@@ -96,7 +96,18 @@ Inside each `specs/00X-feature/` folder, the following files orchestrate the wor
 
 ## 🤖 Recommended AI Workflow / Flujo de IA Recomendado
 
-If you are using **GitHub Spec Kit** alongside Codely/Cursor/Copilot, wrap your work using these steps:
+This repository is optimized for two main AI workflows: **Lovable** (for rapid visual generation) and **GitHub Spec Kit** (for CLI-driven terminal workflows).
+
+### 💜 Working with Lovable / Trabajando con Lovable 
+
+The ultimate combination: *Lovable's code generation + Spec-Driven Development rigor*.
+We have designed a progressive 3-level guide (from Beginner to Advanced) to avoid AI hallucinations and ensure maintainable code.
+
+👉 **[Read the full Lovable Guide (EN)](./docs/en/17-working-with-lovable.md)** | **[Lee la guía completa de Lovable (ES)](./docs/es/17-trabajar-con-lovable.md)**
+
+### ⚙️ Working with GitHub Spec Kit
+
+If you are using **GitHub Spec Kit** alongside Cursor/Copilot, wrap your work using these steps:
 
 1. **Install CLI tool:**
    <kbd>uv tool install specify-cli --from git+https://github.com/github/spec-kit.git</kbd>
