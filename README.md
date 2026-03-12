@@ -137,56 +137,64 @@ To make administration easier, use the provided bash scripts:
 
 ---
 
-## 📚 Documentation Index / Índice de Documentación
+## 📚 Documentation Discovery / Descubrimiento de Documentos
 
-Choose your preferred engagement level / Elige tu nivel de profundidad preferido:
+Find the guide that fits your current need / Encuentra la guía que mejor se adapte a tu necesidad:
 
 <div align="center">
   <table>
     <tr>
-      <th align="center">🟢 Beginner / Principiante</th>
-      <th align="center">🟡 Intermediate / Intermedio</th>
+      <th align="center">🏗️ Foundation / Base</th>
+      <th align="center">🤖 AI & Prompts</th>
     </tr>
     <tr>
-      <td align="center">
-        <a href="./docs/en/13-quick-guide-non-programmers.md"><img src="https://img.shields.io/badge/-Quick_Guide_(EN)-white?style=for-the-badge" alt="EN"></a><br><br>
-        <a href="./docs/es/13-guia-rapida-no-programadores.md"><img src="https://img.shields.io/badge/-Guía_Rápida_(ES)-white?style=for-the-badge" alt="ES"></a>
+      <td align="left">
+        • <a href="./docs/en/18-complete-3-level-path.md">Complete Path / Ruta Completa</a><br>
+        • <a href="./docs/es/01-estructura.md">Structure / Estructura</a><br>
+        • <a href="./docs/es/02-flujo-de-trabajo.md">Workflow / Flujo</a><br>
+        • <a href="./docs/es/11-refinamiento-continuo.md">Refinement / Refinamiento</a>
       </td>
-      <td align="center">
-         <a href="./docs/en/14-intermediate-guide.md"><img src="https://img.shields.io/badge/-Intermediate_(EN)-blue?style=for-the-badge" alt="EN"></a><br><br>
-        <a href="./docs/es/14-guia-intermedia.md"><img src="https://img.shields.io/badge/-Intermedia_(ES)-blue?style=for-the-badge" alt="ES"></a>
+      <td align="left">
+        • <a href="./docs/es/10-agentes-ia-soportados-y-prompts.md">Supported Agents / Agentes</a><br>
+        • <a href="./docs/es/19-matriz-prompts-por-objetivo.md">Prompt Matrix / Matriz</a><br>
+        • <a href="./docs/en/17-working-with-lovable.md"><b>Working with Lovable</b></a><br>
+        • <a href="./docs/es/08-integracion-github-spec-kit.md">Spec Kit Integration</a>
       </td>
     </tr>
     <tr>
-      <th align="center">🔴 Advanced / Avanzado</th>
-      <th align="center">🧭 Full Path / Ruta Completa</th>
+      <th align="center">🛠️ Tools & Quality / Calidad</th>
+      <th align="center">👥 Management / Gestión</th>
     </tr>
     <tr>
-      <td align="center">
-         <a href="./docs/en/15-advanced-guide.md"><img src="https://img.shields.io/badge/-Advanced_(EN)-red?style=for-the-badge" alt="EN"></a><br><br>
-        <a href="./docs/es/15-guia-avanzada.md"><img src="https://img.shields.io/badge/-Avanzada_(ES)-red?style=for-the-badge" alt="ES"></a>
+      <td align="left">
+        • <a href="./docs/es/16-guia-herramientas-desktop-local.md">Local Tools / Herramientas</a><br>
+        • <a href="./docs/es/12-tdd-y-bdd-como-escribir-specs.md">TDD & BDD</a><br>
+        • <a href="./docs/es/21-checklists-calidad-por-etapa.md">Checklists</a><br>
+        • <a href="./docs/es/20-anti-patrones-y-errores-comunes.md">Anti-patterns</a>
       </td>
-      <td align="center">
-         <a href="./docs/en/18-complete-3-level-path.md"><img src="https://img.shields.io/badge/-3_Levels_(EN)-orange?style=for-the-badge" alt="EN"></a><br><br>
-        <a href="./docs/es/18-ruta-completa-3-niveles.md"><img src="https://img.shields.io/badge/-3_Niveles_(ES)-orange?style=for-the-badge" alt="ES"></a>
+      <td align="left">
+        • <a href="./docs/es/22-modo-equipo-y-colaboracion.md">Team Mode / Colaboración</a><br>
+        • <a href="./docs/es/24-decisiones-de-arquitectura.md">Arch Decisions</a><br>
+        • <a href="./docs/es/23-onboarding-30-minutos.md">30-min Onboarding</a><br>
+        • <a href="./docs/es/31-marco-legal-y-uso-comercial.md">Legal Framework</a>
       </td>
     </tr>
   </table>
 </div>
 
+### 🌍 Read by Level / Leer por Nivel
+| Beginner / Principiante | Intermediate / Intermedio | Advanced / Avanzado |
+| :---: | :---: | :---: |
+| [Quick Guide](./docs/es/13-guia-rapida-no-programadores.md) | [Intermediate Guide](./docs/es/14-guia-intermedia.md) | [Advanced Guide](./docs/es/15-advanced-guide.md) |
+
 <br>
 
 <details>
-<summary>📂 <b>View all internal reference documents / Ver todos los documentos internos</b></summary>
+<summary>📂 <b>View all internal documents (60+) / Ver todos los documentos (60+)</b></summary>
 <br>
 
-- [10 Agents & Prompts](./docs/en/10-supported-ai-agents-and-prompts.md) | [10 Agentes y Prompts](./docs/es/10-agentes-ia-soportados-y-prompts.md)
-- [11 Continuous Refinement](./docs/en/11-continuous-refinement.md) | [11 Refinamiento Continuo](./docs/es/11-refinamiento-continuo.md)
-- [16 Desktop Tools Guide](./docs/en/16-local-desktop-tools-guide.md) | [16 Guía Herramientas Locales](./docs/es/16-guia-herramientas-desktop-local.md)
-- [17 Working with Lovable](./docs/en/17-working-with-lovable.md) | [17 Trabajando con Lovable](./docs/es/17-trabajar-con-lovable.md)
-- [19 Prompt Matrix](./docs/en/19-prompt-matrix-by-goal.md) | [19 Matriz de Prompts](./docs/es/19-matriz-prompts-por-objetivo.md)
-- [20 Anti-patterns](./docs/en/20-anti-patterns-and-common-errors.md) | [20 Antipatrones](./docs/es/20-anti-patrones-y-errores-comunes.md)
-- [... Expand all docs ...](./docs/README.md)
+- [Full Documentation README](./docs/README.md)
+- [AI Start Here](../AI_START_HERE.md)
 
 </details>
 

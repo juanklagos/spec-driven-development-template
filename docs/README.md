@@ -13,37 +13,53 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 - 🇪🇸 Spanish (Español): [`docs/es/`](./es)
 - 🇺🇸 English: [`docs/en/`](./en)
 
-## 🚀 Quick links / Enlaces rápidos
+## 🧭 Discovery Index / Índice de Descubrimiento
 
-| Topic | Español | English |
-| --- | --- | --- |
+### 🏗️ 1. Foundation & SDD Core / Base y SDD Core
+| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
+| :--- | :---: | :---: |
 | Ruta completa 3 niveles / Complete 3-level path | [ES](./es/18-ruta-completa-3-niveles.md) | [EN](./en/18-complete-3-level-path.md) |
 | Introducción / Introduction | [ES](./es/00-introduccion.md) | [EN](./en/00-introduction.md) |
-| Guía rápida (no programadores) / Quick guide (non-programmers) | [ES](./es/13-guia-rapida-no-programadores.md) | [EN](./en/13-quick-guide-non-programmers.md) |
-| Guía intermedia / Intermediate guide | [ES](./es/14-guia-intermedia.md) | [EN](./en/14-intermediate-guide.md) |
-| Guía avanzada / Advanced guide | [ES](./es/15-guia-avanzada.md) | [EN](./en/15-advanced-guide.md) |
-| Estructura / Structure | [ES](./es/01-estructura.md) | [EN](./en/01-structure.md) |
-| Flujo / Workflow | [ES](./es/02-flujo-de-trabajo.md) | [EN](./en/02-workflow.md) |
+| Estructura del proyecto / Project structure | [ES](./es/01-estructura.md) | [EN](./en/01-structure.md) |
+| Flujo de trabajo SDD / SDD Workflow | [ES](./es/02-flujo-de-trabajo.md) | [EN](./en/02-workflow.md) |
+| Refinamiento continuo / Continuous refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
+| De idea a spec (3 niveles) / Idea to spec (3 levels) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) |
+
+### 🤖 2. AI & Prompt Engineering / IA e Ingeniería de Prompts
+| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
+| :--- | :---: | :---: |
+| Agentes y prompts soportados / Supported agents | [ES](./es/10-agentes-ia-soportados-y-prompts.md) | [EN](./en/10-supported-ai-agents-and-prompts.md) |
+| Matriz de prompts por objetivo / Prompt matrix | [ES](./es/19-matriz-prompts-por-objetivo.md) | [EN](./en/19-prompt-matrix-by-goal.md) |
+| Banco de prompts validados / Validated prompt bank | [ES](./es/26-banco-prompts-validados.md) | [EN](./en/26-validated-prompt-bank.md) |
+| Prompts por característica / Prompts by feature | [ES](./es/30-guia-prompts-por-caracteristica.md) | [EN](./en/30-prompts-by-template-feature.md) |
+| Lovable: ejecución con calidad / quality execution | [ES](./es/17-trabajar-con-lovable.md) | [EN](./en/17-working-with-lovable.md) |
 | Integración Spec Kit / Spec Kit Integration | [ES](./es/08-integracion-github-spec-kit.md) | [EN](./en/08-github-spec-kit-integration.md) |
+
+### 🛠️ 3. Developer Tools & Quality / Herramientas y Calidad
+| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
+| :--- | :---: | :---: |
 | Herramientas desktop locales / Local desktop tools | [ES](./es/16-guia-herramientas-desktop-local.md) | [EN](./en/16-local-desktop-tools-guide.md) |
-| Lovable: ejecución con calidad / Lovable: quality execution | [ES](./es/17-trabajar-con-lovable.md) | [EN](./en/17-working-with-lovable.md) |
-| Agentes y prompts / Agents and prompts | [ES](./es/10-agentes-ia-soportados-y-prompts.md) | [EN](./en/10-supported-ai-agents-and-prompts.md) |
-| Matriz de prompts / Prompt matrix | [ES](./es/19-matriz-prompts-por-objetivo.md) | [EN](./en/19-prompt-matrix-by-goal.md) |
-| Anti-patrones / Anti-patterns | [ES](./es/20-anti-patrones-y-errores-comunes.md) | [EN](./en/20-anti-patterns-and-common-errors.md) |
+| TDD y BDD en specs / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklists de calidad / Quality checklists | [ES](./es/21-checklists-calidad-por-etapa.md) | [EN](./en/21-quality-checklists-by-stage.md) |
+| Anti-patrones y errores / Anti-patterns | [ES](./es/20-anti-patrones-y-errores-comunes.md) | [EN](./en/20-anti-patterns-and-common-errors.md) |
+| Dashboard status + roadmap | [ES](./es/29-dashboard-status-y-roadmap.md) | [EN](./en/29-status-dashboard-and-auto-roadmap.md) |
+
+### 👥 4. Management & Collaboration / Gestión y Colaboración
+| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
+| :--- | :---: | :---: |
 | Modo equipo / Team mode | [ES](./es/22-modo-equipo-y-colaboracion.md) | [EN](./en/22-team-mode-and-collaboration.md) |
 | Onboarding 30 minutos / 30-minute onboarding | [ES](./es/23-onboarding-30-minutos.md) | [EN](./en/23-30-minute-onboarding.md) |
 | Decisiones de arquitectura / Architecture decisions | [ES](./es/24-decisiones-de-arquitectura.md) | [EN](./en/24-architecture-decisions.md) |
-| De idea a spec (3 niveles) / Idea to spec (3 levels) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) |
-| Banco de prompts / Prompt bank | [ES](./es/26-banco-prompts-validados.md) | [EN](./en/26-validated-prompt-bank.md) |
 | Playbooks por proyecto / Project playbooks | [ES](./es/27-playbooks-por-tipo-de-proyecto.md) | [EN](./en/27-project-type-playbooks.md) |
 | Migración legado avanzada / Advanced legacy migration | [ES](./es/28-modo-migracion-legado-avanzado.md) | [EN](./en/28-advanced-legacy-migration-mode.md) |
-| Dashboard status + roadmap | [ES](./es/29-dashboard-status-y-roadmap.md) | [EN](./en/29-status-dashboard-and-auto-roadmap.md) |
-| Prompts por característica / Prompts by feature | [ES](./es/30-guia-prompts-por-caracteristica.md) | [EN](./en/30-prompts-by-template-feature.md) |
-| Marco legal y uso comercial / Legal framework & commercial use | [ES](./es/31-marco-legal-y-uso-comercial.md) | [EN](./en/31-legal-framework-and-commercial-use.md) |
-| Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
-| TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |
+| Marco legal y uso comercial / Legal framework | [ES](./es/31-marco-legal-y-uso-comercial.md) | [EN](./en/31-legal-framework-and-commercial-use.md) |
+
+| Guide Level / Nivel | 🇪🇸 Español | 🇺🇸 English |
+| :--- | :---: | :---: |
+| Guía rápida (no programadores) / Quick guide | [ES](./es/13-guia-rapida-no-programadores.md) | [EN](./en/13-quick-guide-non-programmers.md) |
+| Guía intermedia / Intermediate guide | [ES](./es/14-guia-intermedia.md) | [EN](./en/14-intermediate-guide.md) |
+| Guía avanzada / Advanced guide | [ES](./es/15-guia-avanzada.md) | [EN](./en/15-advanced-guide.md) |
 
 ## ⭐ Uso explícito del repositorio base
 
