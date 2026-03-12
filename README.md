@@ -74,6 +74,8 @@ Supported agents + unified prompts:
 - 🇺🇸 [Agents and prompts](./docs/en/10-supported-ai-agents-and-prompts.md)
 - 🇪🇸 [Guía de herramientas desktop con acceso local](./docs/es/16-guia-herramientas-desktop-local.md)
 - 🇺🇸 [Desktop tools with local access guide](./docs/en/16-local-desktop-tools-guide.md)
+- 🇪🇸 [Cómo trabajar con Lovable (ejecución con calidad)](./docs/es/17-trabajar-con-lovable.md)
+- 🇺🇸 [How to work with Lovable (quality execution)](./docs/en/17-working-with-lovable.md)
 
 ## ⚙️ Scripts
 

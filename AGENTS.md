@@ -58,6 +58,11 @@ For local desktop execution guidance (Codex desktop, Claude desktop, similar too
 - `docs/es/16-guia-herramientas-desktop-local.md` or
 - `docs/en/16-local-desktop-tools-guide.md`
 
+For Lovable execution workflow after refined specs, read:
+
+- `docs/es/17-trabajar-con-lovable.md` or
+- `docs/en/17-working-with-lovable.md`
+
 For operator level (beginner/intermediate/advanced), use:
 
 - `docs/es/13-guia-rapida-no-programadores.md` / `docs/en/13-quick-guide-non-programmers.md`
