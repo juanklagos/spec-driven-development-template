@@ -33,6 +33,13 @@
 | `scripts/` | Bootstrap helpers | Scripts de inicialización |
 | `templates/` | Copy-ready templates | Plantillas listas para copiar |
 | `examples/` | Practical reference projects | Proyectos de referencia |
+| `playbooks/` | Project-type accelerators | Aceleradores por tipo de proyecto |
+| `quality/` | Test and quality evidence | Evidencia de pruebas y calidad |
+
+Optional modules policy / Política de módulos opcionales:
+
+- You can use only `idea/`, `specs/`, and `bitacora/` and remain fully compliant.
+- `playbooks/`, `quality/`, and advanced scripts are optional accelerators.
 
 ## 📐 Required specification format / Formato obligatorio
 
@@ -103,6 +110,31 @@ Validate structure:
 ./scripts/validate-sdd.sh . --strict
 ```
 
+Create next spec from template:
+
+```bash
+./scripts/new-spec.sh "feature-name" "Owner / Responsable"
+```
+
+Quality scoring:
+
+```bash
+./scripts/score-spec.sh --all
+```
+
+Roadmap and status:
+
+```bash
+./scripts/generate-roadmap.sh
+./scripts/generate-status.sh
+```
+
+Legacy reverse-engineering:
+
+```bash
+./scripts/legacy-discovery.sh /path/to/legacy-project
+```
+
 ## 📚 Documentation index / Índice de documentación
 
 - [docs/README.md](./docs/README.md)
@@ -138,6 +170,16 @@ Validate structure:
 - 🇺🇸 [Architecture decisions](./docs/en/24-architecture-decisions.md)
 - 🇪🇸 [De idea a spec con SDD (3 niveles)](./docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md)
 - 🇺🇸 [From idea to spec with SDD (3 levels)](./docs/en/25-idea-to-spec-with-sdd-3-levels.md)
+- 🇪🇸 [Banco de prompts validados](./docs/es/26-banco-prompts-validados.md)
+- 🇺🇸 [Validated prompt bank](./docs/en/26-validated-prompt-bank.md)
+- 🇪🇸 [Playbooks por tipo de proyecto](./docs/es/27-playbooks-por-tipo-de-proyecto.md)
+- 🇺🇸 [Project type playbooks](./docs/en/27-project-type-playbooks.md)
+- 🇪🇸 [Modo migración legado avanzado](./docs/es/28-modo-migracion-legado-avanzado.md)
+- 🇺🇸 [Advanced legacy migration mode](./docs/en/28-advanced-legacy-migration-mode.md)
+- 🇪🇸 [Dashboard de estado y roadmap automático](./docs/es/29-dashboard-status-y-roadmap.md)
+- 🇺🇸 [Status dashboard and auto roadmap](./docs/en/29-status-dashboard-and-auto-roadmap.md)
+- 🇪🇸 [Guía de prompts por característica](./docs/es/30-guia-prompts-por-caracteristica.md)
+- 🇺🇸 [Prompt guide by template feature](./docs/en/30-prompts-by-template-feature.md)
 
 ## 👤 Authorship / Autoría
 

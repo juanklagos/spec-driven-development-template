@@ -49,6 +49,7 @@ Mantén el comportamiento actual del código, crea la estructura idea/specs/bita
 4. `docs/es/11-refinamiento-continuo.md` or `docs/en/11-continuous-refinement.md`
 5. `docs/es/19-matriz-prompts-por-objetivo.md` or `docs/en/19-prompt-matrix-by-goal.md`
 6. `docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md` or `docs/en/25-idea-to-spec-with-sdd-3-levels.md`
+7. `docs/es/30-guia-prompts-por-caracteristica.md` or `docs/en/30-prompts-by-template-feature.md`
 
 ## 🧪 Validation command / Comando de validación
 
@@ -60,6 +61,16 @@ Mantén el comportamiento actual del código, crea la estructura idea/specs/bita
 
 - Templates: `templates/`
 - Example projects: `examples/`
+- Project-type playbooks: `playbooks/`
+- Quality evidence templates: `quality/evidence/templates/`
+
+## ⚙️ Optional automation scripts / Scripts opcionales de automatización
+
+- `./scripts/new-spec.sh "feature-name"`
+- `./scripts/score-spec.sh --all`
+- `./scripts/generate-roadmap.sh`
+- `./scripts/generate-status.sh`
+- `./scripts/legacy-discovery.sh /path/to/legacy-project`
 
 ## 🎯 Expected outcome / Resultado esperado
 

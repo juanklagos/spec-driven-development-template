@@ -11,6 +11,7 @@ Mantener esta plantilla clara, simple y útil para personas nuevas y profesional
 3. Todo cambio relevante debe actualizar documentación en `docs/`.
 4. Mantener ejemplos simples y aplicables.
 5. Ejecutar `./scripts/validate-sdd.sh . --strict` antes de proponer cambios.
+6. Módulos opcionales (`playbooks/`, `quality/`, scripts extra) no son obligatorios para contribuciones mínimas, pero deben mantenerse consistentes si se usan.
 
 ## Proceso recomendado
 

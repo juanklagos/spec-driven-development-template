@@ -33,6 +33,11 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 | Onboarding 30 minutos / 30-minute onboarding | [ES](./es/23-onboarding-30-minutos.md) | [EN](./en/23-30-minute-onboarding.md) |
 | Decisiones de arquitectura / Architecture decisions | [ES](./es/24-decisiones-de-arquitectura.md) | [EN](./en/24-architecture-decisions.md) |
 | De idea a spec (3 niveles) / Idea to spec (3 levels) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) |
+| Banco de prompts / Prompt bank | [ES](./es/26-banco-prompts-validados.md) | [EN](./en/26-validated-prompt-bank.md) |
+| Playbooks por proyecto / Project playbooks | [ES](./es/27-playbooks-por-tipo-de-proyecto.md) | [EN](./en/27-project-type-playbooks.md) |
+| Migración legado avanzada / Advanced legacy migration | [ES](./es/28-modo-migracion-legado-avanzado.md) | [EN](./en/28-advanced-legacy-migration-mode.md) |
+| Dashboard status + roadmap | [ES](./es/29-dashboard-status-y-roadmap.md) | [EN](./en/29-status-dashboard-and-auto-roadmap.md) |
+| Prompts por característica / Prompts by feature | [ES](./es/30-guia-prompts-por-caracteristica.md) | [EN](./en/30-prompts-by-template-feature.md) |
 | Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
 | TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |

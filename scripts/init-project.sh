@@ -17,6 +17,8 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/bitacora/handoffs" \
          "$TARGET/bitacora/decisiones" \
          "$TARGET/bitacora/templates" \
+         "$TARGET/playbooks" \
+         "$TARGET/quality/evidence/templates" \
          "$TARGET/scripts"
 
 cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
@@ -34,8 +36,20 @@ cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templat
 cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
 cp -Rn "$ROOT_DIR/templates" "$TARGET/templates"
+cp -Rn "$ROOT_DIR/playbooks/." "$TARGET/playbooks/"
+cp -Rn "$ROOT_DIR/quality/." "$TARGET/quality/"
 cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
+cp -n "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
+cp -n "$ROOT_DIR/scripts/score-spec.sh" "$TARGET/scripts/score-spec.sh"
+cp -n "$ROOT_DIR/scripts/generate-roadmap.sh" "$TARGET/scripts/generate-roadmap.sh"
+cp -n "$ROOT_DIR/scripts/generate-status.sh" "$TARGET/scripts/generate-status.sh"
+cp -n "$ROOT_DIR/scripts/legacy-discovery.sh" "$TARGET/scripts/legacy-discovery.sh"
 chmod +x "$TARGET/scripts/validate-sdd.sh"
+chmod +x "$TARGET/scripts/new-spec.sh" \
+         "$TARGET/scripts/score-spec.sh" \
+         "$TARGET/scripts/generate-roadmap.sh" \
+         "$TARGET/scripts/generate-status.sh" \
+         "$TARGET/scripts/legacy-discovery.sh"
 
 cat <<MSG
 Proyecto inicializado en: $TARGET
@@ -45,4 +59,5 @@ Siguientes pasos:
 2) Crea la primera especificación en specs/001-nombre/
 3) Registra la primera entrada en bitacora/global/PROJECT_LOG.md
 4) Ejecuta validación base: ./scripts/validate-sdd.sh .
+5) Opcional: genera status y roadmap con scripts/generate-*.sh
 MSG

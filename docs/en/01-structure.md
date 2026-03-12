@@ -94,3 +94,10 @@ Contains educational documentation for this system.
 Path: `scripts/`
 
 Contains scripts to initialize this structure in other repositories.
+
+## Optional folders (accelerators)
+
+- `playbooks/`: project-type guides (SaaS, e-commerce, mobile app, backend API).
+- `quality/`: evidence templates for testing and quality control.
+
+These folders are optional. If they are not used, the base `idea/specs/bitacora` workflow remains valid.

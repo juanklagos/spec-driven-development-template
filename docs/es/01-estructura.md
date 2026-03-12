@@ -94,3 +94,10 @@ Contiene la documentación pedagógica del sistema.
 Ruta: `scripts/`
 
 Contiene scripts para instalar esta estructura en otro repositorio.
+
+## Carpetas opcionales (aceleradores)
+
+- `playbooks/`: guías por tipo de proyecto (SaaS, e-commerce, app móvil, backend API).
+- `quality/`: plantillas de evidencia para pruebas y control de calidad.
+
+Estas carpetas son opcionales. Si no se usan, el flujo base `idea/specs/bitacora` sigue siendo válido.
