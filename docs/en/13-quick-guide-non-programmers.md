@@ -1,5 +1,14 @@
 # 🚀 Quick guide for non-programmers (5 minutes)
 
+> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> If the repository is already local, always follow its guides before requesting implementation.
+
 > Goal: start using this template even if you do not code.
 
 ## 🧠 Core idea

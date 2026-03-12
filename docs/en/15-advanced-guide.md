@@ -1,5 +1,14 @@
 # 🧭 Advanced guide (high-consistency teams)
 
+> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> If the repository is already local, always follow its guides before requesting implementation.
+
 > Goal: achieve unified outcomes across different Artificial Intelligence tools.
 
 ## 🧱 Advanced strategy

@@ -1,5 +1,12 @@
 # 🌱 Spec Driven Development Template
 
+> 📌 **Mandatory start / Inicio obligatorio:** clone (or open) this repository and follow its guides before asking any Artificial Intelligence tool to implement changes.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+
 ## 🌍 Language / Idioma
 
 - 🇪🇸 Español: [docs/es](./docs/es)

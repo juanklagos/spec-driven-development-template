@@ -1,5 +1,14 @@
 # How to publish on GitHub step by step
 
+> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> If the repository is already local, always follow its guides before requesting implementation.
+
 ## Prerequisites
 
 - A GitHub account

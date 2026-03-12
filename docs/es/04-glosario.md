@@ -1,5 +1,14 @@
 # Glosario
 
+> 📌 **Inicio obligatorio:** antes de trabajar, clona (o abre) este repositorio y sigue esta documentación como fuente de verdad.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> Si ya tienes el repositorio local, usa siempre su guía antes de pedir implementación.
+
 ## Especificación
 Documento que describe qué se quiere construir, por qué, y cómo validar que está bien.
 

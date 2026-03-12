@@ -1,5 +1,14 @@
 # 🚀 Guía rápida para no programadores (5 minutos)
 
+> 📌 **Inicio obligatorio:** antes de trabajar, clona (o abre) este repositorio y sigue esta documentación como fuente de verdad.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> Si ya tienes el repositorio local, usa siempre su guía antes de pedir implementación.
+
 > Objetivo: que puedas usar esta plantilla sin saber programar.
 
 ## 🧠 Idea clave

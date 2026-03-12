@@ -1,5 +1,16 @@
 # 🤖 Instructions for any Artificial Intelligence tool / Instrucciones para cualquier herramienta de Inteligencia Artificial
 
+## 📌 Mandatory repository rule / Regla obligatoria del repositorio
+
+Before any action, clone or open this repository locally and follow its guides.
+
+Antes de cualquier acción, clona o abre este repositorio en local y sigue sus guías.
+
+```bash
+git clone https://github.com/juanklagos/spec-driven-development-template.git
+cd spec-driven-development-template
+```
+
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
 1. `idea/IDEA_GENERAL.md`

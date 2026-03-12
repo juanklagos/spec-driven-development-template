@@ -1,5 +1,14 @@
 # 🧪 TDD and BDD: how to write strong specifications
 
+> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> If the repository is already local, always follow its guides before requesting implementation.
+
 This section is a repository bonus to connect specification-first development with quality practices.
 
 ## 1) Simple difference between TDD and BDD

@@ -1,5 +1,7 @@
 # 📚 Documentation / Documentación
 
+> 📌 **Mandatory start / Inicio obligatorio:** work only from a cloned/opened local copy of this repository and follow these guides as the source of truth.
+
 ## 🌍 Choose language / Elige idioma
 
 - 🇪🇸 Spanish (Español): [`docs/es/`](./es)

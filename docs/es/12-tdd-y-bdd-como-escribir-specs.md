@@ -1,5 +1,14 @@
 # 🧪 TDD y BDD: cómo escribir buenas especificaciones
 
+> 📌 **Inicio obligatorio:** antes de trabajar, clona (o abre) este repositorio y sigue esta documentación como fuente de verdad.
+>
+> ```bash
+> git clone https://github.com/juanklagos/spec-driven-development-template.git
+> cd spec-driven-development-template
+> ```
+>
+> Si ya tienes el repositorio local, usa siempre su guía antes de pedir implementación.
+
 Este apartado es un plus del repositorio para conectar desarrollo guiado por especificaciones con prácticas de calidad.
 
 ## 1) Diferencia simple entre TDD y BDD
