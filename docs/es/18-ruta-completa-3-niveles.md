@@ -1,6 +1,6 @@
 # 🧭 Ruta completa de aprendizaje en 3 niveles (todo el sistema)
 
-⬅️ [Volver al índice](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---
 
@@ -30,13 +30,13 @@ flowchart LR
 
 | Nivel | Perfil | Objetivo principal |
 | --- | --- | --- |
-| 🟢 Principiante | Persona nueva en programación | Entender y usar el flujo sin perderse |
-| 🟡 Intermedio | Persona con experiencia básica | Mantener consistencia entre sesiones |
-| 🔴 Avanzado | Equipo técnico exigente | Unificar resultados entre herramientas y escalar calidad |
+| <img src="https://img.shields.io/badge/🟢_Principiante-238636?style=flat-square" alt="Principiante"> | Persona nueva en programación | Entender y usar el flujo sin perderse |
+| <img src="https://img.shields.io/badge/🟡_Intermedio-D29922?style=flat-square" alt="Intermedio"> | Persona con experiencia básica | Mantener consistencia entre sesiones |
+| <img src="https://img.shields.io/badge/🔴_Avanzado-DA3633?style=flat-square" alt="Avanzado"> | Equipo técnico exigente | Unificar resultados entre herramientas y escalar calidad |
 
 ## 🗺️ Ruta por temas (todo el sistema)
 
-| Tema | 🟢 Principiante | 🟡 Intermedio | 🔴 Avanzado |
+| Tema | <img src="https://img.shields.io/badge/🟢_Principiante-238636?style=flat-square" alt="Principiante"> | <img src="https://img.shields.io/badge/🟡_Intermedio-D29922?style=flat-square" alt="Intermedio"> | <img src="https://img.shields.io/badge/🔴_Avanzado-DA3633?style=flat-square" alt="Avanzado"> |
 | --- | --- | --- | --- |
 | Estructura base | Confirmar carpetas `idea/specs/bitacora` | Validar plantillas obligatorias | Automatizar validaciones de estructura |
 | Idea del proyecto | Completar `IDEA_GENERAL.md` con guía IA | Refinar alcance y riesgos | Gestionar cambios de visión con protocolo |
@@ -114,11 +114,11 @@ Entrega reporte unificado: objetivo, archivos, comandos, validaciones, riesgos, 
 
 ## 🎓 Qué guía leer según tu nivel
 
-- 🟢 Principiante:
+- <img src="https://img.shields.io/badge/🟢_Principiante-238636?style=flat-square" alt="Principiante">:
   - `docs/es/13-guia-rapida-no-programadores.md`
-- 🟡 Intermedio:
+- <img src="https://img.shields.io/badge/🟡_Intermedio-D29922?style=flat-square" alt="Intermedio">:
   - `docs/es/14-guia-intermedia.md`
-- 🔴 Avanzado:
+- <img src="https://img.shields.io/badge/🔴_Avanzado-DA3633?style=flat-square" alt="Avanzado">:
   - `docs/es/15-guia-avanzada.md`
 
 ## 🔁 Regla final

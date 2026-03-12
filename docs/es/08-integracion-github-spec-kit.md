@@ -1,6 +1,6 @@
 # 🤖 Integración con GitHub Spec Kit
 
-⬅️ [Volver al índice](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---
 
@@ -58,11 +58,11 @@ Esta plantilla recomienda usar GitHub Spec Kit como motor de flujo de trabajo.
 
 | Fase | Comando | Propósito |
 |---|---|---|
-| 1 | `/speckit.constitution` | Definir principios del proyecto |
-| 2 | `/speckit.specify` | Definir qué se construye |
-| 3 | `/speckit.plan` | Definir cómo se construye |
-| 4 | `/speckit.tasks` | Generar tareas ejecutables |
-| 5 | `/speckit.implement` | Ejecutar implementación |
+| 1 | <kbd>/speckit.constitution</kbd> | Definir principios del proyecto |
+| 2 | <kbd>/speckit.specify</kbd> | Definir qué se construye |
+| 3 | <kbd>/speckit.plan</kbd> | Definir cómo se construye |
+| 4 | <kbd>/speckit.tasks</kbd> | Generar tareas ejecutables |
+| 5 | <kbd>/speckit.implement</kbd> | Ejecutar implementación |
 
 ## Flujo visual
 

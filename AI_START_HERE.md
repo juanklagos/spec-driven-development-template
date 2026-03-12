@@ -11,7 +11,7 @@
 
 Repository URL / URL del repositorio:
 
-- `https://github.com/juanklagos/spec-driven-development-template`
+- <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
 ## 🚀 Prompt to create a new project / Prompt para crear un proyecto nuevo
 

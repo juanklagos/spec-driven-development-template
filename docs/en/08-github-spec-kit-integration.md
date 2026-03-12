@@ -1,6 +1,6 @@
 # 🤖 GitHub Spec Kit integration
 
-⬅️ [Back to index](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
 
@@ -58,11 +58,11 @@ This template recommends GitHub Spec Kit as the main workflow engine.
 
 | Phase | Command | Purpose |
 |---|---|---|
-| 1 | `/speckit.constitution` | Define project principles |
-| 2 | `/speckit.specify` | Define what to build |
-| 3 | `/speckit.plan` | Define how to build |
-| 4 | `/speckit.tasks` | Generate executable tasks |
-| 5 | `/speckit.implement` | Execute implementation |
+| 1 | <kbd>/speckit.constitution</kbd> | Define project principles |
+| 2 | <kbd>/speckit.specify</kbd> | Define what to build |
+| 3 | <kbd>/speckit.plan</kbd> | Define how to build |
+| 4 | <kbd>/speckit.tasks</kbd> | Generate executable tasks |
+| 5 | <kbd>/speckit.implement</kbd> | Execute implementation |
 
 ## Visual flow
 

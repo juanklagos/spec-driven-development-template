@@ -1,6 +1,6 @@
 # Agentes de Inteligencia Artificial soportados y prompts recomendados
 
-⬅️ [Volver al índice](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---
 
@@ -60,7 +60,7 @@ Fuente oficial:
 
 ## 1) Tabla de agentes soportados por GitHub Spec Kit
 
-En el comando `specify init --ai`, Spec Kit soporta los siguientes agentes:
+En el comando <kbd>specify init --ai</kbd>, Spec Kit soporta los siguientes agentes:
 
 | Agente | Identificador para `--ai` | Estado |
 |---|---|---|
@@ -89,11 +89,11 @@ En el comando `specify init --ai`, Spec Kit soporta los siguientes agentes:
 
 ## 2) Flujo recomendado para cualquier agente
 
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.plan`
-4. `/speckit.tasks`
-5. `/speckit.implement`
+1. <kbd>/speckit.constitution</kbd>
+2. <kbd>/speckit.specify</kbd>
+3. <kbd>/speckit.plan</kbd>
+4. <kbd>/speckit.tasks</kbd>
+5. <kbd>/speckit.implement</kbd>
 
 ## 3) Prompt maestro de inicio (copiar y pegar)
 
@@ -171,7 +171,7 @@ Este contrato reduce diferencias entre herramientas y mantiene resultados cohere
 
 ## 7) Playbooks por nivel
 
-### 🟢 Principiante
+### <img src="https://img.shields.io/badge/🟢_Principiante-238636?style=flat-square" alt="Principiante">
 
 ```text
 Explícame paso a paso como si fuera nuevo en programación.
@@ -180,7 +180,7 @@ Ayúdame a completar la idea y luego crear la spec 001.
 No avances al siguiente paso sin confirmar que entendí.
 ```
 
-### 🟡 Intermedio
+### <img src="https://img.shields.io/badge/🟡_Intermedio-D29922?style=flat-square" alt="Intermedio">
 
 ```text
 Trabaja sobre una única spec activa.
@@ -188,7 +188,7 @@ Prioriza claridad de alcance, tareas ejecutables y bitácora completa.
 Separa cambios en: idea, spec, plan, tareas y validación.
 ```
 
-### 🔴 Avanzado
+### <img src="https://img.shields.io/badge/🔴_Avanzado-DA3633?style=flat-square" alt="Avanzado">
 
 ```text
 Aplica contrato de salida unificado y protocolo de refinamiento.

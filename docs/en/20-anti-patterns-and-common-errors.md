@@ -1,6 +1,6 @@
 # Anti-patterns and common errors
 
-⬅️ [Back to index](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
 

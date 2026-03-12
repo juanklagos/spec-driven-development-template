@@ -47,10 +47,11 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 ## ⭐ Uso explícito del repositorio base
 
 Usa siempre este repositorio como referencia principal:
+<kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
-- `https://github.com/juanklagos/spec-driven-development-template`
-
-### 🆕 Caso 1: crear un proyecto nuevo desde esta base
+<details>
+<summary>🆕 <b>Caso 1: crear un proyecto nuevo desde esta base</b></summary>
+<br>
 
 Prompt sugerido para la IA:
 
@@ -60,7 +61,11 @@ Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; lue
 No saltes pasos.
 ```
 
-### ♻️ Caso 2: adaptar un proyecto existente usando esta base
+</details>
+
+<details>
+<summary>♻️ <b>Caso 2: adaptar un proyecto existente usando esta base</b></summary>
+<br>
 
 Prompt sugerido para la IA:
 
@@ -69,20 +74,24 @@ Usando https://github.com/juanklagos/spec-driven-development-template y su guía
 Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
 ```
 
-### ✅ Resultado mínimo esperado
+</details>
 
-- Proyecto creado o adaptado con estructura estándar.
-- Primera especificación creada.
-- Bitácora inicial registrada.
-- Próximo paso claro para continuar.
+> [!NOTE]
+> **✅ Resultado mínimo esperado:**
+>
+> - Proyecto creado o adaptado con estructura estándar.
+> - Primera especificación creada.
+> - Bitácora inicial registrada.
+> - Próximo paso claro para continuar.
 
 ## ⭐ Explicit base repository usage
 
 Always use this repository as the primary reference:
+<kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
-- `https://github.com/juanklagos/spec-driven-development-template`
-
-### 🆕 Case 1: create a new project from this base
+<details>
+<summary>🆕 <b>Case 1: create a new project from this base</b></summary>
+<br>
 
 Suggested prompt for the Artificial Intelligence assistant:
 
@@ -92,7 +101,11 @@ If this repository is not available locally, tell me how to get access to it; th
 Do not skip steps.
 ```
 
-### ♻️ Case 2: adapt an existing project using this base
+</details>
+
+<details>
+<summary>♻️ <b>Case 2: adapt an existing project using this base</b></summary>
+<br>
 
 Suggested prompt for the Artificial Intelligence assistant:
 
@@ -101,9 +114,12 @@ Using https://github.com/juanklagos/spec-driven-development-template and its gui
 Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability.
 ```
 
-### ✅ Minimum expected outcome
+</details>
 
-- Project created or adapted with standard structure.
-- First specification created.
-- Initial logbook entry recorded.
-- Clear next step to continue.
+> [!NOTE]
+> **✅ Minimum expected outcome:**
+>
+> - Project created or adapted with standard structure.
+> - First specification created.
+> - Initial logbook entry recorded.
+> - Clear next step to continue.

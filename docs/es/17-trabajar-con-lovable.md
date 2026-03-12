@@ -1,6 +1,6 @@
 # 💜 Cómo trabajar con Lovable después de tener specs listas
 
-⬅️ [Volver al índice](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---
 

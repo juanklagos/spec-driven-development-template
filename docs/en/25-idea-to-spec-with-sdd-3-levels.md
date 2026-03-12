@@ -1,6 +1,6 @@
 # From written idea to specs with SDD (3 levels)
 
-⬅️ [Back to index](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
 
@@ -10,13 +10,13 @@
 
 According to the official Spec Kit documentation, the recommended flow is:
 
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.clarify` (optional, recommended)
-4. `/speckit.plan`
-5. `/speckit.tasks`
-6. `/speckit.analyze` (optional, recommended)
-7. `/speckit.implement`
+1. <kbd>/speckit.constitution</kbd>
+2. <kbd>/speckit.specify</kbd>
+3. <kbd>/speckit.clarify</kbd> (optional, recommended)
+4. <kbd>/speckit.plan</kbd>
+5. <kbd>/speckit.tasks</kbd>
+6. <kbd>/speckit.analyze</kbd> (optional, recommended)
+7. <kbd>/speckit.implement</kbd>
 
 Official command flow and approach: [github/spec-kit](https://github.com/github/spec-kit).
 

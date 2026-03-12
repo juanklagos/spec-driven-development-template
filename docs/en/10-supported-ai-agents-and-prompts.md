@@ -1,6 +1,6 @@
 # Supported Artificial Intelligence agents and recommended prompts
 
-⬅️ [Back to index](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
 
@@ -60,7 +60,7 @@ Official source:
 
 ## 1) Agent table supported by GitHub Spec Kit
 
-In `specify init --ai`, Spec Kit supports the following agents:
+In <kbd>specify init --ai</kbd>, Spec Kit supports the following agents:
 
 | Agent | `--ai` identifier | Status |
 |---|---|---|
@@ -89,11 +89,11 @@ In `specify init --ai`, Spec Kit supports the following agents:
 
 ## 2) Recommended flow for any agent
 
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.plan`
-4. `/speckit.tasks`
-5. `/speckit.implement`
+1. <kbd>/speckit.constitution</kbd>
+2. <kbd>/speckit.specify</kbd>
+3. <kbd>/speckit.plan</kbd>
+4. <kbd>/speckit.tasks</kbd>
+5. <kbd>/speckit.implement</kbd>
 
 ## 3) Master kickoff prompt (copy and paste)
 
@@ -171,7 +171,7 @@ This contract reduces tool differences and keeps outcomes consistent.
 
 ## 7) Playbooks by level
 
-### 🟢 Beginner
+### <img src="https://img.shields.io/badge/🟢_Beginner-238636?style=flat-square" alt="Beginner">
 
 ```text
 Explain step by step as if I am new to programming.
@@ -180,7 +180,7 @@ Help me complete the idea and then create spec 001.
 Do not move to the next step until I confirm understanding.
 ```
 
-### 🟡 Intermediate
+### <img src="https://img.shields.io/badge/🟡_Intermediate-D29922?style=flat-square" alt="Intermediate">
 
 ```text
 Work on one active specification.
@@ -188,7 +188,7 @@ Prioritize scope clarity, executable tasks, and complete logbook updates.
 Separate changes into: idea, spec, plan, tasks, and validation.
 ```
 
-### 🔴 Advanced
+### <img src="https://img.shields.io/badge/🔴_Advanced-DA3633?style=flat-square" alt="Advanced">
 
 ```text
 Apply unified output contract and refinement protocol.

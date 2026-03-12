@@ -1,6 +1,6 @@
 # Status dashboard and auto roadmap
 
-⬅️ [Back to index](../README.md)
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
 
@@ -8,8 +8,8 @@
 
 - Create new spec: `./scripts/new-spec.sh "feature-name"`
 - Score spec quality: `./scripts/score-spec.sh --all`
-- Generate Mermaid roadmap: `./scripts/generate-roadmap.sh`
-- Generate status dashboard: `./scripts/generate-status.sh`
+- Generate Mermaid roadmap: <kbd>./scripts/generate-roadmap.sh</kbd>
+- Generate status dashboard: <kbd>./scripts/generate-status.sh</kbd>
 
 ## Output
 
