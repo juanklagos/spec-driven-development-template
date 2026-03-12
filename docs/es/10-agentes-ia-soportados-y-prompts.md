@@ -115,3 +115,31 @@ Pide siempre este formato de salida:
 6. Próximo paso
 
 Este contrato reduce diferencias entre herramientas y mantiene resultados coherentes.
+
+
+## 7) Playbooks por nivel
+
+### 🟢 Principiante
+
+```text
+Explícame paso a paso como si fuera nuevo en programación.
+Haz preguntas cortas.
+Ayúdame a completar la idea y luego crear la spec 001.
+No avances al siguiente paso sin confirmar que entendí.
+```
+
+### 🟡 Intermedio
+
+```text
+Trabaja sobre una única spec activa.
+Prioriza claridad de alcance, tareas ejecutables y bitácora completa.
+Separa cambios en: idea, spec, plan, tareas y validación.
+```
+
+### 🔴 Avanzado
+
+```text
+Aplica contrato de salida unificado y protocolo de refinamiento.
+Si hay cambio de alcance, bloquea implementación hasta actualizar history.md e INDEX.
+Entrega análisis de riesgo y próximo paso exacto.
+```

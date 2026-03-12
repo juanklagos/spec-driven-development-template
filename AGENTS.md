@@ -42,6 +42,12 @@ and the refinement guide:
 - `docs/es/11-refinamiento-continuo.md` or
 - `docs/en/11-continuous-refinement.md`
 
+For operator level (beginner/intermediate/advanced), use:
+
+- `docs/es/13-guia-rapida-no-programadores.md` / `docs/en/13-quick-guide-non-programmers.md`
+- `docs/es/14-guia-intermedia.md` / `docs/en/14-intermediate-guide.md`
+- `docs/es/15-guia-avanzada.md` / `docs/en/15-advanced-guide.md`
+
 ## ✅ Final requirement / Requisito final
 
 No implementation without specification, refinement trace, and logbook updates.

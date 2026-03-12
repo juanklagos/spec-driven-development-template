@@ -84,6 +84,18 @@ Setup + Spec Kit:
 
 - [docs/README.md](./docs/README.md)
 
+### Learning paths / Rutas de aprendizaje
+
+- 🟢 Beginner / Principiante:
+  - 🇪🇸 [Guía rápida para no programadores](./docs/es/13-guia-rapida-no-programadores.md)
+  - 🇺🇸 [Quick guide for non-programmers](./docs/en/13-quick-guide-non-programmers.md)
+- 🟡 Intermediate / Intermedio:
+  - 🇪🇸 [Guía intermedia](./docs/es/14-guia-intermedia.md)
+  - 🇺🇸 [Intermediate guide](./docs/en/14-intermediate-guide.md)
+- 🔴 Advanced / Avanzado:
+  - 🇪🇸 [Guía avanzada](./docs/es/15-guia-avanzada.md)
+  - 🇺🇸 [Advanced guide](./docs/en/15-advanced-guide.md)
+
 ## 👤 Authorship / Autoría
 
 - Main author / Autor principal: **Juan Klagos** ([AUTHORS.md](./AUTHORS.md))

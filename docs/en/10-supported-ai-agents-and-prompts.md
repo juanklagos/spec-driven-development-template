@@ -115,3 +115,31 @@ Always request this output structure:
 6. Next step
 
 This contract reduces tool differences and keeps outcomes consistent.
+
+
+## 7) Playbooks by level
+
+### 🟢 Beginner
+
+```text
+Explain step by step as if I am new to programming.
+Ask short questions.
+Help me complete the idea and then create spec 001.
+Do not move to the next step until I confirm understanding.
+```
+
+### 🟡 Intermediate
+
+```text
+Work on one active specification.
+Prioritize scope clarity, executable tasks, and complete logbook updates.
+Separate changes into: idea, spec, plan, tasks, and validation.
+```
+
+### 🔴 Advanced
+
+```text
+Apply unified output contract and refinement protocol.
+If scope changes, block implementation until history.md and INDEX are updated.
+Return risk analysis and exact next step.
+```
