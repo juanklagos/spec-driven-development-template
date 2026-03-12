@@ -48,6 +48,16 @@ require_file "idea/IDEA_GENERAL.md"
 require_file "specs/INDEX.md"
 require_dir "specs/_template"
 require_file "specs/_template/spec.md"
+
+if [ -f "$ROOT/idea/IDEA_GENERAL.md" ]; then
+  # Simple check: if the file size is very small, it might not be filled out.
+  # The original template is ~388 bytes.
+  file_size=$(wc -c < "$ROOT/idea/IDEA_GENERAL.md" | tr -d ' ')
+  if [ "$file_size" -le 400 ]; then
+    warn "idea/IDEA_GENERAL.md exists but appears to be mostly empty. Please fill it out."
+  fi
+fi
+
 require_file "specs/_template/plan.md"
 require_file "specs/_template/tasks.md"
 require_file "specs/_template/research.md"
