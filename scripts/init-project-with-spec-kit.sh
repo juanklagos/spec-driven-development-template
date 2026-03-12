@@ -31,4 +31,5 @@ Siguiente flujo sugerido:
 3) /speckit.plan
 4) /speckit.tasks
 5) /speckit.implement
+6) ./scripts/validate-sdd.sh . --strict
 MSG

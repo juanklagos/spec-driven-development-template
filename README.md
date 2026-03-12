@@ -31,6 +31,8 @@
 | `bitacora/` | Real execution log | Registro real de ejecución |
 | `docs/` | User guides | Guías de uso |
 | `scripts/` | Bootstrap helpers | Scripts de inicialización |
+| `templates/` | Copy-ready templates | Plantillas listas para copiar |
+| `examples/` | Practical reference projects | Proyectos de referencia |
 
 ## 📐 Required specification format / Formato obligatorio
 
@@ -95,6 +97,12 @@ Setup + Spec Kit:
 ./scripts/init-project-with-spec-kit.sh /path/to/project codex
 ```
 
+Validate structure:
+
+```bash
+./scripts/validate-sdd.sh . --strict
+```
+
 ## 📚 Documentation index / Índice de documentación
 
 - [docs/README.md](./docs/README.md)
@@ -113,6 +121,23 @@ Setup + Spec Kit:
 - 🔴 Advanced / Avanzado:
   - 🇪🇸 [Guía avanzada](./docs/es/15-guia-avanzada.md)
   - 🇺🇸 [Advanced guide](./docs/en/15-advanced-guide.md)
+
+### Advanced operations / Operación avanzada
+
+- 🇪🇸 [Matriz de prompts por objetivo](./docs/es/19-matriz-prompts-por-objetivo.md)
+- 🇺🇸 [Prompt matrix by goal](./docs/en/19-prompt-matrix-by-goal.md)
+- 🇪🇸 [Anti-patrones y errores comunes](./docs/es/20-anti-patrones-y-errores-comunes.md)
+- 🇺🇸 [Anti-patterns and common errors](./docs/en/20-anti-patterns-and-common-errors.md)
+- 🇪🇸 [Checklists de calidad por etapa](./docs/es/21-checklists-calidad-por-etapa.md)
+- 🇺🇸 [Quality checklists by stage](./docs/en/21-quality-checklists-by-stage.md)
+- 🇪🇸 [Modo equipo y colaboración](./docs/es/22-modo-equipo-y-colaboracion.md)
+- 🇺🇸 [Team mode and collaboration](./docs/en/22-team-mode-and-collaboration.md)
+- 🇪🇸 [Onboarding en 30 minutos](./docs/es/23-onboarding-30-minutos.md)
+- 🇺🇸 [30-minute onboarding](./docs/en/23-30-minute-onboarding.md)
+- 🇪🇸 [Decisiones de arquitectura](./docs/es/24-decisiones-de-arquitectura.md)
+- 🇺🇸 [Architecture decisions](./docs/en/24-architecture-decisions.md)
+- 🇪🇸 [De idea a spec con SDD (3 niveles)](./docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md)
+- 🇺🇸 [From idea to spec with SDD (3 levels)](./docs/en/25-idea-to-spec-with-sdd-3-levels.md)
 
 ## 👤 Authorship / Autoría
 

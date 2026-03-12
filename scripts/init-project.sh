@@ -7,6 +7,8 @@ if [ "$#" -ne 1 ]; then
 fi
 
 TARGET="$1"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 mkdir -p "$TARGET/idea" \
          "$TARGET/specs/_template/contracts" \
@@ -14,22 +16,26 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/bitacora/diaria" \
          "$TARGET/bitacora/handoffs" \
          "$TARGET/bitacora/decisiones" \
-         "$TARGET/bitacora/templates"
+         "$TARGET/bitacora/templates" \
+         "$TARGET/scripts"
 
-cp -n idea/IDEA_GENERAL.md "$TARGET/idea/IDEA_GENERAL.md"
-cp -n specs/README.md "$TARGET/specs/README.md"
-cp -n specs/INDEX.md "$TARGET/specs/INDEX.md"
-cp -n specs/_template/spec.md "$TARGET/specs/_template/spec.md"
-cp -n specs/_template/plan.md "$TARGET/specs/_template/plan.md"
-cp -n specs/_template/tasks.md "$TARGET/specs/_template/tasks.md"
-cp -n specs/_template/research.md "$TARGET/specs/_template/research.md"
-cp -n specs/_template/history.md "$TARGET/specs/_template/history.md"
-cp -n specs/_template/contracts/README.md "$TARGET/specs/_template/contracts/README.md"
-cp -n bitacora/README.md "$TARGET/bitacora/README.md"
-cp -n bitacora/global/PROJECT_LOG.md "$TARGET/bitacora/global/PROJECT_LOG.md"
-cp -n bitacora/templates/DAILY_TEMPLATE.md "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
-cp -n bitacora/templates/HANDOFF_TEMPLATE.md "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
-cp -n bitacora/templates/DECISION_TEMPLATE.md "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
+cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
+cp -n "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
+cp -n "$ROOT_DIR/specs/INDEX.md" "$TARGET/specs/INDEX.md"
+cp -n "$ROOT_DIR/specs/_template/spec.md" "$TARGET/specs/_template/spec.md"
+cp -n "$ROOT_DIR/specs/_template/plan.md" "$TARGET/specs/_template/plan.md"
+cp -n "$ROOT_DIR/specs/_template/tasks.md" "$TARGET/specs/_template/tasks.md"
+cp -n "$ROOT_DIR/specs/_template/research.md" "$TARGET/specs/_template/research.md"
+cp -n "$ROOT_DIR/specs/_template/history.md" "$TARGET/specs/_template/history.md"
+cp -n "$ROOT_DIR/specs/_template/contracts/README.md" "$TARGET/specs/_template/contracts/README.md"
+cp -n "$ROOT_DIR/bitacora/README.md" "$TARGET/bitacora/README.md"
+cp -n "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$TARGET/bitacora/global/PROJECT_LOG.md"
+cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
+cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
+cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
+cp -Rn "$ROOT_DIR/templates" "$TARGET/templates"
+cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
+chmod +x "$TARGET/scripts/validate-sdd.sh"
 
 cat <<MSG
 Proyecto inicializado en: $TARGET
@@ -38,4 +44,5 @@ Siguientes pasos:
 1) Completa idea/IDEA_GENERAL.md
 2) Crea la primera especificación en specs/001-nombre/
 3) Registra la primera entrada en bitacora/global/PROJECT_LOG.md
+4) Ejecuta validación base: ./scripts/validate-sdd.sh .
 MSG

@@ -47,6 +47,19 @@ Mantén el comportamiento actual del código, crea la estructura idea/specs/bita
 2. `docs/README.md`
 3. `docs/es/10-agentes-ia-soportados-y-prompts.md` or `docs/en/10-supported-ai-agents-and-prompts.md`
 4. `docs/es/11-refinamiento-continuo.md` or `docs/en/11-continuous-refinement.md`
+5. `docs/es/19-matriz-prompts-por-objetivo.md` or `docs/en/19-prompt-matrix-by-goal.md`
+6. `docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md` or `docs/en/25-idea-to-spec-with-sdd-3-levels.md`
+
+## 🧪 Validation command / Comando de validación
+
+```bash
+./scripts/validate-sdd.sh . --strict
+```
+
+## 📦 Reusable assets / Recursos reutilizables
+
+- Templates: `templates/`
+- Example projects: `examples/`
 
 ## 🎯 Expected outcome / Resultado esperado
 

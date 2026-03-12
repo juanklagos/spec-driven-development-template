@@ -17,6 +17,7 @@ Quick start for AI tools / Inicio rápido para herramientas de IA:
 1. `idea/IDEA_GENERAL.md`
 2. `specs/INDEX.md`
 3. Latest handoff file in `bitacora/handoffs/` / último archivo de `bitacora/handoffs/`
+4. Reusable templates in `templates/` / plantillas reutilizables en `templates/`
 
 ## 🔧 Mandatory workflow / Flujo obligatorio
 
@@ -28,6 +29,7 @@ Quick start for AI tools / Inicio rápido para herramientas de IA:
    - `/speckit.tasks`
    - `/speckit.implement`
 3. Keep `specs/` and `bitacora/` updated at session end.
+4. Run `./scripts/validate-sdd.sh . --strict` before finishing.
 
 ## 🔁 Mandatory refinement protocol / Protocolo obligatorio de refinamiento
 

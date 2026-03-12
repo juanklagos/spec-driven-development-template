@@ -5,11 +5,12 @@ Mantener esta plantilla clara, simple y útil para personas nuevas y profesional
 
 ## Reglas de contribución
 
-0. Trabajar sobre una copia local de este repositorio y seguir la documentación oficial.
+0. Clonar es opcional; lo obligatorio es usar este repositorio y su documentación como referencia principal al trabajar con IA.
 1. No introducir términos no explicados.
 2. No romper la estructura base (`idea`, `specs`, `bitacora`).
 3. Todo cambio relevante debe actualizar documentación en `docs/`.
 4. Mantener ejemplos simples y aplicables.
+5. Ejecutar `./scripts/validate-sdd.sh . --strict` antes de proponer cambios.
 
 ## Proceso recomendado
 

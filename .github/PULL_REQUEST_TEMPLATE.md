@@ -1,9 +1,17 @@
-## Resumen del cambio
+## Summary / Resumen
 
-## Archivos afectados
+- Active spec / Spec activa: `specs/___-___/`
+- Scope statement / Alcance:
 
-## Validación realizada
+## Changed files / Archivos afectados
 
-## Impacto en personas nuevas
+## Validation / Validación
 
-## Impacto en personas profesionales
+- [ ] Tests executed / pruebas ejecutadas
+- [ ] `./scripts/validate-sdd.sh .` executed
+- [ ] `history.md` updated when scope changed
+- [ ] Logbook updated (`bitacora/`)
+
+## Beginner impact / Impacto en personas nuevas
+
+## Professional impact / Impacto en personas profesionales

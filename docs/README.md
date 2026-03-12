@@ -26,6 +26,13 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 | Herramientas desktop locales / Local desktop tools | [ES](./es/16-guia-herramientas-desktop-local.md) | [EN](./en/16-local-desktop-tools-guide.md) |
 | Lovable: ejecución con calidad / Lovable: quality execution | [ES](./es/17-trabajar-con-lovable.md) | [EN](./en/17-working-with-lovable.md) |
 | Agentes y prompts / Agents and prompts | [ES](./es/10-agentes-ia-soportados-y-prompts.md) | [EN](./en/10-supported-ai-agents-and-prompts.md) |
+| Matriz de prompts / Prompt matrix | [ES](./es/19-matriz-prompts-por-objetivo.md) | [EN](./en/19-prompt-matrix-by-goal.md) |
+| Anti-patrones / Anti-patterns | [ES](./es/20-anti-patrones-y-errores-comunes.md) | [EN](./en/20-anti-patterns-and-common-errors.md) |
+| Checklists de calidad / Quality checklists | [ES](./es/21-checklists-calidad-por-etapa.md) | [EN](./en/21-quality-checklists-by-stage.md) |
+| Modo equipo / Team mode | [ES](./es/22-modo-equipo-y-colaboracion.md) | [EN](./en/22-team-mode-and-collaboration.md) |
+| Onboarding 30 minutos / 30-minute onboarding | [ES](./es/23-onboarding-30-minutos.md) | [EN](./en/23-30-minute-onboarding.md) |
+| Decisiones de arquitectura / Architecture decisions | [ES](./es/24-decisiones-de-arquitectura.md) | [EN](./en/24-architecture-decisions.md) |
+| De idea a spec (3 niveles) / Idea to spec (3 levels) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) |
 | Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
 | TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |
