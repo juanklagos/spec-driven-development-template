@@ -1,5 +1,9 @@
 # Validated prompt bank
 
+⬅️ [Back to index](../README.md)
+
+---
+
 > Goal: get consistent outputs across different AI tools.
 
 ## Prompt 1: convert idea to spec

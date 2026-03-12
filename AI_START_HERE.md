@@ -1,13 +1,13 @@
 # 🤖 AI Start Here / Inicio IA Aquí
 
-## ✅ Mandatory rule / Regla obligatoria
+> [!IMPORTANT]
+> **Mandatory rule / Regla obligatoria**
+> Do not start coding blindly. First, tell the Artificial Intelligence assistant to use this repository template and its guides as the primary reference.
+> No empieces a programar a ciegas. Primero, indica a la Inteligencia Artificial que use este repositorio template y sus guías como referencia principal.
 
-Do not start coding blindly. First, tell the Artificial Intelligence assistant to use this repository template and its guides as the primary reference.
-
-No empieces a programar a ciegas. Primero, indica a la Inteligencia Artificial que use este repositorio template y sus guías como referencia principal.
-
-Cloning is optional. If this repository is already available locally, use it directly.  
-Clonar es opcional. Si este repositorio ya está disponible en local, úsalo directamente.
+> [!TIP]
+> Cloning is optional. If this repository is already available locally, use it directly.  
+> Clonar es opcional. Si este repositorio ya está disponible en local, úsalo directamente.
 
 Repository URL / URL del repositorio:
 

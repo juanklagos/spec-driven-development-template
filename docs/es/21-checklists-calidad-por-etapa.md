@@ -1,5 +1,9 @@
 # Checklists de calidad por etapa
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 ## 1) Antes de implementar
 
 - [ ] Spec activa definida.

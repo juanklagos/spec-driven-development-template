@@ -1,5 +1,9 @@
 # Anti-patrones y errores comunes
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 ## 🚫 Lo que no debes hacer
 
 | Anti-patrón | Problema | Corrección |

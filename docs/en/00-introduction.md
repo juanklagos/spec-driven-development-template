@@ -1,7 +1,13 @@
 # Introduction
 
-> ✅ **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
->
+⬅️ [Back to index](../README.md)
+
+---
+
+> [!TIP]
+> **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
+
+> [!IMPORTANT]
 > **Mandatory rule:** tell the Artificial Intelligence assistant to use this template and its guides as the primary reference.
 >
 > Options:

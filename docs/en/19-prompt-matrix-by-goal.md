@@ -1,5 +1,9 @@
 # Prompt matrix by goal
 
+⬅️ [Back to index](../README.md)
+
+---
+
 > Use this matrix to get consistent outputs from any AI assistant.
 
 ## Main table

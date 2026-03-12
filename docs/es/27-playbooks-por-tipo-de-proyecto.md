@@ -1,5 +1,9 @@
 # Playbooks por tipo de proyecto
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 Estos playbooks son opcionales. El template funciona igual si no los usas.
 
 ## Packs disponibles

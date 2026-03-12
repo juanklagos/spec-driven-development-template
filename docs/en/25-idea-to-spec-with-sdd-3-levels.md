@@ -1,5 +1,9 @@
 # From written idea to specs with SDD (3 levels)
 
+⬅️ [Back to index](../README.md)
+
+---
+
 > This guide teaches how to transform a plain-text idea into consistent specifications using Spec-Driven Development, with the recommended standard from [GitHub Spec Kit](https://github.com/github/spec-kit).
 
 ## 🔎 Method baseline (summary)

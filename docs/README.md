@@ -1,8 +1,10 @@
 # 📚 Documentation / Documentación
 
-> ✅ **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
->
-> 📌 **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and these guides as the primary reference.
+> [!TIP]
+> **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
+
+> [!IMPORTANT]
+> **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and these guides as the primary reference.
 
 Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 
@@ -14,7 +16,7 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 ## 🚀 Quick links / Enlaces rápidos
 
 | Topic | Español | English |
-|---|---|---|
+| --- | --- | --- |
 | Ruta completa 3 niveles / Complete 3-level path | [ES](./es/18-ruta-completa-3-niveles.md) | [EN](./en/18-complete-3-level-path.md) |
 | Introducción / Introduction | [ES](./es/00-introduccion.md) | [EN](./en/00-introduction.md) |
 | Guía rápida (no programadores) / Quick guide (non-programmers) | [ES](./es/13-guia-rapida-no-programadores.md) | [EN](./en/13-quick-guide-non-programmers.md) |
@@ -41,8 +43,6 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 | Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
 | TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |
-
-
 
 ## ⭐ Uso explícito del repositorio base
 
@@ -75,8 +75,6 @@ Mantén el código actual, integra la estructura idea/specs/bitacora, crea la pr
 - Primera especificación creada.
 - Bitácora inicial registrada.
 - Próximo paso claro para continuar.
-
-
 
 ## ⭐ Explicit base repository usage
 

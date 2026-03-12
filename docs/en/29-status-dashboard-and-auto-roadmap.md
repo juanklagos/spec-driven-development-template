@@ -1,5 +1,9 @@
 # Status dashboard and auto roadmap
 
+⬅️ [Back to index](../README.md)
+
+---
+
 ## Included scripts
 
 - Create new spec: `./scripts/new-spec.sh "feature-name"`

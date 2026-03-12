@@ -1,5 +1,9 @@
 # Anti-patterns and common errors
 
+⬅️ [Back to index](../README.md)
+
+---
+
 ## 🚫 What not to do
 
 | Anti-pattern | Problem | Fix |

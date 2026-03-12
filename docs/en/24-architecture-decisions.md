@@ -1,5 +1,9 @@
 # Architecture decisions
 
+⬅️ [Back to index](../README.md)
+
+---
+
 ## Purpose
 
 This document centralizes cross-cutting decisions that affect multiple specs.

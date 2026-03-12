@@ -1,5 +1,9 @@
 # Team mode and collaboration
 
+⬅️ [Back to index](../README.md)
+
+---
+
 ## Recommended roles
 
 | Role | Responsibility |

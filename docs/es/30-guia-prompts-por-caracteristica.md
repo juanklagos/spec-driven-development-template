@@ -1,5 +1,9 @@
 # Guía de prompts por característica del template
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 > Esta guía está diseñada para hablarle a la IA y activar cada característica del template de forma consistente.
 
 ## Regla base (usar siempre al inicio)

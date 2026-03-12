@@ -1,5 +1,9 @@
 # Modo migración legado avanzado
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 ## Objetivo
 
 Transformar un sistema existente en specs sin romper su comportamiento actual.

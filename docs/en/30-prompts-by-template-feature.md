@@ -1,5 +1,9 @@
 # Prompt guide by template feature
 
+⬅️ [Back to index](../README.md)
+
+---
+
 > This guide is designed so users can instruct AI tools to use each template feature consistently.
 
 ## Base rule (always use first)

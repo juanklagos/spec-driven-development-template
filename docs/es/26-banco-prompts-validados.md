@@ -1,5 +1,9 @@
 # Banco de prompts validados
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 > Objetivo: obtener resultados consistentes entre diferentes herramientas de IA.
 
 ## Prompt 1: convertir idea en spec

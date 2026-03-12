@@ -1,6 +1,11 @@
 # 🖥️ Guía: herramientas de escritorio con acceso local
 
-> ✅ **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto.
+⬅️ [Volver al índice](../README.md)
+
+---
+
+> [!TIP]
+> **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto.
 >
 > **Regla obligatoria:** indica a la IA que debe trabajar usando este template y sus guías como referencia principal.
 >

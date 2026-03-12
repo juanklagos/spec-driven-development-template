@@ -1,5 +1,9 @@
 # Project type playbooks
 
+⬅️ [Back to index](../README.md)
+
+---
+
 These playbooks are optional. The template works even if you do not use them.
 
 ## Available packs

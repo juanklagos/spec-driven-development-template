@@ -1,6 +1,11 @@
 # 🧭 Complete 3-level learning path (full system)
 
-> ✅ **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
+⬅️ [Back to index](../README.md)
+
+---
+
+> [!TIP]
+> **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
 >
 > **Mandatory rule:** tell the Artificial Intelligence assistant to work with this template and its guides as the primary reference.
 >
@@ -24,7 +29,7 @@ flowchart LR
 ## 🧱 What each level means
 
 | Level | Profile | Main goal |
-|---|---|---|
+| --- | --- | --- |
 | 🟢 Beginner | New to programming | Understand and use workflow without confusion |
 | 🟡 Intermediate | Basic project experience | Keep consistency across sessions |
 | 🔴 Advanced | High-discipline technical teams | Unify outputs across tools and scale quality |
@@ -32,7 +37,7 @@ flowchart LR
 ## 🗺️ Path by topic (full system)
 
 | Topic | 🟢 Beginner | 🟡 Intermediate | 🔴 Advanced |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Base structure | Confirm `idea/specs/bitacora` folders | Validate required templates | Automate structure validation |
 | Project idea | Complete `IDEA_GENERAL.md` with AI guidance | Refine scope and risks | Manage vision changes via protocol |
 | Specifications | Create `001-...` from template | Keep `history.md` updated | Split specs by domain and dependencies |

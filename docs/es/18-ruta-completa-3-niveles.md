@@ -1,6 +1,11 @@
 # 🧭 Ruta completa de aprendizaje en 3 niveles (todo el sistema)
 
-> ✅ **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando dentro de un proyecto.
+⬅️ [Volver al índice](../README.md)
+
+---
+
+> [!TIP]
+> **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando dentro de un proyecto.
 >
 > **Regla obligatoria:** indica a la IA que debe trabajar con este template y sus guías como referencia principal.
 >
@@ -24,7 +29,7 @@ flowchart LR
 ## 🧱 Qué significa cada nivel
 
 | Nivel | Perfil | Objetivo principal |
-|---|---|---|
+| --- | --- | --- |
 | 🟢 Principiante | Persona nueva en programación | Entender y usar el flujo sin perderse |
 | 🟡 Intermedio | Persona con experiencia básica | Mantener consistencia entre sesiones |
 | 🔴 Avanzado | Equipo técnico exigente | Unificar resultados entre herramientas y escalar calidad |
@@ -32,7 +37,7 @@ flowchart LR
 ## 🗺️ Ruta por temas (todo el sistema)
 
 | Tema | 🟢 Principiante | 🟡 Intermedio | 🔴 Avanzado |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Estructura base | Confirmar carpetas `idea/specs/bitacora` | Validar plantillas obligatorias | Automatizar validaciones de estructura |
 | Idea del proyecto | Completar `IDEA_GENERAL.md` con guía IA | Refinar alcance y riesgos | Gestionar cambios de visión con protocolo |
 | Especificaciones | Crear `001-...` desde plantilla | Mantener `history.md` al día | Separar specs por dominio y dependencias |

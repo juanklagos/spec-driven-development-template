@@ -1,8 +1,10 @@
 # 🌱 Spec Driven Development Template
 
-> ✅ **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
+> [!TIP]
+> **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
 >
-> 📌 **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and its guides as the primary reference.
+> [!IMPORTANT]
+> **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and its guides as the primary reference.
 >
 > If needed, optional clone:
 > ```bash

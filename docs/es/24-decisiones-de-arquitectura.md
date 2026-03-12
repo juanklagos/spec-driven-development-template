@@ -1,5 +1,9 @@
 # Decisiones de arquitectura
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 ## Propósito
 
 Este documento centraliza decisiones transversales que impactan múltiples specs.

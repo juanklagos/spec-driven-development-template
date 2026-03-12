@@ -1,5 +1,9 @@
 # Matriz de prompts por objetivo
 
+⬅️ [Volver al índice](../README.md)
+
+---
+
 > Usa esta matriz para pedirle a cualquier IA resultados consistentes.
 
 ## Tabla principal

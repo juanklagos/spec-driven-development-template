@@ -1,5 +1,9 @@
 # Advanced legacy migration mode
 
+⬅️ [Back to index](../README.md)
+
+---
+
 ## Goal
 
 Transform an existing system into specs without breaking current behavior.
