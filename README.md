@@ -39,6 +39,7 @@
 5. [⚙️ Scripts & Tools / Scripts y Herramientas](#️-scripts--tools--scripts-y-herramientas)
 6. [📚 Documentation Index / Índice de Documentación](#-documentation-index--índice-de-documentación)
 7. [⭐ Base Repository Usage / Uso Base Explícito](#-base-repository-usage--uso-base-explícito)
+8. [⚖️ Licensing & Legal / Licenciamiento y Legal](#️-licensing--legal--licenciamiento-y-legal)
 
 </details>
 
@@ -211,6 +212,29 @@ If applying this to a legacy codebase, feed this prompt to the AI:
 > **EN:** "Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: `[PROJECT_PATH]`. Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability."
 > 
 > **ES:** "Usando https://github.com/juanklagos/spec-driven-development-template y su guía, adapta este proyecto existente: `[RUTA_DEL_PROYECTO]`. Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa."
+
+---
+
+## ⚖️ Licensing & Legal / Licenciamiento y Legal
+
+This repository is licensed under `PolyForm Noncommercial 1.0.0`.
+Commercial use requires explicit written authorization from the author.
+
+Este repositorio está licenciado bajo `PolyForm Noncommercial 1.0.0`.
+El uso comercial requiere autorización escrita explícita del autor.
+
+Legal documents:
+
+- [LICENSE](./LICENSE)
+- [NOTICE](./NOTICE)
+- [COMMERCIAL_LICENSE.md](./COMMERCIAL_LICENSE.md)
+- [DISCLAIMER.md](./DISCLAIMER.md)
+- [TRADEMARK_POLICY.md](./TRADEMARK_POLICY.md)
+- [ENFORCEMENT.md](./ENFORCEMENT.md)
+- [CLA.md](./CLA.md)
+- [LEGAL_OVERVIEW.md](./LEGAL_OVERVIEW.md)
+- 🇪🇸 [Marco legal y uso comercial](./docs/es/31-marco-legal-y-uso-comercial.md)
+- 🇺🇸 [Legal framework and commercial use](./docs/en/31-legal-framework-and-commercial-use.md)
 
 ---
 

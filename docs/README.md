@@ -40,6 +40,7 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 | Migración legado avanzada / Advanced legacy migration | [ES](./es/28-modo-migracion-legado-avanzado.md) | [EN](./en/28-advanced-legacy-migration-mode.md) |
 | Dashboard status + roadmap | [ES](./es/29-dashboard-status-y-roadmap.md) | [EN](./en/29-status-dashboard-and-auto-roadmap.md) |
 | Prompts por característica / Prompts by feature | [ES](./es/30-guia-prompts-por-caracteristica.md) | [EN](./en/30-prompts-by-template-feature.md) |
+| Marco legal y uso comercial / Legal framework & commercial use | [ES](./es/31-marco-legal-y-uso-comercial.md) | [EN](./en/31-legal-framework-and-commercial-use.md) |
 | Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
 | TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |

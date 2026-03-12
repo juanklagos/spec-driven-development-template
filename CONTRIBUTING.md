@@ -12,6 +12,7 @@ Mantener esta plantilla clara, simple y útil para personas nuevas y profesional
 4. Mantener ejemplos simples y aplicables.
 5. Ejecutar `./scripts/validate-sdd.sh . --strict` antes de proponer cambios.
 6. Módulos opcionales (`playbooks/`, `quality/`, scripts extra) no son obligatorios para contribuciones mínimas, pero deben mantenerse consistentes si se usan.
+7. Toda contribución debe aceptar `CLA.md` y respetar la política de licencia no comercial.
 
 ## Proceso recomendado
 

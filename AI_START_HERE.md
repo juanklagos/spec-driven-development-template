@@ -50,6 +50,7 @@ Mantén el comportamiento actual del código, crea la estructura idea/specs/bita
 5. `docs/es/19-matriz-prompts-por-objetivo.md` or `docs/en/19-prompt-matrix-by-goal.md`
 6. `docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md` or `docs/en/25-idea-to-spec-with-sdd-3-levels.md`
 7. `docs/es/30-guia-prompts-por-caracteristica.md` or `docs/en/30-prompts-by-template-feature.md`
+8. `docs/es/31-marco-legal-y-uso-comercial.md` or `docs/en/31-legal-framework-and-commercial-use.md`
 
 ## 🧪 Validation command / Comando de validación
 
