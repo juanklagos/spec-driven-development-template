@@ -109,3 +109,71 @@ Setup + Spec Kit:
 
 - Main author / Autor principal: **Juan Klagos** ([AUTHORS.md](./AUTHORS.md))
 - Open space for collaborators / Espacio abierto para colaboradores: [COLLABORATORS.md](./COLLABORATORS.md)
+
+
+
+## ⭐ Uso explícito del repositorio base
+
+Usa siempre este repositorio como referencia principal:
+
+- `https://github.com/juanklagos/spec-driven-development-template`
+
+### 🆕 Caso 1: crear un proyecto nuevo desde esta base
+
+Prompt sugerido para la IA:
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
+Clona el repositorio base, inicializa la estructura, y guíame paso a paso para definir idea, primera spec y bitácora.
+No saltes pasos.
+```
+
+### ♻️ Caso 2: adaptar un proyecto existente usando esta base
+
+Prompt sugerido para la IA:
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template y su guía, adapta este proyecto existente: [RUTA_DEL_PROYECTO].
+Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
+```
+
+### ✅ Resultado mínimo esperado
+
+- Proyecto creado o adaptado con estructura estándar.
+- Primera especificación creada.
+- Bitácora inicial registrada.
+- Próximo paso claro para continuar.
+
+
+
+## ⭐ Explicit base repository usage
+
+Always use this repository as the primary reference:
+
+- `https://github.com/juanklagos/spec-driven-development-template`
+
+### 🆕 Case 1: create a new project from this base
+
+Suggested prompt for the Artificial Intelligence assistant:
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
+Clone the base repository, initialize the structure, and guide me step by step to define idea, first specification, and logbook.
+Do not skip steps.
+```
+
+### ♻️ Case 2: adapt an existing project using this base
+
+Suggested prompt for the Artificial Intelligence assistant:
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: [PROJECT_PATH].
+Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability.
+```
+
+### ✅ Minimum expected outcome
+
+- Project created or adapted with standard structure.
+- First specification created.
+- Initial logbook entry recorded.
+- Clear next step to continue.
