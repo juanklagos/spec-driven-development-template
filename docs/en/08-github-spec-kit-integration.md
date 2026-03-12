@@ -1,16 +1,27 @@
-# GitHub Spec Kit integration
+# 🤖 GitHub Spec Kit integration
 
-This template strongly recommends using GitHub Spec Kit.
+This template recommends GitHub Spec Kit as the main workflow engine.
 
-## What GitHub Spec Kit provides
+## Quick map
 
-A practical flow for:
+| Phase | Command | Purpose |
+|---|---|---|
+| 1 | `/speckit.constitution` | Define project principles |
+| 2 | `/speckit.specify` | Define what to build |
+| 3 | `/speckit.plan` | Define how to build |
+| 4 | `/speckit.tasks` | Generate executable tasks |
+| 5 | `/speckit.implement` | Execute implementation |
 
-1. Project principles
-2. Feature specification
-3. Technical plan
-4. Task generation
-5. Implementation
+## Visual flow
+
+```mermaid
+flowchart LR
+  A["Constitution"] --> B["Specification"]
+  B --> C["Plan"]
+  C --> D["Tasks"]
+  D --> E["Implementation"]
+  E --> F["Logbook + Refinement"]
+```
 
 ## Recommended installation
 
@@ -40,16 +51,18 @@ One-time command alternative:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
-## Recommended command flow
-
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.plan`
-4. `/speckit.tasks`
-5. `/speckit.implement`
-
 ## How it fits this template
 
-- `idea/` keeps overall project intent.
-- `specs/` keeps numbered human-readable specs.
-- `bitacora/` keeps real execution history.
+- `idea/` defines global project intent.
+- `specs/` stores numbered specifications.
+- `bitacora/` stores real execution trace.
+
+## Practical recommendation
+
+After Spec Kit commands, always update:
+
+- `specs/INDEX.md`
+- active spec `history.md`
+- `bitacora/global/PROJECT_LOG.md`
+- `bitacora/diaria/`
+- `bitacora/handoffs/` when pending work exists

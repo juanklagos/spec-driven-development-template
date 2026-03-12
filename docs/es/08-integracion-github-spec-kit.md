@@ -1,16 +1,27 @@
-# Integración con GitHub Spec Kit
+# 🤖 Integración con GitHub Spec Kit
 
-Esta plantilla promueve el uso de GitHub Spec Kit como mecanismo práctico para aplicar desarrollo guiado por especificaciones.
+Esta plantilla recomienda usar GitHub Spec Kit como motor de flujo de trabajo.
 
-## Qué es GitHub Spec Kit
+## Mapa rápido
 
-GitHub Spec Kit es un conjunto de herramientas para organizar el trabajo en fases:
+| Fase | Comando | Propósito |
+|---|---|---|
+| 1 | `/speckit.constitution` | Definir principios del proyecto |
+| 2 | `/speckit.specify` | Definir qué se construye |
+| 3 | `/speckit.plan` | Definir cómo se construye |
+| 4 | `/speckit.tasks` | Generar tareas ejecutables |
+| 5 | `/speckit.implement` | Ejecutar implementación |
 
-1. Principios del proyecto.
-2. Especificación funcional.
-3. Plan técnico.
-4. Lista de tareas.
-5. Implementación.
+## Flujo visual
+
+```mermaid
+flowchart LR
+  A["Constitución"] --> B["Especificación"]
+  B --> C["Plan"]
+  C --> D["Tareas"]
+  D --> E["Implementación"]
+  E --> F["Bitácora + Refinamiento"]
+```
 
 ## Instalación recomendada
 
@@ -40,27 +51,18 @@ También puedes usar ejecución puntual:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
-## Flujo recomendado en sesión
-
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.plan`
-4. `/speckit.tasks`
-5. `/speckit.implement`
-
 ## Relación con esta plantilla
 
-- `idea/` conserva la intención general del proyecto.
-- `specs/` conserva las especificaciones numeradas para lectura humana directa.
-- `bitacora/` conserva historial real de ejecución.
-
-GitHub Spec Kit y esta plantilla se complementan: uno guía el flujo y el otro ordena el conocimiento del proyecto.
+- `idea/` define intención general.
+- `specs/` guarda especificaciones numeradas.
+- `bitacora/` mantiene trazabilidad real.
 
 ## Recomendación práctica
 
 Después de usar comandos de Spec Kit, actualiza siempre:
 
 - `specs/INDEX.md`
+- `history.md` de la spec activa
 - `bitacora/global/PROJECT_LOG.md`
 - `bitacora/diaria/`
 - `bitacora/handoffs/` si dejas trabajo pendiente

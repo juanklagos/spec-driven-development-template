@@ -1,23 +1,27 @@
-# Spec Driven Development Template
+# 🌱 Spec Driven Development Template
 
-Language / Idioma:
+## 🌍 Language / Idioma
 
-- Español: [docs/es](./docs/es)
-- English: [docs/en](./docs/en)
+- 🇪🇸 Español: [docs/es](./docs/es)
+- 🇺🇸 English: [docs/en](./docs/en)
 
-## What this repository is / Qué es este repositorio
+## 🧩 What this repository is / Qué es este repositorio
 
-This is a reusable project structure to work with specification-first development.
+**English:** A reusable structure to run projects with specification-first discipline.
 
-Este es un sistema reutilizable para trabajar con desarrollo guiado por especificaciones.
+**Español:** Una estructura reutilizable para ejecutar proyectos con disciplina guiada por especificaciones.
 
-## Core folders / Carpetas principales
+## 🗂️ Core folders / Carpetas principales
 
-- `idea/`: general project idea / idea general del proyecto.
-- `specs/`: numbered specifications / especificaciones numeradas.
-- `bitacora/`: real work history / historial real de trabajo.
+| Folder | Purpose (EN) | Propósito (ES) |
+|---|---|---|
+| `idea/` | General product intent | Idea general del producto |
+| `specs/` | Numbered specifications | Especificaciones numeradas |
+| `bitacora/` | Real execution log | Registro real de ejecución |
+| `docs/` | User guides | Guías de uso |
+| `scripts/` | Bootstrap helpers | Scripts de inicialización |
 
-## Required specification format / Formato obligatorio de especificación
+## 📐 Required specification format / Formato obligatorio
 
 Each specification folder must include / Cada carpeta de especificación debe incluir:
 
@@ -25,9 +29,17 @@ Each specification folder must include / Cada carpeta de especificación debe in
 - `plan.md`
 - `tasks.md`
 - `research.md`
+- `history.md` ⭐ (required change history / historial de cambios obligatorio)
 - `contracts/` when needed / cuando sea necesario
 
-## Recommended with GitHub Spec Kit / Recomendado con GitHub Spec Kit
+## 🔁 Continuous refinement / Refinamiento continuo
+
+When ideas or requirements change, follow this protocol:
+
+- 🇪🇸 [Refinamiento continuo](./docs/es/11-refinamiento-continuo.md)
+- 🇺🇸 [Continuous refinement](./docs/en/11-continuous-refinement.md)
+
+## 🤖 Recommended with GitHub Spec Kit / Recomendado con GitHub Spec Kit
 
 Install / instalar:
 
@@ -49,25 +61,25 @@ Recommended command flow / flujo recomendado:
 4. `/speckit.tasks`
 5. `/speckit.implement`
 
-Supported agents table + unified prompts / Tabla de agentes soportados + prompts unificados:
+Supported agents + unified prompts:
 
-- [ES](./docs/es/10-agentes-ia-soportados-y-prompts.md)
-- [EN](./docs/en/10-supported-ai-agents-and-prompts.md)
+- 🇪🇸 [Agentes y prompts](./docs/es/10-agentes-ia-soportados-y-prompts.md)
+- 🇺🇸 [Agents and prompts](./docs/en/10-supported-ai-agents-and-prompts.md)
 
-## Scripts / Scripts
+## ⚙️ Scripts
 
-- Base template setup / Inicialización base:
+Base setup:
 
 ```bash
 ./scripts/init-project.sh /path/to/project
 ```
 
-- Template + GitHub Spec Kit setup / Inicialización con plantilla + GitHub Spec Kit:
+Setup + Spec Kit:
 
 ```bash
 ./scripts/init-project-with-spec-kit.sh /path/to/project codex
 ```
 
-## Documentation index / Índice de documentación
+## 📚 Documentation index / Índice de documentación
 
 - [docs/README.md](./docs/README.md)

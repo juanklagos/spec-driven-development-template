@@ -1,15 +1,15 @@
-# Instructions for any Artificial Intelligence tool / Instrucciones para cualquier herramienta de Inteligencia Artificial
+# 🤖 Instructions for any Artificial Intelligence tool / Instrucciones para cualquier herramienta de Inteligencia Artificial
 
-## Mandatory reading order / Orden obligatorio de lectura
+## 📚 Mandatory reading order / Orden obligatorio de lectura
 
 1. `idea/IDEA_GENERAL.md`
 2. `specs/INDEX.md`
 3. Latest handoff file in `bitacora/handoffs/` / último archivo de `bitacora/handoffs/`
 
-## Mandatory workflow / Flujo obligatorio
+## 🔧 Mandatory workflow / Flujo obligatorio
 
-1. Work from an active specification.
-2. If GitHub Spec Kit is available, use it before implementation:
+1. Work from one active specification.
+2. If GitHub Spec Kit is available, use:
    - `/speckit.constitution`
    - `/speckit.specify`
    - `/speckit.plan`
@@ -17,17 +17,33 @@
    - `/speckit.implement`
 3. Keep `specs/` and `bitacora/` updated at session end.
 
-## Required reference / Referencia obligatoria
+## 🔁 Mandatory refinement protocol / Protocolo obligatorio de refinamiento
 
-Before starting execution, read:
+If idea, scope, priority, or requirements change:
+
+1. Update the active specification.
+2. Add an entry in `history.md`.
+3. Update `specs/INDEX.md` if status or priority changes.
+4. Register the change in `bitacora/`.
+
+Do not continue implementation until documentation is aligned.
+
+No continúes implementación hasta que la documentación quede alineada.
+
+## 🧭 Required reference / Referencia obligatoria
+
+Read and apply:
 
 - `docs/es/10-agentes-ia-soportados-y-prompts.md` or
 - `docs/en/10-supported-ai-agents-and-prompts.md`
 
-and apply the unified output contract defined there.
+and the refinement guide:
 
-## Final requirement / Requisito final
+- `docs/es/11-refinamiento-continuo.md` or
+- `docs/en/11-continuous-refinement.md`
 
-No implementation without specification and traceability.
+## ✅ Final requirement / Requisito final
 
-No hay implementación sin especificación y trazabilidad.
+No implementation without specification, refinement trace, and logbook updates.
+
+No hay implementación sin especificación, traza de refinamiento y actualización de bitácora.
