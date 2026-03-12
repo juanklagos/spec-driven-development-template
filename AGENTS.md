@@ -17,6 +17,15 @@
    - `/speckit.implement`
 3. Keep `specs/` and `bitacora/` updated at session end.
 
+## Required reference / Referencia obligatoria
+
+Before starting execution, read:
+
+- `docs/es/10-agentes-ia-soportados-y-prompts.md` or
+- `docs/en/10-supported-ai-agents-and-prompts.md`
+
+and apply the unified output contract defined there.
+
 ## Final requirement / Requisito final
 
 No implementation without specification and traceability.

@@ -49,6 +49,11 @@ Recommended command flow / flujo recomendado:
 4. `/speckit.tasks`
 5. `/speckit.implement`
 
+Supported agents table + unified prompts / Tabla de agentes soportados + prompts unificados:
+
+- [ES](./docs/es/10-agentes-ia-soportados-y-prompts.md)
+- [EN](./docs/en/10-supported-ai-agents-and-prompts.md)
+
 ## Scripts / Scripts
 
 - Base template setup / Inicialización base:

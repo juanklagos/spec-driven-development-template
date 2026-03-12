@@ -19,3 +19,6 @@ Choose language / Elige idioma:
 - GitHub Spec Kit integration / Integración con GitHub Spec Kit:
   - [ES](./es/08-integracion-github-spec-kit.md)
   - [EN](./en/08-github-spec-kit-integration.md)
+- Supported agents and prompts / Agentes soportados y prompts:
+  - [ES](./es/10-agentes-ia-soportados-y-prompts.md)
+  - [EN](./en/10-supported-ai-agents-and-prompts.md)
