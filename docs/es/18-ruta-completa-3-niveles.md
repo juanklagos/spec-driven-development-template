@@ -1,7 +1,10 @@
 # 🧭 Ruta completa de aprendizaje en 3 niveles (todo el sistema)
 
-> 📌 **Inicio obligatorio:** antes de trabajar, clona (o abre) este repositorio y sigue esta documentación como fuente de verdad.
+> ✅ **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando dentro de un proyecto.
 >
+> **Regla obligatoria:** indica a la IA que debe trabajar con este template y sus guías como referencia principal.
+>
+> Clonado opcional:
 > ```bash
 > git clone https://github.com/juanklagos/spec-driven-development-template.git
 > cd spec-driven-development-template

@@ -1,7 +1,10 @@
 # 🌱 Spec Driven Development Template
 
-> 📌 **Mandatory start / Inicio obligatorio:** clone (or open) this repository and follow its guides before asking any Artificial Intelligence tool to implement changes.
+> ✅ **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
 >
+> 📌 **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and its guides as the primary reference.
+>
+> If needed, optional clone:
 > ```bash
 > git clone https://github.com/juanklagos/spec-driven-development-template.git
 > cd spec-driven-development-template
@@ -11,6 +14,7 @@
 
 - 🇪🇸 Español: [docs/es](./docs/es)
 - 🇺🇸 English: [docs/en](./docs/en)
+- 🤖 AI quick start / Inicio rápido para IA: [AI_START_HERE.md](./AI_START_HERE.md)
 
 ## 🧩 What this repository is / Qué es este repositorio
 
@@ -129,7 +133,7 @@ Prompt sugerido para la IA:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Clona el repositorio base, inicializa la estructura, y guíame paso a paso para definir idea, primera spec y bitácora.
+Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
 No saltes pasos.
 ```
 
@@ -163,7 +167,7 @@ Suggested prompt for the Artificial Intelligence assistant:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-Clone the base repository, initialize the structure, and guide me step by step to define idea, first specification, and logbook.
+If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
 Do not skip steps.
 ```
 

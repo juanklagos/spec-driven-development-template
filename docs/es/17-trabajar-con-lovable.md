@@ -1,13 +1,18 @@
 # 💜 Cómo trabajar con Lovable después de tener specs listas
 
-> 📌 **Inicio obligatorio:** antes de trabajar, clona (o abre) este repositorio y sigue esta documentación como fuente de verdad.
+> ✅ **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto.
+>
+> **Regla obligatoria:** indica a la IA que debe trabajar usando este template y sus guías como referencia principal.
+>
+> Opciones:
+> - Si ya tienes este repositorio en local, úsalo directamente.
+> - Si trabajas en otro proyecto, pide a la IA adaptar ese proyecto usando esta guía.
+> - Si no tienes este repositorio, puedes clonarlo como opción:
 >
 > ```bash
 > git clone https://github.com/juanklagos/spec-driven-development-template.git
 > cd spec-driven-development-template
 > ```
->
-> Si ya tienes el repositorio local, usa siempre su guía antes de pedir implementación.
 
 ## ⭐ Uso explícito del repositorio base
 
@@ -21,7 +26,7 @@ Prompt sugerido para la IA:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Clona el repositorio base, inicializa la estructura, y guíame paso a paso para definir idea, primera spec y bitácora.
+Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
 No saltes pasos.
 ```
 

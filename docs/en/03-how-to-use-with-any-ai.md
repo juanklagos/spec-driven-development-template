@@ -1,13 +1,18 @@
 # How to use with any Artificial Intelligence tool
 
-> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+> ✅ **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
+>
+> **Mandatory rule:** tell the Artificial Intelligence assistant to use this template and its guides as the primary reference.
+>
+> Options:
+> - If this repository is already local, use it directly.
+> - If you are in another project, ask the assistant to adapt that project using this guide.
+> - If you do not have this repository, cloning is optional:
 >
 > ```bash
 > git clone https://github.com/juanklagos/spec-driven-development-template.git
 > cd spec-driven-development-template
 > ```
->
-> If the repository is already local, always follow its guides before requesting implementation.
 
 ## ⭐ Explicit base repository usage
 
@@ -21,7 +26,7 @@ Suggested prompt for the Artificial Intelligence assistant:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-Clone the base repository, initialize the structure, and guide me step by step to define idea, first specification, and logbook.
+If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
 Do not skip steps.
 ```
 

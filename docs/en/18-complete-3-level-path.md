@@ -1,7 +1,10 @@
 # 🧭 Complete 3-level learning path (full system)
 
-> 📌 **Mandatory start:** before working, clone (or open) this repository and follow this documentation as the source of truth.
+> ✅ **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
 >
+> **Mandatory rule:** tell the Artificial Intelligence assistant to work with this template and its guides as the primary reference.
+>
+> Optional clone:
 > ```bash
 > git clone https://github.com/juanklagos/spec-driven-development-template.git
 > cd spec-driven-development-template

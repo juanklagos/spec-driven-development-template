@@ -2,14 +2,15 @@
 
 ## 📌 Mandatory repository rule / Regla obligatoria del repositorio
 
-Before any action, clone or open this repository locally and follow its guides.
+Cloning is optional. The mandatory requirement is to work with this repository template and guides as the primary reference.
 
-Antes de cualquier acción, clona o abre este repositorio en local y sigue sus guías.
+Clonar es opcional. Lo obligatorio es trabajar con este template y sus guías como referencia principal.
 
-```bash
-git clone https://github.com/juanklagos/spec-driven-development-template.git
-cd spec-driven-development-template
-```
+Quick start for AI tools / Inicio rápido para herramientas de IA:
+
+- `AI_START_HERE.md`
+- `docs/es/10-agentes-ia-soportados-y-prompts.md`
+- `docs/en/10-supported-ai-agents-and-prompts.md`
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
@@ -90,7 +91,7 @@ Prompt sugerido para la IA:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Clona el repositorio base, inicializa la estructura, y guíame paso a paso para definir idea, primera spec y bitácora.
+Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
 No saltes pasos.
 ```
 
@@ -124,7 +125,7 @@ Suggested prompt for the Artificial Intelligence assistant:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-Clone the base repository, initialize the structure, and guide me step by step to define idea, first specification, and logbook.
+If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
 Do not skip steps.
 ```
 
