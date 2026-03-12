@@ -1,0 +1,20 @@
+name: Validate SDD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make validation script executable
+        run: chmod +x ./scripts/validate-sdd.sh
+
+      - name: Run validate-sdd.sh
+        run: ./scripts/validate-sdd.sh . --strict
