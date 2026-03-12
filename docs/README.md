@@ -11,6 +11,7 @@
 
 | Topic | Español | English |
 |---|---|---|
+| Ruta completa 3 niveles / Complete 3-level path | [ES](./es/18-ruta-completa-3-niveles.md) | [EN](./en/18-complete-3-level-path.md) |
 | Introducción / Introduction | [ES](./es/00-introduccion.md) | [EN](./en/00-introduction.md) |
 | Guía rápida (no programadores) / Quick guide (non-programmers) | [ES](./es/13-guia-rapida-no-programadores.md) | [EN](./en/13-quick-guide-non-programmers.md) |
 | Guía intermedia / Intermediate guide | [ES](./es/14-guia-intermedia.md) | [EN](./en/14-intermediate-guide.md) |

@@ -65,6 +65,7 @@ For Lovable execution workflow after refined specs, read:
 
 For operator level (beginner/intermediate/advanced), use:
 
+- `docs/es/18-ruta-completa-3-niveles.md` / `docs/en/18-complete-3-level-path.md`
 - `docs/es/13-guia-rapida-no-programadores.md` / `docs/en/13-quick-guide-non-programmers.md`
 - `docs/es/14-guia-intermedia.md` / `docs/en/14-intermediate-guide.md`
 - `docs/es/15-guia-avanzada.md` / `docs/en/15-advanced-guide.md`

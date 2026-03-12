@@ -97,6 +97,9 @@ Setup + Spec Kit:
 
 ### Learning paths / Rutas de aprendizaje
 
+- 🧭 Ruta completa:
+  - 🇪🇸 [Ruta completa de aprendizaje en 3 niveles](./docs/es/18-ruta-completa-3-niveles.md)
+  - 🇺🇸 [Complete 3-level learning path](./docs/en/18-complete-3-level-path.md)
 - 🟢 Beginner / Principiante:
   - 🇪🇸 [Guía rápida para no programadores](./docs/es/13-guia-rapida-no-programadores.md)
   - 🇺🇸 [Quick guide for non-programmers](./docs/en/13-quick-guide-non-programmers.md)
