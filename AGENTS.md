@@ -42,6 +42,11 @@ and the refinement guide:
 - `docs/es/11-refinamiento-continuo.md` or
 - `docs/en/11-continuous-refinement.md`
 
+For local desktop execution guidance (Codex desktop, Claude desktop, similar tools), read:
+
+- `docs/es/16-guia-herramientas-desktop-local.md` or
+- `docs/en/16-local-desktop-tools-guide.md`
+
 For operator level (beginner/intermediate/advanced), use:
 
 - `docs/es/13-guia-rapida-no-programadores.md` / `docs/en/13-quick-guide-non-programmers.md`

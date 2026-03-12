@@ -65,6 +65,8 @@ Supported agents + unified prompts:
 
 - 🇪🇸 [Agentes y prompts](./docs/es/10-agentes-ia-soportados-y-prompts.md)
 - 🇺🇸 [Agents and prompts](./docs/en/10-supported-ai-agents-and-prompts.md)
+- 🇪🇸 [Guía de herramientas desktop con acceso local](./docs/es/16-guia-herramientas-desktop-local.md)
+- 🇺🇸 [Desktop tools with local access guide](./docs/en/16-local-desktop-tools-guide.md)
 
 ## ⚙️ Scripts
 
