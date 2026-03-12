@@ -83,3 +83,8 @@ Setup + Spec Kit:
 ## 📚 Documentation index / Índice de documentación
 
 - [docs/README.md](./docs/README.md)
+
+## 👤 Authorship / Autoría
+
+- Main author / Autor principal: **Juan Klagos** ([AUTHORS.md](./AUTHORS.md))
+- Open space for collaborators / Espacio abierto para colaboradores: [COLLABORATORS.md](./COLLABORATORS.md)

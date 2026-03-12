@@ -16,3 +16,8 @@ Mantener esta plantilla clara, simple y útil para personas nuevas y profesional
 2. Describir el problema.
 3. Proponer solución concreta.
 4. Actualizar archivos afectados.
+
+## Reconocimiento de autoría y colaboradores
+
+- Autor principal: revisar `AUTHORS.md`.
+- Nuevas personas colaboradoras: agregar entrada en `COLLABORATORS.md`.

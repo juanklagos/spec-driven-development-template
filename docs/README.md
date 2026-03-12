@@ -15,4 +15,5 @@
 | Integración Spec Kit / Spec Kit Integration | [ES](./es/08-integracion-github-spec-kit.md) | [EN](./en/08-github-spec-kit-integration.md) |
 | Agentes y prompts / Agents and prompts | [ES](./es/10-agentes-ia-soportados-y-prompts.md) | [EN](./en/10-supported-ai-agents-and-prompts.md) |
 | Refinamiento / Refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
+| TDD y BDD / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
 | Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |
