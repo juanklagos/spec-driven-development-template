@@ -1,12 +1,12 @@
-# Registro general del proyecto
+# Project log / Registro general del proyecto
 
-## Formato de entrada
+## Entry format / Formato de entrada
 
-### [AAAA-MM-DD HH:MM] Sesión N
-- Objetivo:
-- Trabajo realizado:
-- Archivos modificados:
-- Decisiones tomadas:
-- Bloqueos:
-- Próximo paso:
-- Responsable:
+### [YYYY-MM-DD HH:MM] Session N / Sesión N
+- Goal / Objetivo:
+- Work completed / Trabajo realizado:
+- Modified files / Archivos modificados:
+- Decisions made / Decisiones tomadas:
+- Blockers / Bloqueos:
+- Next step / Próximo paso:
+- Owner / Responsable:

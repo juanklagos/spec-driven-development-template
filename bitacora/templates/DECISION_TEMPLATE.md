@@ -1,11 +1,11 @@
-# Decisión importante - Título
+# Key decision - Title / Decisión importante - Título
 
-## Fecha
+## Date / Fecha
 
-## Contexto
+## Context / Contexto
 
-## Decisión tomada
+## Decision / Decisión
 
-## Alternativas consideradas
+## Alternatives considered / Alternativas consideradas
 
-## Consecuencias
+## Consequences / Consecuencias

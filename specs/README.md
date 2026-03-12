@@ -1,22 +1,22 @@
-# Reglas para especificaciones
+# Specification rules / Reglas para especificaciones
 
-Cada especificación debe crearse con número y nombre.
+Each specification must be created using a number and a clear name.
 
-Ejemplo:
+Cada especificación debe crearse con número y nombre claro.
 
-- `001-inicio`
-- `002-nueva-funcionalidad`
+Examples / Ejemplos:
 
-Cada especificación debe incluir, sin excepción:
+- `001-authentication`
+- `002-dashboard`
+
+Required files / Archivos obligatorios:
 
 - `spec.md`
 - `plan.md`
 - `tasks.md`
 - `research.md`
-- `contracts/` cuando sea necesario
+- `contracts/` when needed / cuando sea necesario
 
-## Ejemplo de referencia incluido
-
-Esta plantilla ya incluye un ejemplo completo para aprender el formato:
+Included example / Ejemplo incluido:
 
 - `specs/001-ejemplo-inicial/`

@@ -1,5 +1,5 @@
-# Índice de especificaciones
+# Specification Index / Índice de especificaciones
 
-| Número | Nombre | Estado | Prioridad | Responsable | Fecha de actualización |
+| Number / Número | Name / Nombre | Status / Estado | Priority / Prioridad | Owner / Responsable | Updated / Actualización |
 |---|---|---|---|---|---|
-| 001 | ejemplo-inicial | Listo | Alta | Plantilla | 2026-03-12 |
+| 001 | ejemplo-inicial | Ready / Listo | High / Alta | Template / Plantilla | 2026-03-12 |

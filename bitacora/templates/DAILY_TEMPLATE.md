@@ -1,11 +1,11 @@
-# Registro diario - AAAA-MM-DD
+# Daily log - YYYY-MM-DD / Registro diario - YYYY-MM-DD
 
-## Contexto inicial
+## Initial context / Contexto inicial
 
-## Trabajo realizado
+## Work completed / Trabajo realizado
 
-## Validaciones
+## Validation / Validaciones
 
-## Pendientes
+## Pending / Pendientes
 
-## Riesgos
+## Risks / Riesgos

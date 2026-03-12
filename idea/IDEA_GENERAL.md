@@ -1,17 +1,17 @@
-# Idea general del proyecto
+# General Project Idea / Idea general del proyecto
 
-## Nombre del proyecto
+## Project name / Nombre del proyecto
 
-## Problema que se quiere resolver
+## Problem to solve / Problema que se quiere resolver
 
-## Objetivo principal
+## Main goal / Objetivo principal
 
-## Alcance inicial
+## Initial scope / Alcance inicial
 
-## Lo que no está incluido
+## Out of scope / Fuera de alcance
 
-## Usuarios objetivo
+## Target users / Usuarios objetivo
 
-## Riesgos principales
+## Main risks / Riesgos principales
 
-## Criterio de terminado del proyecto
+## Global completion criteria / Criterio de terminado global

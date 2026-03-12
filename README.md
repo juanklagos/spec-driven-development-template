@@ -1,112 +1,47 @@
 # Spec Driven Development Template
 
-Plantilla de trabajo para organizar proyectos con un enfoque guiado por especificaciones.
+Language / Idioma:
 
-Esta plantilla sirve para equipos y personas que:
+- Español: [docs/es](./docs/es)
+- English: [docs/en](./docs/en)
 
-- Están empezando a programar.
-- Ya tienen experiencia profesional.
-- Quieren trabajar con cualquier herramienta de Inteligencia Artificial.
+## What this repository is / Qué es este repositorio
 
-## Recomendación central
+This is a reusable project structure to work with specification-first development.
 
-Esta plantilla está diseñada para trabajar junto con GitHub Spec Kit.
+Este es un sistema reutilizable para trabajar con desarrollo guiado por especificaciones.
 
-GitHub Spec Kit aporta el flujo operativo y esta plantilla aporta la estructura humana de proyecto (`idea`, `specs`, `bitacora`).
+## Core folders / Carpetas principales
 
-## Qué significa este enfoque
+- `idea/`: general project idea / idea general del proyecto.
+- `specs/`: numbered specifications / especificaciones numeradas.
+- `bitacora/`: real work history / historial real de trabajo.
 
-Trabajar guiado por especificaciones significa que, antes de escribir o modificar código, se define de forma clara:
+## Required specification format / Formato obligatorio de especificación
 
-- Qué problema se quiere resolver.
-- Qué comportamiento debe tener el sistema.
-- Cómo se va a validar que funciona.
-- Qué se hizo en cada sesión de trabajo.
+Each specification folder must include / Cada carpeta de especificación debe incluir:
 
-En este sistema, la documentación no es opcional. Es parte del producto.
+- `spec.md`
+- `plan.md`
+- `tasks.md`
+- `research.md`
+- `contracts/` when needed / cuando sea necesario
 
-## Objetivo de la plantilla
+## Recommended with GitHub Spec Kit / Recomendado con GitHub Spec Kit
 
-Convertir la organización del proyecto en un estándar reutilizable para cualquier repositorio.
-
-## Estructura principal
-
-```text
-spec-driven-development-template/
-├── idea/
-├── specs/
-├── bitacora/
-├── docs/
-├── scripts/
-└── .github/
-```
-
-### Significado de cada carpeta
-
-- `idea/`: contiene la idea general del proyecto.
-- `specs/`: contiene las especificaciones numeradas del proyecto.
-- `bitacora/`: contiene el historial real de trabajo del equipo.
-- `docs/`: contiene guías para entender y aplicar el sistema.
-- `scripts/`: contiene scripts de ayuda para inicializar el formato en otros proyectos.
-- `.github/`: contiene archivos recomendados para publicar en GitHub.
-
-## Reglas obligatorias del estándar
-
-1. No se empieza una funcionalidad sin una especificación escrita.
-2. Cada especificación debe tener carpeta propia y número consecutivo.
-3. Cada sesión de trabajo debe quedar registrada en la bitácora.
-4. Cada decisión importante debe dejarse por escrito.
-5. Toda persona nueva debe poder entender el estado del proyecto leyendo la documentación.
-
-## Formato obligatorio de cada especificación
-
-Cada carpeta dentro de `specs/` debe tener:
-
-- `spec.md`: qué se va a construir y por qué.
-- `plan.md`: cómo se va a implementar.
-- `tasks.md`: tareas concretas.
-- `research.md`: hallazgos y contexto técnico.
-- `contracts/`: contratos funcionales o técnicos cuando hagan falta.
-
-## Guía rápida de uso
-
-1. Completa `idea/IDEA_GENERAL.md`.
-2. Crea tu primera especificación con número: `specs/001-nombre-de-la-especificacion/`.
-3. Llena los archivos obligatorios de esa especificación.
-4. Registra avances en `bitacora/`.
-5. Repite para cada nueva necesidad del proyecto.
-
-## Publicación en GitHub
-
-Esta plantilla ya incluye documentos base para compartir en GitHub:
-
-- `LICENSE`
-- `CONTRIBUTING.md`
-- `CODE_OF_CONDUCT.md`
-- `.github/ISSUE_TEMPLATE.md`
-- `.github/PULL_REQUEST_TEMPLATE.md`
-
-## Uso con GitHub Spec Kit
-
-Instalación recomendada:
+Install / instalar:
 
 ```bash
 uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 ```
 
-Inicializar en carpeta actual:
+Initialize / inicializar:
 
 ```bash
 specify init . --ai codex
 ```
 
-O uso puntual sin instalación persistente:
-
-```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
-```
-
-Flujo de sesión recomendado:
+Recommended command flow / flujo recomendado:
 
 1. `/speckit.constitution`
 2. `/speckit.specify`
@@ -114,21 +49,20 @@ Flujo de sesión recomendado:
 4. `/speckit.tasks`
 5. `/speckit.implement`
 
-Script incluido para crear proyecto + Spec Kit:
+## Scripts / Scripts
+
+- Base template setup / Inicialización base:
 
 ```bash
-./scripts/init-project-with-spec-kit.sh /ruta/del-proyecto codex
+./scripts/init-project.sh /path/to/project
 ```
 
-## Lectura recomendada
+- Template + GitHub Spec Kit setup / Inicialización con plantilla + GitHub Spec Kit:
 
-- `docs/00-introduccion.md`
-- `docs/01-estructura.md`
-- `docs/02-flujo-de-trabajo.md`
-- `docs/03-como-usar-con-cualquier-inteligencia-artificial.md`
-- `docs/04-glosario.md`
-- `docs/05-preguntas-frecuentes.md`
-- `docs/06-que-usa-esta-plantilla.md`
-- `docs/07-como-publicar-en-github-paso-a-paso.md`
-- `docs/08-integracion-github-spec-kit.md`
-- `docs/09-release-checklist.md`
+```bash
+./scripts/init-project-with-spec-kit.sh /path/to/project codex
+```
+
+## Documentation index / Índice de documentación
+
+- [docs/README.md](./docs/README.md)

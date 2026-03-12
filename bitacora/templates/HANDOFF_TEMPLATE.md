@@ -1,14 +1,14 @@
-# Traspaso de contexto - AAAA-MM-DD HH:MM
+# Handoff - YYYY-MM-DD HH:MM / Traspaso de contexto
 
-## Resumen
+## Summary / Resumen
 
-## Estado actual
-- Completado:
-- En progreso:
-- Bloqueado:
+## Current status / Estado actual
+- Completed / Completado:
+- In progress / En progreso:
+- Blocked / Bloqueado:
 
-## Próximo paso exacto
+## Exact next step / Próximo paso exacto
 
-## Archivos clave
+## Key files / Archivos clave
 
-## Riesgos al retomar
+## Resume risks / Riesgos al retomar

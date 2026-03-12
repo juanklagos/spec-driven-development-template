@@ -1,29 +1,24 @@
-# Instrucciones para cualquier herramienta de Inteligencia Artificial
+# Instructions for any Artificial Intelligence tool / Instrucciones para cualquier herramienta de Inteligencia Artificial
 
-Este repositorio usa un estándar de trabajo guiado por especificaciones.
+## Mandatory reading order / Orden obligatorio de lectura
 
-## Regla principal
+1. `idea/IDEA_GENERAL.md`
+2. `specs/INDEX.md`
+3. Latest handoff file in `bitacora/handoffs/` / último archivo de `bitacora/handoffs/`
 
-Si en el proyecto existe o se va a usar GitHub Spec Kit, debes seguir su flujo antes de proponer implementación.
+## Mandatory workflow / Flujo obligatorio
 
-## Flujo obligatorio para la herramienta de Inteligencia Artificial
-
-1. Leer en este orden:
-   - `idea/IDEA_GENERAL.md`
-   - `specs/INDEX.md`
-   - último archivo de `bitacora/handoffs/` (si existe)
-2. Si el proyecto aún no tiene Spec Kit inicializado, proponer inicialización con:
-   - `specify init . --ai <asistente>`
-   - o `uvx --from git+https://github.com/github/spec-kit.git specify init . --ai <asistente>`
-3. Ejecutar flujo de comandos de Spec Kit:
+1. Work from an active specification.
+2. If GitHub Spec Kit is available, use it before implementation:
    - `/speckit.constitution`
    - `/speckit.specify`
    - `/speckit.plan`
    - `/speckit.tasks`
    - `/speckit.implement`
-4. Mantener sincronía entre carpeta `specs/` de este estándar y artefactos generados por Spec Kit.
-5. Al cerrar sesión, registrar trabajo en `bitacora/`.
+3. Keep `specs/` and `bitacora/` updated at session end.
 
-## Resultado esperado
+## Final requirement / Requisito final
 
-Toda implementación debe estar respaldada por especificación, plan y tareas, con trazabilidad de sesión.
+No implementation without specification and traceability.
+
+No hay implementación sin especificación y trazabilidad.

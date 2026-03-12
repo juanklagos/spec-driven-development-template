@@ -1,8 +1,10 @@
-# Bitácora
+# Logbook / Bitácora
 
-La bitácora registra el trabajo real del proyecto.
+This folder keeps real project execution history.
 
-## Estructura
+Esta carpeta guarda el historial real de ejecución del proyecto.
+
+## Structure / Estructura
 
 - `global/PROJECT_LOG.md`
 - `diaria/`
