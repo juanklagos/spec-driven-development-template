@@ -46,6 +46,7 @@ cp "specs/_template/contracts/README.md" "$SPEC_DIR/contracts/README.md"
 # Replace placeholder text when present.
 for f in spec.md plan.md tasks.md research.md history.md; do
   sed -i.bak "s/\[Feature Name\]/$NAME_RAW/g" "$SPEC_DIR/$f" || true
+  sed -i.bak "s/\[Spec Number\]/$NEXT_NUM/g" "$SPEC_DIR/$f" || true
   rm -f "$SPEC_DIR/$f.bak"
 done
 

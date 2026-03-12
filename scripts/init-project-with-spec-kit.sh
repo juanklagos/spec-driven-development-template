@@ -18,8 +18,13 @@ cd "$TARGET"
 
 if command -v specify >/dev/null 2>&1; then
   specify init . --ai "$ASSISTANT" --force
-else
+elif command -v uvx >/dev/null 2>&1; then
   uvx --from git+https://github.com/github/spec-kit.git specify init . --ai "$ASSISTANT" --force
+else
+  echo "Error: Neither 'specify' nor 'uvx' (uv) commands were found."
+  echo "Please install uv (https://github.com/astral-sh/uv) or specify-cli first:"
+  echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"
+  exit 1
 fi
 
 cat <<MSG

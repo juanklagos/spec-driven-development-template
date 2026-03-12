@@ -1,4 +1,4 @@
-# Especificación NNN - Nombre
+# Especificación [Spec Number] - [Feature Name]
 
 ## Historia de usuario principal
 
