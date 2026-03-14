@@ -1,4 +1,4 @@
-# Guía avanzada (estandarización y alta consistencia)
+# 🧭 Guía avanzada (estandarización y alta consistencia)
 
 Para quién es:
 - Equipos que estandarizan SDD entre múltiples herramientas y modelos de IA.
@@ -23,17 +23,36 @@ Entregar resultados equivalentes sin depender del agente/modelo usado.
 - `plan.md` consistente
 - validaciones en verde
 
-4. Contrato de salida por sesión:
-- objetivo
+## Pack de prompts (Avanzado)
+
+### Prompt A: modo estándar multiagente
+```text
+Opera con gobernanza SDD estricta y flujo Spec Kit-first.
+Aplica compuerta: no código sin spec aprobada y plan consistente.
+Trabaja con una sola spec activa.
+```
+
+### Prompt B: protocolo de refinamiento
+```text
+Detecta cambios de alcance/prioridad/requisitos.
+Si existen, detén implementación y actualiza:
 - spec activa
-- cambios
-- validación
-- riesgos
-- próximo paso exacto
+- history.md
+- specs/INDEX.md (si cambia estado/prioridad)
+- bitácora
+Luego continúa.
+```
+
+### Prompt C: cierre de gobernanza
+```text
+Cierra sesión con:
+objetivo, spec activa, cambios, validaciones, riesgos, próximo paso exacto.
+Incluye impacto en release/gobernanza si aplica.
+```
 
 ## Gobernanza recomendada
-- Versionado SemVer.
-- Changelog por release.
+- Disciplina de versionado SemVer.
+- Changelog actualizado por release.
 - Sin merge cuando falla la compuerta SDD.
 
 ## Métricas sugeridas
@@ -41,6 +60,17 @@ Entregar resultados equivalentes sin depender del agente/modelo usado.
 - % sesiones con bitácora completa
 - cambios fuera de alcance por sprint
 - consistencia entre agentes
+
+## Validación
+```bash
+./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
+```
+
+## Más prompts
+- [Matriz de prompts](./19-matriz-prompts-por-objetivo.md)
+- [Banco de prompts validados](./26-banco-prompts-validados.md)
+- [Prompts por característica](./30-guia-prompts-por-caracteristica.md)
 
 ## Referencias siguientes
 - [Checklists de calidad](./21-checklists-calidad-por-etapa.md)
