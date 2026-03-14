@@ -1,102 +1,47 @@
-# 🚀 Quick guide for non-programmers (5 minutes)
+# Quick guide for non-programmers
 
-<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
+Who is this for:
+- You are starting with SDD and want clear steps without technical overload.
 
----
+## Goal
+Finish one clean cycle:
+1. idea defined
+2. first spec created
+3. first log entry written
+4. validations executed
 
-> [!TIP]
-> **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project.
->
-> **Mandatory rule:** tell the Artificial Intelligence assistant to use this template and its guides as the primary reference.
->
-> Options:
-> - If this repository is already local, use it directly.
-> - If you are in another project, ask the assistant to adapt that project using this guide.
-> - If you do not have this repository, cloning is optional:
->
-> ```bash
-> git clone https://github.com/juanklagos/spec-driven-development-template.git
-> cd spec-driven-development-template
-> ```
+## Steps
 
-## ⭐ Explicit base repository usage
+1. Fill `idea/IDEA_GENERAL.md` in simple language.
+2. Create first spec:
 
-Always use this repository as the primary reference:
-
-- `https://github.com/juanklagos/spec-driven-development-template`
-
-### 🆕 Case 1: create a new project from this base
-
-Suggested prompt for the Artificial Intelligence assistant:
-
-```text
-Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
-Do not skip steps.
+```bash
+./scripts/new-spec.sh "my-first-feature" "Owner"
 ```
 
-### ♻️ Case 2: adapt an existing project using this base
+3. Complete in `specs/001-.../`:
+- `spec.md` (requirements + acceptance)
+- `plan.md` (how to build)
+- `tasks.md` (checklist)
+- `history.md` (initial entry)
 
-Suggested prompt for the Artificial Intelligence assistant:
+4. Validate:
 
-```text
-Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: [PROJECT_PATH].
-Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability.
+```bash
+./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
 ```
 
-### ✅ Minimum expected outcome
+5. Write session log in `bitacora/global/PROJECT_LOG.md`.
 
-- Project created or adapted with standard structure.
-- First specification created.
-- Initial logbook entry recorded.
-- Clear next step to continue.
+## Rules you must keep
+- Do not implement code before approved `spec.md` + consistent `plan.md`.
+- If idea changes, update docs first, then implementation.
 
+## Use these prompts
+- [Prompt matrix](./19-prompt-matrix-by-goal.md)
+- [Validated prompt bank](./26-validated-prompt-bank.md)
 
-> Goal: start using this template even if you do not code.
-
-## 🧠 Core idea
-
-You do not need to write code first.
-Define your idea clearly and ask the Artificial Intelligence assistant to guide each step.
-
-## ✅ First steps
-
-1. Open `idea/IDEA_GENERAL.md`
-2. Write your project idea in simple language
-3. Create `specs/001-my-first-spec/`
-4. Copy files from `specs/_template/`
-5. Ask the assistant to complete each section with you
-
-## 🗣️ Ready-to-use prompt (start)
-
-```text
-Act as a beginner-friendly guide.
-Help me complete idea/IDEA_GENERAL.md using simple language.
-Do not assume missing information.
-Ask one short question at a time.
-At the end, summarize the idea clearly so I can continue with specs.
-```
-
-## 🗣️ Ready-to-use prompt (first spec)
-
-```text
-Based on idea/IDEA_GENERAL.md, create an initial specification in specs/001-my-first-spec/ with:
-- spec.md
-- plan.md
-- tasks.md
-- research.md
-- history.md
-Use clear language and avoid unexplained abbreviations.
-```
-
-## 🧪 Quick validation
-
-| Question | If answer is Yes, you are on track ✅ |
-|---|---|
-| Do you understand what will be built? | Yes |
-| Is there a clear task list? | Yes |
-| Can you explain the idea to someone else? | Yes |
-
-## 📌 Golden rule
-
-If the idea changes, update documentation first, then implementation.
+## Next step
+Move to the intermediate guide:
+- [docs/en/14-intermediate-guide.md](./14-intermediate-guide.md)

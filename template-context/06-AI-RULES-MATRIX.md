@@ -11,9 +11,9 @@ This matrix helps apply the same SDD guardrails across multiple AI tools.
 | Agent / Tool | Rule file | Status |
 |---|---|---|
 | Cursor | `.cursorrules` | Ready |
-| Claude (Desktop/Code) | `.clauderules` + `CLAUDE.md` | Ready |
+| Claude (Desktop/Code) | `.clauderules` + `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` | Ready |
 | GitHub Copilot | `.github/copilot-instructions.md` | Ready |
-| Gemini | `GEMINI.md` | Ready |
+| Gemini | `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` | Ready |
 | Aider | `template-context/prompts/aider.prompt.md` | Ready |
 | Windsurf | `template-context/prompts/windsurf.prompt.md` | Ready |
 | Roo Code | `template-context/prompts/roo.prompt.md` | Ready |

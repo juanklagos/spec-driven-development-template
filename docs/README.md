@@ -1,146 +1,46 @@
-# 📚 Documentation / Documentación
+# Documentation / Documentación
 
-> [!TIP]
-> **Low-friction start / Inicio de baja fricción:** cloning this repository is optional.
+Start here / Empieza aquí:
+- [AI_START_HERE.md](../AI_START_HERE.md)
+- [QUICKSTART.md](../QUICKSTART.md)
+- [AGENT_OPERATING_SYSTEM.md](../template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 
-> [!IMPORTANT]
-> **Mandatory rule / Regla obligatoria:** tell the Artificial Intelligence assistant to work with this template and these guides as the primary reference.
+## Choose language / Elige idioma
+- English: [docs/en](./en)
+- Español: [docs/es](./es)
 
-Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
+## Fast routes / Rutas rápidas
 
-Template context for AI / Contexto template para IA:
-[`template-context/README.md`](../template-context/README.md)
-`INSTRUCTIONS.md`: [`../INSTRUCTIONS.md`](../INSTRUCTIONS.md)
+### 1) Beginner / Principiante (first 30-60 min)
+- EN: [13-quick-guide-non-programmers](./en/13-quick-guide-non-programmers.md)
+- ES: [13-guia-rapida-no-programadores](./es/13-guia-rapida-no-programadores.md)
+- Outcome: first idea, first spec, first logbook entry.
 
-## 🌍 Choose language / Elige idioma
+### 2) Intermediate / Intermedio (team execution)
+- EN: [14-intermediate-guide](./en/14-intermediate-guide.md)
+- ES: [14-guia-intermedia](./es/14-guia-intermedia.md)
+- Outcome: consistent execution across sessions and contributors.
 
-- 🇪🇸 Spanish (Español): [`docs/es/`](./es)
-- 🇺🇸 English: [`docs/en/`](./en)
+### 3) Advanced / Avanzado (standardization)
+- EN: [15-advanced-guide](./en/15-advanced-guide.md)
+- ES: [15-guia-avanzada](./es/15-guia-avanzada.md)
+- Outcome: cross-agent consistency, governance, and quality gates.
 
-## 🧭 Discovery Index / Índice de Descubrimiento
+## Core SDD references / Referencias SDD base
+- Workflow: [EN](./en/02-workflow.md) | [ES](./es/02-flujo-de-trabajo.md)
+- Spec Kit integration: [EN](./en/08-github-spec-kit-integration.md) | [ES](./es/08-integracion-github-spec-kit.md)
+- Continuous refinement: [EN](./en/11-continuous-refinement.md) | [ES](./es/11-refinamiento-continuo.md)
+- Quality checklists: [EN](./en/21-quality-checklists-by-stage.md) | [ES](./es/21-checklists-calidad-por-etapa.md)
 
-### 🏗️ 1. Foundation & SDD Core / Base y SDD Core
-| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
-| :--- | :---: | :---: |
-| Ruta completa 3 niveles / Complete 3-level path | [ES](./es/18-ruta-completa-3-niveles.md) | [EN](./en/18-complete-3-level-path.md) |
-| Introducción / Introduction | [ES](./es/00-introduccion.md) | [EN](./en/00-introduction.md) |
-| Estructura del proyecto / Project structure | [ES](./es/01-estructura.md) | [EN](./en/01-structure.md) |
-| Flujo de trabajo SDD / SDD Workflow | [ES](./es/02-flujo-de-trabajo.md) | [EN](./en/02-workflow.md) |
-| Refinamiento continuo / Continuous refinement | [ES](./es/11-refinamiento-continuo.md) | [EN](./en/11-continuous-refinement.md) |
-| De idea a spec (3 niveles) / Idea to spec (3 levels) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) |
+## AI & prompts / IA y prompts
+- Supported agents: [EN](./en/10-supported-ai-agents-and-prompts.md) | [ES](./es/10-agentes-ia-soportados-y-prompts.md)
+- Prompt matrix: [EN](./en/19-prompt-matrix-by-goal.md) | [ES](./es/19-matriz-prompts-por-objetivo.md)
+- Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
-### 🤖 2. AI & Prompt Engineering / IA e Ingeniería de Prompts
-| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
-| :--- | :---: | :---: |
-| Agentes y prompts soportados / Supported agents | [ES](./es/10-agentes-ia-soportados-y-prompts.md) | [EN](./en/10-supported-ai-agents-and-prompts.md) |
-| Matriz de prompts por objetivo / Prompt matrix | [ES](./es/19-matriz-prompts-por-objetivo.md) | [EN](./en/19-prompt-matrix-by-goal.md) |
-| Banco de prompts validados / Validated prompt bank | [ES](./es/26-banco-prompts-validados.md) | [EN](./en/26-validated-prompt-bank.md) |
-| Prompts por característica / Prompts by feature | [ES](./es/30-guia-prompts-por-caracteristica.md) | [EN](./en/30-prompts-by-template-feature.md) |
-| Lovable: ejecución con calidad / quality execution | [ES](./es/17-trabajar-con-lovable.md) | [EN](./en/17-working-with-lovable.md) |
-| Integración Spec Kit / Spec Kit Integration | [ES](./es/08-integracion-github-spec-kit.md) | [EN](./en/08-github-spec-kit-integration.md) |
+## Full index / Índice completo
+- EN docs list: `docs/en/00` to `docs/en/31`
+- ES docs list: `docs/es/00` to `docs/es/31`
 
-### 🛠️ 3. Developer Tools & Quality / Herramientas y Calidad
-| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
-| :--- | :---: | :---: |
-| Herramientas desktop locales / Local desktop tools | [ES](./es/16-guia-herramientas-desktop-local.md) | [EN](./en/16-local-desktop-tools-guide.md) |
-| TDD y BDD en specs / TDD and BDD | [ES](./es/12-tdd-y-bdd-como-escribir-specs.md) | [EN](./en/12-tdd-and-bdd-how-to-write-specs.md) |
-| Checklists de calidad / Quality checklists | [ES](./es/21-checklists-calidad-por-etapa.md) | [EN](./en/21-quality-checklists-by-stage.md) |
-| Anti-patrones y errores / Anti-patterns | [ES](./es/20-anti-patrones-y-errores-comunes.md) | [EN](./en/20-anti-patterns-and-common-errors.md) |
-| Dashboard status + roadmap | [ES](./es/29-dashboard-status-y-roadmap.md) | [EN](./en/29-status-dashboard-and-auto-roadmap.md) |
-
-### 👥 4. Management & Collaboration / Gestión y Colaboración
-| Topic / Tema | 🇪🇸 Español | 🇺🇸 English |
-| :--- | :---: | :---: |
-| Modo equipo / Team mode | [ES](./es/22-modo-equipo-y-colaboracion.md) | [EN](./en/22-team-mode-and-collaboration.md) |
-| Onboarding 30 minutos / 30-minute onboarding | [ES](./es/23-onboarding-30-minutos.md) | [EN](./en/23-30-minute-onboarding.md) |
-| Decisiones de arquitectura / Architecture decisions | [ES](./es/24-decisiones-de-arquitectura.md) | [EN](./en/24-architecture-decisions.md) |
-| Playbooks por proyecto / Project playbooks | [ES](./es/27-playbooks-por-tipo-de-proyecto.md) | [EN](./en/27-project-type-playbooks.md) |
-| Migración legado avanzada / Advanced legacy migration | [ES](./es/28-modo-migracion-legado-avanzado.md) | [EN](./en/28-advanced-legacy-migration-mode.md) |
-| Checklist de release / Release checklist | [ES](./es/09-release-checklist.md) | [EN](./en/09-release-checklist.md) |
-| Marco legal y uso comercial / Legal framework | [ES](./es/31-marco-legal-y-uso-comercial.md) | [EN](./en/31-legal-framework-and-commercial-use.md) |
-
-| Guide Level / Nivel | 🇪🇸 Español | 🇺🇸 English |
-| :--- | :---: | :---: |
-| Guía rápida (no programadores) / Quick guide | [ES](./es/13-guia-rapida-no-programadores.md) | [EN](./en/13-quick-guide-non-programmers.md) |
-| Guía intermedia / Intermediate guide | [ES](./es/14-guia-intermedia.md) | [EN](./en/14-intermediate-guide.md) |
-| Guía avanzada / Advanced guide | [ES](./es/15-guia-avanzada.md) | [EN](./en/15-advanced-guide.md) |
-
-## ⭐ Uso explícito del repositorio base
-
-Usa siempre este repositorio como referencia principal:
-<kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
-
-<details>
-<summary>🆕 <b>Caso 1: crear un proyecto nuevo desde esta base</b></summary>
-<br>
-
-Prompt sugerido para la IA:
-
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
-No saltes pasos.
-```
-
-</details>
-
-<details>
-<summary>♻️ <b>Caso 2: adaptar un proyecto existente usando esta base</b></summary>
-<br>
-
-Prompt sugerido para la IA:
-
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template y su guía, adapta este proyecto existente: [RUTA_DEL_PROYECTO].
-Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
-```
-
-</details>
-
-> [!NOTE]
-> **✅ Resultado mínimo esperado:**
->
-> - Proyecto creado o adaptado con estructura estándar.
-> - Primera especificación creada.
-> - Bitácora inicial registrada.
-> - Próximo paso claro para continuar.
-
-## ⭐ Explicit base repository usage
-
-Always use this repository as the primary reference:
-<kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
-
-<details>
-<summary>🆕 <b>Case 1: create a new project from this base</b></summary>
-<br>
-
-Suggested prompt for the Artificial Intelligence assistant:
-
-```text
-Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
-Do not skip steps.
-```
-
-</details>
-
-<details>
-<summary>♻️ <b>Case 2: adapt an existing project using this base</b></summary>
-<br>
-
-Suggested prompt for the Artificial Intelligence assistant:
-
-```text
-Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: [PROJECT_PATH].
-Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability.
-```
-
-</details>
-
-> [!NOTE]
-> **✅ Minimum expected outcome:**
->
-> - Project created or adapted with standard structure.
-> - First specification created.
-> - Initial logbook entry recorded.
-> - Clear next step to continue.
+## Documentation audits / Auditorías de documentación
+- EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)
+- ES: [32-auditoria-documentacion-2026-03-14](./es/32-auditoria-documentacion-2026-03-14.md)

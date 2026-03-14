@@ -1,100 +1,56 @@
-# 🤖 AI Start Here / Inicio IA Aquí
+# AI Start Here / Inicio IA aquí
 
-> [!IMPORTANT]
-> **Mandatory rule / Regla obligatoria**
-> Do not start coding blindly. First, tell the Artificial Intelligence assistant to use this repository template and its guides as the primary reference.
-> No empieces a programar a ciegas. Primero, indica a la Inteligencia Artificial que use este repositorio template y sus guías como referencia principal.
+Use this repository as the primary SDD reference:
+- `https://github.com/juanklagos/spec-driven-development-template`
 
-> [!TIP]
-> Cloning is optional. If this repository is already available locally, use it directly.  
-> Clonar es opcional. Si este repositorio ya está disponible en local, úsalo directamente.
+## Mandatory context / Contexto obligatorio
 
-Repository URL / URL del repositorio:
+Read in this order before implementation:
+1. `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
+2. `idea/IDEA_GENERAL.md`
+3. `specs/INDEX.md`
+4. Latest handoff in `bitacora/handoffs/` (if exists)
 
-- <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
+## Hard stop (SDD gate)
 
-## 🧭 Template context first / Primero contexto del template
+No code until both are true:
+1. `spec.md` approved by user.
+2. `plan.md` consistent with `spec.md`.
 
-> [!IMPORTANT]
-> **EN:** This repository is not an in-progress product; it is a starter template to bootstrap SDD projects quickly.
-> **ES:** Este repositorio no es un producto en desarrollo; es un template para iniciar proyectos con SDD rápidamente.
+If missing:
+- refine docs first (`spec/plan/tasks/history`), then continue.
 
-Read this context before any implementation-oriented session:
+## Recommended startup flow
 
-1. [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
-2. `template-context/README.md`
-3. `template-context/01-PURPOSE.md`
-4. `template-context/02-AI-OPERATING-RULES.md`
-5. `template-context/03-FAST-ENTRY-FLOWS.md`
-6. `template-context/04-ANTI-MISUSE.md`
-7. `template-context/05-SDD-EXECUTION-GATE.md`
-8. `template-context/06-AI-RULES-MATRIX.md`
-9. `template-context/07-AI-HANDOFF-CHECKLIST.md`
-
-## 🚀 Prompt to create a new project / Prompt para crear un proyecto nuevo
-
-```text
-Using https://github.com/juanklagos/spec-driven-development-template as the main guide, help me create a new project for [GOAL].
-If the template is not available locally, tell me the fastest way to access it.
-Then set up idea/specs/bitacora, create the first specification, and leave a clear logbook entry.
-Do not skip steps.
+### New project
+```bash
+./scripts/init-project-with-spec-kit.sh /path/project codex
 ```
 
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template como guía principal, ayúdame a crear un proyecto nuevo para [OBJETIVO].
-Si el template no está disponible en local, indícame la forma más rápida de acceder a él.
-Luego configura idea/specs/bitacora, crea la primera especificación y deja una entrada clara en la bitácora.
-No saltes pasos.
+### Existing project
+```bash
+specify init . --ai codex
 ```
 
-## ♻️ Prompt to adapt an existing project / Prompt para adaptar un proyecto existente
+Then run:
+1. `/speckit.constitution`
+2. `/speckit.specify`
+3. `/speckit.plan`
+4. `/speckit.tasks`
+5. `/speckit.implement`
 
-```text
-Using https://github.com/juanklagos/spec-driven-development-template as the main guide, adapt this existing project: [PROJECT_PATH].
-Keep current code behavior, create idea/specs/bitacora structure, generate the first spec from existing behavior, and record all decisions in the logbook.
-```
-
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template como guía principal, adapta este proyecto existente: [RUTA_DEL_PROYECTO].
-Mantén el comportamiento actual del código, crea la estructura idea/specs/bitacora, genera la primera spec desde el comportamiento existente y registra todas las decisiones en la bitácora.
-```
-
-## 📚 Minimum docs to read / Documentos mínimos a leer
-
-1. `README.md`
-2. `docs/README.md`
-3. `docs/es/10-agentes-ia-soportados-y-prompts.md` or `docs/en/10-supported-ai-agents-and-prompts.md`
-4. `docs/es/11-refinamiento-continuo.md` or `docs/en/11-continuous-refinement.md`
-5. `docs/es/19-matriz-prompts-por-objetivo.md` or `docs/en/19-prompt-matrix-by-goal.md`
-6. `docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md` or `docs/en/25-idea-to-spec-with-sdd-3-levels.md`
-7. `docs/es/30-guia-prompts-por-caracteristica.md` or `docs/en/30-prompts-by-template-feature.md`
-8. `docs/es/31-marco-legal-y-uso-comercial.md` or `docs/en/31-legal-framework-and-commercial-use.md`
-
-## 🧪 Validation command / Comando de validación
+## Session close checks
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
 ./scripts/check-sdd-gate.sh .
 ```
 
-## 📦 Reusable assets / Recursos reutilizables
+Update:
+- `specs/INDEX.md` (if status/priority changed)
+- active spec `history.md`
+- `bitacora/global/PROJECT_LOG.md`
 
-- Templates: `templates/`
-- Example projects: `examples/`
-- Project-type playbooks: `playbooks/`
-- Quality evidence templates: `quality/evidence/templates/`
-
-## ⚙️ Optional automation scripts / Scripts opcionales de automatización
-
-- `./scripts/new-spec.sh "feature-name"`
-- `./scripts/score-spec.sh --all`
-- `./scripts/generate-roadmap.sh`
-- `./scripts/generate-status.sh`
-- `./scripts/legacy-discovery.sh /path/to/legacy-project`
-
-## 🎯 Expected outcome / Resultado esperado
-
-- One clear idea document in `idea/`
-- One active, numbered spec in `specs/`
-- One session entry in `bitacora/`
-- Next step clearly defined
+## Prompts (short links)
+- Prompt matrix: [EN](./docs/en/19-prompt-matrix-by-goal.md) | [ES](./docs/es/19-matriz-prompts-por-objetivo.md)
+- Validated prompts: [EN](./docs/en/26-validated-prompt-bank.md) | [ES](./docs/es/26-banco-prompts-validados.md)

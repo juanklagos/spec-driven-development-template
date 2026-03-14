@@ -1,98 +1,48 @@
-# 🧭 Guía avanzada (equipos exigentes y resultados unificados)
+# Guía avanzada (estandarización y alta consistencia)
 
-<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
+Para quién es:
+- Equipos que estandarizan SDD entre múltiples herramientas y modelos de IA.
 
----
+## Objetivo
+Entregar resultados equivalentes sin depender del agente/modelo usado.
 
-> [!TIP]
-> **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto.
->
-> **Regla obligatoria:** indica a la IA que debe trabajar usando este template y sus guías como referencia principal.
->
-> Opciones:
-> - Si ya tienes este repositorio en local, úsalo directamente.
-> - Si trabajas en otro proyecto, pide a la IA adaptar ese proyecto usando esta guía.
-> - Si no tienes este repositorio, puedes clonarlo como opción:
->
-> ```bash
-> git clone https://github.com/juanklagos/spec-driven-development-template.git
-> cd spec-driven-development-template
-> ```
+## Modelo operativo avanzado
 
-## ⭐ Uso explícito del repositorio base
+1. Instrucciones canónicas de IA:
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
 
-Usa siempre este repositorio como referencia principal:
+2. Flujo Spec Kit-first:
+- `/speckit.constitution`
+- `/speckit.specify`
+- `/speckit.plan`
+- `/speckit.tasks`
+- `/speckit.implement`
 
-- `https://github.com/juanklagos/spec-driven-development-template`
+3. Compuertas obligatorias:
+- `spec.md` aprobada
+- `plan.md` consistente
+- validaciones en verde
 
-### 🆕 Caso 1: crear un proyecto nuevo desde esta base
+4. Contrato de salida por sesión:
+- objetivo
+- spec activa
+- cambios
+- validación
+- riesgos
+- próximo paso exacto
 
-Prompt sugerido para la IA:
+## Gobernanza recomendada
+- Versionado SemVer.
+- Changelog por release.
+- Sin merge cuando falla la compuerta SDD.
 
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
-No saltes pasos.
-```
+## Métricas sugeridas
+- % specs con `history.md` actualizado
+- % sesiones con bitácora completa
+- cambios fuera de alcance por sprint
+- consistencia entre agentes
 
-### ♻️ Caso 2: adaptar un proyecto existente usando esta base
-
-Prompt sugerido para la IA:
-
-```text
-Usando https://github.com/juanklagos/spec-driven-development-template y su guía, adapta este proyecto existente: [RUTA_DEL_PROYECTO].
-Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
-```
-
-### ✅ Resultado mínimo esperado
-
-- Proyecto creado o adaptado con estructura estándar.
-- Primera especificación creada.
-- Bitácora inicial registrada.
-- Próximo paso claro para continuar.
-
-
-> Objetivo: lograr consistencia alta entre diferentes herramientas de Inteligencia Artificial.
-
-## 🧱 Estrategia avanzada
-
-1. Usa contrato de salida unificado.
-2. Fuerza validaciones explícitas por sesión.
-3. Exige refinamiento antes de cambios de alcance.
-4. Controla calidad con TDD y BDD.
-
-## 🗣️ Prompt maestro avanzado
-
-```text
-Sigue el estándar del repositorio.
-
-Lectura obligatoria:
-1) idea/IDEA_GENERAL.md
-2) specs/INDEX.md
-3) último handoff
-4) docs/es/10-agentes-ia-soportados-y-prompts.md
-5) docs/es/11-refinamiento-continuo.md
-
-Reglas:
-- No implementar sin spec activa.
-- Si detectas cambio de alcance, actualiza history.md y bitácora antes de implementar.
-- Entrega salida con este formato:
-  1) Objetivo
-  2) Cambios
-  3) Validaciones
-  4) Riesgos
-  5) Próximo paso
-```
-
-## 📈 Métricas sugeridas
-
-| Métrica | Objetivo |
-|---|---|
-| Especificaciones con `history.md` al día | 100% |
-| Sesiones con bitácora completa | 100% |
-| Cambios fuera de alcance | 0 |
-| Pendientes sin handoff | 0 |
-
-## 🔒 Criterio de calidad
-
-Si no hay trazabilidad, el trabajo no está terminado.
+## Referencias siguientes
+- [Checklists de calidad](./21-checklists-calidad-por-etapa.md)
+- [Decisiones de arquitectura](./24-decisiones-de-arquitectura.md)
+- [Checklist de release](./09-release-checklist.md)
