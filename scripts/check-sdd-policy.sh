@@ -7,6 +7,12 @@ POLICY_PATH="$ROOT/sdd.policy.yaml"
 errors=0
 warnings=0
 
+if command -v rg >/dev/null 2>&1; then
+  SEARCH_BIN="rg"
+else
+  SEARCH_BIN="grep"
+fi
+
 ok() {
   printf "[OK] %s\n" "$1"
 }
@@ -19,6 +25,16 @@ warn() {
 fail() {
   printf "[FAIL] %s\n" "$1"
   errors=$((errors + 1))
+}
+
+match_q() {
+  local pattern="$1"
+  local file="$2"
+  if [ "$SEARCH_BIN" = "rg" ]; then
+    rg -q -- "$pattern" "$file"
+  else
+    grep -E -q -- "$pattern" "$file"
+  fi
 }
 
 extract_required_files() {
@@ -41,13 +57,13 @@ if [ ! -f "$POLICY_PATH" ]; then
 fi
 ok "Policy file exists: sdd.policy.yaml"
 
-if rg -q '^hard_stop:' "$POLICY_PATH"; then
+if match_q '^hard_stop:' "$POLICY_PATH"; then
   ok "Policy defines hard_stop block"
 else
   fail "Policy missing hard_stop block"
 fi
 
-if rg -q '^required_files:' "$POLICY_PATH"; then
+if match_q '^required_files:' "$POLICY_PATH"; then
   ok "Policy defines required_files block"
 else
   fail "Policy missing required_files block"
@@ -65,13 +81,13 @@ done < <(extract_required_files)
 # Validate rule-file content markers in key files.
 for rf in ".cursorrules" ".clauderules" "CLAUDE.md" "GEMINI.md" "WINDSURF.md" "AIDER.md" "ROO.md" ".github/copilot-instructions.md" "INSTRUCTIONS.md"; do
   if [ -f "$ROOT/$rf" ]; then
-    if rg -q "template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" "$ROOT/$rf"; then
+    if match_q "template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" "$ROOT/$rf"; then
       ok "$rf references canonical source"
     else
       fail "$rf does not reference canonical source"
     fi
 
-    if rg -q "No code before approved spec and consistent plan\." "$ROOT/$rf" || rg -q "No hay código sin spec aprobada y plan consistente\." "$ROOT/$rf"; then
+    if match_q "No code before approved spec and consistent plan\." "$ROOT/$rf" || match_q "No hay código sin spec aprobada y plan consistente\." "$ROOT/$rf"; then
       ok "$rf includes hard-stop phrasing"
     else
       warn "$rf should include explicit hard-stop phrase"
