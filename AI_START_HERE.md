@@ -1,139 +1,234 @@
 # 🤖 AI Start Here / Inicio IA aquí
 
 > [!IMPORTANT]
-> **EN:** Use this repository as the main SDD reference and keep GitHub Spec Kit as the default operating flow.
-> **ES:** Usa este repositorio como referencia principal SDD y mantén GitHub Spec Kit como flujo operativo por defecto.
+> **EN:** This template exists to make SDD easy. The AI must guide the user step by step, not skip stages, and keep traceability.
+> **ES:** Este template existe para volver SDD fácil. La IA debe guiar paso a paso, no saltar etapas y mantener trazabilidad.
 
-Repository URL / URL del repositorio:
+Base repository / Repositorio base:
 - <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
-## 🧭 Mandatory context first / Contexto obligatorio primero
+---
 
-Read in this order before implementation:
+## 1) What this is / Qué es esto
+
+**EN (Problem):** Most teams jump to code and lose context, decisions, and quality.
+**EN (Solution):** This template enforces a clear flow: `idea -> spec -> plan -> tasks -> implement -> validate -> logbook`.
+
+**ES (Problema):** Muchos equipos saltan directo al código y pierden contexto, decisiones y calidad.
+**ES (Solución):** Este template impone un flujo claro: `idea -> spec -> plan -> tasks -> implementar -> validar -> bitácora`.
+
+---
+
+## 2) Hard rule / Regla dura
+
+**EN:** No implementation before:
+1. `spec.md` is approved
+2. `plan.md` is consistent with `spec.md`
+
+**ES:** No hay implementación antes de:
+1. `spec.md` aprobada
+2. `plan.md` consistente con `spec.md`
+
+If not aligned, refine docs first:
+- `spec.md`
+- `plan.md`
+- `tasks.md`
+- `history.md`
+- `bitacora/*`
+
+---
+
+## 3) First reading order / Orden inicial de lectura
+
 1. `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
 2. `idea/IDEA_GENERAL.md`
 3. `specs/INDEX.md`
-4. latest `bitacora/handoffs/` file (if exists)
+4. latest file in `bitacora/handoffs/` (if exists)
 
-## 🛑 SDD Hard Stop / Parada obligatoria SDD
+---
 
-No code until both are true:
-1. `spec.md` approved by user
-2. `plan.md` consistent with `spec.md`
+## 4) Copy/paste prompts (easy mode) / Prompts copiar/pegar (modo fácil)
 
-If missing: refine docs first (`spec`, `plan`, `tasks`, `history`, `bitacora`).
+### A. New project / Proyecto nuevo
 
-## ⚙️ Spec Kit-first startup
+```text
+EN:
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to execute my project end-to-end.
+My project is: [describe your project in plain language].
+If this repository is not available locally, tell me how to get it first.
+Then initialize the template, define the idea, create the first spec, and guide me step by step.
+Do not skip idea, spec, plan, tasks, validation, and logbook.
 
-### New project / Proyecto nuevo
-```bash
-./scripts/init-project-with-spec-kit.sh /path/project codex
+ES:
+Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para ejecutar mi proyecto de inicio a fin.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+Si este repositorio no está disponible en local, indícame primero cómo obtenerlo.
+Luego inicializa el template, define la idea, crea la primera spec y guíame paso a paso.
+No omitas idea, spec, plan, tasks, validación y bitácora.
 ```
 
-### Existing project / Proyecto existente
-```bash
-specify init . --ai codex
-# or / o
-uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
+### B. Existing project / Proyecto existente
+
+```text
+EN:
+Using https://github.com/juanklagos/spec-driven-development-template, adapt my existing project without breaking current behavior.
+Project path: [PROJECT_PATH].
+Integrate idea/specs/bitacora, create the first spec based on existing behavior, and leave full traceability.
+Guide me in simple language.
+
+ES:
+Usando https://github.com/juanklagos/spec-driven-development-template, adapta mi proyecto existente sin romper el comportamiento actual.
+Ruta del proyecto: [RUTA_PROYECTO].
+Integra idea/specs/bitacora, crea la primera spec basada en el comportamiento existente y deja trazabilidad completa.
+Guíame con lenguaje simple.
 ```
 
-### Standard command flow / Flujo estándar de comandos
-1. `/speckit.constitution`
-2. `/speckit.specify`
-3. `/speckit.plan`
-4. `/speckit.tasks`
-5. `/speckit.implement`
+### C. Session close / Cierre de sesión
 
-## 🧪 Session close validation
+```text
+EN:
+Before closing, run validation and give me: what was done, what is pending, risks, and the next exact step.
+Update INDEX, history, and PROJECT_LOG if needed.
+
+ES:
+Antes de cerrar, ejecuta validación y dame: qué se hizo, qué falta, riesgos y próximo paso exacto.
+Actualiza INDEX, history y PROJECT_LOG si aplica.
+```
+
+---
+
+## 5) Prompts by user level / Prompts por nivel de usuario
+
+### Level 1 (Beginner) / Nivel 1 (Principiante)
+
+```text
+EN:
+Act as an SDD guide for non-technical users.
+Ask one short question at a time.
+Use plain language, no jargon.
+Do not write code yet.
+
+ES:
+Actúa como guía SDD para usuarios no técnicos.
+Haz una pregunta corta por vez.
+Usa lenguaje simple, sin jerga.
+No escribas código todavía.
+```
+
+### Level 2 (Intermediate) / Nivel 2 (Intermedio)
+
+```text
+EN:
+Read idea, INDEX, and latest handoff.
+Choose one active spec and propose a 5-step session plan.
+Implement only in-scope tasks.
+End with validation + next step.
+
+ES:
+Lee idea, INDEX y último handoff.
+Elige una spec activa y propone plan de sesión de 5 pasos.
+Implementa solo tareas dentro de alcance.
+Cierra con validación + próximo paso.
+```
+
+### Level 3 (Advanced) / Nivel 3 (Avanzado)
+
+```text
+EN:
+Operate in Spec Kit-first mode with strict SDD gate.
+Use: constitution -> specify -> plan -> tasks -> implement.
+Block implementation if spec approval or plan consistency is missing.
+Return objective, changes, validation, risks, and next step.
+
+ES:
+Opera en modo Spec Kit-first con compuerta SDD estricta.
+Usa: constitution -> specify -> plan -> tasks -> implement.
+Bloquea implementación si falta aprobación de spec o consistencia del plan.
+Entrega objetivo, cambios, validación, riesgos y próximo paso.
+```
+
+---
+
+## 6) Tips to write better prompts / Tips para escribir mejores prompts
+
+### Use this structure / Usa esta estructura
+
+```text
+1) Context: what project and what goal
+2) Current state: new project or existing project
+3) Constraints: do not break behavior, simple language, no skipped phases
+4) Deliverable: exact files/outputs expected
+5) Closure: validation + next step
+```
+
+### Good vs bad prompt / Prompt bueno vs malo
+
+**Bad / Malo**
+```text
+Help me with SDD.
+```
+
+**Good / Bueno**
+```text
+Using this template repo, adapt my existing project at [PATH].
+Create idea/specs/bitacora, draft the first approved-ready spec,
+and give me the next exact step. Use beginner-friendly language.
+```
+
+### Practical tips / Consejos prácticos
+
+- **EN:** Keep prompts concrete: goal + path + expected output.
+- **ES:** Mantén prompts concretos: objetivo + ruta + salida esperada.
+- **EN:** Ask the AI to confirm the active spec before coding.
+- **ES:** Pide a la IA confirmar la spec activa antes de programar.
+- **EN:** End every session with one clear next step.
+- **ES:** Cierra cada sesión con un próximo paso claro.
+
+---
+
+## 7) Optional command flow (for technical users) / Flujo de comandos opcional (usuarios técnicos)
+
+```bash
+/speckit.constitution
+/speckit.specify
+/speckit.plan
+/speckit.tasks
+/speckit.implement
+```
+
+Local validation:
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
 ./scripts/check-sdd-gate.sh .
 ```
 
-Mandatory updates:
-- `specs/INDEX.md` (if status/priority changed)
-- active spec `history.md`
-- `bitacora/global/PROJECT_LOG.md`
-- handoff in `bitacora/handoffs/` if pending work
+---
 
-## 🚀 Prompt pack by level / Pack de prompts por nivel
+## 8) Visual map / Mapa visual
 
-### Level 1 (Beginner) / Nivel 1 (Principiante)
-```text
-Act as an SDD beginner guide.
-Read idea/IDEA_GENERAL.md and help me complete it with simple language.
-Then create specs/001-... with spec.md, plan.md, tasks.md, history.md.
-Ask short questions one by one before assuming missing info.
-Do not implement code yet.
+```mermaid
+flowchart LR
+  A["Idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation"]
+  F --> G["Logbook + next step"]
 ```
 
-### Level 2 (Intermediate) / Nivel 2 (Intermedio)
-```text
-Read idea/IDEA_GENERAL.md, specs/INDEX.md and latest handoff.
-Select one active specification and propose a 5-step session plan.
-Execute only in-scope tasks.
-Update history.md, INDEX.md (if needed), and PROJECT_LOG.md.
-Run validations and report risks + next step.
-```
+---
 
-### Level 3 (Advanced) / Nivel 3 (Avanzado)
-```text
-Operate in Spec Kit-first mode with strict SDD gates.
-Use: constitution -> specify -> plan -> tasks -> implement.
-Block implementation if spec approval or plan consistency is missing.
-Return output contract: objective, active spec, changes, validation, risks, exact next step.
-Ensure traceability and handoff completeness.
-```
-
-## 📚 Prompt references / Referencias de prompts
+## 9) Related guides / Guías relacionadas
 
 - Prompt matrix: [EN](./docs/en/19-prompt-matrix-by-goal.md) | [ES](./docs/es/19-matriz-prompts-por-objetivo.md)
 - Validated prompt bank: [EN](./docs/en/26-validated-prompt-bank.md) | [ES](./docs/es/26-banco-prompts-validados.md)
 - Prompts by template feature: [EN](./docs/en/30-prompts-by-template-feature.md) | [ES](./docs/es/30-guia-prompts-por-caracteristica.md)
+- 3-level route: [EN](./docs/en/18-complete-3-level-path.md) | [ES](./docs/es/18-ruta-completa-3-niveles.md)
 
-## ✅ Expected outcome / Resultado esperado
+---
 
-- one clear idea
-- one active numbered spec
-- one session log entry
-- one exact next step
+## 10) Minimum expected outcome / Resultado mínimo esperado
 
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+- **EN:** one clear idea, one active spec, one updated log entry, one exact next step.
+- **ES:** una idea clara, una spec activa, una entrada de bitácora actualizada, un próximo paso exacto.
