@@ -52,12 +52,19 @@ chmod +x "$TARGET/scripts/new-spec.sh" \
          "$TARGET/scripts/legacy-discovery.sh"
 
 cat <<MSG
-Proyecto inicializado en: $TARGET
+🎉 Project initialized at / Proyecto inicializado en: $TARGET
 
-Siguientes pasos:
-1) Completa idea/IDEA_GENERAL.md
-2) Crea la primera especificación en specs/001-nombre/
-3) Registra la primera entrada en bitacora/global/PROJECT_LOG.md
-4) Ejecuta validación base: ./scripts/validate-sdd.sh .
-5) Opcional: genera status y roadmap con scripts/generate-*.sh
+Next steps / Siguientes pasos:
+  1) Fill idea/IDEA_GENERAL.md / Completa idea/IDEA_GENERAL.md
+  2) Create first spec / Crea la primera spec:
+     ./scripts/new-spec.sh "feature-name" "Owner"
+  3) Log your first session / Registra tu primera sesión:
+     bitacora/global/PROJECT_LOG.md
+  4) Validate / Valida:
+     ./scripts/validate-sdd.sh . --strict
+  5) Optional / Opcional: generate status and roadmap:
+     ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
+
+📖 Read QUICKSTART.md for a guided walkthrough.
+   Lee QUICKSTART.md para un recorrido guiado.
 MSG

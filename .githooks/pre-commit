@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# SDD pre-commit hook
+# Runs validate-sdd.sh before each commit to enforce structural integrity.
+#
+# Installation / Instalación:
+#   git config core.hooksPath .githooks
+#
+# Or copy this file to .git/hooks/pre-commit
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Try to find validate-sdd.sh relative to the hook location
+if [ -f "$SCRIPT_DIR/../../scripts/validate-sdd.sh" ]; then
+  ROOT="$SCRIPT_DIR/../.."
+elif [ -f "./scripts/validate-sdd.sh" ]; then
+  ROOT="."
+else
+  echo "[SDD] ⚠️  Could not find scripts/validate-sdd.sh. Skipping validation."
+  exit 0
+fi
+
+echo "[SDD] 🔍 Running pre-commit validation..."
+if ! bash "$ROOT/scripts/validate-sdd.sh" "$ROOT"; then
+  echo ""
+  echo "[SDD] ❌ Commit blocked: SDD validation failed."
+  echo "[SDD] Fix the errors above and try again."
+  echo "[SDD] To skip this check: git commit --no-verify"
+  exit 1
+fi
+
+echo "[SDD] ✅ Validation passed. Proceeding with commit."

@@ -50,11 +50,14 @@ require_dir "specs/_template"
 require_file "specs/_template/spec.md"
 
 if [ -f "$ROOT/idea/IDEA_GENERAL.md" ]; then
-  # Simple check: if the file size is very small, it might not be filled out.
-  # The original template is ~388 bytes.
-  file_size=$(wc -c < "$ROOT/idea/IDEA_GENERAL.md" | tr -d ' ')
-  if [ "$file_size" -le 400 ]; then
-    warn "idea/IDEA_GENERAL.md exists but appears to be mostly empty. Please fill it out."
+  # Check if the file has real content beyond the template structure.
+  # Strip HTML comments, blank lines, lines starting with # or <!-- or - (empty bullets), and *Created using*
+  real_content=$(sed -e 's/<!--.*-->//g' "$ROOT/idea/IDEA_GENERAL.md" \
+    | grep -vE '^\s*$|^\s*#|^\s*>|^\s*-\s*$|^\s*\*Created|^\s*---' \
+    | grep -vE '^\s*<!--' \
+    | wc -c | tr -d ' ')
+  if [ "$real_content" -le 50 ]; then
+    warn "idea/IDEA_GENERAL.md exists but appears to be unfilled (only template structure). Please add your project details."
   fi
 fi
 
