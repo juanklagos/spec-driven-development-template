@@ -85,7 +85,9 @@ ES:
 
 Next / Siguiente:
   cd "$TARGET"
-  ./scripts/confirm-user-consent.sh "User approved initial spec scope"
+  ./scripts/new-spec.sh "first-feature" "Owner"
+  # Record consent only right before implementation starts:
+  ./scripts/confirm-user-consent.sh "User approved implementation for spec 001"
   ./scripts/validate-sdd.sh . --strict
   ./scripts/check-sdd-policy.sh .
   ./scripts/check-sdd-gate.sh .

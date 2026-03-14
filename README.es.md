@@ -47,7 +47,7 @@ Este template exige chequeos de política y compuerta:
 
 Parada dura:
 - No hay código sin `spec.md` aprobada y `plan.md` consistente.
-- Registra consentimiento explícito del usuario antes de crear/cambiar specs:
+- Registra consentimiento explícito del usuario antes de iniciar ejecución/implementación:
   `./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
 
 Archivos de referencia:

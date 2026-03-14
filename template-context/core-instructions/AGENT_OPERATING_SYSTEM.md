@@ -28,6 +28,10 @@ No code implementation (creation or modification) is allowed until **BOTH** cond
 
 This gate **MUST** be enforced by default in every agent session.
 
+Consent rule:
+- **MUST** allow creating/refining SDD base artifacts (`idea`, `spec`, `plan`, `tasks`, `bitacora`) without execution consent.
+- **MUST** ask and record explicit user consent right before execution/implementation starts on an approved spec.
+
 ## 📐 3. Required Workflow / Flujo de Trabajo Obligatorio
 
 1. **Observe:** Read `idea/IDEA_GENERAL.md` and `specs/INDEX.md` first.

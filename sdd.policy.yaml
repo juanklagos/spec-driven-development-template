@@ -18,7 +18,7 @@ execution_root:
   do_not_implement_in_template_root: true
 
 user_consent:
-  required_before_spec_creation: true
+  required_before_execution_after_spec_approval: true
   required_before_gate_execution_when_specs_exist: true
   log_file: .sdd/user-consent.log
   command: ./scripts/confirm-user-consent.sh "User approved scope"

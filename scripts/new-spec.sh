@@ -14,14 +14,6 @@ if [ -f "sdd.policy.yaml" ] && [ -f "scripts/create-www-project.sh" ] && [ -d "w
   exit 1
 fi
 
-# Require explicit user consent before creating/changing execution scope artifacts.
-if [ ! -s ".sdd/user-consent.log" ]; then
-  echo "Error: missing user consent log (.sdd/user-consent.log)."
-  echo "Record consent first:"
-  echo "  ./scripts/confirm-user-consent.sh \"User approved creating/updating this spec\""
-  exit 1
-fi
-
 NAME_RAW="$1"
 OWNER="${2:-TBD / Por definir}"
 

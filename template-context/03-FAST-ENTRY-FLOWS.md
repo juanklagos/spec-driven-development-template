@@ -8,7 +8,8 @@
 4. Complete `idea/IDEA_GENERAL.md`.
 5. Create `specs/001-.../` and update `specs/INDEX.md`.
 6. Register first entry in `bitacora/global/PROJECT_LOG.md`.
-7. Validate with `./scripts/validate-sdd.sh . --strict`.
+7. Request and record explicit user consent only when implementation is about to start.
+8. Validate with `./scripts/validate-sdd.sh . --strict`.
 
 ## Flow B: Adapt existing project using this template
 
@@ -17,7 +18,8 @@
 3. Add `idea/`, `specs/`, `bitacora/` structure.
 4. Write first spec based on current behavior.
 5. Register migration decisions in `bitacora/`.
-6. Validate structure and consistency.
+6. Request and record explicit user consent only when implementation is about to start.
+7. Validate structure and consistency.
 
 ## Minimum expected outcome / Resultado mínimo esperado
 

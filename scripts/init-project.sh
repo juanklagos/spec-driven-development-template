@@ -123,17 +123,18 @@ Profile / Perfil: $PROFILE
 Next steps / Siguientes pasos:
   1) Fill idea/IDEA_GENERAL.md / Completa idea/IDEA_GENERAL.md
   2) Create first spec / Crea la primera spec:
-     ./scripts/confirm-user-consent.sh "User approved first spec scope"
      ./scripts/new-spec.sh "feature-name" "Owner"
-  3) Log your first session / Registra tu primera sesión:
+  3) Before execution/implementation, record consent:
+     ./scripts/confirm-user-consent.sh "User approved implementation for spec 001"
+  4) Log your first session / Registra tu primera sesión:
      bitacora/global/PROJECT_LOG.md
-  4) Validate / Valida:
+  5) Validate / Valida:
      ./scripts/validate-sdd.sh . --strict
-  5) Check SDD policy / Verifica política SDD:
+  6) Check SDD policy / Verifica política SDD:
      ./scripts/check-sdd-policy.sh .
-  6) Check SDD gate / Verifica compuerta SDD:
+  7) Check SDD gate / Verifica compuerta SDD:
      ./scripts/check-sdd-gate.sh .
-  7) Optional (full profile) / Opcional (perfil full): generate status and roadmap:
+  8) Optional (full profile) / Opcional (perfil full): generate status and roadmap:
      ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
 
 📖 Read QUICKSTART.md for a guided walkthrough and Spec Kit-first setup.

@@ -16,6 +16,10 @@ If any check is NO:
 - Refine docs first.
 - Report exact missing condition.
 
+Consent policy:
+- SDD base creation/refinement is allowed without consent.
+- Explicit user consent is required only when execution/implementation is about to start.
+
 ## Minimal evidence to proceed
 
 - Explicit user approval in session text.

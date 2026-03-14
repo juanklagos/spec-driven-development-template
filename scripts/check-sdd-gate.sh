@@ -79,6 +79,7 @@ else
 fi
 
 spec_count=0
+approved_count=0
 while IFS= read -r spec_path; do
   spec_count=$((spec_count + 1))
   spec_dir="$(dirname "$spec_path")"
@@ -95,6 +96,7 @@ while IFS= read -r spec_path; do
   status_line="$(first_line_match "Estado / Status:" "$spec_path")"
   status_value="$(echo "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/' | tr -d '[:space:]')"
   if echo "$status_value" | grep -E -i -q "^(Aprobado|Approved)$"; then
+    approved_count=$((approved_count + 1))
     if match_q "YYYY-MM-DD" "$spec_path"; then
       fail "$spec_name approved but approval date still placeholder"
     fi
@@ -141,10 +143,14 @@ done < <(find "$ROOT/specs" -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9][0-
 if [ "$spec_count" -eq 0 ]; then
   warn "No numbered specs found; gate check skipped."
 else
-  if [ -s "$ROOT/.sdd/user-consent.log" ]; then
-    ok "User consent log present: .sdd/user-consent.log"
+  if [ "$approved_count" -gt 0 ]; then
+    if [ -s "$ROOT/.sdd/user-consent.log" ]; then
+      ok "User consent log present for execution stage: .sdd/user-consent.log"
+    else
+      fail "Missing user consent log (.sdd/user-consent.log) for approved spec execution"
+    fi
   else
-    fail "Missing user consent log (.sdd/user-consent.log) while specs exist"
+    warn "No approved specs yet; user consent log not required at base SDD stage"
   fi
 fi
 

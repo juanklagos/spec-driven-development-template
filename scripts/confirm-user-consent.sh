@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [ "$#" -lt 1 ]; then
   echo "Usage: $0 \"consent summary\""
-  echo "Example: $0 \"User approved creating spec 001-auth and implementation plan\""
+  echo "Example: $0 \"User approved implementation for spec 001-auth\""
   exit 1
 fi
 

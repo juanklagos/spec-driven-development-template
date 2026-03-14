@@ -9,8 +9,8 @@ Hard stop (mandatory):
 - No hay código sin spec aprobada y plan consistente.
 
 User consent (mandatory):
-- Record explicit user consent before creating/updating specs or implementation scope.
-- Registra consentimiento explícito del usuario antes de crear/actualizar specs o alcance de implementación.
+- Record explicit user consent before starting execution/implementation for an approved spec.
+- Registra consentimiento explícito del usuario antes de iniciar ejecución/implementación sobre una spec aprobada.
 - Command / Comando:
   `./scripts/confirm-user-consent.sh "User approved scope X"`
 

@@ -29,6 +29,11 @@ Base repository / Repositorio base:
 1. `spec.md` aprobada
 2. `plan.md` consistente con `spec.md`
 
+- **EN:** Creating the SDD base (`idea/spec/plan/tasks/bitacora`) does not require execution consent.
+- **EN:** Ask and record user consent only when implementation is going to start.
+- **ES:** Crear la base SDD (`idea/spec/plan/tasks/bitacora`) no requiere consentimiento de ejecución.
+- **ES:** Pide y registra consentimiento del usuario solo cuando vaya a iniciar implementación.
+
 If not aligned, refine docs first:
 - `spec.md`
 - `plan.md`
@@ -87,7 +92,7 @@ My project is: [describe your project in plain language].
 If this repository is not available locally, tell me how to get it first.
 Then initialize the template, define the idea, create the first spec, and guide me step by step.
 Use www/<project-name>/ as execution root.
-Before creating/changing specs or implementation scope, ask for my approval and record it.
+Before execution/implementation starts, ask for my approval and record it.
 Do not skip idea, spec, plan, tasks, validation, and logbook.
 
 ES:
@@ -95,7 +100,7 @@ Usando https://github.com/juanklagos/spec-driven-development-template, crea todo
 Mi proyecto es: [explica tu proyecto en lenguaje simple].
 Si este repositorio no está disponible en local, indícame primero cómo obtenerlo.
 Luego inicializa el template, define la idea, crea la primera spec y guíame paso a paso.
-Antes de crear/cambiar specs o alcance de implementación, pide mi aprobación y regístrala.
+Antes de iniciar ejecución/implementación, pide mi aprobación y regístrala.
 No omitas idea, spec, plan, tasks, validación y bitácora.
 ```
 

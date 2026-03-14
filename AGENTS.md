@@ -48,7 +48,7 @@ Before implementation tasks, explicitly determine:
 1. For runnable target projects, create/use `www/<project-name>/`:
    - `./scripts/create-www-project.sh <project-name> <assistant>`
 2. Work from one active specification.
-3. Record explicit user consent before creating/changing specs:
+3. Record explicit user consent before execution/implementation starts on an approved spec:
    - `./scripts/confirm-user-consent.sh "User approved scope X"`
 4. If GitHub Spec Kit is available, use:
    - `/speckit.constitution`
