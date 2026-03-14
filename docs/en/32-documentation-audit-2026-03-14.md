@@ -33,3 +33,9 @@ Reviewed:
 1. Apply the same concise structure to docs `00-12` and `16-31`.
 2. Add link-check and style checks in CI for docs.
 3. Add timed UX validation (find Quickstart/start path in <10 seconds).
+
+## Pass 2 update (2026-03-14)
+
+- Compacted repeated startup/prompt blocks across core docs `00-12` and `16` in EN/ES.
+- Replaced long duplicated sections with short links to `AI_START_HERE.md`, prompt matrix, and validated prompt bank.
+- Kept topic-specific content intact while reducing onboarding noise.

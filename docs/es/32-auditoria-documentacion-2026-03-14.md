@@ -33,3 +33,9 @@ Se revisó:
 1. Aplicar la misma estructura concisa a docs `00-12` y `16-31`.
 2. Agregar validación de links y estilo en CI para documentación.
 3. Agregar validación UX cronometrada (encontrar Quickstart/ruta de inicio en <10 segundos).
+
+## Actualización pasada 2 (2026-03-14)
+
+- Se compactaron bloques repetidos de inicio/prompts en guías core `00-12` y `16` en EN/ES.
+- Se reemplazaron secciones largas duplicadas por enlaces cortos a `AI_START_HERE.md`, matriz de prompts y banco validado.
+- Se mantuvo el contenido específico de cada tema reduciendo ruido de onboarding.
