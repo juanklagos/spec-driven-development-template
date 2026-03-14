@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Execute projects with specification-first discipline.<br>Ejecuta proyectos con disciplina guiada por especificaciones.</b></p>
+  <p><b>Start projects with specification-first discipline and AI-friendly guidance.</b></p>
 
   <p>
     <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Active-blue?style=for-the-badge" alt="English"></a>
@@ -9,49 +9,66 @@
 
   <p>
     <img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge" alt="Version">
-    <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown"></a>
-    <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell Script"></a>
-    <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white" alt="ChatGPT"></a>
+    <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_START-Open-purple?style=for-the-badge" alt="AI Start"></a>
+    <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart"></a>
   </p>
-
-  <br>
-
-  <a href="./QUICKSTART.md">
-    <img src="https://img.shields.io/badge/🚀_GET_STARTED-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart">
-  </a>
-  &nbsp;&nbsp;
-  <a href="./AI_START_HERE.md">
-    <img src="https://img.shields.io/badge/🤖_AI_PILOT-Start_Here-purple?style=for-the-badge" alt="AI Quickstart">
-  </a>
-
-  <br><br>
 </div>
 
 ---
 
-## ⚡ The Mission: Solve "Code Drift"
-**Stop losing context in chats. Stop implementing code without a plan.**
+## ⚡ Start in 30 Seconds
 
-| ❌ The Problem | ✅ The SDD Solution |
-| :--- | :--- |
-| Decisions lost in chat history | **Single Source of Truth** in `specs/` |
-| Code implemented without context | **Mandatory Planning** in `plan.md` |
-| Difficult team/AI onboarding | **Standard Anatomy** for any project |
-| No proof of validation | **Execution Logs** in `bitacora/` |
-
-## 🗣️ Friendly prompt (copy/paste)
+1. Open [AI_START_HERE.md](./AI_START_HERE.md)
+2. Copy/paste this prompt:
 
 ```text
-Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
 My project is: [describe your project in plain language].
-
-If my project is new, initialize it with this template and GitHub Spec Kit.
-If my project already exists, adapt it to idea/specs/bitacora without breaking current behavior.
-Guide me step by step for my level (beginner/intermediate/advanced), using simple language.
-Do not skip specification, plan, tasks, refinement trace, logbook, and validation.
+If my project is new, initialize from this template.
+If it already exists, adapt it without breaking current behavior.
+No code before approved spec and consistent plan.
 ```
 
-## 🎯 Choose your level
+3. Choose your level and continue:
+- Beginner: [docs/en/13-quick-guide-non-programmers.md](./docs/en/13-quick-guide-non-programmers.md)
+- Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
+- Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
+
+## 🚨 Mandatory Rule Before Coding
+
+This template enforces policy + gate checks:
+
+```bash
+./scripts/check-sdd-policy.sh .
+./scripts/check-sdd-gate.sh .
+```
+
+Hard stop:
+- No code before approved `spec.md` and consistent `plan.md`.
+
+Reference files:
+- [sdd.policy.yaml](./sdd.policy.yaml)
+- [INSTRUCTIONS.md](./INSTRUCTIONS.md)
+- [template-context/core-instructions/AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
+
+---
+
+## 🎯 Problem vs Solution
+
+| ❌ Problem | ✅ SDD Solution |
+| :--- | :--- |
+| Decisions lost in chat history | Single source of truth in `specs/` |
+| Code created without planning | Mandatory `spec.md` + `plan.md` gate |
+| Hard onboarding for teams/AI | Standard structure and level-based guides |
+| Weak traceability | Session logs in `bitacora/` |
+
+## 🧭 Template vs Real Project
+
+- This repository is a **framework/template**.
+- Your product work should run in your target project using this structure.
+- If you adapt an existing project, integrate `idea/specs/bitacora` without breaking current behavior.
+
+## 🗺️ 3-Level Learning Path
 
 ```mermaid
 flowchart LR
@@ -62,113 +79,60 @@ flowchart LR
   C --> F["Governance + quality gates"]
 ```
 
-- Beginner: [docs/en/13-quick-guide-non-programmers.md](./docs/en/13-quick-guide-non-programmers.md)
-- Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
-- Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
+---
+
+## 🏗️ Anatomy of an SDD Project
+
+Mandatory folders:
+- `idea/`: project intent and scope
+- `specs/`: numbered specifications
+- `bitacora/`: execution trace and handoffs
+- `docs/`: usage guides and references
+
+Mandatory spec bundle (for each feature):
+1. `spec.md`
+2. `plan.md`
+3. `tasks.md`
+4. `history.md`
 
 ---
 
-## 🏗️ Project Anatomy
-The repository is divided into 3 mandatory execution layers:
+## 👤 Non-Technical Path
 
-### 1. Folder Structure
-- 📁 `idea/`: The "Why". General vision and high-level scope.
-- 📁 `specs/`: The "What". Numbered sequential specifications (The Contract).
-- 📁 `bitacora/`: The "How it went". Daily logs and technical handoffs.
-- 📁 `docs/`: The "How we work". Guides, playbooks, and conventions.
+- Start here: [AI_START_HERE.md](./AI_START_HERE.md)
+- Follow level path: [docs/en/18-complete-3-level-path.md](./docs/en/18-complete-3-level-path.md)
+- Use ready prompts:
+  - [docs/en/19-prompt-matrix-by-goal.md](./docs/en/19-prompt-matrix-by-goal.md)
+  - [docs/en/26-validated-prompt-bank.md](./docs/en/26-validated-prompt-bank.md)
 
-### 2. The Spec Bundle
-Every feature in `specs/` must contain:
-1. 📄 **`spec.md`**: Business requirements & UI/UX logic.
-2. 📄 **`plan.md`**: Technical strategy & architecture.
-3. 📄 **`tasks.md`**: Sequential Actionable Checklist.
-4. 📄 **`history.md`**: Traceability of all changes.
-
----
-
-## 🛠️ Toolkit & Automation
-Manage your SDD life with these pre-built helpers:
+## 🛠️ Technical Path
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
-| **New Project** | `./scripts/init-project.sh` | Bootstrap the structure in seconds. |
-| **New Project + Spec Kit** | `./scripts/init-project-with-spec-kit.sh` | Bootstrap structure and initialize GitHub Spec Kit. |
-| **Reset** | `./scripts/reset-template.sh` | Clean the template for a fresh start. |
-| **New Spec** | `./scripts/new-spec.sh` | Generate a new numbered spec folder. |
-| **Validation** | `./scripts/validate-sdd.sh` | Ensure your repo follows the SDD rules. |
-| **Policy Check** | `./scripts/check-sdd-policy.sh` | Enforce multi-agent policy consistency and mandatory rule files. |
-| **SDD Gate** | `./scripts/check-sdd-gate.sh` | Enforce approval and spec-plan-task consistency before coding. |
-| **Roadmap** | `./scripts/generate-status.sh` | Generate an auto-updating dashboard. |
+| New Project | `./scripts/init-project.sh` | Bootstrap SDD structure |
+| New Project + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Bootstrap + Spec Kit init |
+| New Spec | `./scripts/new-spec.sh` | Create numbered spec folder |
+| Validation | `./scripts/validate-sdd.sh . --strict` | Validate structure and consistency |
+| Policy Check | `./scripts/check-sdd-policy.sh .` | Validate multi-agent policy files |
+| SDD Gate | `./scripts/check-sdd-gate.sh .` | Enforce approval and plan consistency |
+| Status Dashboard | `./scripts/generate-status.sh` | Generate project status report |
 
 > [!TIP]
-> **Pro Tip:** Use `npx degit juanklagos/spec-driven-development-template` for a clean copy.
+> For a clean copy: `npx degit juanklagos/spec-driven-development-template`
 
 ---
 
-## 📚 Knowledge Hub
-Deep dive into different aspects of the SDD methodology:
+## 📚 Documentation Discovery
 
-### 🏗️ Essentials
-- [Structure Detail](./docs/en/01-structure.md) | [Workflow Guide](./docs/en/02-workflow.md) | [3-Level Learning Path](./docs/en/18-complete-3-level-path.md)
-
-### 🤖 AI & Development
-- [Supported Agents & Prompts](./docs/en/10-supported-ai-agents-and-prompts.md)
-- [**Working with Lovable (Recommended)**](./docs/en/17-working-with-lovable.md)
-- [TDD & BDD patterns](./docs/en/12-tdd-and-bdd-how-to-write-specs.md)
-- [Validated Prompt Bank](./docs/en/26-validated-prompt-bank.md)
-
-### 👥 Governance & Team
-- [Team Mode & Collaboration](./docs/en/22-team-mode-and-collaboration.md)
-- [Quality Stage Gates](./docs/en/21-quality-checklists-by-stage.md)
-- [Architecture Decision Records (ADR)](./docs/en/24-architecture-decisions.md)
+- Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
+- AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
+- Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 
 ---
 
 ## ⚖️ Legal & Authorship
-- **License:** PolyForm Noncommercial 1.0.0. [See Legal Framework](./docs/en/31-legal-framework-and-commercial-use.md).
-- **History:** Check the [CHANGELOG.md](./CHANGELOG.md).
-- **Author:** Developed with ☕ and discipline by **Juan Klagos** ([AUTHORS.md](./AUTHORS.md)).
 
----
-<p align="center">
-  <em>Spec-Driven Development — Discipline is the bridge between goals and accomplishment.</em>
-</p>
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+- License: PolyForm Noncommercial 1.0.0
+- Legal guide: [docs/en/31-legal-framework-and-commercial-use.md](./docs/en/31-legal-framework-and-commercial-use.md)
+- Changelog: [CHANGELOG.md](./CHANGELOG.md)
+- Author: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
