@@ -1,12 +1,15 @@
 # Cursor Rules: SDD Template Guardrails
 
-Apply `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as canonical source.
+Canonical source:
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
+- `sdd.policy.yaml`
 
-Hard rule:
-- Do not implement code until `spec.md` is approved by user and `plan.md` is consistent with `spec.md`.
+Hard stop:
+- No code before approved spec and consistent plan.
+- No hay código sin spec aprobada y plan consistente.
 
 Always:
-1. Clarify mode: template maintenance vs target project execution.
-2. Work from one active specification.
+1. Confirm mode: template maintenance vs target project execution.
+2. Use one active specification.
 3. Keep refinement trace (`history.md`, `specs/INDEX.md`, `bitacora/`).
-4. Validate with `./scripts/validate-sdd.sh . --strict`.
+4. Run `./scripts/validate-sdd.sh . --strict` and `./scripts/check-sdd-gate.sh .`.

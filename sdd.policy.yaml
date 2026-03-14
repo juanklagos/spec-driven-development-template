@@ -1,0 +1,51 @@
+version: 1
+name: spec-driven-development-template-policy
+
+context:
+  repository: https://github.com/juanklagos/spec-driven-development-template
+  purpose_en: Starter template to bootstrap SDD projects with low friction.
+  purpose_es: Plantilla base para iniciar proyectos SDD con baja fricción.
+
+hard_stop:
+  no_code_before_spec_approved: true
+  no_code_before_plan_consistent: true
+
+gates:
+  required_order:
+    - idea
+    - spec
+    - plan
+    - tasks
+    - implement
+    - validate
+    - logbook
+  validate_commands:
+    - ./scripts/validate-sdd.sh . --strict
+    - ./scripts/check-sdd-gate.sh .
+
+required_files:
+  - AGENTS.md
+  - AI_START_HERE.md
+  - INSTRUCTIONS.md
+  - template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
+  - .cursorrules
+  - .clauderules
+  - CLAUDE.md
+  - GEMINI.md
+  - WINDSURF.md
+  - AIDER.md
+  - ROO.md
+  - .github/copilot-instructions.md
+
+agent_rule_markers:
+  canonical_source: template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
+  hard_stop_phrase_en: No code before approved spec and consistent plan.
+  hard_stop_phrase_es: No hay código sin spec aprobada y plan consistente.
+
+session_output_contract:
+  - objective
+  - active_spec
+  - changes
+  - validation
+  - risks
+  - next_step

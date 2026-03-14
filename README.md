@@ -96,6 +96,7 @@ Manage your SDD life with these pre-built helpers:
 | **Reset** | `./scripts/reset-template.sh` | Clean the template for a fresh start. |
 | **New Spec** | `./scripts/new-spec.sh` | Generate a new numbered spec folder. |
 | **Validation** | `./scripts/validate-sdd.sh` | Ensure your repo follows the SDD rules. |
+| **Policy Check** | `./scripts/check-sdd-policy.sh` | Enforce multi-agent policy consistency and mandatory rule files. |
 | **SDD Gate** | `./scripts/check-sdd-gate.sh` | Enforce approval and spec-plan-task consistency before coding. |
 | **Roadmap** | `./scripts/generate-status.sh` | Generate an auto-updating dashboard. |
 

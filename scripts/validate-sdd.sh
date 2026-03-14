@@ -66,6 +66,16 @@ require_file "specs/_template/tasks.md"
 require_file "specs/_template/research.md"
 require_file "specs/_template/history.md"
 
+if [ -f "$ROOT/scripts/check-sdd-policy.sh" ]; then
+  if "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
+    ok "SDD policy check"
+  else
+    fail "SDD policy check failed"
+  fi
+else
+  fail "Missing scripts/check-sdd-policy.sh"
+fi
+
 spec_dirs=()
 while IFS= read -r spec_dir; do
   spec_dirs+=("$spec_dir")

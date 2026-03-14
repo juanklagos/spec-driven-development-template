@@ -96,6 +96,7 @@ Gestiona tu flujo SDD con estas utilidades:
 | **Reset** | `./scripts/reset-template.sh` | Limpia el template para empezar de cero. |
 | **Nueva spec** | `./scripts/new-spec.sh` | Crea una carpeta numerada de spec. |
 | **Validación** | `./scripts/validate-sdd.sh` | Verifica cumplimiento de reglas SDD. |
+| **Chequeo de política** | `./scripts/check-sdd-policy.sh` | Exige consistencia de política multi-agente y archivos de reglas obligatorios. |
 | **Compuerta SDD** | `./scripts/check-sdd-gate.sh` | Exige aprobación y consistencia spec-plan-tasks antes de codificar. |
 | **Roadmap** | `./scripts/generate-status.sh` | Genera un tablero de estado automático. |
 

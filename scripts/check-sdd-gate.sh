@@ -22,6 +22,16 @@ fail() {
 
 printf "Checking SDD gate in: %s\n" "$(cd "$ROOT" && pwd)"
 
+if [ -f "$ROOT/scripts/check-sdd-policy.sh" ]; then
+  if "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
+    ok "SDD policy check"
+  else
+    fail "SDD policy check failed"
+  fi
+else
+  fail "Missing scripts/check-sdd-policy.sh"
+fi
+
 spec_count=0
 while IFS= read -r spec_path; do
   spec_count=$((spec_count + 1))

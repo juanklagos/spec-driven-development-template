@@ -1,8 +1,15 @@
 # Claude Rules: SDD Template Guardrails
 
-Use `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as the canonical instruction set.
+Canonical source:
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
+- `sdd.policy.yaml`
 
-Blocking gate:
-- No code changes before `spec.md` approval + `plan.md` consistency.
+Hard stop:
+- No code before approved spec and consistent plan.
+- No hay código sin spec aprobada y plan consistente.
 
-If gate is not met, only refine documents and request/confirm approval.
+Workflow:
+1. Read `AI_START_HERE.md`, `idea/IDEA_GENERAL.md`, `specs/INDEX.md`.
+2. Work with one active spec.
+3. If gate not met, refine docs only.
+4. Close with validation and exact next step.

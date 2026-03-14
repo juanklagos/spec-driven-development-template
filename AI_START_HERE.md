@@ -41,9 +41,11 @@ If not aligned, refine docs first:
 ## 3) First reading order / Orden inicial de lectura
 
 1. `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
-2. `idea/IDEA_GENERAL.md`
-3. `specs/INDEX.md`
-4. latest file in `bitacora/handoffs/` (if exists)
+2. `sdd.policy.yaml`
+3. `INSTRUCTIONS.md`
+4. `idea/IDEA_GENERAL.md`
+5. `specs/INDEX.md`
+6. latest file in `bitacora/handoffs/` (if exists)
 
 ---
 
@@ -200,6 +202,7 @@ Local validation:
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-policy.sh .
 ./scripts/check-sdd-gate.sh .
 ```
 

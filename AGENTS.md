@@ -9,6 +9,8 @@ Clonar es opcional. Lo obligatorio es trabajar con este template y sus guías co
 Quick start for AI tools / Inicio rápido para herramientas de IA:
 
 - [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
+- `sdd.policy.yaml`
+- `INSTRUCTIONS.md`
 - `AI_START_HERE.md`
 - `template-context/README.md`
 - `template-context/01-PURPOSE.md`
@@ -51,8 +53,9 @@ Before implementation tasks, explicitly determine:
    - `/speckit.implement`
 3. Keep `specs/` and `bitacora/` updated at session end.
 4. Run `./scripts/validate-sdd.sh . --strict` before finishing.
-5. Run `./scripts/check-sdd-gate.sh .` before finishing.
-6. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
+5. Run `./scripts/check-sdd-policy.sh .` before finishing.
+6. Run `./scripts/check-sdd-gate.sh .` before finishing.
+7. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
 

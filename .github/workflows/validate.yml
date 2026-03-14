@@ -15,9 +15,16 @@ jobs:
 
       - name: Verify multi-agent SDD rule files
         run: |
+          test -f sdd.policy.yaml
           test -f template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
+          test -f INSTRUCTIONS.md
           test -f .cursorrules
           test -f .clauderules
+          test -f CLAUDE.md
+          test -f GEMINI.md
+          test -f WINDSURF.md
+          test -f AIDER.md
+          test -f ROO.md
           test -f .github/copilot-instructions.md
           test -f template-context/05-SDD-EXECUTION-GATE.md
           test -f template-context/06-AI-RULES-MATRIX.md
@@ -27,6 +34,12 @@ jobs:
 
       - name: Make SDD gate script executable
         run: chmod +x ./scripts/check-sdd-gate.sh
+
+      - name: Make SDD policy script executable
+        run: chmod +x ./scripts/check-sdd-policy.sh
+
+      - name: Run check-sdd-policy.sh
+        run: ./scripts/check-sdd-policy.sh .
 
       - name: Run validate-sdd.sh
         run: ./scripts/validate-sdd.sh . --strict

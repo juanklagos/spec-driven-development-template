@@ -1,22 +1,20 @@
 # GitHub Copilot Instructions - SDD Template
 
-This repository follows Spec-Driven Development (SDD).
-
-Read first:
+Canonical source:
 - `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
-- `AGENTS.md`
-- `template-context/README.md`
+- `sdd.policy.yaml`
 
-Hard implementation gate:
-- Do not generate or modify implementation code unless `spec.md` is approved by the user and `plan.md` is consistent with `spec.md`.
+Hard stop:
+- No code before approved spec and consistent plan.
+- No hay código sin spec aprobada y plan consistente.
 
-If gate is not met:
-- Focus on refining spec/plan/tasks/history/logbook.
+Required behavior:
+1. Treat this repository as a starter template, not a product backlog.
+2. Read `AI_START_HERE.md`, `idea/IDEA_GENERAL.md`, `specs/INDEX.md` first.
+3. Work from one active specification.
+4. If gate is not met, refine docs (`spec`, `plan`, `tasks`, `history`, `bitacora`) only.
+5. Keep traceability in `history.md`, `specs/INDEX.md`, and `bitacora/`.
 
-Always preserve traceability:
-- Update `history.md` for requirement/scope/priority changes.
-- Update `specs/INDEX.md` when status or priority changes.
-- Update `bitacora/` at session end.
-
-Validation:
-- Run `./scripts/validate-sdd.sh . --strict` before closing tasks.
+Validation commands:
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-gate.sh .`

@@ -1,0 +1,31 @@
+# AI Instructions / Instrucciones IA
+
+Canonical source:
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
+- `sdd.policy.yaml`
+
+Hard stop (mandatory):
+- No code before approved spec and consistent plan.
+- No hay código sin spec aprobada y plan consistente.
+
+This repository is a starter template, not a product backlog.
+Este repositorio es un template de arranque, no un backlog de producto.
+
+Minimum execution flow:
+1. Read `AI_START_HERE.md`
+2. Read `idea/IDEA_GENERAL.md`
+3. Read `specs/INDEX.md`
+4. Work with one active spec
+5. Validate and update logbook
+
+Copy/paste base prompt:
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
+My project is: [describe project in plain language].
+No code before approved spec and consistent plan.
+
+Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
+Mi proyecto es: [explica el proyecto en lenguaje simple].
+No hay código sin spec aprobada y plan consistente.
+```

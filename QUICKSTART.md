@@ -73,6 +73,7 @@ Update:
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-policy.sh .
 ./scripts/check-sdd-gate.sh .
 ```
 
