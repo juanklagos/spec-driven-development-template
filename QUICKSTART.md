@@ -34,8 +34,15 @@ cd www/my-project
 ```
 
 Default:
-- EN: minimal scaffold only.
-- ES: solo scaffold mínimo.
+- EN: recommended scaffold (best default for project quality).
+- ES: scaffold recomendado (mejor valor por defecto para calidad del proyecto).
+
+Minimal only:
+
+```bash
+./scripts/create-www-project.sh my-project codex --minimal-template
+cd www/my-project
+```
 
 Optional full packs:
 

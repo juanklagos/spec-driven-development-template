@@ -48,8 +48,14 @@ Create workspace:
 ```
 
 Default behavior:
-- EN: creates a minimal scaffold (only what is needed for SDD + AI context).
-- ES: crea un scaffold mínimo (solo lo necesario para SDD + contexto IA).
+- EN: creates a recommended scaffold (SDD core + AI context + quality/playbooks essentials).
+- ES: crea un scaffold recomendado (núcleo SDD + contexto IA + esenciales de calidad/playbooks).
+
+Optional minimal scaffold:
+
+```bash
+./scripts/create-www-project.sh my-project codex --minimal-template
+```
 
 Optional full scaffold:
 

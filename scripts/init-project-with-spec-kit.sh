@@ -2,8 +2,9 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 3 ]; then
-  echo "Uso: $0 /ruta/del-proyecto [asistente] [--profile=minimal|full]"
+  echo "Uso: $0 /ruta/del-proyecto [asistente] [--profile=minimal|recommended|full]"
   echo "Ejemplo: $0 /tmp/mi-proyecto codex"
+  echo "Ejemplo: $0 /tmp/mi-proyecto codex --profile=recommended"
   echo "Ejemplo: $0 /tmp/mi-proyecto codex --profile=full"
   exit 1
 fi
@@ -15,7 +16,7 @@ PROFILE="--profile=minimal"
 shift
 for arg in "$@"; do
   case "$arg" in
-    --profile=minimal|--profile=full)
+    --profile=minimal|--profile=recommended|--profile=full)
       PROFILE="$arg"
       ;;
     *)

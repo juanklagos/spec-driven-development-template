@@ -2,21 +2,23 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-  echo "Uso: $0 /ruta/del-nuevo-proyecto [--profile=minimal|full]"
+  echo "Uso: $0 /ruta/del-nuevo-proyecto [--profile=minimal|recommended|full]"
   echo "Ejemplo: $0 /tmp/mi-proyecto"
+  echo "Ejemplo: $0 /tmp/mi-proyecto --profile=recommended"
   echo "Ejemplo: $0 /tmp/mi-proyecto --profile=full"
   exit 1
 fi
 
 TARGET="$1"
-PROFILE="minimal"
+PROFILE="recommended"
 if [ "${2:-}" != "" ]; then
   case "$2" in
     --profile=minimal) PROFILE="minimal" ;;
+    --profile=recommended) PROFILE="recommended" ;;
     --profile=full) PROFILE="full" ;;
     *)
       echo "Error: perfil no soportado: $2"
-      echo "Usa --profile=minimal o --profile=full"
+      echo "Usa --profile=minimal, --profile=recommended o --profile=full"
       exit 1
       ;;
   esac
@@ -34,7 +36,8 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/bitacora/templates" \
          "$TARGET/template-context/core-instructions" \
          "$TARGET/scripts" \
-         "$TARGET/.github/workflows"
+         "$TARGET/.github/workflows" \
+         "$TARGET/docs"
 
 cp -n "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
 cp -n "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
@@ -78,7 +81,7 @@ chmod +x "$TARGET/scripts/check-sdd-policy.sh"
 chmod +x "$TARGET/scripts/check-sdd-gate.sh"
 chmod +x "$TARGET/scripts/new-spec.sh"
 
-if [ "$PROFILE" = "full" ]; then
+if [ "$PROFILE" = "recommended" ] || [ "$PROFILE" = "full" ]; then
   mkdir -p "$TARGET/playbooks" \
            "$TARGET/quality/evidence/templates" \
            "$TARGET/template-context/prompts"
@@ -94,6 +97,11 @@ if [ "$PROFILE" = "full" ]; then
            "$TARGET/scripts/generate-roadmap.sh" \
            "$TARGET/scripts/generate-status.sh" \
            "$TARGET/scripts/legacy-discovery.sh"
+fi
+
+if [ "$PROFILE" = "full" ]; then
+  cp -R "$ROOT_DIR/docs/." "$TARGET/docs/"
+  cp -R "$ROOT_DIR/legal" "$TARGET/legal"
 fi
 
 cat <<MSG

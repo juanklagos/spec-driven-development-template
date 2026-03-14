@@ -17,8 +17,14 @@ Recommended creation command / Comando recomendado:
 ```
 
 Default:
-- EN: minimal scaffold only.
-- ES: scaffold mínimo únicamente.
+- EN: recommended scaffold (best default for project quality).
+- ES: scaffold recomendado (mejor valor por defecto para calidad del proyecto).
+
+Minimal scaffold (optional) / Scaffold mínimo (opcional):
+
+```bash
+./scripts/create-www-project.sh my-project codex --minimal-template
+```
 
 Without Spec Kit auto-init / Sin auto-init de Spec Kit:
 

@@ -75,10 +75,10 @@ else
   fail "Policy missing execution_root block"
 fi
 
-if match_q "default_scaffold_profile:[[:space:]]*minimal" "$POLICY_PATH"; then
-  ok "Policy default scaffold profile is minimal"
+if match_q "default_scaffold_profile:[[:space:]]*recommended" "$POLICY_PATH"; then
+  ok "Policy default scaffold profile is recommended"
 else
-  warn "Policy should define default_scaffold_profile: minimal"
+  warn "Policy should define default_scaffold_profile: recommended"
 fi
 
 while IFS= read -r rel_path; do
