@@ -15,5 +15,6 @@ Esta carpeta define el contexto canónico de este repositorio como plantilla de 
 2. `02-AI-OPERATING-RULES.md`
 3. `03-FAST-ENTRY-FLOWS.md`
 4. `04-ANTI-MISUSE.md`
-5. `prompts/`
-
+5. `05-SDD-EXECUTION-GATE.md`
+6. `06-AI-RULES-MATRIX.md`
+7. `prompts/`

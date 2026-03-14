@@ -1,0 +1,8 @@
+# Claude Rules: SDD Template Guardrails
+
+Use `INSTRUCTIONS.md` as the canonical instruction set.
+
+Blocking gate:
+- No code changes before `spec.md` approval + `plan.md` consistency.
+
+If gate is not met, only refine documents and request/confirm approval.

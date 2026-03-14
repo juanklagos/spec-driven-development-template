@@ -21,11 +21,14 @@ Repository URL / URL del repositorio:
 
 Read this context before any implementation-oriented session:
 
-1. `template-context/README.md`
-2. `template-context/01-PURPOSE.md`
-3. `template-context/02-AI-OPERATING-RULES.md`
-4. `template-context/03-FAST-ENTRY-FLOWS.md`
-5. `template-context/04-ANTI-MISUSE.md`
+1. `INSTRUCTIONS.md`
+2. `template-context/README.md`
+3. `template-context/01-PURPOSE.md`
+4. `template-context/02-AI-OPERATING-RULES.md`
+5. `template-context/03-FAST-ENTRY-FLOWS.md`
+6. `template-context/04-ANTI-MISUSE.md`
+7. `template-context/05-SDD-EXECUTION-GATE.md`
+8. `template-context/06-AI-RULES-MATRIX.md`
 
 ## 🚀 Prompt to create a new project / Prompt para crear un proyecto nuevo
 

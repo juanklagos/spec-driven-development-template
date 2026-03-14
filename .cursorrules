@@ -1,0 +1,12 @@
+# Cursor Rules: SDD Template Guardrails
+
+Apply `INSTRUCTIONS.md` as canonical source.
+
+Hard rule:
+- Do not implement code until `spec.md` is approved by user and `plan.md` is consistent with `spec.md`.
+
+Always:
+1. Clarify mode: template maintenance vs target project execution.
+2. Work from one active specification.
+3. Keep refinement trace (`history.md`, `specs/INDEX.md`, `bitacora/`).
+4. Validate with `./scripts/validate-sdd.sh . --strict`.

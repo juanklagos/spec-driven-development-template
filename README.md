@@ -67,11 +67,14 @@ Una estructura reutilizable para ejecutar proyectos con disciplina guiada por es
 
 Canonical context for AI tools:
 
+- [`INSTRUCTIONS.md`](./INSTRUCTIONS.md)
 - [`template-context/README.md`](./template-context/README.md)
 - [`template-context/01-PURPOSE.md`](./template-context/01-PURPOSE.md)
 - [`template-context/02-AI-OPERATING-RULES.md`](./template-context/02-AI-OPERATING-RULES.md)
 - [`template-context/03-FAST-ENTRY-FLOWS.md`](./template-context/03-FAST-ENTRY-FLOWS.md)
 - [`template-context/04-ANTI-MISUSE.md`](./template-context/04-ANTI-MISUSE.md)
+- [`template-context/05-SDD-EXECUTION-GATE.md`](./template-context/05-SDD-EXECUTION-GATE.md)
+- [`template-context/06-AI-RULES-MATRIX.md`](./template-context/06-AI-RULES-MATRIX.md)
 
 ---
 

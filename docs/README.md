@@ -10,6 +10,7 @@ Start here / Empieza aquí: [`AI_START_HERE.md`](../AI_START_HERE.md)
 
 Template context for AI / Contexto template para IA:
 [`template-context/README.md`](../template-context/README.md)
+`INSTRUCTIONS.md`: [`../INSTRUCTIONS.md`](../INSTRUCTIONS.md)
 
 ## 🌍 Choose language / Elige idioma
 
