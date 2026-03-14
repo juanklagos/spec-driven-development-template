@@ -1,41 +1,64 @@
 # Marco legal y uso comercial
 
-## Estado del proyecto
+<a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
-Este repositorio es **source-available no comercial**.
-No es open source OSI.
+---
 
-Licencia vigente:
+> Este documento resume los términos de licenciamiento. Para el lenguaje legal completo, consulta los documentos legales en la raíz.
 
-- `LICENSE` (PolyForm Noncommercial 1.0.0)
+## 📋 Estado de licenciamiento del proyecto
 
-## Qué está permitido (resumen)
+Este repositorio está licenciado bajo **PolyForm Noncommercial 1.0.0**. Es **código disponible** pero **no es open source aprobado por OSI**.
 
-- Uso personal no comercial.
-- Uso educativo no comercial.
-- Uso en organizaciones no comerciales según términos de licencia.
+| Aspecto | Detalle |
+|---|---|
+| Tipo de licencia | PolyForm Noncommercial 1.0.0 |
+| Disponibilidad del código | Público, legible, forkeable |
+| Open-source OSI | ❌ No |
+| Uso comercial | ❌ Requiere autorización escrita |
 
-## Qué requiere autorización previa
+## ✅ Qué está permitido (sin autorización)
 
-- Cualquier uso comercial.
-- Venta de derivados.
-- Integración en servicios o productos pagos.
+| Caso de uso | ¿Permitido? | Notas |
+|---|---|---|
+| Aprendizaje personal y experimentación | ✅ Sí | Usa libremente para autoeducación |
+| Uso académico y educativo | ✅ Sí | Aulas, talleres, investigación |
+| Uso por organizaciones sin fines de lucro | ✅ Sí | Bajo términos PolyForm Noncommercial |
+| Contribuir a este repositorio | ✅ Sí | Bajo términos del CLA (ver abajo) |
+| Crear proyectos personales con este template | ✅ Sí | Siempre que los servicios construidos sean no-comerciales |
+| Referenciar en blog posts o charlas | ✅ Sí | Con atribución apropiada |
 
-Ver:
+## ❌ Qué requiere autorización escrita previa
 
-- `COMMERCIAL_LICENSE.md`
+| Caso de uso | Estado | Cómo obtener permiso |
+|---|---|---|
+| Vender el template o derivados | ❌ Necesita licencia | Contactar al autor |
+| Usar en un producto SaaS pagado | ❌ Necesita licencia | Contactar al autor |
+| Incluir en cursos o capacitaciones pagadas | ❌ Necesita licencia | Contactar al autor |
+| White-labeling para clientes | ❌ Necesita licencia | Contactar al autor |
+| Integración en herramientas CI/CD comerciales | ❌ Necesita licencia | Contactar al autor |
 
-## Documentos legales del repositorio
+## 📄 Documentos legales en este repositorio
 
-- `LICENSE`
-- `NOTICE`
-- `COMMERCIAL_LICENSE.md`
-- `DISCLAIMER.md`
-- `TRADEMARK_POLICY.md`
-- `ENFORCEMENT.md`
-- `CLA.md`
-- `LEGAL_OVERVIEW.md`
+| Documento | Propósito |
+|---|---|
+| [LICENSE](../../LICENSE) | Texto completo PolyForm Noncommercial 1.0.0 |
+| [NOTICE](../../NOTICE) | Aviso de copyright y atribución |
+| [COMMERCIAL_LICENSE.md](../../legal/COMMERCIAL_LICENSE.md) | Términos para solicitudes de licencia comercial |
+| [DISCLAIMER.md](../../legal/DISCLAIMER.md) | Descargo de garantía y responsabilidad |
+| [TRADEMARK_POLICY.md](../../legal/TRADEMARK_POLICY.md) | Reglas para usar nombre y branding del proyecto |
+| [ENFORCEMENT.md](../../legal/ENFORCEMENT.md) | Cómo se manejan violaciones de licencia |
+| [CLA.md](../../legal/CLA.md) | Acuerdo de Licencia de Contribuidor |
+| [LEGAL_OVERVIEW.md](../../legal/LEGAL_OVERVIEW.md) | Resumen de todos los documentos legales |
 
-## Nota importante
+## 🤝 Acuerdo de Licencia de Contribuidor (CLA)
 
-Este documento es informativo y no constituye asesoría legal.
+Al contribuir a este repositorio, aceptas los términos del CLA en `legal/CLA.md`. Puntos clave:
+- Retienes el copyright de tus contribuciones
+- Otorgas al proyecto una licencia amplia y perpetua para usar tus contribuciones
+- Certificas que tus contribuciones son tu trabajo original
+
+## ⚠️ Nota importante
+
+> [!WARNING]
+> Este documento es **solo informativo** y no constituye asesoría legal. Para términos vinculantes, consulta el texto real de la licencia en `LICENSE`. En caso de duda, consulta a un abogado.
