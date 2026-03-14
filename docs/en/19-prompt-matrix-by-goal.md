@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **19-prompt-matrix-by-goal.md**
+- Español: [../es/19-matriz-prompts-por-objetivo.md](../es/19-matriz-prompts-por-objetivo.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -45,3 +51,20 @@ At the end, leave logbook and handoff updates.
 - One major change = one active spec.
 - No implementation without `tasks.md`.
 - If the idea changes, update `history.md` and logbook.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

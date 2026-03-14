@@ -1,5 +1,20 @@
 # 🚀 Guía rápida para no programadores
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **13-guia-rapida-no-programadores.md**
+- English: [../en/13-quick-guide-non-programmers.md](../en/13-quick-guide-non-programmers.md)
+
+
+## 🗣️ Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+Guíame por nivel y no omitas especificación, plan, tareas, bitácora y validación.
+```
+
+
 Para quién es:
 - Para empezar en SDD con pasos claros y sin sobrecarga técnica.
 
@@ -68,3 +83,20 @@ Lista brechas y correcciones exactas antes de implementar.
 
 ## Próximo paso
 - [docs/es/14-guia-intermedia.md](./14-guia-intermedia.md)
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

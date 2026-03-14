@@ -1,5 +1,20 @@
 # 🚀 Quick guide for non-programmers
 
+## 🌍 Language pair / Par de idioma
+
+- English: **13-quick-guide-non-programmers.md**
+- Español: [../es/13-guia-rapida-no-programadores.md](../es/13-guia-rapida-no-programadores.md)
+
+
+## 🗣️ Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+My project is: [describe your project in plain language].
+Guide me step by step for my level and do not skip specification, plan, tasks, logbook, and validation.
+```
+
+
 Who is this for:
 - You are starting with SDD and want clear steps without technical overload.
 
@@ -68,3 +83,20 @@ List gaps and exact fixes before implementation.
 
 ## Next step
 - [docs/en/14-intermediate-guide.md](./14-intermediate-guide.md)
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **26-validated-prompt-bank.md**
+- Español: [../es/26-banco-prompts-validados.md](../es/26-banco-prompts-validados.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -151,3 +157,20 @@ Every AI response during SDD work should include:
 4. **Changes performed** — what was modified
 5. **Validation** — did we run `validate-sdd.sh`?
 6. **Exact next step** — one clear action for the next session
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

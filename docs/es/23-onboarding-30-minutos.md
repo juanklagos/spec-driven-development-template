@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **23-onboarding-30-minutos.md**
+- English: [../en/23-30-minute-onboarding.md](../en/23-30-minute-onboarding.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -99,4 +105,21 @@ Usando https://github.com/juanklagos/spec-driven-development-template como guía
 ayúdame a completar un onboarding de 30 minutos para mi proyecto: [DESCRIBE TU PROYECTO].
 Guíame paso a paso: definición de idea, creación de primera spec, y configuración de bitácora.
 Quiero outputs concretos en cada etapa. No saltes ningún paso.
+```
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
 ```

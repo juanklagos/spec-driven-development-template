@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **22-modo-equipo-y-colaboracion.md**
+- English: [../en/22-team-mode-and-collaboration.md](../en/22-team-mode-and-collaboration.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -91,3 +97,20 @@ Al iniciar un proyecto de equipo con SDD:
 | Cambio de alcance | Discutir con el Spec Owner primero | `history.md` + `bitacora/decisiones/` |
 | Bloqueo encontrado | Escalar inmediatamente, documentar | `bitacora/handoffs/` |
 | Spec completada | Revisar y cerrar, actualizar INDEX | `specs/INDEX.md` status → `Done` |
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

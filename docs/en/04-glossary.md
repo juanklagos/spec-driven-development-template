@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **04-glossary.md**
+- Español: [../es/04-glosario.md](../es/04-glosario.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -44,3 +50,20 @@ Document with findings and technical context before implementation.
 
 ## Task
 Concrete action to advance a specification.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

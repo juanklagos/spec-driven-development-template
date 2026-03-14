@@ -1,12 +1,18 @@
 # Detailed structure
 
+## 🌍 Language pair / Par de idioma
+
+- English: **01-structure.md**
+- Español: [../es/01-estructura.md](../es/01-estructura.md)
+
+
 > [!TIP]
 > For startup instructions and prompts, use:
 > - [`AI_START_HERE.md`](../../AI_START_HERE.md)
 > - [Prompt matrix](./19-prompt-matrix-by-goal.md)
 > - [Validated prompt bank](./26-validated-prompt-bank.md)
 
-## Friendly prompt (copy/paste)
+## 🗣️ Friendly prompt (copy/paste)
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template, set up my project structure with idea/specs/bitacora and guide me in simple language.
@@ -71,3 +77,20 @@ Contains scripts to initialize this structure in other repositories.
 - `quality/`: evidence templates for testing and quality control.
 
 These folders are optional. If they are not used, the base `idea/specs/bitacora` workflow remains valid.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

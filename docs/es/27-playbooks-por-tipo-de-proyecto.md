@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **27-playbooks-por-tipo-de-proyecto.md**
+- English: [../en/27-project-type-playbooks.md](../en/27-project-type-playbooks.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -118,3 +124,20 @@ Si tu tipo de proyecto no está cubierto, crea un nuevo playbook:
 2. Define: partición típica de specs, consideraciones clave, prompts específicos del dominio
 3. Incluye al menos 5 specs sugeridas con áreas de enfoque
 4. Agrega un prompt de IA recomendado para inicialización
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

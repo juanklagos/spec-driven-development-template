@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **26-banco-prompts-validados.md**
+- English: [../en/26-validated-prompt-bank.md](../en/26-validated-prompt-bank.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -151,3 +157,20 @@ Cada respuesta de IA durante trabajo SDD debería incluir:
 4. **Cambios realizados** — qué se modificó
 5. **Validación** — ¿ejecutamos `validate-sdd.sh`?
 6. **Próximo paso exacto** — una acción clara para la siguiente sesión
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

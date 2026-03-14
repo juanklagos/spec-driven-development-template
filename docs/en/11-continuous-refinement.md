@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **11-continuous-refinement.md**
+- Español: [../es/11-refinamiento-continuo.md](../es/11-refinamiento-continuo.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -88,3 +94,20 @@ If you detect contradiction between idea and specification:
 2. Propose refinement.
 3. Update documentation.
 4. Continue implementation only after alignment.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

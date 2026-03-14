@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **20-anti-patrones-y-errores-comunes.md**
+- English: [../en/20-anti-patterns-and-common-errors.md](../en/20-anti-patterns-and-common-errors.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -77,3 +83,20 @@ Si te descubres (o a tu equipo) rompiendo la disciplina SDD:
 4. Solo entonces retoma la implementación
 
 Esto toma 15 minutos y ahorra horas de retrabajo.
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

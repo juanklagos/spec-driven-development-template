@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **06-what-this-template-uses.md**
+- Español: [../es/06-que-usa-esta-plantilla.md](../es/06-que-usa-esta-plantilla.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -52,3 +58,20 @@ This template is simple and universal.
 - Writing specifications before coding
 - Session-by-session logging
 - Clear key decisions
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **24-decisiones-de-arquitectura.md**
+- English: [../en/24-architecture-decisions.md](../en/24-architecture-decisions.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -94,3 +100,20 @@ YYYY-MM-DD
 - **Dónde guardar:** `bitacora/decisiones/NNN-titulo.md`
 - **Cómo referenciar:** En `spec.md` o `plan.md`, enlaza al ADR: "Ver ADR-002 para elección de base de datos"
 - **Cuándo actualizar:** Si una decisión se revierte o reemplaza, actualiza el status y crea un nuevo ADR
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

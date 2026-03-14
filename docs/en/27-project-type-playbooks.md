@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **27-project-type-playbooks.md**
+- Español: [../es/27-playbooks-por-tipo-de-proyecto.md](../es/27-playbooks-por-tipo-de-proyecto.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -118,3 +124,20 @@ If your project type isn't covered, create a new playbook:
 2. Define: typical spec partition, key considerations, domain-specific prompts
 3. Include at least 5 suggested specs with focus areas
 4. Add a recommended AI prompt for initialization
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

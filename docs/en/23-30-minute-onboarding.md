@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **23-30-minute-onboarding.md**
+- Español: [../es/23-onboarding-30-minutos.md](../es/23-onboarding-30-minutos.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -99,4 +105,21 @@ Using https://github.com/juanklagos/spec-driven-development-template as the main
 help me complete a 30-minute onboarding for my project: [DESCRIBE YOUR PROJECT].
 Walk me through each step: idea definition, first spec creation, and logbook setup.
 I want concrete outputs at each stage. Do not skip any steps.
+```
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
 ```

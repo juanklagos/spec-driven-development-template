@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **29-status-dashboard-and-auto-roadmap.md**
+- Español: [../es/29-dashboard-status-y-roadmap.md](../es/29-dashboard-status-y-roadmap.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -136,4 +142,21 @@ gantt
     001-user-auth :active, a1, 2026-01-01, 14d
   section UI
     002-dashboard :       a2, after a1, 10d
+```
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
 ```

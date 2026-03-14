@@ -1,5 +1,20 @@
 # 🧭 Guía avanzada (estandarización y alta consistencia)
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **15-guia-avanzada.md**
+- English: [../en/15-advanced-guide.md](../en/15-advanced-guide.md)
+
+
+## 🗣️ Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+Guíame por nivel y no omitas especificación, plan, tareas, bitácora y validación.
+```
+
+
 Para quién es:
 - Equipos que estandarizan SDD entre múltiples herramientas y modelos de IA.
 
@@ -76,3 +91,20 @@ Incluye impacto en release/gobernanza si aplica.
 - [Checklists de calidad](./21-checklists-calidad-por-etapa.md)
 - [Decisiones de arquitectura](./24-decisiones-de-arquitectura.md)
 - [Checklist de release](./09-release-checklist.md)
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

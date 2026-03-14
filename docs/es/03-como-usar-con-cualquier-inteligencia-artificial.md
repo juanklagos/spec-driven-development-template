@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **03-como-usar-con-cualquier-inteligencia-artificial.md**
+- English: [../en/03-how-to-use-with-any-ai.md](../en/03-how-to-use-with-any-ai.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -44,3 +50,20 @@ No dependas de una sola herramienta. El formato debe funcionar igual con cualqui
 ## Prompt sugerido para iniciar sesión
 
 "Lee `idea/IDEA_GENERAL.md`, `specs/INDEX.md` y el último archivo de `bitacora/handoffs/`. Luego continúa solo con la especificación activa y actualiza bitácora al finalizar."
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **10-supported-ai-agents-and-prompts.md**
+- Español: [../es/10-agentes-ia-soportados-y-prompts.md](../es/10-agentes-ia-soportados-y-prompts.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -169,4 +175,21 @@ Separate changes into: idea, spec, plan, tasks, and validation.
 Apply unified output contract and refinement protocol.
 If scope changes, block implementation until history.md and INDEX are updated.
 Return risk analysis and exact next step.
+```
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
 ```

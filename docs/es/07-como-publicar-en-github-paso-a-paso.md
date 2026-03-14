@@ -1,12 +1,18 @@
 # Cómo publicar en GitHub paso a paso
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **07-como-publicar-en-github-paso-a-paso.md**
+- English: [../en/07-how-to-publish-on-github-step-by-step.md](../en/07-how-to-publish-on-github-step-by-step.md)
+
+
 > [!TIP]
 > Para inicio rápido y prompts, usa:
 > - [`AI_START_HERE.md`](../../AI_START_HERE.md)
 > - [Matriz de prompts](./19-matriz-prompts-por-objetivo.md)
 > - [Banco de prompts validados](./26-banco-prompts-validados.md)
 
-## Prompt amigable (copiar y pegar)
+## 🗣️ Prompt amigable (copiar y pegar)
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, ayúdame a publicar mi proyecto en GitHub paso a paso.
@@ -69,3 +75,20 @@ git push origin v1.0.0
 ## Recomendación
 
 En la descripción del repositorio explica en una frase para quién es la plantilla y qué problema resuelve.
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **28-modo-migracion-legado-avanzado.md**
+- English: [../en/28-advanced-legacy-migration-mode.md](../en/28-advanced-legacy-migration-mode.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -128,3 +134,20 @@ Ayúdame a:
 | No testear comportamiento actual | No puedes verificar que siga funcionando | Agrega tests de regresión antes de tocar código |
 | Migrar todo al mismo tiempo | Overwhelm, conflictos de merge | Un dominio/spec a la vez |
 | Saltarse la spec baseline | Sin punto de referencia para el "antes" | 001-baseline es obligatorio |
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

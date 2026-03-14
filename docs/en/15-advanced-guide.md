@@ -1,5 +1,20 @@
 # 🧭 Advanced guide (high-consistency teams)
 
+## 🌍 Language pair / Par de idioma
+
+- English: **15-advanced-guide.md**
+- Español: [../es/15-guia-avanzada.md](../es/15-guia-avanzada.md)
+
+
+## 🗣️ Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+My project is: [describe your project in plain language].
+Guide me step by step for my level and do not skip specification, plan, tasks, logbook, and validation.
+```
+
+
 Who is this for:
 - Teams standardizing SDD across multiple AI tools and contributors.
 
@@ -76,3 +91,20 @@ Include release/governance impacts if any.
 - [Quality checklists](./21-quality-checklists-by-stage.md)
 - [Architecture decisions](./24-architecture-decisions.md)
 - [Release checklist](./09-release-checklist.md)
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **25-idea-to-spec-with-sdd-3-levels.md**
+- Español: [../es/25-de-idea-a-spec-con-sdd-3-niveles.md](../es/25-de-idea-a-spec-con-sdd-3-niveles.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -167,4 +173,21 @@ Include what should NOT be implemented yet.
 Use this template as the main guide and recommend GitHub Spec Kit as the standard.
 Help me convert this idea into consistent specs, suggesting spec splitting when needed,
 and do not move to implementation until ambiguities and traceability are resolved.
+```
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
 ```

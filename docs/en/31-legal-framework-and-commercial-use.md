@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **31-legal-framework-and-commercial-use.md**
+- Español: [../es/31-marco-legal-y-uso-comercial.md](../es/31-marco-legal-y-uso-comercial.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -77,3 +83,20 @@ By contributing to this repository, you agree to the CLA terms in `legal/CLA.md`
 
 > [!WARNING]
 > This document is **informational only** and does not constitute legal advice. For binding terms, refer to the actual license text in `LICENSE`. When in doubt, consult a lawyer.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

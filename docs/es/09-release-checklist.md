@@ -1,12 +1,18 @@
 # Checklist de publicación (Release Checklist)
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **09-release-checklist.md**
+- English: [../en/09-release-checklist.md](../en/09-release-checklist.md)
+
+
 > [!TIP]
 > Para inicio rápido y prompts, usa:
 > - [`AI_START_HERE.md`](../../AI_START_HERE.md)
 > - [Matriz de prompts](./19-matriz-prompts-por-objetivo.md)
 > - [Banco de prompts validados](./26-banco-prompts-validados.md)
 
-## Prompt amigable (copiar y pegar)
+## 🗣️ Prompt amigable (copiar y pegar)
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, haz una revisión de release para mi proyecto.
@@ -79,3 +85,20 @@ git push origin v1.0.0
 - [ ] Cualquier persona puede seguir la guía sin pedir contexto adicional.
 - [ ] La plantilla se puede inicializar con `scripts/init-project.sh`.
 - [ ] La plantilla se puede inicializar con `scripts/init-project-with-spec-kit.sh`.
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

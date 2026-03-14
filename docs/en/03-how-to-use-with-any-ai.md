@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **03-how-to-use-with-any-ai.md**
+- Español: [../es/03-como-usar-con-cualquier-inteligencia-artificial.md](../es/03-como-usar-con-cualquier-inteligencia-artificial.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -44,3 +50,20 @@ Do not depend on one specific tool. This format should work with any Artificial 
 ## Suggested session prompt
 
 "Read `idea/IDEA_GENERAL.md`, `specs/INDEX.md`, and the latest file in `bitacora/handoffs/`. Continue only with the active specification and update logs at the end."
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

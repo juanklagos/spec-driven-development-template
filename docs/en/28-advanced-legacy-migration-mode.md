@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **28-advanced-legacy-migration-mode.md**
+- Español: [../es/28-modo-migracion-legado-avanzado.md](../es/28-modo-migracion-legado-avanzado.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -128,3 +134,20 @@ Help me:
 | Not testing current behavior | Can't verify things still work | Add regression tests before touching code |
 | Migrating everything at once | Overwhelm, merge conflicts | One domain spec at a time |
 | Skipping the baseline spec | No reference point for "before" | 001-baseline is mandatory |
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

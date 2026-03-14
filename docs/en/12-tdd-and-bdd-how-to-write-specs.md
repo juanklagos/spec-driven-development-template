@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **12-tdd-and-bdd-how-to-write-specs.md**
+- Español: [../es/12-tdd-y-bdd-como-escribir-specs.md](../es/12-tdd-y-bdd-como-escribir-specs.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -96,3 +102,20 @@ Then [expected result]
 - Mixing business scope and technical detail in one section.
 - Not updating `history.md` when scenarios change.
 - Implementing without confirming the spec is still current.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

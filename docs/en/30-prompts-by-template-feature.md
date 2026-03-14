@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Language pair / Par de idioma
+
+- English: **30-prompts-by-template-feature.md**
+- Español: [../es/30-guia-prompts-por-caracteristica.md](../es/30-guia-prompts-por-caracteristica.md)
+
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:
@@ -76,3 +82,20 @@ Deliver: summary, decisions, touched files, risks, and next step.
 - Base flow `idea/specs/bitacora` is always primary.
 - Optional modules accelerate, never block.
 - If ambiguity exists, do not move to implementation.
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

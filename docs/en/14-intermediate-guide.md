@@ -1,5 +1,20 @@
 # 🛠️ Intermediate guide (teams and real projects)
 
+## 🌍 Language pair / Par de idioma
+
+- English: **14-intermediate-guide.md**
+- Español: [../es/14-guia-intermedia.md](../es/14-guia-intermedia.md)
+
+
+## 🗣️ Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+My project is: [describe your project in plain language].
+Guide me step by step for my level and do not skip specification, plan, tasks, logbook, and validation.
+```
+
+
 Who is this for:
 - You already use SDD basics and need consistent team execution.
 
@@ -54,3 +69,20 @@ Also verify if specs/INDEX.md status needs update.
 
 ## Next step
 - [docs/en/15-advanced-guide.md](./15-advanced-guide.md)
+
+## 💡 Quick tips
+
+- Start from a simple one-paragraph project description.
+- Ask the AI to confirm the active spec before coding.
+- Close every session with validation and a clear next step.
+
+## 📊 Visual flow
+
+```mermaid
+flowchart LR
+  A["Project idea"] --> B["Spec approved"]
+  B --> C["Plan aligned"]
+  C --> D["Tasks prioritized"]
+  D --> E["Implementation"]
+  E --> F["Validation + Logbook"]
+```

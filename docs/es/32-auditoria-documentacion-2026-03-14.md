@@ -1,5 +1,11 @@
 # Auditoría de documentación (2026-03-14)
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **32-auditoria-documentacion-2026-03-14.md**
+- English: [../en/32-documentation-audit-2026-03-14.md](../en/32-documentation-audit-2026-03-14.md)
+
+
 ## Alcance
 
 Se revisó:
@@ -39,3 +45,30 @@ Se revisó:
 - Se compactaron bloques repetidos de inicio/prompts en guías core `00-12` y `16` en EN/ES.
 - Se reemplazaron secciones largas duplicadas por enlaces cortos a `AI_START_HERE.md`, matriz de prompts y banco validado.
 - Se mantuvo el contenido específico de cada tema reduciendo ruido de onboarding.
+
+## 🗣️ Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, guíame con este template de principio a fin para mi proyecto.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+Si es nuevo, inicialízalo desde este template.
+Si ya existe, adáptalo sin romper el comportamiento actual.
+Mantenme en flujo SDD (idea -> spec -> plan -> tasks -> implementación), con lenguaje claro.
+```
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
+```

@@ -4,6 +4,12 @@
 
 ---
 
+## 🌍 Par de idioma / Language pair
+
+- Español: **10-agentes-ia-soportados-y-prompts.md**
+- English: [../en/10-supported-ai-agents-and-prompts.md](../en/10-supported-ai-agents-and-prompts.md)
+
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
@@ -169,4 +175,21 @@ Separa cambios en: idea, spec, plan, tareas y validación.
 Aplica contrato de salida unificado y protocolo de refinamiento.
 Si hay cambio de alcance, bloquea implementación hasta actualizar history.md e INDEX.
 Entrega análisis de riesgo y próximo paso exacto.
+```
+
+## 💡 Tips rápidos
+
+- Empieza con una descripción corta del proyecto en lenguaje simple.
+- Pide a la IA confirmar la spec activa antes de programar.
+- Cierra cada sesión con validación y próximo paso claro.
+
+## 📊 Flujo visual
+
+```mermaid
+flowchart LR
+  A["Idea del proyecto"] --> B["Spec aprobada"]
+  B --> C["Plan alineado"]
+  C --> D["Tareas priorizadas"]
+  D --> E["Implementación"]
+  E --> F["Validación + Bitácora"]
 ```
