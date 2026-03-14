@@ -18,4 +18,5 @@ Esta carpeta define el contexto canónico de este repositorio como plantilla de 
 5. `05-SDD-EXECUTION-GATE.md`
 6. `06-AI-RULES-MATRIX.md`
 7. `07-AI-HANDOFF-CHECKLIST.md`
-8. `prompts/`
+8. `08-FRAMEWORK-READINESS.md`
+9. `prompts/`

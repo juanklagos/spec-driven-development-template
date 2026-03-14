@@ -3,6 +3,7 @@
   <p><b>Execute projects with specification-first discipline.<br>Ejecuta proyectos con disciplina guiada por especificaciones.</b></p>
   
   <p>
+    <img src="https://img.shields.io/badge/version-v1.0.0-blue?style=for-the-badge" alt="Version">
     <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown"></a>
     <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell Script"></a>
     <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"></a>
@@ -16,7 +17,8 @@
 ---
 
 <div align="center">
-  <b>🌍 Choose your language / Elige tu idioma:</b><br><br>
+  <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/⚡_Quickstart-5_Steps-ff6b35?style=for-the-badge" alt="Quickstart"></a>
+  &nbsp;&nbsp;&nbsp;
   <a href="./docs/en"><img src="https://img.shields.io/badge/🇺🇸_English-Read_Docs-blue?style=for-the-badge" alt="English Docs"></a>
   &nbsp;&nbsp;&nbsp;
   <a href="./docs/es"><img src="https://img.shields.io/badge/🇪🇸_Español-Leer_Docs-green?style=for-the-badge" alt="Spanish Docs"></a>
@@ -50,6 +52,9 @@
 
 > [!TIP]
 > **Low-friction start / Inicio de baja fricción:** cloning this repository is optional. Use the structure and conventions straight away.
+> 
+> **New here? Read [⚡ QUICKSTART.md](./QUICKSTART.md) first — 5 steps, 1 page.**
+> **¿Nuevo aquí? Lee [⚡ QUICKSTART.md](./QUICKSTART.md) primero — 5 pasos, 1 página.**
 
 **🇺🇸 English:** 
 A reusable structure to run projects with specification-first discipline. It solves the problem of decisions lost in chats, code changes without context, and difficult onboarding.
@@ -155,6 +160,9 @@ To make administration easier, use the provided bash scripts:
 | <kbd>./scripts/new-spec.sh "feature" "Owner"</kbd> | Generates the folder and markdown files automatically |
 | <kbd>./scripts/score-spec.sh --all</kbd> | Rates the quality and coverage of your specs |
 | <kbd>./scripts/generate-roadmap.sh</kbd> | Creates an overview of the project's features |
+| <kbd>./scripts/generate-status.sh</kbd> | Generates STATUS.md dashboard from specs |
+| <kbd>./scripts/reset-template.sh --confirm</kbd> | Resets template to clean state for new projects |
+| <kbd>./scripts/legacy-discovery.sh /path/</kbd> | Analyzes a legacy project for SDD migration |
 
 ---
 
@@ -226,6 +234,19 @@ Find the guide that fits your current need / Encuentra la guía que mejor se ada
 Always use this repository as the primary reference / Usa siempre este repositorio como referencia principal:
 `https://github.com/juanklagos/spec-driven-development-template`
 
+### 📥 Getting the template / Obtener el template
+
+```bash
+# Option A: GitHub "Use this template" button (recommended)
+# Click the green button on the GitHub page
+
+# Option B: degit (clean copy, no git history)
+npx degit juanklagos/spec-driven-development-template my-project
+
+# Option C: git clone
+git clone https://github.com/juanklagos/spec-driven-development-template.git my-project
+```
+
 ### 🆕 Case 1: Create a new project / Crear proyecto nuevo
 
 If starting from zero, feed this prompt to the AI:
@@ -256,14 +277,20 @@ Legal documents:
 
 - [LICENSE](./LICENSE)
 - [NOTICE](./NOTICE)
-- [COMMERCIAL_LICENSE.md](./COMMERCIAL_LICENSE.md)
-- [DISCLAIMER.md](./DISCLAIMER.md)
-- [TRADEMARK_POLICY.md](./TRADEMARK_POLICY.md)
-- [ENFORCEMENT.md](./ENFORCEMENT.md)
-- [CLA.md](./CLA.md)
-- [LEGAL_OVERVIEW.md](./LEGAL_OVERVIEW.md)
+- [COMMERCIAL_LICENSE.md](./legal/COMMERCIAL_LICENSE.md)
+- [DISCLAIMER.md](./legal/DISCLAIMER.md)
+- [TRADEMARK_POLICY.md](./legal/TRADEMARK_POLICY.md)
+- [ENFORCEMENT.md](./legal/ENFORCEMENT.md)
+- [CLA.md](./legal/CLA.md)
+- [LEGAL_OVERVIEW.md](./legal/LEGAL_OVERVIEW.md)
 - 🇪🇸 [Marco legal y uso comercial](./docs/es/31-marco-legal-y-uso-comercial.md)
 - 🇺🇸 [Legal framework and commercial use](./docs/en/31-legal-framework-and-commercial-use.md)
+
+---
+
+## 📋 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
