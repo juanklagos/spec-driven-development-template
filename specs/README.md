@@ -28,4 +28,6 @@ Any relevant change to scope, priorities, or requirements must update:
 
 ## 🎓 Included example / Ejemplo incluido
 
-- `specs/001-ejemplo-inicial/`
+- This template keeps full examples under `examples/`.
+- Este template conserva los ejemplos completos en `examples/`.
+- Example / Ejemplo: `examples/001-ejemplo-inicial/`
