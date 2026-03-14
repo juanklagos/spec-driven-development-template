@@ -3,7 +3,7 @@
 This repository follows Spec-Driven Development (SDD).
 
 Read first:
-- `INSTRUCTIONS.md`
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md`
 - `AGENTS.md`
 - `template-context/README.md`
 

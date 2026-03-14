@@ -2,7 +2,8 @@
 
 ## Estado de aprobación / Approval status
 
-- Estado / Status: `Pendiente` | `Aprobado`
+- Estado / Status: `Pendiente`
+- Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `YYYY-MM-DD`
 - Aprobado por / Approved by: `Nombre o rol`
 - Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote):

@@ -4,7 +4,7 @@ This matrix helps apply the same SDD guardrails across multiple AI tools.
 
 ## Canonical source
 
-- `INSTRUCTIONS.md` (single source of truth)
+- `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` (single source of truth)
 
 ## Agent mapping
 
@@ -17,8 +17,8 @@ This matrix helps apply the same SDD guardrails across multiple AI tools.
 | Aider | `template-context/prompts/aider.prompt.md` | Ready |
 | Windsurf | `template-context/prompts/windsurf.prompt.md` | Ready |
 | Roo Code | `template-context/prompts/roo.prompt.md` | Ready |
-| Generic / Other agents | `AGENT_SYSTEM_PROMPT.md` | Ready |
+| Generic / Other agents | `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` | Ready |
 
 ## Operational note
 
-If a tool does not support local rule files, paste `AGENT_SYSTEM_PROMPT.md` as system prompt manually.
+If a tool does not support local rule files, paste `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as system prompt manually.

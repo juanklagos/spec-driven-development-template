@@ -1,6 +1,6 @@
 # Claude Rules: SDD Template Guardrails
 
-Use `INSTRUCTIONS.md` as the canonical instruction set.
+Use `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as the canonical instruction set.
 
 Blocking gate:
 - No code changes before `spec.md` approval + `plan.md` consistency.

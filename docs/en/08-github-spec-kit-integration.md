@@ -103,6 +103,14 @@ One-time command alternative:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
+## Recommended initialization with this template
+
+If this template is already available locally, you can bootstrap a project and initialize Spec Kit in one step:
+
+```bash
+./scripts/init-project-with-spec-kit.sh /path/project codex
+```
+
 ## How it fits this template
 
 - `idea/` defines global project intent.
@@ -118,3 +126,10 @@ After Spec Kit commands, always update:
 - `bitacora/global/PROJECT_LOG.md`
 - `bitacora/diaria/`
 - `bitacora/handoffs/` when pending work exists
+
+Then validate:
+
+```bash
+./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
+```

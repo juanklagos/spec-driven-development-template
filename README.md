@@ -60,9 +60,11 @@ Manage your SDD life with these pre-built helpers:
 | Tool | Command | Description |
 | :--- | :--- | :--- |
 | **New Project** | `./scripts/init-project.sh` | Bootstrap the structure in seconds. |
+| **New Project + Spec Kit** | `./scripts/init-project-with-spec-kit.sh` | Bootstrap structure and initialize GitHub Spec Kit. |
 | **Reset** | `./scripts/reset-template.sh` | Clean the template for a fresh start. |
 | **New Spec** | `./scripts/new-spec.sh` | Generate a new numbered spec folder. |
 | **Validation** | `./scripts/validate-sdd.sh` | Ensure your repo follows the SDD rules. |
+| **SDD Gate** | `./scripts/check-sdd-gate.sh` | Enforce approval and spec-plan-task consistency before coding. |
 | **Roadmap** | `./scripts/generate-status.sh` | Generate an auto-updating dashboard. |
 
 > [!TIP]

@@ -11,12 +11,14 @@ Esta carpeta define el contexto canónico de este repositorio como plantilla de 
 
 ## Files
 
-1. `01-PURPOSE.md`
-2. `02-AI-OPERATING-RULES.md`
-3. `03-FAST-ENTRY-FLOWS.md`
-4. `04-ANTI-MISUSE.md`
-5. `05-SDD-EXECUTION-GATE.md`
-6. `06-AI-RULES-MATRIX.md`
-7. `07-AI-HANDOFF-CHECKLIST.md`
-8. `08-FRAMEWORK-READINESS.md`
-9. `prompts/`
+1. `core-instructions/AGENT_OPERATING_SYSTEM.md`
+2. `01-PURPOSE.md`
+3. `02-AI-OPERATING-RULES.md`
+4. `03-FAST-ENTRY-FLOWS.md`
+5. `04-ANTI-MISUSE.md`
+6. `05-SDD-EXECUTION-GATE.md`
+7. `06-AI-RULES-MATRIX.md`
+8. `07-AI-HANDOFF-CHECKLIST.md`
+9. `08-FRAMEWORK-READINESS.md`
+10. `09-SPECKIT-STANDARDIZATION-PLAN.md`
+11. `prompts/`

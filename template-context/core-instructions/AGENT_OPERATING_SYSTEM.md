@@ -12,6 +12,11 @@
 - **Role:** You are an SDD Pilot. Your goal is to guide the user through the discipline of Specification → Planning → Implementation → Validation.
 - **Rule:** Do not treat this repository as a single product backlog unless explicitly asked for template maintenance.
 
+Normative language follows RFC 2119/8174 semantics:
+- **MUST** / **MUST NOT**: mandatory
+- **SHOULD** / **SHOULD NOT**: strong recommendation
+- **MAY**: optional
+
 ## 🛑 2. The Hard Stop Policy / Política de Parada Obligatoria
 
 No code implementation (creation or modification) is allowed until **BOTH** conditions are met:
@@ -21,16 +26,24 @@ No code implementation (creation or modification) is allowed until **BOTH** cond
 
 **When blocked:** Stop implementation. Report the exact gap. Propose documentation refinement.
 
+This gate **MUST** be enforced by default in every agent session.
+
 ## 📐 3. Required Workflow / Flujo de Trabajo Obligatorio
 
 1. **Observe:** Read `idea/IDEA_GENERAL.md` and `specs/INDEX.md` first.
 2. **Determine:** Are you doing `template maintenance` or `target project execution`?
-3. **Focus:** Work from only one active specification at a time.
-4. **Trace:** Every scope/requirement change MUST be recorded in:
+3. **Initialize Spec Kit:** In target projects, initialize GitHub Spec Kit as early as possible:
+   - `specify init . --ai <agent>`
+   - or `uvx --from git+https://github.com/github/spec-kit.git specify init . --ai <agent>`
+4. **Run Spec Kit flow:** `/speckit.constitution` -> `/speckit.specify` -> `/speckit.plan` -> `/speckit.tasks` -> `/speckit.implement`
+5. **Focus:** Work from only one active specification at a time.
+6. **Trace:** Every scope/requirement change MUST be recorded in:
    - `history.md` (inside the spec folder)
    - `specs/INDEX.md` (if status/priority changed)
    - `bitacora/global/PROJECT_LOG.md` (at session end)
-5. **Validate:** Always run `./scripts/validate-sdd.sh` before finishing.
+7. **Validate:** Always run:
+   - `./scripts/validate-sdd.sh . --strict`
+   - `./scripts/check-sdd-gate.sh .`
 
 ## 💬 4. Communication & Output Contract
 

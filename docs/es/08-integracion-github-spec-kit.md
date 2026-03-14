@@ -103,6 +103,14 @@ También puedes usar ejecución puntual:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
+## Inicialización recomendada con este template
+
+Si ya tienes este template en local, puedes arrancar un proyecto nuevo y dejar Spec Kit listo en un solo paso:
+
+```bash
+./scripts/init-project-with-spec-kit.sh /ruta/proyecto codex
+```
+
 ## Relación con esta plantilla
 
 - `idea/` define intención general.
@@ -118,3 +126,10 @@ Después de usar comandos de Spec Kit, actualiza siempre:
 - `bitacora/global/PROJECT_LOG.md`
 - `bitacora/diaria/`
 - `bitacora/handoffs/` si dejas trabajo pendiente
+
+Y valida:
+
+```bash
+./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
+```

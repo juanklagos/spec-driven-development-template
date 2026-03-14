@@ -19,7 +19,10 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/bitacora/templates" \
          "$TARGET/playbooks" \
          "$TARGET/quality/evidence/templates" \
-         "$TARGET/scripts"
+         "$TARGET/template-context/core-instructions" \
+         "$TARGET/template-context/prompts" \
+         "$TARGET/scripts" \
+         "$TARGET/.github/workflows"
 
 cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
 cp -n "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
@@ -36,15 +39,24 @@ cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templat
 cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
 cp -Rn "$ROOT_DIR/templates" "$TARGET/templates"
+cp -Rn "$ROOT_DIR/template-context/." "$TARGET/template-context/"
 cp -Rn "$ROOT_DIR/playbooks/." "$TARGET/playbooks/"
 cp -Rn "$ROOT_DIR/quality/." "$TARGET/quality/"
+cp -n "$ROOT_DIR/AGENTS.md" "$TARGET/AGENTS.md"
+cp -n "$ROOT_DIR/AI_START_HERE.md" "$TARGET/AI_START_HERE.md"
+cp -n "$ROOT_DIR/QUICKSTART.md" "$TARGET/QUICKSTART.md"
+cp -n "$ROOT_DIR/.cursorrules" "$TARGET/.cursorrules"
+cp -n "$ROOT_DIR/.clauderules" "$TARGET/.clauderules"
+cp -n "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copilot-instructions.md"
 cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
+cp -n "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
 cp -n "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
 cp -n "$ROOT_DIR/scripts/score-spec.sh" "$TARGET/scripts/score-spec.sh"
 cp -n "$ROOT_DIR/scripts/generate-roadmap.sh" "$TARGET/scripts/generate-roadmap.sh"
 cp -n "$ROOT_DIR/scripts/generate-status.sh" "$TARGET/scripts/generate-status.sh"
 cp -n "$ROOT_DIR/scripts/legacy-discovery.sh" "$TARGET/scripts/legacy-discovery.sh"
 chmod +x "$TARGET/scripts/validate-sdd.sh"
+chmod +x "$TARGET/scripts/check-sdd-gate.sh"
 chmod +x "$TARGET/scripts/new-spec.sh" \
          "$TARGET/scripts/score-spec.sh" \
          "$TARGET/scripts/generate-roadmap.sh" \
@@ -62,9 +74,11 @@ Next steps / Siguientes pasos:
      bitacora/global/PROJECT_LOG.md
   4) Validate / Valida:
      ./scripts/validate-sdd.sh . --strict
-  5) Optional / Opcional: generate status and roadmap:
+  5) Check SDD gate / Verifica compuerta SDD:
+     ./scripts/check-sdd-gate.sh .
+  6) Optional / Opcional: generate status and roadmap:
      ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
 
-📖 Read QUICKSTART.md for a guided walkthrough.
+📖 Read QUICKSTART.md for a guided walkthrough and Spec Kit-first setup.
    Lee QUICKSTART.md para un recorrido guiado.
 MSG

@@ -74,6 +74,7 @@ Mantén el comportamiento actual del código, crea la estructura idea/specs/bita
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
 ```
 
 ## 📦 Reusable assets / Recursos reutilizables

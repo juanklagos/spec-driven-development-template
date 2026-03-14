@@ -1,6 +1,6 @@
 # Cursor Rules: SDD Template Guardrails
 
-Apply `INSTRUCTIONS.md` as canonical source.
+Apply `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as canonical source.
 
 Hard rule:
 - Do not implement code until `spec.md` is approved by user and `plan.md` is consistent with `spec.md`.

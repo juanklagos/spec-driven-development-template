@@ -51,7 +51,8 @@ Before implementation tasks, explicitly determine:
    - `/speckit.implement`
 3. Keep `specs/` and `bitacora/` updated at session end.
 4. Run `./scripts/validate-sdd.sh . --strict` before finishing.
-5. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
+5. Run `./scripts/check-sdd-gate.sh .` before finishing.
+6. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
 

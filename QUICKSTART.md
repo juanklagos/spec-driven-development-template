@@ -23,6 +23,21 @@ git clone https://github.com/juanklagos/spec-driven-development-template.git my-
 cd my-project
 ```
 
+## Step 1.5 · Initialize GitHub Spec Kit (recommended) / Inicializa GitHub Spec Kit (recomendado)
+
+```bash
+# Preferred: install once and reuse
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+
+# Initialize in current project for your AI assistant
+specify init . --ai codex
+```
+
+```bash
+# One-shot alternative (no persistent install)
+uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
+```
+
 ---
 
 ## Step 2 · Define your idea / Define tu idea
@@ -78,6 +93,7 @@ Open `bitacora/global/PROJECT_LOG.md` and add:
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
+./scripts/check-sdd-gate.sh .
 ```
 
 Expected output: `0 error(s)`. You're ready to build! 🎉
