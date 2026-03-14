@@ -3,6 +3,11 @@
   <p><b>Execute projects with specification-first discipline.<br>Ejecuta proyectos con disciplina guiada por especificaciones.</b></p>
 
   <p>
+    <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Active-blue?style=for-the-badge" alt="English"></a>
+    <a href="./README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-Read-green?style=for-the-badge" alt="Español"></a>
+  </p>
+
+  <p>
     <img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge" alt="Version">
     <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown"></a>
     <a href="https://github.com/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell Script"></a>
@@ -76,23 +81,23 @@ Manage your SDD life with these pre-built helpers:
 Deep dive into different aspects of the SDD methodology:
 
 ### 🏗️ Essentials
-- [Structure Detail](./docs/es/01-estructura.md) | [Workflow Guide](./docs/es/02-flujo-de-trabajo.md) | [3-Level Learning Path](./docs/en/18-complete-3-level-path.md)
+- [Structure Detail](./docs/en/01-structure.md) | [Workflow Guide](./docs/en/02-workflow.md) | [3-Level Learning Path](./docs/en/18-complete-3-level-path.md)
 
 ### 🤖 AI & Development
-- [Supported Agents & Prompts](./docs/es/10-agentes-ia-soportados-y-prompts.md)
+- [Supported Agents & Prompts](./docs/en/10-supported-ai-agents-and-prompts.md)
 - [**Working with Lovable (Recommended)**](./docs/en/17-working-with-lovable.md)
-- [TDD & BDD patterns](./docs/es/12-tdd-y-bdd-como-escribir-specs.md)
+- [TDD & BDD patterns](./docs/en/12-tdd-and-bdd-how-to-write-specs.md)
 - [Validated Prompt Bank](./docs/en/26-validated-prompt-bank.md)
 
 ### 👥 Governance & Team
-- [Team Mode & Collaboration](./docs/es/22-modo-equipo-y-colaboracion.md)
-- [Quality Stage Gates](./docs/es/21-checklists-calidad-por-etapa.md)
-- [Architecture Decision Records (ADR)](./docs/es/24-decisiones-de-arquitectura.md)
+- [Team Mode & Collaboration](./docs/en/22-team-mode-and-collaboration.md)
+- [Quality Stage Gates](./docs/en/21-quality-checklists-by-stage.md)
+- [Architecture Decision Records (ADR)](./docs/en/24-architecture-decisions.md)
 
 ---
 
 ## ⚖️ Legal & Authorship
-- **License:** PolyForm Noncommercial 1.0.0. [See Legal Framework](./docs/es/31-marco-legal-y-uso-comercial.md).
+- **License:** PolyForm Noncommercial 1.0.0. [See Legal Framework](./docs/en/31-legal-framework-and-commercial-use.md).
 - **History:** Check the [CHANGELOG.md](./CHANGELOG.md).
 - **Author:** Developed with ☕ and discipline by **Juan Klagos** ([AUTHORS.md](./AUTHORS.md)).
 
