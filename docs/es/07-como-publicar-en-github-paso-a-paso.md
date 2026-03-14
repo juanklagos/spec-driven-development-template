@@ -6,6 +6,14 @@
 > - [Matriz de prompts](./19-matriz-prompts-por-objetivo.md)
 > - [Banco de prompts validados](./26-banco-prompts-validados.md)
 
+## Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, ayúdame a publicar mi proyecto en GitHub paso a paso.
+Mi proyecto es: [explica el proyecto].
+Haz la configuración y explícame cada paso con lenguaje simple.
+```
+
 
 
 ## Requisitos previos

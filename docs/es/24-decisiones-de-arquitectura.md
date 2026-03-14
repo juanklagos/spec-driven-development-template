@@ -4,6 +4,21 @@
 
 ---
 
+## 🗣️ Prompt amigable (copiar y pegar)
+
+Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+
+Si mi proyecto es nuevo, inicialízalo con este template y GitHub Spec Kit.
+Si mi proyecto ya existe, adáptalo a idea/specs/bitacora sin romper el comportamiento actual.
+Guíame paso a paso según mi nivel (principiante/intermedio/avanzado), con lenguaje claro.
+No omitas especificación, plan, tareas, traza de refinamiento, bitácora y validación.
+```
+
+
 > Las decisiones de arquitectura que cruzan specs deben registrarse centralmente para que cualquier miembro del equipo (o IA) entienda el "por qué" detrás del sistema.
 
 ## 📐 ¿Qué califica como decisión de arquitectura?

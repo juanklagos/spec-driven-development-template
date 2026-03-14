@@ -6,6 +6,15 @@
 > - [Prompt matrix](./19-prompt-matrix-by-goal.md)
 > - [Validated prompt bank](./26-validated-prompt-bank.md)
 
+## Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, set up my project structure with idea/specs/bitacora and guide me in simple language.
+My project is: [describe project].
+If it is new, initialize everything.
+If it already exists, adapt it without breaking current behavior.
+```
+
 
 
 ## idea

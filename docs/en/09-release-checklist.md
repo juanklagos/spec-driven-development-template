@@ -6,6 +6,14 @@
 > - [Prompt matrix](./19-prompt-matrix-by-goal.md)
 > - [Validated prompt bank](./26-validated-prompt-bank.md)
 
+## Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, run a release-readiness review on my project.
+My project is: [describe project].
+Check this list, tell me what is missing, and propose exact next actions in simple language.
+```
+
 
 
 Use this list before publishing on GitHub.

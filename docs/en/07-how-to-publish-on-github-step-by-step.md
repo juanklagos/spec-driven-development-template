@@ -6,6 +6,14 @@
 > - [Prompt matrix](./19-prompt-matrix-by-goal.md)
 > - [Validated prompt bank](./26-validated-prompt-bank.md)
 
+## Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, prepare my project to publish on GitHub step by step.
+My project is: [describe project].
+Do the setup and explain each step in simple language.
+```
+
 
 
 ## Prerequisites

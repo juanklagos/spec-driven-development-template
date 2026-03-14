@@ -6,6 +6,14 @@
 > - [Matriz de prompts](./19-matriz-prompts-por-objetivo.md)
 > - [Banco de prompts validados](./26-banco-prompts-validados.md)
 
+## Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, haz una revisión de release para mi proyecto.
+Mi proyecto es: [explica el proyecto].
+Revisa este checklist, dime qué falta y propón acciones exactas en lenguaje simple.
+```
+
 
 
 Usa esta lista antes de publicar la plantilla en GitHub.
