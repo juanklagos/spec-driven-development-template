@@ -17,6 +17,7 @@ Quick start for AI tools / Inicio rápido para herramientas de IA:
 - `template-context/04-ANTI-MISUSE.md`
 - `template-context/05-SDD-EXECUTION-GATE.md`
 - `template-context/06-AI-RULES-MATRIX.md`
+- `template-context/07-AI-HANDOFF-CHECKLIST.md`
 - `docs/es/10-agentes-ia-soportados-y-prompts.md`
 - `docs/en/10-supported-ai-agents-and-prompts.md`
 

@@ -75,6 +75,7 @@ Canonical context for AI tools:
 - [`template-context/04-ANTI-MISUSE.md`](./template-context/04-ANTI-MISUSE.md)
 - [`template-context/05-SDD-EXECUTION-GATE.md`](./template-context/05-SDD-EXECUTION-GATE.md)
 - [`template-context/06-AI-RULES-MATRIX.md`](./template-context/06-AI-RULES-MATRIX.md)
+- [`template-context/07-AI-HANDOFF-CHECKLIST.md`](./template-context/07-AI-HANDOFF-CHECKLIST.md)
 
 ---
 

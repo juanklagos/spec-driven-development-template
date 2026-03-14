@@ -13,6 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Verify multi-agent SDD rule files
+        run: |
+          test -f INSTRUCTIONS.md
+          test -f AGENT_SYSTEM_PROMPT.md
+          test -f .cursorrules
+          test -f .clauderules
+          test -f CLAUDE.md
+          test -f GEMINI.md
+          test -f .github/copilot-instructions.md
+          test -f template-context/05-SDD-EXECUTION-GATE.md
+          test -f template-context/06-AI-RULES-MATRIX.md
+
       - name: Make validation script executable
         run: chmod +x ./scripts/validate-sdd.sh
 

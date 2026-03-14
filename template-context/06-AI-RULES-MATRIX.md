@@ -14,6 +14,9 @@ This matrix helps apply the same SDD guardrails across multiple AI tools.
 | Claude (Desktop/Code) | `.clauderules` + `CLAUDE.md` | Ready |
 | GitHub Copilot | `.github/copilot-instructions.md` | Ready |
 | Gemini | `GEMINI.md` | Ready |
+| Aider | `template-context/prompts/aider.prompt.md` | Ready |
+| Windsurf | `template-context/prompts/windsurf.prompt.md` | Ready |
+| Roo Code | `template-context/prompts/roo.prompt.md` | Ready |
 | Generic / Other agents | `AGENT_SYSTEM_PROMPT.md` | Ready |
 
 ## Operational note

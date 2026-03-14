@@ -17,4 +17,5 @@ Esta carpeta define el contexto canónico de este repositorio como plantilla de 
 4. `04-ANTI-MISUSE.md`
 5. `05-SDD-EXECUTION-GATE.md`
 6. `06-AI-RULES-MATRIX.md`
-7. `prompts/`
+7. `07-AI-HANDOFF-CHECKLIST.md`
+8. `prompts/`

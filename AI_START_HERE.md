@@ -29,6 +29,7 @@ Read this context before any implementation-oriented session:
 6. `template-context/04-ANTI-MISUSE.md`
 7. `template-context/05-SDD-EXECUTION-GATE.md`
 8. `template-context/06-AI-RULES-MATRIX.md`
+9. `template-context/07-AI-HANDOFF-CHECKLIST.md`
 
 ## 🚀 Prompt to create a new project / Prompt para crear un proyecto nuevo
 
