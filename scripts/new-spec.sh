@@ -7,6 +7,21 @@ if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
   exit 1
 fi
 
+# Block spec creation in template root to avoid mixing framework and runnable project work.
+if [ -f "sdd.policy.yaml" ] && [ -f "scripts/create-www-project.sh" ] && [ -d "www" ]; then
+  echo "Error: refusing to create spec in template root."
+  echo "Create/use a workspace under www/<project-name>/ and run this command there."
+  exit 1
+fi
+
+# Require explicit user consent before creating/changing execution scope artifacts.
+if [ ! -s ".sdd/user-consent.log" ]; then
+  echo "Error: missing user consent log (.sdd/user-consent.log)."
+  echo "Record consent first:"
+  echo "  ./scripts/confirm-user-consent.sh \"User approved creating/updating this spec\""
+  exit 1
+fi
+
 NAME_RAW="$1"
 OWNER="${2:-TBD / Por definir}"
 

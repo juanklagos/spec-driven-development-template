@@ -75,6 +75,12 @@ else
   fail "Policy missing execution_root block"
 fi
 
+if match_q '^user_consent:' "$POLICY_PATH"; then
+  ok "Policy defines user_consent block"
+else
+  fail "Policy missing user_consent block"
+fi
+
 if match_q "default_scaffold_profile:[[:space:]]*recommended" "$POLICY_PATH"; then
   ok "Policy default scaffold profile is recommended"
 else

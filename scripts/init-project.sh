@@ -27,6 +27,14 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+TARGET_ABS="$(cd "$(dirname "$TARGET")" && pwd)/$(basename "$TARGET")"
+if [ "$TARGET_ABS" = "$ROOT_DIR" ]; then
+  echo "Error: refusing to initialize in template root."
+  echo "Use workspace creation instead:"
+  echo "  ./scripts/create-www-project.sh <project-name> <assistant>"
+  exit 1
+fi
+
 mkdir -p "$TARGET/idea" \
          "$TARGET/specs/_template/contracts" \
          "$TARGET/bitacora/global" \
@@ -34,6 +42,7 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/bitacora/handoffs" \
          "$TARGET/bitacora/decisiones" \
          "$TARGET/bitacora/templates" \
+         "$TARGET/.sdd" \
          "$TARGET/template-context/core-instructions" \
          "$TARGET/scripts" \
          "$TARGET/.github/workflows" \
@@ -55,6 +64,7 @@ cp -n "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$TARGET/bitacora/global/PROJEC
 cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
+cp -n "$ROOT_DIR/.sdd.README.template.md" "$TARGET/.sdd/README.md"
 mkdir -p "$TARGET/template-context"
 cp -n "$ROOT_DIR/template-context/README.md" "$TARGET/template-context/README.md"
 cp -n "$ROOT_DIR/template-context/05-SDD-EXECUTION-GATE.md" "$TARGET/template-context/05-SDD-EXECUTION-GATE.md"
@@ -75,10 +85,12 @@ cp -n "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copilot-instr
 cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
 cp -n "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
 cp -n "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
+cp -n "$ROOT_DIR/scripts/confirm-user-consent.sh" "$TARGET/scripts/confirm-user-consent.sh"
 cp -n "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
 chmod +x "$TARGET/scripts/validate-sdd.sh"
 chmod +x "$TARGET/scripts/check-sdd-policy.sh"
 chmod +x "$TARGET/scripts/check-sdd-gate.sh"
+chmod +x "$TARGET/scripts/confirm-user-consent.sh"
 chmod +x "$TARGET/scripts/new-spec.sh"
 
 if [ "$PROFILE" = "recommended" ] || [ "$PROFILE" = "full" ]; then
@@ -111,6 +123,7 @@ Profile / Perfil: $PROFILE
 Next steps / Siguientes pasos:
   1) Fill idea/IDEA_GENERAL.md / Completa idea/IDEA_GENERAL.md
   2) Create first spec / Crea la primera spec:
+     ./scripts/confirm-user-consent.sh "User approved first spec scope"
      ./scripts/new-spec.sh "feature-name" "Owner"
   3) Log your first session / Registra tu primera sesión:
      bitacora/global/PROJECT_LOG.md

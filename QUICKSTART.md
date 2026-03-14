@@ -74,6 +74,12 @@ Complete `idea/IDEA_GENERAL.md` with:
 
 ### 5) Create first spec / Crea primera spec
 
+Record user consent first:
+
+```bash
+./scripts/confirm-user-consent.sh "User approved first spec scope"
+```
+
 ```bash
 ./scripts/new-spec.sh "my-feature" "Owner"
 ```

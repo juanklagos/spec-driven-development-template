@@ -8,6 +8,12 @@ Hard stop (mandatory):
 - No code before approved spec and consistent plan.
 - No hay código sin spec aprobada y plan consistente.
 
+User consent (mandatory):
+- Record explicit user consent before creating/updating specs or implementation scope.
+- Registra consentimiento explícito del usuario antes de crear/actualizar specs o alcance de implementación.
+- Command / Comando:
+  `./scripts/confirm-user-consent.sh "User approved scope X"`
+
 Execution root (mandatory for runnable projects):
 - Use `www/<project-name>/` as execution root for runnable code.
 - Usa `www/<nombre-proyecto>/` como raíz de ejecución para código ejecutable.

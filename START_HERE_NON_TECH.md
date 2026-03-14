@@ -51,6 +51,8 @@ Expected result / Resultado esperado: [qué quieres lograr]
 
 - EN: No code before approved `spec.md` and consistent `plan.md`.
 - ES: No hay código sin `spec.md` aprobada y `plan.md` consistente.
+- EN: Ask the AI to request your explicit approval before creating/changing specs.
+- ES: Pídele a la IA que solicite tu aprobación explícita antes de crear/cambiar specs.
 
 ## 5) If you get stuck / Si te atoras
 

@@ -31,6 +31,7 @@ jobs:
           test -f template-context/05-SDD-EXECUTION-GATE.md
           test -f template-context/06-AI-RULES-MATRIX.md
           test -f scripts/create-www-project.sh
+          test -f scripts/confirm-user-consent.sh
 
       - name: Make validation script executable
         run: chmod +x ./scripts/validate-sdd.sh

@@ -47,6 +47,8 @@ This template enforces policy + gate checks:
 
 Hard stop:
 - No code before approved `spec.md` and consistent `plan.md`.
+- Record explicit user consent before creating/changing specs:
+  `./scripts/confirm-user-consent.sh "User approved scope X"`
 
 Reference files:
 - [sdd.policy.yaml](./sdd.policy.yaml)

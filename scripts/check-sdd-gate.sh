@@ -140,6 +140,12 @@ done < <(find "$ROOT/specs" -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9][0-
 
 if [ "$spec_count" -eq 0 ]; then
   warn "No numbered specs found; gate check skipped."
+else
+  if [ -s "$ROOT/.sdd/user-consent.log" ]; then
+    ok "User consent log present: .sdd/user-consent.log"
+  else
+    fail "Missing user consent log (.sdd/user-consent.log) while specs exist"
+  fi
 fi
 
 printf "\nSDD Gate summary: %d error(s), %d warning(s).\n" "$errors" "$warnings"

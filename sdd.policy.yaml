@@ -13,8 +13,15 @@ execution_root:
   default_workspace_parent: www
   default_creation_command: ./scripts/create-www-project.sh <project-name> <assistant>
   default_scaffold_profile: recommended
+  minimal_scaffold_flag: --minimal-template
   full_scaffold_flag: --full-template
   do_not_implement_in_template_root: true
+
+user_consent:
+  required_before_spec_creation: true
+  required_before_gate_execution_when_specs_exist: true
+  log_file: .sdd/user-consent.log
+  command: ./scripts/confirm-user-consent.sh "User approved scope"
 
 hard_stop:
   no_code_before_spec_approved: true
@@ -46,6 +53,7 @@ required_files:
   - AIDER.md
   - ROO.md
   - .github/copilot-instructions.md
+  - scripts/confirm-user-consent.sh
 
 agent_rule_markers:
   canonical_source: template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
