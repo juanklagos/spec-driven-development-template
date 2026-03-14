@@ -20,6 +20,5 @@ jobs:
           args: >-
             --offline
             --no-progress
-            --exclude-mail
             --format detailed
             "**/*.md"
