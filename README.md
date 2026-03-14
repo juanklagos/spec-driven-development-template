@@ -33,13 +33,14 @@
 <br>
 
 1. [🧩 What this repository is / Qué es este repositorio](#-what-this-repository-is--qué-es-este-repositorio)
-2. [🗂️ Core folders / Carpetas principales](#️-core-folders--carpetas-principales)
-3. [📐 Required specification format / Formato obligatorio](#-required-specification-format--formato-obligatorio)
-4. [🤖 Recommended AI Workflow / Flujo de IA Recomendado](#-recommended-ai-workflow--flujo-de-ia-recomendado)
-5. [⚙️ Scripts & Tools / Scripts y Herramientas](#️-scripts--tools--scripts-y-herramientas)
-6. [📚 Documentation Index / Índice de Documentación](#-documentation-index--índice-de-documentación)
-7. [⭐ Base Repository Usage / Uso Base Explícito](#-base-repository-usage--uso-base-explícito)
-8. [⚖️ Licensing & Legal / Licenciamiento y Legal](#️-licensing--legal--licenciamiento-y-legal)
+2. [🧭 Template Context for AI / Contexto template para IA](#-template-context-for-ai--contexto-template-para-ia)
+3. [🗂️ Core folders / Carpetas principales](#️-core-folders--carpetas-principales)
+4. [📐 Required specification format / Formato obligatorio](#-required-specification-format--formato-obligatorio)
+5. [🤖 Recommended AI Workflow / Flujo de IA Recomendado](#-recommended-ai-workflow--flujo-de-ia-recomendado)
+6. [⚙️ Scripts & Tools / Scripts y Herramientas](#️-scripts--tools--scripts-y-herramientas)
+7. [📚 Documentation Index / Índice de Documentación](#-documentation-index--índice-de-documentación)
+8. [⭐ Base Repository Usage / Uso Base Explícito](#-base-repository-usage--uso-base-explícito)
+9. [⚖️ Licensing & Legal / Licenciamiento y Legal](#️-licensing--legal--licenciamiento-y-legal)
 
 </details>
 
@@ -55,6 +56,22 @@ A reusable structure to run projects with specification-first discipline. It sol
 
 **🇪🇸 Español:** 
 Una estructura reutilizable para ejecutar proyectos con disciplina guiada por especificaciones. Resuelve la pérdida de contexto en chats, cambios de código indocumentados y el difícil onboarding.
+
+---
+
+## 🧭 Template Context for AI / Contexto template para IA
+
+> [!IMPORTANT]
+> **EN:** This repository is a reusable starter template, not an in-progress product backlog.
+> **ES:** Este repositorio es una plantilla reutilizable de arranque, no un backlog activo de producto.
+
+Canonical context for AI tools:
+
+- [`template-context/README.md`](./template-context/README.md)
+- [`template-context/01-PURPOSE.md`](./template-context/01-PURPOSE.md)
+- [`template-context/02-AI-OPERATING-RULES.md`](./template-context/02-AI-OPERATING-RULES.md)
+- [`template-context/03-FAST-ENTRY-FLOWS.md`](./template-context/03-FAST-ENTRY-FLOWS.md)
+- [`template-context/04-ANTI-MISUSE.md`](./template-context/04-ANTI-MISUSE.md)
 
 ---
 

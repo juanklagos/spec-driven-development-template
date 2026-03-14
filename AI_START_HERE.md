@@ -13,6 +13,20 @@ Repository URL / URL del repositorio:
 
 - <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
+## 🧭 Template context first / Primero contexto del template
+
+> [!IMPORTANT]
+> **EN:** This repository is not an in-progress product; it is a starter template to bootstrap SDD projects quickly.
+> **ES:** Este repositorio no es un producto en desarrollo; es un template para iniciar proyectos con SDD rápidamente.
+
+Read this context before any implementation-oriented session:
+
+1. `template-context/README.md`
+2. `template-context/01-PURPOSE.md`
+3. `template-context/02-AI-OPERATING-RULES.md`
+4. `template-context/03-FAST-ENTRY-FLOWS.md`
+5. `template-context/04-ANTI-MISUSE.md`
+
 ## 🚀 Prompt to create a new project / Prompt para crear un proyecto nuevo
 
 ```text

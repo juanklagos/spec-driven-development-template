@@ -9,8 +9,24 @@ Clonar es opcional. Lo obligatorio es trabajar con este template y sus guías co
 Quick start for AI tools / Inicio rápido para herramientas de IA:
 
 - `AI_START_HERE.md`
+- `template-context/README.md`
+- `template-context/01-PURPOSE.md`
+- `template-context/02-AI-OPERATING-RULES.md`
+- `template-context/03-FAST-ENTRY-FLOWS.md`
+- `template-context/04-ANTI-MISUSE.md`
 - `docs/es/10-agentes-ia-soportados-y-prompts.md`
 - `docs/en/10-supported-ai-agents-and-prompts.md`
+
+## 🧭 Repository context lock / Bloqueo de contexto del repositorio
+
+- EN: Treat this repository as a starter template, not as a single in-progress product.
+- ES: Trata este repositorio como un template de arranque, no como un único producto en desarrollo.
+
+Before implementation tasks, explicitly determine:
+
+1. If the task is `template maintenance` or `target project execution`.
+2. The real target project path when execution is for a user project.
+3. The active specification in that target project.
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
