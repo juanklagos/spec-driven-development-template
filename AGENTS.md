@@ -8,7 +8,7 @@ Clonar es opcional. Lo obligatorio es trabajar con este template y sus guías co
 
 Quick start for AI tools / Inicio rápido para herramientas de IA:
 
-- `INSTRUCTIONS.md`
+- [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 - `AI_START_HERE.md`
 - `template-context/README.md`
 - `template-context/01-PURPOSE.md`

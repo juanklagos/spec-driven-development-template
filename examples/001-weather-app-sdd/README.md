@@ -1,19 +1,32 @@
 # 🌟 Case Study: Weather App (SkyCast)
 
-Welcome to the **Golden Example** of the Spec-Driven Development (SDD) process!
+This is the **Reference Implementation** of the Spec-Driven Development (SDD) process. Follow this guided path to understand how to build projects with discipline.
 
-## ❓ What is this?
-This folder is a reference implementation of a project following the SDD methodology. It demonstrates how to evolve an idea into a structured set of specifications and daily logs.
+## 🧭 The Guided Path
 
-## 🧭 How to explore this case
-1. **The Seed:** Start with [`idea/IDEA_GENERAL.md`](./idea/IDEA_GENERAL.md). See how we defined the problem *before* any code.
-2. **The Blueprint:** Move to [`specs/001-ui-shell/spec.md`](./specs/001-ui-shell/spec.md). This is the "Contract" for the UI.
-3. **The Progress:** Read [`bitacora/global/PROJECT_LOG.md`](./bitacora/global/PROJECT_LOG.md). Notice how decisions are recorded to keep the team aligned.
+### Step 1: The Product Seed 
+Before a single line of code, we defined the "Why".
+👉 **[Read idea/IDEA_GENERAL.md](./idea/IDEA_GENERAL.md)**
 
-## 💡 Key SDD Lessons here
-- **Isolation:** Each feature has its own folder in `specs/`.
-- **Traceability:** You can see *why* a decision was made by looking at the History and Decision logs.
-- **AI-Readiness:** This structure is perfect for feeding into an AI agent like Claude or GPT to handle implementation accurately.
+### Step 2: The Contract
+We created a numbered specification for the first feature (UI Shell).
+👉 **[Read specs/001-ui-shell/spec.md](./specs/001-ui-shell/spec.md)**
+
+### Step 3: Architecture & Tasks
+We didn't just code; we planned the strategy and the sequential actions.
+👉 **[Read specs/001-ui-shell/plan.md](./specs/001-ui-shell/plan.md)**
+👉 **[Read specs/001-ui-shell/tasks.md](./specs/001-ui-shell/tasks.md)**
+
+### Step 4: The Execution Trail
+Track how decisions and progress were recorded daily.
+👉 **[Read bitacora/global/PROJECT_LOG.md](./bitacora/global/PROJECT_LOG.md)**
 
 ---
-*Ready to start your own? Use `./scripts/init-project.sh`*
+
+## 💡 Why this works
+1. **Context Persistence:** If a developer leaves, the next one knows exactly where we are.
+2. **AI Precision:** Feeding these specific files into an AI (Claude/Cursor) results in 0 hallucinations.
+3. **Validation:** Use `./scripts/validate-sdd.sh .` inside this folder to see it pass.
+
+---
+*Ready to start your own? Run `./scripts/reset-template.sh --confirm` in the root.*

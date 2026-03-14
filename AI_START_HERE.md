@@ -21,7 +21,7 @@ Repository URL / URL del repositorio:
 
 Read this context before any implementation-oriented session:
 
-1. `INSTRUCTIONS.md`
+1. [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 2. `template-context/README.md`
 3. `template-context/01-PURPOSE.md`
 4. `template-context/02-AI-OPERATING-RULES.md`

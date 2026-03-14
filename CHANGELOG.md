@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.0.1] — 2026-03-14
+
+### Added
+- Created `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as the unified SDD source of truth for AI agents.
+
+### Changed
+- **Major README Overhaul**: Transformed from reference manual to Landing Page UX.
+- Simplified folder/file anatomy tables in README.
+- Better documentation discovery categories.
+- Optimized AI context links (offloaded root rules into `template-context/`).
+- Improved Weather App example README with guided "Step-by-Step" path.
+
+### Removed
+- Deleted root-level redundant instruction files: `INSTRUCTIONS.md`, `CLAUDE.md`, `GEMINI.md`, and `AGENT_SYSTEM_PROMPT.md`.
+
+---
+
 ## [v1.0.0] — 2026-03-14
 
 ### 🎉 Initial Stable Release
