@@ -31,6 +31,7 @@ This gate **MUST** be enforced by default in every agent session.
 Consent rule:
 - **MUST** allow creating/refining SDD base artifacts (`idea`, `spec`, `plan`, `tasks`, `bitacora`) without execution consent.
 - **MUST** ask and record explicit user consent right before execution/implementation starts on an approved spec.
+- **MUST** keep runnable project work inside the currently opened chat workspace (use `./www/<project-name>/` in this template).
 
 ## 📐 3. Required Workflow / Flujo de Trabajo Obligatorio
 

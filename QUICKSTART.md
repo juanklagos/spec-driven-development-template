@@ -33,6 +33,10 @@ cd my-project
 cd www/my-project
 ```
 
+Important / Importante:
+- EN: Keep runnable project work inside this current chat/workspace folder (`./www/...`).
+- ES: Mantén el trabajo ejecutable dentro de esta carpeta actual del chat/workspace (`./www/...`).
+
 Default:
 - EN: recommended scaffold (best default for project quality).
 - ES: scaffold recomendado (mejor valor por defecto para calidad del proyecto).

@@ -11,6 +11,7 @@ context:
 execution_root:
   required_for_target_execution: true
   default_workspace_parent: www
+  constrained_to_current_chat_workspace: true
   default_creation_command: ./scripts/create-www-project.sh <project-name> <assistant>
   default_scaffold_profile: recommended
   minimal_scaffold_flag: --minimal-template
@@ -61,6 +62,8 @@ agent_rule_markers:
   hard_stop_phrase_es: No hay código sin spec aprobada y plan consistente.
   execution_root_phrase_en: Use www/<project-name>/ as execution root for runnable code.
   execution_root_phrase_es: Usa www/<nombre-proyecto>/ como raíz de ejecución para código ejecutable.
+  workspace_scope_phrase_en: Keep runnable projects inside the current chat workspace folder.
+  workspace_scope_phrase_es: Mantén proyectos ejecutables dentro de la carpeta actual del chat.
 
 session_output_contract:
   - objective

@@ -71,6 +71,7 @@ Reference files:
 - This repository is a **framework/template**.
 - Your product work should run in your target project using this structure.
 - Inside this repository, use `www/<project-name>/` as execution root for runnable projects.
+- Keep runnable projects inside the current chat/workspace folder (do not create them outside).
 - If you adapt an existing project, integrate `idea/specs/bitacora` without breaking current behavior.
 
 ## 🗺️ 3-Level Learning Path

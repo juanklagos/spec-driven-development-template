@@ -17,6 +17,8 @@ User consent (mandatory):
 Execution root (mandatory for runnable projects):
 - Use `www/<project-name>/` as execution root for runnable code.
 - Usa `www/<nombre-proyecto>/` como raíz de ejecución para código ejecutable.
+- Keep runnable projects inside the folder where this chat/workspace is open.
+- Mantén proyectos ejecutables dentro de la carpeta donde este chat/workspace está abierto.
 
 This repository is a starter template, not a product backlog.
 Este repositorio es un template de arranque, no un backlog de producto.

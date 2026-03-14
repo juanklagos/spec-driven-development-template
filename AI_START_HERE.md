@@ -45,6 +45,8 @@ If not aligned, refine docs first:
 
 - EN: For runnable projects in this repository, execute inside `www/<project-name>/`.
 - ES: Para proyectos ejecutables en este repositorio, ejecuta dentro de `www/<nombre-proyecto>/`.
+- EN: Keep runnable projects inside the current chat workspace folder.
+- ES: Mantén proyectos ejecutables dentro de la carpeta actual del chat/workspace.
 
 Create workspace:
 

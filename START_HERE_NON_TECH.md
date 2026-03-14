@@ -5,6 +5,8 @@ Si no eres técnico, usa solo esta página.
 
 - EN: Ask the AI to use `www/<project-name>/` as execution root.
 - ES: Pide a la IA usar `www/<nombre-proyecto>/` como raíz de ejecución.
+- EN: Ask the AI to keep everything inside the current chat/workspace folder.
+- ES: Pide a la IA mantener todo dentro de la carpeta actual del chat/workspace.
 - EN: Default to recommended scaffold; use minimal only if you explicitly want the lightest setup.
 - ES: Usa scaffold recomendado por defecto; usa mínimo solo si explícitamente quieres la versión más liviana.
 

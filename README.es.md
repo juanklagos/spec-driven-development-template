@@ -71,6 +71,7 @@ Archivos de referencia:
 - Este repositorio es un **marco/template**.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
 - Dentro de este repositorio, usa `www/<nombre-proyecto>/` como raíz de ejecución para proyectos ejecutables.
+- Mantén los proyectos ejecutables dentro de la carpeta actual del chat/workspace (no los crees fuera).
 - Si adaptas un proyecto existente, integra `idea/specs/bitacora` sin romper comportamiento actual.
 
 ## 🗺️ Ruta de aprendizaje (3 niveles)

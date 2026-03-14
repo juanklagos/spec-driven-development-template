@@ -2,10 +2,10 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-  echo "Uso: $0 /ruta/del-nuevo-proyecto [--profile=minimal|recommended|full]"
-  echo "Ejemplo: $0 /tmp/mi-proyecto"
-  echo "Ejemplo: $0 /tmp/mi-proyecto --profile=recommended"
-  echo "Ejemplo: $0 /tmp/mi-proyecto --profile=full"
+  echo "Uso: $0 ./www/mi-proyecto [--profile=minimal|recommended|full]"
+  echo "Ejemplo: $0 ./www/mi-proyecto"
+  echo "Ejemplo: $0 ./www/mi-proyecto --profile=recommended"
+  echo "Ejemplo: $0 ./www/mi-proyecto --profile=full"
   exit 1
 fi
 
@@ -34,6 +34,17 @@ if [ "$TARGET_ABS" = "$ROOT_DIR" ]; then
   echo "  ./scripts/create-www-project.sh <project-name> <assistant>"
   exit 1
 fi
+
+case "$TARGET_ABS/" in
+  "$ROOT_DIR/"*)
+    ;;
+  *)
+    echo "Error: target must be inside the current workspace root."
+    echo "Keep project execution inside this chat folder under ./www/<project-name>."
+    echo "Use: ./scripts/create-www-project.sh <project-name> <assistant>"
+    exit 1
+    ;;
+esac
 
 mkdir -p "$TARGET/idea" \
          "$TARGET/specs/_template/contracts" \

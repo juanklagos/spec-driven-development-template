@@ -34,6 +34,7 @@ Before implementation tasks, explicitly determine:
 2. The real target project path when execution is for a user project.
 3. The active specification in that target project.
 4. For target execution in this repository, use `www/<project-name>/` as working root.
+5. Keep runnable target projects inside the current chat workspace folder (do not create them outside this repository/workspace).
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
