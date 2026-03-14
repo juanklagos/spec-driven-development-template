@@ -9,17 +9,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [v1.0.1] — 2026-03-14
 
 ### Added
-- Created `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as the unified SDD source of truth for AI agents.
+- `scripts/check-sdd-gate.sh` to enforce SDD implementation gate checks before coding.
+- `template-context/09-SPECKIT-STANDARDIZATION-PLAN.md` with phased roadmap to evolve into a Spec Kit-centered framework.
 
 ### Changed
-- **Major README Overhaul**: Transformed from reference manual to Landing Page UX.
-- Simplified folder/file anatomy tables in README.
-- Better documentation discovery categories.
-- Optimized AI context links (offloaded root rules into `template-context/`).
-- Improved Weather App example README with guided "Step-by-Step" path.
+- **Spec Kit-first workflow standardization** across scripts and docs.
+- `scripts/init-project-with-spec-kit.sh` now prioritizes `specify`, then `uv tool install`, then `uvx`.
+- `scripts/init-project.sh` now propagates AI rule files, template context, and `check-sdd-gate.sh` into initialized projects.
+- CI workflow now validates canonical AI rule assets and runs both:
+  - `./scripts/validate-sdd.sh . --strict`
+  - `./scripts/check-sdd-gate.sh .`
+- AI rules now use `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as canonical source.
+- Updated onboarding docs (`README.md`, `AGENTS.md`, `AI_START_HERE.md`, `QUICKSTART.md`, Spec Kit integration docs EN/ES) to include SDD gate and Spec Kit-first flow.
+- Updated templates:
+  - `specs/_template/spec.md` approval status fields clarified.
+  - `specs/_template/plan.md` now includes dependencies, milestones, and risks sections.
 
 ### Removed
-- Deleted root-level redundant instruction files: `INSTRUCTIONS.md`, `CLAUDE.md`, `GEMINI.md`, and `AGENT_SYSTEM_PROMPT.md`.
+- References to deprecated root-level instruction files in active rule paths.
 
 ---
 
