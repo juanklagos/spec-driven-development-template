@@ -39,6 +39,33 @@
 | Difficult team/AI onboarding | **Standard Anatomy** for any project |
 | No proof of validation | **Execution Logs** in `bitacora/` |
 
+## 🗣️ Friendly prompt (copy/paste)
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+My project is: [describe your project in plain language].
+
+If my project is new, initialize it with this template and GitHub Spec Kit.
+If my project already exists, adapt it to idea/specs/bitacora without breaking current behavior.
+Guide me step by step for my level (beginner/intermediate/advanced), using simple language.
+Do not skip specification, plan, tasks, refinement trace, logbook, and validation.
+```
+
+## 🎯 Choose your level
+
+```mermaid
+flowchart LR
+  A["Beginner"] --> B["Intermediate"]
+  B --> C["Advanced"]
+  A --> D["First idea + first spec"]
+  B --> E["Consistent team sessions"]
+  C --> F["Governance + quality gates"]
+```
+
+- Beginner: [docs/en/13-quick-guide-non-programmers.md](./docs/en/13-quick-guide-non-programmers.md)
+- Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
+- Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
+
 ---
 
 ## 🏗️ Project Anatomy

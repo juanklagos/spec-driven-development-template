@@ -39,6 +39,33 @@
 | Onboarding difícil de equipo/IA | **Anatomía estándar** para cualquier proyecto |
 | Sin evidencia de validación | **Trazabilidad de ejecución** en `bitacora/` |
 
+## 🗣️ Prompt amigable (copiar y pegar)
+
+```text
+Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
+Mi proyecto es: [explica tu proyecto en lenguaje simple].
+
+Si mi proyecto es nuevo, inicialízalo con este template y GitHub Spec Kit.
+Si mi proyecto ya existe, adáptalo a idea/specs/bitacora sin romper el comportamiento actual.
+Guíame paso a paso según mi nivel (principiante/intermedio/avanzado), con lenguaje claro.
+No omitas especificación, plan, tareas, traza de refinamiento, bitácora y validación.
+```
+
+## 🎯 Elige tu nivel
+
+```mermaid
+flowchart LR
+  A["Principiante"] --> B["Intermedio"]
+  B --> C["Avanzado"]
+  A --> D["Primera idea + primera spec"]
+  B --> E["Sesiones consistentes en equipo"]
+  C --> F["Gobernanza + compuertas de calidad"]
+```
+
+- Principiante: [docs/es/13-guia-rapida-no-programadores.md](./docs/es/13-guia-rapida-no-programadores.md)
+- Intermedio: [docs/es/14-guia-intermedia.md](./docs/es/14-guia-intermedia.md)
+- Avanzado: [docs/es/15-guia-avanzada.md](./docs/es/15-guia-avanzada.md)
+
 ---
 
 ## 🏗️ Anatomía del proyecto

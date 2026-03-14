@@ -5,11 +5,27 @@ Start here / Empieza aquí:
 - [QUICKSTART.md](../QUICKSTART.md)
 - [AGENT_OPERATING_SYSTEM.md](../template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 
+## Friendly prompt / Prompt amigable
+
+```text
+Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
+My project is: [describe your project in plain language].
+If my project is new, initialize it with this template + GitHub Spec Kit.
+If it already exists, adapt it to idea/specs/bitacora without breaking behavior.
+Guide me by level (beginner/intermediate/advanced) using simple language.
+```
+
 ## Choose language / Elige idioma
 - English: [docs/en](./en)
 - Español: [docs/es](./es)
 
 ## Fast routes / Rutas rápidas
+
+```mermaid
+flowchart LR
+  A["Level 1 / Nivel 1"] --> B["Level 2 / Nivel 2"]
+  B --> C["Level 3 / Nivel 3"]
+```
 
 ### 1) Beginner / Principiante (first 30-60 min)
 - EN: [13-quick-guide-non-programmers](./en/13-quick-guide-non-programmers.md)
