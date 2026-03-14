@@ -36,6 +36,17 @@ If not aligned, refine docs first:
 - `history.md`
 - `bitacora/*`
 
+## 2.1) Execution root / Raíz de ejecución
+
+- EN: For runnable projects in this repository, execute inside `www/<project-name>/`.
+- ES: Para proyectos ejecutables en este repositorio, ejecuta dentro de `www/<nombre-proyecto>/`.
+
+Create workspace:
+
+```bash
+./scripts/create-www-project.sh my-project codex
+```
+
 ---
 
 ## 3) First reading order / Orden inicial de lectura
@@ -59,6 +70,7 @@ Using https://github.com/juanklagos/spec-driven-development-template, create eve
 My project is: [describe your project in plain language].
 If this repository is not available locally, tell me how to get it first.
 Then initialize the template, define the idea, create the first spec, and guide me step by step.
+Use www/<project-name>/ as execution root.
 Do not skip idea, spec, plan, tasks, validation, and logbook.
 
 ES:
@@ -82,6 +94,7 @@ ES:
 Usando https://github.com/juanklagos/spec-driven-development-template, adapta mi proyecto existente sin romper el comportamiento actual.
 Ruta del proyecto: [RUTA_PROYECTO].
 Integra idea/specs/bitacora, crea la primera spec basada en el comportamiento existente y deja trazabilidad completa.
+Usa www/<nombre-proyecto>/ como raíz de ejecución.
 Guíame con lenguaje simple.
 ```
 

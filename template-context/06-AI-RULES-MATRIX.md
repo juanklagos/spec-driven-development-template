@@ -24,6 +24,10 @@ This matrix helps apply the same SDD guardrails across multiple AI tools.
 
 If a tool does not support local rule files, paste `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` as system prompt manually.
 
+Execution workspace note:
+- EN: For runnable target projects in this repository, use `www/<project-name>/`.
+- ES: Para proyectos ejecutables en este repositorio, usa `www/<nombre-proyecto>/`.
+
 ## 🌐 Bilingual support / Soporte bilingüe
 
 - EN: This repository is designed to be used in English and Spanish.

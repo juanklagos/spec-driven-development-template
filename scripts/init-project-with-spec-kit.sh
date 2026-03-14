@@ -44,6 +44,7 @@ Siguiente flujo sugerido:
 4) /speckit.tasks
 5) /speckit.implement
 6) ./scripts/validate-sdd.sh . --strict
-7) ./scripts/check-sdd-gate.sh .
-8) Optional: ./scripts/score-spec.sh --all && ./scripts/generate-status.sh
+7) ./scripts/check-sdd-policy.sh .
+8) ./scripts/check-sdd-gate.sh .
+9) Optional: ./scripts/score-spec.sh --all && ./scripts/generate-status.sh
 MSG

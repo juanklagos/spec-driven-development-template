@@ -26,7 +26,14 @@ git clone https://github.com/juanklagos/spec-driven-development-template.git my-
 cd my-project
 ```
 
-### 2) Initialize Spec Kit (recommended) / Inicializa Spec Kit (recomendado)
+### 2) Create execution workspace / Crea espacio de ejecución
+
+```bash
+./scripts/create-www-project.sh my-project codex
+cd www/my-project
+```
+
+### 3) Initialize Spec Kit (recommended) / Inicializa Spec Kit (recomendado)
 
 ```bash
 uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
@@ -39,7 +46,7 @@ One-shot / Uso puntual:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
-### 3) Define idea / Define idea
+### 4) Define idea / Define idea
 
 Complete `idea/IDEA_GENERAL.md` with:
 - Project name / Nombre
@@ -47,7 +54,7 @@ Complete `idea/IDEA_GENERAL.md` with:
 - Main goal / Objetivo principal
 - MVP scope / Alcance MVP
 
-### 4) Create first spec / Crea primera spec
+### 5) Create first spec / Crea primera spec
 
 ```bash
 ./scripts/new-spec.sh "my-feature" "Owner"
@@ -59,13 +66,13 @@ Fill:
 - `specs/001-.../tasks.md`
 - `specs/001-.../history.md`
 
-### 5) Apply SDD gate / Aplica compuerta SDD
+### 6) Apply SDD gate / Aplica compuerta SDD
 
 No code before:
 - approved `spec.md`
 - consistent `plan.md`
 
-### 6) Validate + close session / Valida + cierra sesión
+### 7) Validate + close session / Valida + cierra sesión
 
 ```bash
 ./scripts/validate-sdd.sh . --strict

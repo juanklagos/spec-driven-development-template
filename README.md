@@ -68,6 +68,7 @@ Reference files:
 
 - This repository is a **framework/template**.
 - Your product work should run in your target project using this structure.
+- Inside this repository, use `www/<project-name>/` as execution root for runnable projects.
 - If you adapt an existing project, integrate `idea/specs/bitacora` without breaking current behavior.
 
 ## 🗺️ 3-Level Learning Path
@@ -112,6 +113,7 @@ Mandatory spec bundle (for each feature):
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
+| Create execution workspace | `./scripts/create-www-project.sh my-project codex` | Create runnable project under `www/` with SDD structure |
 | New Project | `./scripts/init-project.sh` | Bootstrap SDD structure |
 | New Project + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Bootstrap + Spec Kit init |
 | New Spec | `./scripts/new-spec.sh` | Create numbered spec folder |

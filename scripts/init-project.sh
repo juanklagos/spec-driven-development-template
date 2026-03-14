@@ -24,6 +24,8 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/scripts" \
          "$TARGET/.github/workflows"
 
+cp -n "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
+cp -n "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
 cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
 cp -n "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
 cp -n "$ROOT_DIR/specs/INDEX.md" "$TARGET/specs/INDEX.md"
@@ -47,8 +49,14 @@ cp -n "$ROOT_DIR/AI_START_HERE.md" "$TARGET/AI_START_HERE.md"
 cp -n "$ROOT_DIR/QUICKSTART.md" "$TARGET/QUICKSTART.md"
 cp -n "$ROOT_DIR/.cursorrules" "$TARGET/.cursorrules"
 cp -n "$ROOT_DIR/.clauderules" "$TARGET/.clauderules"
+cp -n "$ROOT_DIR/CLAUDE.md" "$TARGET/CLAUDE.md"
+cp -n "$ROOT_DIR/GEMINI.md" "$TARGET/GEMINI.md"
+cp -n "$ROOT_DIR/WINDSURF.md" "$TARGET/WINDSURF.md"
+cp -n "$ROOT_DIR/AIDER.md" "$TARGET/AIDER.md"
+cp -n "$ROOT_DIR/ROO.md" "$TARGET/ROO.md"
 cp -n "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copilot-instructions.md"
 cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
+cp -n "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
 cp -n "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
 cp -n "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
 cp -n "$ROOT_DIR/scripts/score-spec.sh" "$TARGET/scripts/score-spec.sh"
@@ -56,6 +64,7 @@ cp -n "$ROOT_DIR/scripts/generate-roadmap.sh" "$TARGET/scripts/generate-roadmap.
 cp -n "$ROOT_DIR/scripts/generate-status.sh" "$TARGET/scripts/generate-status.sh"
 cp -n "$ROOT_DIR/scripts/legacy-discovery.sh" "$TARGET/scripts/legacy-discovery.sh"
 chmod +x "$TARGET/scripts/validate-sdd.sh"
+chmod +x "$TARGET/scripts/check-sdd-policy.sh"
 chmod +x "$TARGET/scripts/check-sdd-gate.sh"
 chmod +x "$TARGET/scripts/new-spec.sh" \
          "$TARGET/scripts/score-spec.sh" \
@@ -74,9 +83,11 @@ Next steps / Siguientes pasos:
      bitacora/global/PROJECT_LOG.md
   4) Validate / Valida:
      ./scripts/validate-sdd.sh . --strict
-  5) Check SDD gate / Verifica compuerta SDD:
+  5) Check SDD policy / Verifica política SDD:
+     ./scripts/check-sdd-policy.sh .
+  6) Check SDD gate / Verifica compuerta SDD:
      ./scripts/check-sdd-gate.sh .
-  6) Optional / Opcional: generate status and roadmap:
+  7) Optional / Opcional: generate status and roadmap:
      ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
 
 📖 Read QUICKSTART.md for a guided walkthrough and Spec Kit-first setup.

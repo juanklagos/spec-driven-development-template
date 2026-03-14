@@ -69,6 +69,12 @@ else
   fail "Policy missing required_files block"
 fi
 
+if match_q '^execution_root:' "$POLICY_PATH"; then
+  ok "Policy defines execution_root block"
+else
+  fail "Policy missing execution_root block"
+fi
+
 while IFS= read -r rel_path; do
   [ -z "$rel_path" ] && continue
   if [ -f "$ROOT/$rel_path" ]; then
@@ -92,8 +98,29 @@ for rf in ".cursorrules" ".clauderules" "CLAUDE.md" "GEMINI.md" "WINDSURF.md" "A
     else
       warn "$rf should include explicit hard-stop phrase"
     fi
+
+    if match_q "www/<project-name>|www/<nombre-proyecto>" "$ROOT/$rf"; then
+      ok "$rf includes execution-root phrasing"
+    else
+      warn "$rf should include explicit execution-root phrasing"
+    fi
   fi
 done
+
+# Template root must expose the workspace and helper creator script.
+if [ -f "$ROOT/scripts/init-project.sh" ]; then
+  if [ -d "$ROOT/www" ]; then
+    ok "Template workspace exists: www/"
+  else
+    fail "Template workspace missing: www/"
+  fi
+
+  if [ -f "$ROOT/scripts/create-www-project.sh" ]; then
+    ok "Workspace bootstrap script exists: scripts/create-www-project.sh"
+  else
+    fail "Workspace bootstrap script missing: scripts/create-www-project.sh"
+  fi
+fi
 
 printf "\nSDD Policy summary: %d error(s), %d warning(s).\n" "$errors" "$warnings"
 

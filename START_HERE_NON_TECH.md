@@ -3,6 +3,9 @@
 If you are not technical, use this page only.
 Si no eres técnico, usa solo esta página.
 
+- EN: Ask the AI to use `www/<project-name>/` as execution root.
+- ES: Pide a la IA usar `www/<nombre-proyecto>/` como raíz de ejecución.
+
 ## 1) Copy this prompt / Copia este prompt
 
 ```text
@@ -11,6 +14,7 @@ Using https://github.com/juanklagos/spec-driven-development-template, guide me s
 My project is: [describe your project in plain language].
 If my project is new, initialize from this template.
 If it already exists, adapt it without breaking current behavior.
+Use `www/<project-name>/` as execution root.
 No code before approved spec and consistent plan.
 
 ES:
@@ -18,6 +22,7 @@ Usando https://github.com/juanklagos/spec-driven-development-template, guíame p
 Mi proyecto es: [explica tu proyecto en lenguaje simple].
 Si mi proyecto es nuevo, inicializa desde este template.
 Si ya existe, adáptalo sin romper el comportamiento actual.
+Usa `www/<nombre-proyecto>/` como raíz de ejecución.
 No hay código sin spec aprobada y plan consistente.
 ```
 

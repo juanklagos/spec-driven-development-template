@@ -8,8 +8,13 @@ Hard stop:
 - No code before approved spec and consistent plan.
 - No hay código sin spec aprobada y plan consistente.
 
+Execution root:
+- Use `www/<project-name>/` as execution root for runnable code.
+- Usa `www/<nombre-proyecto>/` como raíz de ejecución para código ejecutable.
+
 Always:
 1. Confirm mode: template maintenance vs target project execution.
-2. Use one active specification.
-3. Keep refinement trace (`history.md`, `specs/INDEX.md`, `bitacora/`).
-4. Run `./scripts/validate-sdd.sh . --strict` and `./scripts/check-sdd-gate.sh .`.
+2. For target execution, work inside `www/<project-name>/`.
+3. Use one active specification.
+4. Keep refinement trace (`history.md`, `specs/INDEX.md`, `bitacora/`).
+5. Run `./scripts/validate-sdd.sh . --strict`, `./scripts/check-sdd-policy.sh .`, and `./scripts/check-sdd-gate.sh .`.

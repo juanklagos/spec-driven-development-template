@@ -5,6 +5,14 @@ context:
   repository: https://github.com/juanklagos/spec-driven-development-template
   purpose_en: Starter template to bootstrap SDD projects with low friction.
   purpose_es: Plantilla base para iniciar proyectos SDD con baja fricción.
+  execution_workspace_en: Use www/<project-name>/ for runnable target projects.
+  execution_workspace_es: Usa www/<nombre-proyecto>/ para proyectos ejecutables.
+
+execution_root:
+  required_for_target_execution: true
+  default_workspace_parent: www
+  default_creation_command: ./scripts/create-www-project.sh <project-name> <assistant>
+  do_not_implement_in_template_root: true
 
 hard_stop:
   no_code_before_spec_approved: true
@@ -41,6 +49,8 @@ agent_rule_markers:
   canonical_source: template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
   hard_stop_phrase_en: No code before approved spec and consistent plan.
   hard_stop_phrase_es: No hay código sin spec aprobada y plan consistente.
+  execution_root_phrase_en: Use www/<project-name>/ as execution root for runnable code.
+  execution_root_phrase_es: Usa www/<nombre-proyecto>/ como raíz de ejecución para código ejecutable.
 
 session_output_contract:
   - objective

@@ -33,6 +33,7 @@ Before implementation tasks, explicitly determine:
 1. If the task is `template maintenance` or `target project execution`.
 2. The real target project path when execution is for a user project.
 3. The active specification in that target project.
+4. For target execution in this repository, use `www/<project-name>/` as working root.
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
@@ -44,18 +45,20 @@ Before implementation tasks, explicitly determine:
 
 ## 🔧 Mandatory workflow / Flujo obligatorio
 
-1. Work from one active specification.
-2. If GitHub Spec Kit is available, use:
+1. For runnable target projects, create/use `www/<project-name>/`:
+   - `./scripts/create-www-project.sh <project-name> <assistant>`
+2. Work from one active specification.
+3. If GitHub Spec Kit is available, use:
    - `/speckit.constitution`
    - `/speckit.specify`
    - `/speckit.plan`
    - `/speckit.tasks`
    - `/speckit.implement`
-3. Keep `specs/` and `bitacora/` updated at session end.
-4. Run `./scripts/validate-sdd.sh . --strict` before finishing.
-5. Run `./scripts/check-sdd-policy.sh .` before finishing.
-6. Run `./scripts/check-sdd-gate.sh .` before finishing.
-7. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
+4. Keep `specs/` and `bitacora/` updated at session end.
+5. Run `./scripts/validate-sdd.sh . --strict` before finishing.
+6. Run `./scripts/check-sdd-policy.sh .` before finishing.
+7. Run `./scripts/check-sdd-gate.sh .` before finishing.
+8. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
 

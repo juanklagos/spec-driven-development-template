@@ -68,6 +68,7 @@ Archivos de referencia:
 
 - Este repositorio es un **marco/template**.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
+- Dentro de este repositorio, usa `www/<nombre-proyecto>/` como raíz de ejecución para proyectos ejecutables.
 - Si adaptas un proyecto existente, integra `idea/specs/bitacora` sin romper comportamiento actual.
 
 ## 🗺️ Ruta de aprendizaje (3 niveles)
@@ -112,6 +113,7 @@ Paquete obligatorio por feature:
 
 | Herramienta | Comando | Descripción |
 | :--- | :--- | :--- |
+| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea proyecto ejecutable en `www/` con estructura SDD |
 | Proyecto nuevo | `./scripts/init-project.sh` | Inicializa estructura SDD |
 | Proyecto nuevo + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Inicializa estructura + Spec Kit |
 | Nueva spec | `./scripts/new-spec.sh` | Crea carpeta numerada de spec |
