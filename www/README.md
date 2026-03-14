@@ -16,8 +16,18 @@ Recommended creation command / Comando recomendado:
 ./scripts/create-www-project.sh my-project codex
 ```
 
+Default:
+- EN: minimal scaffold only.
+- ES: scaffold mínimo únicamente.
+
 Without Spec Kit auto-init / Sin auto-init de Spec Kit:
 
 ```bash
 ./scripts/create-www-project.sh my-project codex --no-spec-kit
+```
+
+Full scaffold (optional) / Scaffold completo (opcional):
+
+```bash
+./scripts/create-www-project.sh my-project codex --full-template
 ```

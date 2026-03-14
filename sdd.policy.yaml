@@ -12,6 +12,8 @@ execution_root:
   required_for_target_execution: true
   default_workspace_parent: www
   default_creation_command: ./scripts/create-www-project.sh <project-name> <assistant>
+  default_scaffold_profile: minimal
+  full_scaffold_flag: --full-template
   do_not_implement_in_template_root: true
 
 hard_stop:

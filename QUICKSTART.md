@@ -33,6 +33,17 @@ cd my-project
 cd www/my-project
 ```
 
+Default:
+- EN: minimal scaffold only.
+- ES: solo scaffold mínimo.
+
+Optional full packs:
+
+```bash
+./scripts/create-www-project.sh my-project codex --full-template
+cd www/my-project
+```
+
 ### 3) Initialize Spec Kit (recommended) / Inicializa Spec Kit (recomendado)
 
 ```bash

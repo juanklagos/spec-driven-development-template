@@ -47,6 +47,16 @@ Create workspace:
 ./scripts/create-www-project.sh my-project codex
 ```
 
+Default behavior:
+- EN: creates a minimal scaffold (only what is needed for SDD + AI context).
+- ES: crea un scaffold mínimo (solo lo necesario para SDD + contexto IA).
+
+Optional full scaffold:
+
+```bash
+./scripts/create-www-project.sh my-project codex --full-template
+```
+
 ---
 
 ## 3) First reading order / Orden inicial de lectura

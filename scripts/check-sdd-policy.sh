@@ -75,6 +75,12 @@ else
   fail "Policy missing execution_root block"
 fi
 
+if match_q "default_scaffold_profile:[[:space:]]*minimal" "$POLICY_PATH"; then
+  ok "Policy default scaffold profile is minimal"
+else
+  warn "Policy should define default_scaffold_profile: minimal"
+fi
+
 while IFS= read -r rel_path; do
   [ -z "$rel_path" ] && continue
   if [ -f "$ROOT/$rel_path" ]; then

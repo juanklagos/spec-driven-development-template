@@ -113,7 +113,7 @@ Paquete obligatorio por feature:
 
 | Herramienta | Comando | Descripción |
 | :--- | :--- | :--- |
-| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea proyecto ejecutable en `www/` con estructura SDD |
+| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea proyecto ejecutable en `www/` (scaffold mínimo por defecto) |
 | Proyecto nuevo | `./scripts/init-project.sh` | Inicializa estructura SDD |
 | Proyecto nuevo + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Inicializa estructura + Spec Kit |
 | Nueva spec | `./scripts/new-spec.sh` | Crea carpeta numerada de spec |

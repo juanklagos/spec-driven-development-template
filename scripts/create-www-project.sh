@@ -1,16 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ "$#" -lt 1 ] || [ "$#" -gt 3 ]; then
-  echo "Usage: $0 <project-name> [assistant] [--no-spec-kit]"
+if [ "$#" -lt 1 ] || [ "$#" -gt 4 ]; then
+  echo "Usage: $0 <project-name> [assistant] [--no-spec-kit] [--full-template]"
   echo "Example: $0 my-app codex"
   echo "Example: $0 my-app codex --no-spec-kit"
+  echo "Example: $0 my-app codex --full-template"
   exit 1
 fi
 
 PROJECT_NAME="$1"
-ASSISTANT="${2:-codex}"
-MODE="${3:-}"
+ASSISTANT="codex"
+USE_SPEC_KIT="yes"
+PROFILE="--profile=minimal"
+
+shift
+for arg in "$@"; do
+  case "$arg" in
+    --no-spec-kit)
+      USE_SPEC_KIT="no"
+      ;;
+    --full-template)
+      PROFILE="--profile=full"
+      ;;
+    --minimal-template)
+      PROFILE="--profile=minimal"
+      ;;
+    *)
+      ASSISTANT="$arg"
+      ;;
+  esac
+done
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -33,14 +53,14 @@ fi
 
 mkdir -p "$ROOT_DIR/www"
 
-if [ "$MODE" = "--no-spec-kit" ]; then
-  "$SCRIPT_DIR/init-project.sh" "$TARGET"
+if [ "$USE_SPEC_KIT" = "no" ]; then
+  "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
 else
-  if "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT"; then
+  if "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT" "$PROFILE"; then
     :
   else
     echo "[WARN] Spec Kit init failed. Falling back to plain template init."
-    "$SCRIPT_DIR/init-project.sh" "$TARGET"
+    "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
   fi
 fi
 
@@ -48,6 +68,8 @@ cat <<MSG
 
 ✅ Project workspace created at:
    $TARGET
+Profile:
+   ${PROFILE#--profile=}
 
 EN:
 - Work and implement inside this folder.

@@ -1,18 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-  echo "Uso: $0 /ruta/del-proyecto [asistente]"
+if [ "$#" -lt 1 ] || [ "$#" -gt 3 ]; then
+  echo "Uso: $0 /ruta/del-proyecto [asistente] [--profile=minimal|full]"
   echo "Ejemplo: $0 /tmp/mi-proyecto codex"
+  echo "Ejemplo: $0 /tmp/mi-proyecto codex --profile=full"
   exit 1
 fi
 
 TARGET="$1"
-ASSISTANT="${2:-codex}"
+ASSISTANT="codex"
+PROFILE="--profile=minimal"
+
+shift
+for arg in "$@"; do
+  case "$arg" in
+    --profile=minimal|--profile=full)
+      PROFILE="$arg"
+      ;;
+    *)
+      ASSISTANT="$arg"
+      ;;
+  esac
+done
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-"$SCRIPT_DIR/init-project.sh" "$TARGET"
+"$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
 
 cd "$TARGET"
 

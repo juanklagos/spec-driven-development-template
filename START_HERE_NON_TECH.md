@@ -5,6 +5,8 @@ Si no eres técnico, usa solo esta página.
 
 - EN: Ask the AI to use `www/<project-name>/` as execution root.
 - ES: Pide a la IA usar `www/<nombre-proyecto>/` como raíz de ejecución.
+- EN: Ask for minimal scaffold only unless you explicitly request full packs.
+- ES: Pide scaffold mínimo salvo que explícitamente quieras packs completos.
 
 ## 1) Copy this prompt / Copia este prompt
 
