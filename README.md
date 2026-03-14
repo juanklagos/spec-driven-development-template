@@ -9,6 +9,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge" alt="Version">
+    <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NON--TECH-Start-green?style=for-the-badge" alt="Non Technical Start"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_START-Open-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart"></a>
   </p>
@@ -19,6 +20,7 @@
 ## ⚡ Start in 30 Seconds
 
 1. Open [AI_START_HERE.md](./AI_START_HERE.md)
+   or [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) if you are non-technical.
 2. Copy/paste this prompt:
 
 ```text
@@ -100,6 +102,7 @@ Mandatory spec bundle (for each feature):
 ## 👤 Non-Technical Path
 
 - Start here: [AI_START_HERE.md](./AI_START_HERE.md)
+- Ultra-simple starter: [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md)
 - Follow level path: [docs/en/18-complete-3-level-path.md](./docs/en/18-complete-3-level-path.md)
 - Use ready prompts:
   - [docs/en/19-prompt-matrix-by-goal.md](./docs/en/19-prompt-matrix-by-goal.md)

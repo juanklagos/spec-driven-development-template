@@ -9,6 +9,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge" alt="Version">
+    <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NO_TÉCNICO-Iniciar-green?style=for-the-badge" alt="Inicio no técnico"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_INICIO_IA-Abrir-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
   </p>
@@ -19,6 +20,7 @@
 ## ⚡ Empieza en 30 segundos
 
 1. Abre [AI_START_HERE.md](./AI_START_HERE.md)
+   o [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) si no eres técnico.
 2. Copia y pega este prompt:
 
 ```text
@@ -100,6 +102,7 @@ Paquete obligatorio por feature:
 ## 👤 Ruta no técnica
 
 - Empieza aquí: [AI_START_HERE.md](./AI_START_HERE.md)
+- Inicio ultra simple: [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md)
 - Sigue la ruta por nivel: [docs/es/18-ruta-completa-3-niveles.md](./docs/es/18-ruta-completa-3-niveles.md)
 - Usa prompts listos:
   - [docs/es/19-matriz-prompts-por-objetivo.md](./docs/es/19-matriz-prompts-por-objetivo.md)
