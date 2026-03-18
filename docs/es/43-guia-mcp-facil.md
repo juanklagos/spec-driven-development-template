@@ -13,6 +13,7 @@ Esta guía explica cómo usar `sdd-mcp` de la forma más fácil posible.
 Mantén [41-referencia-completa-mcp.md](./41-referencia-completa-mcp.md) como referencia técnica completa.
 Mantén [42-mapa-organizacion-proyecto.md](./42-mapa-organizacion-proyecto.md) como mapa completo carpeta por carpeta.
 Mantén [47-opciones-gratis-mcp-externo.md](./47-opciones-gratis-mcp-externo.md) como comparación dedicada de MCP externo gratuito.
+Mantén [48-como-conectar-este-repo-con-gitmcp.md](./48-como-conectar-este-repo-con-gitmcp.md) como la guía exacta paso a paso para conectar GitMCP.
 
 ## La idea simple
 

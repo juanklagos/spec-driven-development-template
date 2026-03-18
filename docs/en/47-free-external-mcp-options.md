@@ -87,3 +87,7 @@ What it still should not replace:
 If you only need the AI to understand this public repository better, a free external MCP like GitMCP is enough.
 If you need the AI to guide the real SDD workflow and work with project files, you still need the framework's own MCP behavior.
 ```
+
+## Next guide
+
+If you want the exact step-by-step connection flow for this repository, continue with [How to Connect This Repository with GitMCP](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/48-how-to-connect-this-repo-with-gitmcp.md).

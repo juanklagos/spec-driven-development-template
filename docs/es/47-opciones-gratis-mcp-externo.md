@@ -87,3 +87,7 @@ Qué no debería reemplazar:
 Si solo necesitas que la IA entienda mejor este repositorio público, un MCP externo gratis como GitMCP es suficiente.
 Si necesitas que la IA guíe el flujo real de SDD y trabaje con archivos del proyecto, todavía necesitas el comportamiento propio del MCP del framework.
 ```
+
+## Siguiente guía
+
+Si quieres el flujo exacto paso a paso para conectar este repositorio, sigue con [Cómo conectar este repositorio con GitMCP](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/es/48-como-conectar-este-repo-con-gitmcp.md).

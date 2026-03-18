@@ -49,6 +49,7 @@ flowchart LR
 - Hosted MCP onboarding model: [EN](./en/44-hosted-mcp-onboarding-model.md) | [ES](./es/44-modelo-onboarding-mcp-alojado.md)
 - Client visual examples: [EN](./en/45-client-visual-examples-for-easy-mcp.md) | [ES](./es/45-ejemplos-visuales-clientes-mcp-facil.md)
 - Free external MCP options: [EN](./en/47-free-external-mcp-options.md) | [ES](./es/47-opciones-gratis-mcp-externo.md)
+- GitMCP connection guide: [EN](./en/48-how-to-connect-this-repo-with-gitmcp.md) | [ES](./es/48-como-conectar-este-repo-con-gitmcp.md)
 - MCP complete reference: [EN](./en/41-complete-mcp-reference.md) | [ES](./es/41-referencia-completa-mcp.md)
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
