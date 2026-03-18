@@ -171,6 +171,8 @@ Paquete obligatorio por feature:
 - Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Guía del servidor MCP](./docs/es/33-guia-servidor-mcp.md)
+- Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
+- Versionado: [Estrategia](./docs/es/37-estrategia-versionado.md)
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
 

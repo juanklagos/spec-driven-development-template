@@ -131,6 +131,7 @@ export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResu
   const specId = `${nextNumber}-${slug}`;
   const specDir = path.join(specsRoot, specId);
 
+  await fs.mkdir(specDir, { recursive: false });
   await fs.mkdir(path.join(specDir, "contracts"), { recursive: false });
 
   for (const file of ["spec.md", "plan.md", "tasks.md", "research.md", "history.md"] as const) {

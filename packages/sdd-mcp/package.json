@@ -1,6 +1,6 @@
 {
   "name": "@sdd/sdd-mcp",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
-    "@sdd/sdd-core": "0.1.0",
+    "@sdd/sdd-core": "1.1.0",
     "zod": "^3.25.76"
   }
 }

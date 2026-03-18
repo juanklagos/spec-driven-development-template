@@ -33,3 +33,6 @@ jobs:
 
       - name: MCP HTTP smoke test
         run: npm run mcp:http:smoke
+
+      - name: MCP integration test
+        run: npm run mcp:test

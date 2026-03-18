@@ -171,6 +171,8 @@ Mandatory spec bundle (for each feature):
 - Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [MCP Server Guide](./docs/en/33-mcp-server-guide.md)
+- Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)
+- Versioning: [Strategy](./docs/en/37-versioning-strategy.md)
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 

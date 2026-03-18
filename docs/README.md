@@ -48,6 +48,8 @@ flowchart LR
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
 - Public roadmap: [EN](./en/35-public-roadmap.md) | [ES](./es/35-roadmap-publico.md)
+- Client setup recipes: [EN](./en/36-client-setup-recipes.md) | [ES](./es/36-recetas-setup-clientes.md)
+- Versioning strategy: [EN](./en/37-versioning-strategy.md) | [ES](./es/37-estrategia-versionado.md)
 - Continuous refinement: [EN](./en/11-continuous-refinement.md) | [ES](./es/11-refinamiento-continuo.md)
 - Quality checklists: [EN](./en/21-quality-checklists-by-stage.md) | [ES](./es/21-checklists-calidad-por-etapa.md)
 
@@ -57,8 +59,8 @@ flowchart LR
 - Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
 ## Full index / Índice completo
-- EN docs list: `docs/en/00` to `docs/en/35`
-- ES docs list: `docs/es/00` to `docs/es/35`
+- EN docs list: `docs/en/00` to `docs/en/37`
+- ES docs list: `docs/es/00` to `docs/es/37`
 
 ## Documentation audits / Auditorías de documentación
 - EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)

@@ -9,9 +9,11 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run mcp:test",
     "mcp:start": "npm --workspace @sdd/sdd-mcp run start",
     "mcp:http:start": "npm --workspace @sdd/sdd-mcp run start:http",
     "mcp:build": "npm --workspace @sdd/sdd-mcp run build",
+    "mcp:test": "npm run build && node scripts/test-mcp-integration.mjs",
     "mcp:smoke": "npm run build && node scripts/smoke-test-mcp.mjs",
     "mcp:http:smoke": "npm run build && node scripts/smoke-test-mcp-http.mjs"
   },
