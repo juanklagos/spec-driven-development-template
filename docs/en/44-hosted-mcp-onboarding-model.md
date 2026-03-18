@@ -97,6 +97,7 @@ Short term:
 - keep `sdd-mcp` local for operations
 - publish docs that define the hosted layer contract
 - use the current HTTP transport as the conceptual base
+- optionally use `GitMCP` as the free external repo-context layer for public understanding
 
 Mid term:
 - host a read-oriented onboarding MCP endpoint
@@ -105,6 +106,25 @@ Mid term:
 
 Long term:
 - offer a one-click launcher or thin local bridge that the hosted layer can orchestrate through the client
+
+## Where `GitMCP` fits
+
+`GitMCP` is useful as a free external layer for public repositories.
+
+What it can do well:
+- let AI clients read and understand this repository remotely
+- expose public docs and structure with almost no setup
+- help with discovery, demos, and diffusion
+
+What it should not be treated as:
+- a replacement for `sdd-mcp`
+- a replacement for your custom prompts and product behavior
+- a safe writer into the user's local project
+
+So the recommended framing is:
+- `GitMCP` or similar = external repo context
+- hosted onboarding MCP = your owned remote guidance layer
+- local `sdd-mcp` = operational local execution layer
 
 ## Minimum hosted contract
 

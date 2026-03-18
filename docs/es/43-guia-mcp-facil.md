@@ -74,6 +74,71 @@ Importante:
 - otros pueden mostrarlos como plantillas de prompt o acciones
 - si tu cliente no los muestra, escribe la petición en lenguaje natural
 
+## MCP externo, explicado simple
+
+Hay 2 cosas muy distintas que pueden parecer parecidas:
+
+1. un MCP externo de contexto de repositorio como `GitMCP`
+2. el MCP operativo de este framework, `sdd-mcp`
+
+Piensa en ellas así:
+- `GitMCP` es como un bibliotecario público del repositorio
+- `sdd-mcp` es como el operador del proyecto que puede guiar y organizar el trabajo
+
+### Para qué sí sirve `GitMCP`
+
+Usa `GitMCP` cuando quieres:
+- un MCP externo gratuito e inmediato
+- que la IA lea tu repositorio público
+- que la IA entienda el README, docs, templates y estructura
+- facilitar difusión y descubrimiento
+
+Qué obtiene el usuario:
+- contexto remoto rápido
+- cero trabajo de hosting de tu lado
+- una URL simple basada en el repositorio GitHub
+
+### Qué no reemplaza `GitMCP`
+
+`GitMCP` no reemplaza la capa de producto MCP propia.
+
+No te da:
+- tus tools personalizados
+- tus prompts personalizados como superficie de producto controlada
+- tus reglas del proyecto como servicio propio
+- escrituras reales en archivos locales del proyecto del usuario
+
+Entonces el modelo correcto es:
+- `GitMCP` = lectura y entendimiento remoto
+- `sdd-mcp` = operaciones guiadas de SDD y comportamiento del framework
+
+## La combinación recomendada
+
+Para este framework, la configuración profesional más fácil es:
+
+```mermaid
+flowchart LR
+  A["Repo público en GitHub"] --> B["GitMCP o similar"]
+  A --> C["sdd-mcp local"]
+  B --> D["La IA entiende el framework"]
+  C --> E["La IA puede guiar acciones SDD reales"]
+  E --> F["Archivos del proyecto y trazabilidad"]
+```
+
+Esto significa:
+- usa `GitMCP` si quieres entendimiento externo y gratuito del repo
+- usa `sdd-mcp` si quieres el flujo real del framework
+- combina ambos si quieres la experiencia más fácil para el operador
+
+## Qué decirle a un usuario en lenguaje simple
+
+```text
+Hay dos capas MCP.
+Una capa ayuda a la IA a leer y entender el repositorio público.
+La otra capa ayuda a la IA a guiar el flujo real de SDD.
+Si solo usas un MCP de contexto de repositorio como GitMCP, la IA puede entender mejor el template, pero no reemplaza el comportamiento propio del MCP del framework.
+```
+
 ## Qué debe esperar el usuario siempre
 
 Para un uso amigable de principiante, la IA debe responder en este orden:

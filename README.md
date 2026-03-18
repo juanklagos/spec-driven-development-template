@@ -45,6 +45,11 @@ If your AI client supports MCP, this repository now includes a local `sdd-mcp` s
 If you want the simplest explanation first:
 - [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 
+Important distinction:
+- `GitMCP` or similar can help an AI read and understand this public repository for free.
+- It does not replace this framework's own `sdd-mcp` behavior.
+- Use `GitMCP` for remote repo context and `sdd-mcp` for the real guided SDD workflow.
+
 Quick path:
 1. Build the server:
 

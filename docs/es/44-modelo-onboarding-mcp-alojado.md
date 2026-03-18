@@ -97,6 +97,7 @@ Corto plazo:
 - mantener `sdd-mcp` local para operaciones
 - publicar docs que definan el contrato de la capa alojada
 - usar el transporte HTTP actual como base conceptual
+- usar opcionalmente `GitMCP` como capa externa gratuita de contexto del repo público
 
 Mediano plazo:
 - alojar un endpoint MCP de onboarding orientado a lectura
@@ -105,6 +106,25 @@ Mediano plazo:
 
 Largo plazo:
 - ofrecer un launcher de un clic o un bridge local delgado que la capa alojada pueda orquestar a través del cliente
+
+## Dónde encaja `GitMCP`
+
+`GitMCP` sirve como capa externa gratuita para repositorios públicos.
+
+Qué sí puede hacer bien:
+- permitir que clientes IA lean y entiendan este repositorio de forma remota
+- exponer docs y estructura pública con casi cero setup
+- ayudar en descubrimiento, demos y difusión
+
+Qué no debe considerarse:
+- un reemplazo de `sdd-mcp`
+- un reemplazo de tus prompts y comportamiento de producto
+- un escritor seguro dentro del proyecto local del usuario
+
+Entonces la forma correcta de explicarlo es:
+- `GitMCP` o similar = contexto externo del repo
+- MCP alojado de onboarding = tu capa remota propia de guía
+- `sdd-mcp` local = capa operativa local de ejecución
 
 ## Contrato mínimo alojado
 

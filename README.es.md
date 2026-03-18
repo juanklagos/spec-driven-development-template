@@ -45,6 +45,11 @@ Si tu cliente de IA soporta MCP, este repositorio ya incluye un servidor local `
 Si quieres la explicación más simple primero:
 - [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
 
+Diferencia importante:
+- `GitMCP` o similar puede ayudar a una IA a leer y entender este repositorio público gratis.
+- No reemplaza el comportamiento propio de `sdd-mcp` dentro del framework.
+- Usa `GitMCP` para contexto remoto del repo y `sdd-mcp` para el flujo real guiado de SDD.
+
 Ruta rápida:
 1. Compila el servidor:
 

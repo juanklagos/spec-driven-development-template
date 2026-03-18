@@ -74,6 +74,71 @@ Important:
 - others may show them as prompt templates or actions
 - if your client does not show them, write the request in plain language instead
 
+## External MCP, explained simply
+
+There are 2 very different things that may look similar:
+
+1. an external repo-context MCP such as `GitMCP`
+2. this framework's own operational MCP, `sdd-mcp`
+
+Think of them like this:
+- `GitMCP` is like a public librarian for your repository
+- `sdd-mcp` is like the project operator that can guide and organize work
+
+### What `GitMCP` is good for
+
+Use `GitMCP` when you want:
+- a free and immediate external MCP
+- AI to read your public repository
+- AI to understand your README, docs, templates, and structure
+- easier diffusion and discovery
+
+What the user gets:
+- quick remote context
+- no server hosting work from your side
+- a simple URL form based on the GitHub repository
+
+### What `GitMCP` does not replace
+
+`GitMCP` does not replace your own MCP product layer.
+
+It does not give you:
+- your custom tools
+- your custom prompts as a controlled product surface
+- your own project rules as an owned service
+- real local file writes in the user's project
+
+So the right mental model is:
+- `GitMCP` = remote reading and understanding
+- `sdd-mcp` = guided SDD operations and framework behavior
+
+## The recommended combination
+
+For this framework, the easiest professional setup is:
+
+```mermaid
+flowchart LR
+  A["Public repo on GitHub"] --> B["GitMCP or similar"]
+  A --> C["Local sdd-mcp"]
+  B --> D["AI understands the framework"]
+  C --> E["AI can guide real SDD actions"]
+  E --> F["Project files and traceability"]
+```
+
+This means:
+- use `GitMCP` if you want free external understanding of the repo
+- use `sdd-mcp` if you want the real framework workflow
+- combine both if you want the easiest operator experience
+
+## What to tell a user in plain language
+
+```text
+There are two MCP layers.
+One layer helps the AI read and understand the public repository.
+The other layer helps the AI guide the real SDD workflow.
+If you only use a repo-context MCP like GitMCP, the AI can understand the template better, but it does not replace the framework's own MCP behavior.
+```
+
 ## What the user should expect every time
 
 For beginner-friendly use, the AI should answer in this order:
