@@ -12,3 +12,5 @@
 - Se agrega guía bilingüe de uso del servidor MCP y un smoke test automatizado del protocolo.
 - Se amplía el MCP con tools para status, roadmap y bitácora.
 - Se agregan ejemplos iniciales de configuración por cliente.
+- Se agregan resource templates por archivo de spec.
+- Se agrega transporte `Streamable HTTP` junto con smoke test dedicado.

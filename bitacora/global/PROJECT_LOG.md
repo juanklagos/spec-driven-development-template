@@ -46,13 +46,15 @@
   - Added MCP smoke test and bilingual server setup guides
   - Expanded MCP tools for roadmap, status, and logbook operations
   - Added client-facing setup examples for Claude Desktop, Cursor, and Codex Desktop
+  - Added spec document resource templates and Streamable HTTP transport
+  - Added dedicated smoke test for HTTP MCP connectivity
 - **Decisions made / Decisiones tomadas:**
   - Repository root remains the canonical SDD framework
   - Productized path is `framework root + sdd-core + sdd-mcp`
   - MVP MCP is stdio-first and keeps compatibility with current shell scripts
 - **Blockers / Bloqueos:** Pending dependency install and type verification against the selected MCP SDK version
 - **Next step / Próximo paso:** Install dependencies, typecheck the packages, fix SDK API mismatches, and document local MCP setup
-- **Next step / Próximo paso:** Add resource templates for spec file access and evaluate Streamable HTTP as the next transport
+- **Next step / Próximo paso:** Add richer project-aware resources, tool output schemas, and client-specific installation docs with exact paths
 - **Owner / Responsable:** Juan Klagos / Codex
 
 ---

@@ -25,7 +25,9 @@ npm install
 npm run typecheck
 npm run build
 npm run mcp:smoke
+npm run mcp:http:smoke
 npm run mcp:start
+npm run mcp:http:start
 ```
 
 Current MVP tools:

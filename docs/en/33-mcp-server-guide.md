@@ -14,6 +14,7 @@ The repository now follows this product path:
 
 Transport:
 - `stdio`
+- `Streamable HTTP`
 
 Tools:
 - `sdd_create_workspace`
@@ -48,12 +49,14 @@ npm install
 npm run typecheck
 npm run build
 npm run mcp:smoke
+npm run mcp:http:smoke
 ```
 
 Run the server:
 
 ```bash
 npm run mcp:start
+npm run mcp:http:start
 ```
 
 ## Client configuration pattern
@@ -62,6 +65,12 @@ Use the built server entrypoint:
 
 ```text
 node /ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js
+```
+
+HTTP endpoint:
+
+```text
+http://127.0.0.1:3334/mcp
 ```
 
 Recommended working root:
@@ -133,6 +142,20 @@ Suggested first message:
 ```text
 Use the local sdd MCP server for SDD operations.
 Prefer MCP tools for workspace, spec, validation, roadmap, and logbook actions.
+```
+
+### Streamable HTTP clients
+
+When a client prefers remote-style MCP registration, point it to:
+
+```text
+http://127.0.0.1:3334/mcp
+```
+
+Run it with:
+
+```bash
+npm run mcp:http:start
 ```
 
 ## Operational rules
