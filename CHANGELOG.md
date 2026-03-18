@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.3.1] — 2026-03-18
+
+### Added
+- Dedicated GitMCP connection guides:
+  - `docs/en/48-how-to-connect-this-repo-with-gitmcp.md`
+  - `docs/es/48-como-conectar-este-repo-con-gitmcp.md`
+
+### Changed
+- README, docs index, easy MCP guide, and free external MCP guide now point explicitly to the GitMCP step-by-step path.
+- GitMCP is now explained more clearly as:
+  - free external repo-context MCP
+  - not a replacement for `sdd-mcp`
+  - useful for onboarding and repository understanding
+
+### Verified
+- `npm run build`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+
 ## [v1.3.0] — 2026-03-18
 
 ### Added
