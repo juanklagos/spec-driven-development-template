@@ -4,6 +4,9 @@
 
 This guide documents what each core script and MCP tool creates, modifies, and returns.
 
+For the complete MCP overview, tool intent, resources, and prompts, start here:
+- [Complete MCP Reference](./41-complete-mcp-reference.md)
+
 ## Workspace and bootstrap scripts
 
 ### `./scripts/create-www-project.sh <project-name> <assistant> [flags]`

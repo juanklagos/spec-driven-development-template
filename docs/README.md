@@ -45,6 +45,7 @@ flowchart LR
 ## Core SDD references / Referencias SDD base
 - Workflow: [EN](./en/02-workflow.md) | [ES](./es/02-flujo-de-trabajo.md)
 - Spec Kit integration: [EN](./en/08-github-spec-kit-integration.md) | [ES](./es/08-integracion-github-spec-kit.md)
+- MCP complete reference: [EN](./en/41-complete-mcp-reference.md) | [ES](./es/41-referencia-completa-mcp.md)
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
 - Public roadmap: [EN](./en/35-public-roadmap.md) | [ES](./es/35-roadmap-publico.md)

@@ -2,7 +2,10 @@
 
 ## Propósito
 
-Esta guía explica cómo ejecutar, conectar y usar el servidor local `sdd-mcp` como la capa MCP operativa de este framework.
+Esta guía es solo para setup y conectividad MCP.
+
+Si quieres la referencia funcional completa, empieza aquí:
+- [Referencia completa de MCP](./41-referencia-completa-mcp.md)
 
 Separación del producto:
 - raíz del repositorio: framework SDD canónico
@@ -10,6 +13,8 @@ Separación del producto:
 - `packages/sdd-mcp`: tools, resources, prompts y transportes MCP
 
 ## Lo que ya está implementado
+
+Resumen de alto nivel solamente:
 
 Transportes:
 - `stdio`
@@ -81,9 +86,9 @@ Entrypoints:
 - no implementes código antes de tener spec aprobada y plan consistente
 - solicita consentimiento explícito solo cuando la implementación vaya a comenzar
 
-Ver también:
-- [Referencia de resultados por comando](./40-referencia-resultados-comandos.md)
+Referencias relacionadas:
 - [Referencia completa de MCP](./41-referencia-completa-mcp.md)
+- [Referencia de resultados por comando](./40-referencia-resultados-comandos.md)
 
 ## Ejemplos listos para copiar
 

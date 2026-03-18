@@ -2,7 +2,10 @@
 
 ## Purpose
 
-This guide explains how to run, connect, and use the local `sdd-mcp` server as the operational MCP layer of this framework.
+This guide is only for MCP setup and connectivity.
+
+If you want the full functional reference, start here:
+- [Complete MCP Reference](./41-complete-mcp-reference.md)
 
 Product split:
 - repository root: canonical SDD framework
@@ -10,6 +13,8 @@ Product split:
 - `packages/sdd-mcp`: MCP tools, resources, prompts, and transports
 
 ## What is already implemented
+
+High-level summary only:
 
 Transports:
 - `stdio`
@@ -81,9 +86,9 @@ Entrypoints:
 - do not implement code before approved spec and consistent plan
 - request explicit user consent only when implementation is about to start
 
-See also:
-- [Command Results Reference](./40-command-results-reference.md)
+Related references:
 - [Complete MCP Reference](./41-complete-mcp-reference.md)
+- [Command Results Reference](./40-command-results-reference.md)
 
 ## Copy-paste config examples
 

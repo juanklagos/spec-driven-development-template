@@ -4,6 +4,9 @@
 
 Esta guía documenta qué crea, qué modifica y qué devuelve cada script principal y cada tool MCP.
 
+Para la visión completa de MCP, intención de tools, resources y prompts, empieza aquí:
+- [Referencia completa de MCP](./41-referencia-completa-mcp.md)
+
 ## Scripts de workspace e inicialización
 
 ### `./scripts/create-www-project.sh <nombre-proyecto> <assistant> [flags]`
