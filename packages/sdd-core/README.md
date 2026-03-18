@@ -26,3 +26,9 @@ Current exported operations:
 - `validateProject`
 - `checkGate`
 - `recordUserConsent`
+- `generateStatus`
+- `generateRoadmap`
+- `appendProjectLogEntry`
+- `writeDailyLog`
+- `writeHandoff`
+- `writeDecision`

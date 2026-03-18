@@ -44,13 +44,15 @@
   - Implemented typed core operations for spec creation, validation, gate checks, and consent logging
   - Implemented first MCP stdio server with tools, resources, and prompts
   - Added MCP smoke test and bilingual server setup guides
+  - Expanded MCP tools for roadmap, status, and logbook operations
+  - Added client-facing setup examples for Claude Desktop, Cursor, and Codex Desktop
 - **Decisions made / Decisiones tomadas:**
   - Repository root remains the canonical SDD framework
   - Productized path is `framework root + sdd-core + sdd-mcp`
   - MVP MCP is stdio-first and keeps compatibility with current shell scripts
 - **Blockers / Bloqueos:** Pending dependency install and type verification against the selected MCP SDK version
 - **Next step / Próximo paso:** Install dependencies, typecheck the packages, fix SDK API mismatches, and document local MCP setup
-- **Next step / Próximo paso:** Add client-specific MCP setup examples and expand the tool surface with status/logbook operations
+- **Next step / Próximo paso:** Add resource templates for spec file access and evaluate Streamable HTTP as the next transport
 - **Owner / Responsable:** Juan Klagos / Codex
 
 ---

@@ -10,3 +10,5 @@
 - Se implementa un primer `sdd-core` con operaciones tipadas para workspace, spec, validación, gate y consentimiento.
 - Se implementa un primer `sdd-mcp` con tools, resources y prompts por `stdio`.
 - Se agrega guía bilingüe de uso del servidor MCP y un smoke test automatizado del protocolo.
+- Se amplía el MCP con tools para status, roadmap y bitácora.
+- Se agregan ejemplos iniciales de configuración por cliente.

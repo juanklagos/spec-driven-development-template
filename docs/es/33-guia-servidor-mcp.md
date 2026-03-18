@@ -22,6 +22,12 @@ Tools:
 - `sdd_check_gate`
 - `sdd_record_user_consent`
 - `sdd_list_specs`
+- `sdd_generate_status`
+- `sdd_generate_roadmap`
+- `sdd_append_project_log`
+- `sdd_write_daily_log`
+- `sdd_write_handoff`
+- `sdd_write_decision`
 
 Resources:
 - política
@@ -77,6 +83,58 @@ Raíz de trabajo recomendada:
 }
 ```
 
+## Ejemplos por cliente
+
+### Claude Desktop
+
+Ejemplo de entrada MCP:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "node",
+      "args": [
+        "/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ]
+    }
+  }
+}
+```
+
+Primer mensaje sugerido:
+
+```text
+Usa el servidor MCP sdd conectado.
+Crea primero la base SDD.
+Si el proyecto es ejecutable, mantenlo dentro de ./www/<project-name>.
+No implementes código antes de spec aprobada y plan consistente.
+Usa tools MCP cuando estén disponibles en lugar de edición libre de archivos.
+```
+
+### Cursor
+
+Usa el mismo par `command/args` para registrar el servidor MCP local.
+
+Primer mensaje sugerido:
+
+```text
+Usa las tools y resources del servidor MCP sdd para este repositorio.
+Comienza leyendo los resources de policy y quickstart.
+Luego crea o inspecciona el proyecto SDD activo dentro de ./www/.
+```
+
+### Codex Desktop
+
+Cuando el registro de servidores MCP esté disponible, apunta al mismo entrypoint compilado.
+
+Primer mensaje sugerido:
+
+```text
+Usa el servidor MCP local sdd para operaciones SDD.
+Prefiere tools MCP para workspace, spec, validación, roadmap y bitácora.
+```
+
 ## Reglas operativas
 
 - La raíz del framework sigue siendo la fuente canónica.
@@ -90,4 +148,3 @@ Raíz de trabajo recomendada:
 - agregar tools directos para bitácora
 - agregar transporte Streamable HTTP
 - agregar documentación de integración por cliente
-

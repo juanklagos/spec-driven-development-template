@@ -22,6 +22,12 @@ Tools:
 - `sdd_check_gate`
 - `sdd_record_user_consent`
 - `sdd_list_specs`
+- `sdd_generate_status`
+- `sdd_generate_roadmap`
+- `sdd_append_project_log`
+- `sdd_write_daily_log`
+- `sdd_write_handoff`
+- `sdd_write_decision`
 
 Resources:
 - policy
@@ -77,6 +83,58 @@ Recommended working root:
 }
 ```
 
+## Client examples
+
+### Claude Desktop
+
+Example MCP config entry:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "node",
+      "args": [
+        "/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ]
+    }
+  }
+}
+```
+
+Suggested first message:
+
+```text
+Use the connected sdd MCP server.
+Create the SDD base first.
+If the project is runnable, keep it inside ./www/<project-name>.
+Do not implement code before approved spec and consistent plan.
+Use MCP tools when available instead of free-form file edits.
+```
+
+### Cursor
+
+Use the same command/args pair to register the local MCP server.
+
+Suggested first message:
+
+```text
+Use the sdd MCP tools and resources for this repository.
+Start by reading the policy and quickstart resources.
+Then create or inspect the active SDD project under ./www/.
+```
+
+### Codex Desktop
+
+When MCP server registration is available, point it to the same built server entrypoint.
+
+Suggested first message:
+
+```text
+Use the local sdd MCP server for SDD operations.
+Prefer MCP tools for workspace, spec, validation, roadmap, and logbook actions.
+```
+
 ## Operational rules
 
 - The framework root remains the canonical source.
@@ -90,4 +148,3 @@ Recommended working root:
 - add direct project logbook tools
 - add Streamable HTTP transport
 - add integration docs for specific clients
-

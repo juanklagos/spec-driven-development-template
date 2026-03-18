@@ -35,6 +35,12 @@ Current MVP tools:
 - `sdd_check_gate`
 - `sdd_record_user_consent`
 - `sdd_list_specs`
+- `sdd_generate_status`
+- `sdd_generate_roadmap`
+- `sdd_append_project_log`
+- `sdd_write_daily_log`
+- `sdd_write_handoff`
+- `sdd_write_decision`
 
 Reference docs:
 - `docs/en/33-mcp-server-guide.md`

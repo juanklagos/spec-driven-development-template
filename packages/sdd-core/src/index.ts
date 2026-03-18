@@ -60,6 +60,11 @@ export interface ConsentResult {
   timestamp: string;
 }
 
+export interface FileOutputResult {
+  path: string;
+  content: string;
+}
+
 export interface SpecSummary {
   id: string;
   dir: string;
@@ -366,6 +371,174 @@ export async function recordUserConsent(projectRoot: string, summary: string): P
   };
 }
 
+export async function generateStatus(projectRoot: string): Promise<FileOutputResult> {
+  const root = path.resolve(projectRoot);
+  const indexPath = path.join(root, "specs/INDEX.md");
+  const outputPath = path.join(root, "STATUS.md");
+
+  if (!(await exists(indexPath))) {
+    throw new Error("Missing specs/INDEX.md");
+  }
+
+  const indexContent = await fs.readFile(indexPath, "utf8");
+  const rows = parseIndexRows(indexContent);
+  const activeRows = rows.filter((row) => /in progress|en progreso|ready|listo|active|activo/i.test(row.status));
+
+  let pendingTotal = 0;
+  let completedTotal = 0;
+  for (const spec of await listSpecs(root)) {
+    const tasksContent = await safeReadFile(path.join(spec.dir, "tasks.md"));
+    pendingTotal += (tasksContent.match(/^- \[ \]/gm) ?? []).length;
+    completedTotal += (tasksContent.match(/^- \[[xX]\]/gm) ?? []).length;
+  }
+
+  const projectLogPath = path.join(root, "bitacora/global/PROJECT_LOG.md");
+  const projectLogContent = await safeReadFile(projectLogPath);
+  const projectLogExcerpt = projectLogContent
+    ? projectLogContent.split("\n").slice(-8).join("\n")
+    : "No entries";
+
+  const content = [
+    "# Status Dashboard / Tablero de estado",
+    "",
+    `Generated at / Generado en: ${new Date().toISOString()}`,
+    "",
+    "## Active specs / Specs activas",
+    "",
+    "| Number | Name | Status | Priority | Owner | Updated |",
+    "|---|---|---|---|---|---|",
+    ...(activeRows.length > 0
+      ? activeRows.map(formatIndexRow)
+      : ["| - | - | - | - | - | - |"]),
+    "",
+    "## All specs snapshot / Resumen de todas las specs",
+    "",
+    "| Number | Name | Status | Priority | Owner | Updated |",
+    "|---|---|---|---|---|---|",
+    ...rows.map(formatIndexRow),
+    "",
+    "## Task progress / Progreso de tareas",
+    "",
+    `- Pending / Pendientes: ${pendingTotal}`,
+    `- Completed / Completadas: ${completedTotal}`,
+    "",
+    "## Recent log excerpt / Extracto reciente de bitácora",
+    "",
+    "```text",
+    projectLogExcerpt,
+    "```",
+    ""
+  ].join("\n");
+
+  await fs.writeFile(outputPath, content, "utf8");
+  return { path: outputPath, content };
+}
+
+export async function generateRoadmap(projectRoot: string): Promise<{ mermaidPath: string; markdownPath: string; mermaid: string; markdown: string }> {
+  const root = path.resolve(projectRoot);
+  const indexPath = path.join(root, "specs/INDEX.md");
+  const docsDir = path.join(root, "docs");
+  const mermaidPath = path.join(docsDir, "roadmap.mmd");
+  const markdownPath = path.join(docsDir, "roadmap.md");
+
+  if (!(await exists(indexPath))) {
+    throw new Error("Missing specs/INDEX.md");
+  }
+
+  await fs.mkdir(docsDir, { recursive: true });
+
+  const rows = parseIndexRows(await fs.readFile(indexPath, "utf8"));
+  const mermaidLines = ['flowchart LR', '  START["Idea"]'];
+  let previous = "START";
+
+  for (const row of rows) {
+    const node = `S${row.number}`;
+    const label = `${row.number} - ${row.name}\\n${row.status}\\n${row.priority}`;
+    mermaidLines.push(`  ${node}["${label}"]`);
+    mermaidLines.push(`  ${previous} --> ${node}`);
+    previous = node;
+  }
+
+  const mermaid = `${mermaidLines.join("\n")}\n`;
+  const markdown = [
+    "# Project Roadmap / Hoja de ruta",
+    "",
+    "This roadmap is auto-generated from specs/INDEX.md.",
+    "",
+    "Este roadmap se genera automáticamente desde specs/INDEX.md.",
+    "",
+    "",
+    `auto-generated at: ${new Date().toISOString()}`,
+    "",
+    "",
+    `auto-detected specs: ${rows.length}`,
+    "",
+    "",
+    `auto-diagram source: ${path.relative(root, mermaidPath)}`,
+    "",
+    "",
+    "auto-diagram preview:",
+    "",
+    "",
+    "auto-generated Mermaid:",
+    "",
+    "```mermaid",
+    mermaid.trimEnd(),
+    "```",
+    ""
+  ].join("\n");
+
+  await fs.writeFile(mermaidPath, mermaid, "utf8");
+  await fs.writeFile(markdownPath, markdown, "utf8");
+
+  return {
+    mermaidPath,
+    markdownPath,
+    mermaid,
+    markdown
+  };
+}
+
+export async function appendProjectLogEntry(projectRoot: string, entry: string): Promise<FileOutputResult> {
+  const root = path.resolve(projectRoot);
+  const outputPath = path.join(root, "bitacora/global/PROJECT_LOG.md");
+  await fs.appendFile(outputPath, `\n${entry.trim()}\n`, "utf8");
+  return {
+    path: outputPath,
+    content: await fs.readFile(outputPath, "utf8")
+  };
+}
+
+export async function writeDailyLog(projectRoot: string, date: string, content: string): Promise<FileOutputResult> {
+  const root = path.resolve(projectRoot);
+  const outputPath = path.join(root, "bitacora/diaria", `${date}.md`);
+  await fs.writeFile(outputPath, content, "utf8");
+  return {
+    path: outputPath,
+    content
+  };
+}
+
+export async function writeHandoff(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
+  const root = path.resolve(projectRoot);
+  const outputPath = path.join(root, "bitacora/handoffs", fileName);
+  await fs.writeFile(outputPath, content, "utf8");
+  return {
+    path: outputPath,
+    content
+  };
+}
+
+export async function writeDecision(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
+  const root = path.resolve(projectRoot);
+  const outputPath = path.join(root, "bitacora/decisiones", fileName);
+  await fs.writeFile(outputPath, content, "utf8");
+  return {
+    path: outputPath,
+    content
+  };
+}
+
 export async function ensureInsideRunnableWorkspace(projectRoot: string): Promise<void> {
   const root = path.resolve(projectRoot);
   const frameworkRoot = getFrameworkRoot();
@@ -443,4 +616,34 @@ function summarize(messages: ValidationMessage[]): ValidationResult {
     warnings,
     messages
   };
+}
+
+interface IndexRow {
+  number: string;
+  name: string;
+  status: string;
+  priority: string;
+  owner: string;
+  updated: string;
+}
+
+function parseIndexRows(content: string): IndexRow[] {
+  return content
+    .split("\n")
+    .filter((line) => /^\|\s*\d{3}\s*\|/.test(line))
+    .map((line) => {
+      const parts = line.split("|").map((item) => item.trim());
+      return {
+        number: parts[1] ?? "",
+        name: parts[2] ?? "",
+        status: parts[3] ?? "",
+        priority: parts[4] ?? "",
+        owner: parts[5] ?? "",
+        updated: parts[6] ?? ""
+      };
+    });
+}
+
+function formatIndexRow(row: IndexRow): string {
+  return `| ${row.number} | ${row.name} | ${row.status} | ${row.priority} | ${row.owner} | ${row.updated} |`;
 }

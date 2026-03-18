@@ -5,13 +5,19 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import {
+  appendProjectLogEntry,
   checkGate,
   createSpec,
   createWorkspace,
+  generateRoadmap,
+  generateStatus,
   getFrameworkRoot,
   listSpecs,
   recordUserConsent,
-  validateProject
+  validateProject,
+  writeDailyLog,
+  writeDecision,
+  writeHandoff
 } from "@sdd/sdd-core";
 
 const frameworkRoot = getFrameworkRoot();
@@ -146,6 +152,121 @@ server.tool(
         {
           type: "text",
           text: JSON.stringify(specs, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_generate_status",
+  {
+    projectRoot: projectRootSchema
+  },
+  async ({ projectRoot }) => {
+    const result = await generateStatus(projectRoot);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_generate_roadmap",
+  {
+    projectRoot: projectRootSchema
+  },
+  async ({ projectRoot }) => {
+    const result = await generateRoadmap(projectRoot);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_append_project_log",
+  {
+    projectRoot: projectRootSchema,
+    entry: z.string().min(1)
+  },
+  async ({ projectRoot, entry }) => {
+    const result = await appendProjectLogEntry(projectRoot, entry);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_write_daily_log",
+  {
+    projectRoot: projectRootSchema,
+    date: z.string().min(1).describe("Use YYYY-MM-DD."),
+    content: z.string().min(1)
+  },
+  async ({ projectRoot, date, content }) => {
+    const result = await writeDailyLog(projectRoot, date, content);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_write_handoff",
+  {
+    projectRoot: projectRootSchema,
+    fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-handoff.md."),
+    content: z.string().min(1)
+  },
+  async ({ projectRoot, fileName, content }) => {
+    const result = await writeHandoff(projectRoot, fileName, content);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+server.tool(
+  "sdd_write_decision",
+  {
+    projectRoot: projectRootSchema,
+    fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-decision.md."),
+    content: z.string().min(1)
+  },
+  async ({ projectRoot, fileName, content }) => {
+    const result = await writeDecision(projectRoot, fileName, content);
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(result, null, 2)
         }
       ]
     };
