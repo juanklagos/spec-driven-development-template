@@ -347,6 +347,10 @@ export function createSddMcpServer(): McpServer {
     contents: [{ uri: uri.href, text: await readFrameworkFile("AI_START_HERE.md") }]
   }));
 
+  server.resource("sdd-easy-mcp-guide", "sdd://docs/easy-mcp", { mimeType: "text/markdown" }, async (uri) => ({
+    contents: [{ uri: uri.href, text: await readFrameworkFile("docs/en/43-easy-mcp-guide.md") }]
+  }));
+
   server.resource("sdd-quickstart", "sdd://docs/quickstart", { mimeType: "text/markdown" }, async (uri) => ({
     contents: [{ uri: uri.href, text: await readFrameworkFile("QUICKSTART.md") }]
   }));
@@ -450,6 +454,38 @@ export function createSddMcpServer(): McpServer {
   );
 
   server.prompt(
+    "easy_start_project",
+    {
+      projectName: z.string(),
+      projectDescription: z.string(),
+      targetPath: z.string().optional()
+    },
+    ({ projectName, projectDescription, targetPath }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              `Help me start the project "${projectName}" using the SDD MCP in easy mode.`,
+              `Project description: ${projectDescription}`,
+              targetPath
+                ? `Use this target path if it is valid and desired by the user: ${targetPath}`
+                : "Prefer the recommended default workspace under ./www/<project-name> unless the user chooses another target path.",
+              "Explain the action in 4 simple blocks:",
+              "1. what you are going to do",
+              "2. which files you will create or update",
+              "3. what the user will have at the end",
+              "4. what the next step is",
+              "Create the SDD base first. Do not implement code yet."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
     "start_new_sdd_project",
     {
       projectName: z.string(),
@@ -468,6 +504,34 @@ export function createSddMcpServer(): McpServer {
               "Prefer ./www/<project-name>/ as the recommended default workspace unless the user chooses another target path.",
               "Do not implement code before approved spec and consistent plan.",
               "Ask for explicit user consent only when implementation is about to start."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
+    "easy_create_spec",
+    {
+      projectRoot: z.string(),
+      featureName: z.string()
+    },
+    ({ projectRoot, featureName }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              `Use the SDD MCP in easy mode to create a new spec called "${featureName}".`,
+              `Target project: ${projectRoot}`,
+              "Before and after the action, explain in 4 simple blocks:",
+              "1. what you are going to do",
+              "2. which files you will create or update",
+              "3. what the user will have at the end",
+              "4. what the next step is",
+              "Do not implement code. Only prepare the spec package and explain it clearly."
             ].join("\n")
           }
         }
@@ -501,6 +565,74 @@ export function createSddMcpServer(): McpServer {
   );
 
   server.prompt(
+    "easy_show_structure",
+    {
+      projectRoot: z.string().optional()
+    },
+    ({ projectRoot }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              "Explain the SDD project structure in easy mode, like a simple house map for a beginner.",
+              projectRoot ? `If useful, relate the explanation to this target project: ${projectRoot}` : "Use the framework structure and the standard SDD folders.",
+              "Explain what idea/, specs/, bitacora/, docs/, and one numbered spec folder are for.",
+              "Use simple language and tell the user which folder is usually touched next."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
+    "easy_validate_project",
+    {
+      projectRoot: z.string()
+    },
+    ({ projectRoot }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              `Validate this SDD project in easy mode: ${projectRoot}`,
+              "Run project validation and the SDD gate check.",
+              "Explain the result in simple language.",
+              "Always end with one exact next step."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
+    "easy_show_next_step",
+    {
+      projectRoot: z.string()
+    },
+    ({ projectRoot }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              `Inspect this SDD project and tell me the next safe step: ${projectRoot}`,
+              "Read the current specs and the gate state.",
+              "Return only one next step, why it comes next, and what files will probably be touched."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
     "close_sdd_session",
     {
       activeSpec: z.string()
@@ -519,6 +651,30 @@ export function createSddMcpServer(): McpServer {
               "- validation",
               "- risks",
               "- next exact step"
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  server.prompt(
+    "easy_close_session",
+    {
+      activeSpec: z.string(),
+      projectRoot: z.string().optional()
+    },
+    ({ activeSpec, projectRoot }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              `Close the current SDD session for spec ${activeSpec} in easy mode.`,
+              projectRoot ? `Target project: ${projectRoot}` : "Use the active target project.",
+              "Summarize what was done, what changed, risks, validation, and the next exact step.",
+              "Use simple language and keep the summary easy to scan."
             ].join("\n")
           }
         }

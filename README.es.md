@@ -42,6 +42,9 @@ No hay código sin spec aprobada y plan consistente.
 
 Si tu cliente de IA soporta MCP, este repositorio ya incluye un servidor local `sdd-mcp` y configuración compartida por proyecto.
 
+Si quieres la explicación más simple primero:
+- [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
+
 Ruta rápida:
 1. Compila el servidor:
 
@@ -56,6 +59,7 @@ npm run build
 - Ejemplo para Codex: [`packages/sdd-mcp/examples/codex.config.toml`](./packages/sdd-mcp/examples/codex.config.toml)
 
 3. Lee en este orden:
+- [docs/es/43-guia-mcp-facil.md](./docs/es/43-guia-mcp-facil.md)
 - [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
 - [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
 - [docs/es/40-referencia-resultados-comandos.md](./docs/es/40-referencia-resultados-comandos.md)
@@ -189,6 +193,7 @@ Paquete obligatorio por feature:
 - Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Referencia completa](./docs/es/41-referencia-completa-mcp.md)
+- MCP Fácil: [Guía fácil](./docs/es/43-guia-mcp-facil.md)
 - Setup MCP: [Guía del servidor](./docs/es/33-guia-servidor-mcp.md)
 - Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)

@@ -4,6 +4,9 @@
 
 This guide is only for MCP setup and connectivity.
 
+If you want the non-technical route first, start here:
+- [Easy MCP Guide](./43-easy-mcp-guide.md)
+
 If you want the full functional reference, start here:
 - [Complete MCP Reference](./41-complete-mcp-reference.md)
 
@@ -51,6 +54,7 @@ Structured tool output:
 Static resources:
 - `sdd-policy`
 - `sdd-ai-start`
+- `sdd-easy-mcp-guide`
 - `sdd-quickstart`
 - `sdd-spec-template`
 
@@ -65,6 +69,12 @@ Prompts:
 - `start_new_sdd_project`
 - `adapt_existing_project_to_sdd`
 - `close_sdd_session`
+- `easy_start_project`
+- `easy_create_spec`
+- `easy_show_structure`
+- `easy_validate_project`
+- `easy_show_next_step`
+- `easy_close_session`
 
 ## Local setup
 

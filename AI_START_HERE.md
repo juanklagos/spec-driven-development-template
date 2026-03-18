@@ -78,6 +78,17 @@ Optional full scaffold:
 ./scripts/create-www-project.sh my-project codex --full-template
 ```
 
+## 2.2) Easy MCP mode / Modo fácil MCP
+
+- EN: If the client supports MCP, prefer an easy teaching style first and treat commands like `/start-project` and `/create-spec login` as friendly aliases.
+- ES: Si el cliente soporta MCP, prefiere primero un estilo didáctico y trata comandos como `/start-project` y `/create-spec login` como alias amigables.
+- EN: Always explain 4 things before or after each action: what you will do, which files you will touch, what the user will have at the end, and what the next step is.
+- ES: Siempre explica 4 cosas antes o después de cada acción: qué vas a hacer, qué archivos tocarás, qué tendrá el usuario al final y cuál es el siguiente paso.
+
+Primary easy MCP guide:
+- [docs/en/43-easy-mcp-guide.md](./docs/en/43-easy-mcp-guide.md)
+- [docs/es/43-guia-mcp-facil.md](./docs/es/43-guia-mcp-facil.md)
+
 ---
 
 ## 3) First reading order / Orden inicial de lectura

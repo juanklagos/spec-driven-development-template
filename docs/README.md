@@ -45,6 +45,7 @@ flowchart LR
 ## Core SDD references / Referencias SDD base
 - Workflow: [EN](./en/02-workflow.md) | [ES](./es/02-flujo-de-trabajo.md)
 - Spec Kit integration: [EN](./en/08-github-spec-kit-integration.md) | [ES](./es/08-integracion-github-spec-kit.md)
+- Easy MCP guide: [EN](./en/43-easy-mcp-guide.md) | [ES](./es/43-guia-mcp-facil.md)
 - MCP complete reference: [EN](./en/41-complete-mcp-reference.md) | [ES](./es/41-referencia-completa-mcp.md)
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
@@ -65,8 +66,8 @@ flowchart LR
 - Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
 ## Full index / Índice completo
-- EN docs list: `docs/en/00` to `docs/en/42`
-- ES docs list: `docs/es/00` to `docs/es/42`
+- EN docs list: `docs/en/00` to `docs/en/43`
+- ES docs list: `docs/es/00` to `docs/es/43`
 
 ## Documentation audits / Auditorías de documentación
 - EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)

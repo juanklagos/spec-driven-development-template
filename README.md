@@ -42,6 +42,9 @@ No code before approved spec and consistent plan.
 
 If your AI client supports MCP, this repository now includes a local `sdd-mcp` server and shared project config.
 
+If you want the simplest explanation first:
+- [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
+
 Quick path:
 1. Build the server:
 
@@ -56,6 +59,7 @@ npm run build
 - Codex example: [`packages/sdd-mcp/examples/codex.config.toml`](./packages/sdd-mcp/examples/codex.config.toml)
 
 3. Read in this order:
+- [docs/en/43-easy-mcp-guide.md](./docs/en/43-easy-mcp-guide.md)
 - [docs/en/41-complete-mcp-reference.md](./docs/en/41-complete-mcp-reference.md)
 - [docs/en/33-mcp-server-guide.md](./docs/en/33-mcp-server-guide.md)
 - [docs/en/40-command-results-reference.md](./docs/en/40-command-results-reference.md)
@@ -189,6 +193,7 @@ Mandatory spec bundle (for each feature):
 - Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [Complete Reference](./docs/en/41-complete-mcp-reference.md)
+- MCP Easy Mode: [Easy Guide](./docs/en/43-easy-mcp-guide.md)
 - MCP Setup: [Server Guide](./docs/en/33-mcp-server-guide.md)
 - MCP Results: [Command Reference](./docs/en/40-command-results-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)

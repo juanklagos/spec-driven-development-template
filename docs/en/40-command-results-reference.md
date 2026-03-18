@@ -4,6 +4,9 @@
 
 This guide documents what each core script and MCP tool creates, modifies, and returns.
 
+If you want the beginner-friendly command view first, start here:
+- [Easy MCP Guide](./43-easy-mcp-guide.md)
+
 For the complete MCP overview, tool intent, resources, and prompts, start here:
 - [Complete MCP Reference](./41-complete-mcp-reference.md)
 
@@ -163,6 +166,12 @@ Success result:
 - exits non-zero if the implementation gate should remain closed
 
 ## MCP tools
+
+Friendly aliases often used in chat:
+- `/start-project` -> `sdd_create_workspace` or guided start prompt
+- `/create-spec <name>` -> `sdd_create_spec`
+- `/validate-project` -> `sdd_validate` + `sdd_check_gate`
+- `/close-session` -> close prompt + validation summary
 
 ### `sdd_create_workspace`
 

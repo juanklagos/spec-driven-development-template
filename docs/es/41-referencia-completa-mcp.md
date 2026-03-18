@@ -13,6 +13,7 @@ Usa esta página cuando necesites saber:
 
 Mantén [33-guia-servidor-mcp.md](./33-guia-servidor-mcp.md) como guía de instalación y conexión.
 Mantén [40-referencia-resultados-comandos.md](./40-referencia-resultados-comandos.md) como referencia de resultados script por script.
+Mantén [43-guia-mcp-facil.md](./43-guia-mcp-facil.md) como vista no técnica y por comandos estilo slash.
 
 ## Qué es `sdd-mcp`
 
@@ -398,6 +399,10 @@ Salida estructurada:
 - lee la guía rápida de onboarding para IA
 - úsalo cuando el operador arranca desde cero
 
+#### `sdd-easy-mcp-guide`
+- lee la guía amigable y no técnica de MCP
+- úsalo cuando el operador quiere primero la explicación más fácil posible
+
 #### `sdd-quickstart`
 - lee la guía corta de quickstart
 - úsalo cuando el operador necesita la ruta más corta posible
@@ -441,6 +446,26 @@ Estos resource templates son para proyectos administrados bajo `./www/<nombre-pr
 - úsalo cuando el usuario quiere iniciar un proyecto nuevo desde este framework
 - espera que la IA cree primero la base SDD y posponga implementación hasta que la compuerta esté cumplida
 
+### `easy_start_project`
+- úsalo cuando el usuario quiere iniciar un proyecto con guía tipo niño de 10 años
+- espera que la IA explique acción, archivos tocados, resultado esperado y siguiente paso
+
+### `easy_create_spec`
+- úsalo cuando el usuario dice algo como `/create-spec pagos`
+- espera que la IA cree el paquete de spec y explique el resultado con lenguaje simple
+
+### `easy_show_structure`
+- úsalo cuando el usuario se siente perdido y necesita el mapa de carpetas explicado fácil
+- espera que la IA describa la estructura del proyecto como un mapa básico
+
+### `easy_validate_project`
+- úsalo cuando el usuario quiere validación y estado de compuerta en lenguaje simple
+- espera que la IA traduzca warnings y errores a un único siguiente paso claro
+
+### `easy_show_next_step`
+- úsalo cuando el usuario quiere el siguiente paso SDD seguro sin jerga
+- espera que la IA elija un solo siguiente paso exacto
+
 ### `adapt_existing_project_to_sdd`
 - úsalo cuando el usuario ya tiene un proyecto y quiere agregar estructura SDD
 - espera que la IA preserve el comportamiento actual y agregue trazabilidad
@@ -448,6 +473,10 @@ Estos resource templates son para proyectos administrados bajo `./www/<nombre-pr
 ### `close_sdd_session`
 - úsalo al terminar una sesión
 - espera un resumen con objetivo, cambios, validación, riesgos y próximo paso
+
+### `easy_close_session`
+- úsalo al terminar una sesión con usuario no técnico
+- espera que la IA resuma en lenguaje simple y deje un solo siguiente paso exacto
 
 ## Flujo recomendado para el usuario
 

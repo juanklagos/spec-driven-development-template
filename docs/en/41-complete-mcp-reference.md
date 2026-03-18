@@ -13,6 +13,7 @@ Use this page when you need to know:
 
 Keep [33-mcp-server-guide.md](./33-mcp-server-guide.md) for setup and connectivity.
 Keep [40-command-results-reference.md](./40-command-results-reference.md) for script-by-script output details.
+Keep [43-easy-mcp-guide.md](./43-easy-mcp-guide.md) for the non-technical and slash-style command view.
 
 ## What `sdd-mcp` is
 
@@ -398,6 +399,10 @@ Structured output:
 - reads the fast AI onboarding guide
 - use when the operator is starting from zero
 
+#### `sdd-easy-mcp-guide`
+- reads the friendly non-technical MCP guide
+- use when the operator wants the easiest possible explanation first
+
 #### `sdd-quickstart`
 - reads the short quickstart guide
 - use when the operator needs the shortest possible route
@@ -441,6 +446,26 @@ These resource templates are for managed projects under `./www/<project-name>/`.
 - use when the user wants to start a new project from this framework
 - expects the AI to create the SDD base first and defer implementation until the gate is met
 
+### `easy_start_project`
+- use when the user wants a child-friendly guided project start
+- expects the AI to explain the action, touched files, expected result, and next step
+
+### `easy_create_spec`
+- use when the user says something like `/create-spec payments`
+- expects the AI to create the spec package and explain the result in simple language
+
+### `easy_show_structure`
+- use when the user feels lost and needs the folder map explained simply
+- expects the AI to describe the project structure like a basic map
+
+### `easy_validate_project`
+- use when the user wants validation and gate status in simple language
+- expects the AI to translate warnings and errors into one clear next step
+
+### `easy_show_next_step`
+- use when the user wants the next safe SDD action without jargon
+- expects the AI to choose one exact next step
+
 ### `adapt_existing_project_to_sdd`
 - use when the user already has a project and wants to add SDD structure
 - expects the AI to preserve current behavior and add traceability
@@ -448,6 +473,10 @@ These resource templates are for managed projects under `./www/<project-name>/`.
 ### `close_sdd_session`
 - use when ending a session
 - expects a summary with objective, changes, validation, risks, and next step
+
+### `easy_close_session`
+- use when ending a session for a non-technical user
+- expects the AI to summarize in simple language and leave one exact next step
 
 ## Recommended user flow
 

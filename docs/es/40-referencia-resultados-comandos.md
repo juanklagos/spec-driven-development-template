@@ -4,6 +4,9 @@
 
 Esta guía documenta qué crea, qué modifica y qué devuelve cada script principal y cada tool MCP.
 
+Si quieres primero la vista amigable por comandos, empieza aquí:
+- [Guía fácil de MCP](./43-guia-mcp-facil.md)
+
 Para la visión completa de MCP, intención de tools, resources y prompts, empieza aquí:
 - [Referencia completa de MCP](./41-referencia-completa-mcp.md)
 
@@ -163,6 +166,12 @@ Resultado exitoso:
 - sale con código distinto de cero si la compuerta de implementación debe seguir cerrada
 
 ## Tools MCP
+
+Alias amigables usados con frecuencia en chat:
+- `/start-project` -> `sdd_create_workspace` o prompt guiado de inicio
+- `/create-spec <nombre>` -> `sdd_create_spec`
+- `/validate-project` -> `sdd_validate` + `sdd_check_gate`
+- `/close-session` -> prompt de cierre + resumen de validación
 
 ### `sdd_create_workspace`
 
