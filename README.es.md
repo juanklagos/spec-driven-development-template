@@ -56,6 +56,20 @@ npm run build
 3. Lee la guía de instalación:
 - [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
 
+## 🎬 Flujo rápido de adopción
+
+```mermaid
+flowchart LR
+  A["Describe el proyecto en lenguaje simple"] --> B["Crea la base SDD"]
+  B --> C["Aprueba la primera spec"]
+  C --> D["Alinea plan y tareas"]
+  D --> E["Valida + compuerta"]
+  E --> F["Implementa solo después de consentimiento explícito"]
+```
+
+Usa un ejemplo completo:
+- [examples/002-mcp-end-to-end/README.md](./examples/002-mcp-end-to-end/README.md)
+
 ## 🚨 Regla obligatoria antes de codificar
 
 Este template exige chequeos de política y compuerta:
@@ -157,6 +171,7 @@ Paquete obligatorio por feature:
 - Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Guía del servidor MCP](./docs/es/33-guia-servidor-mcp.md)
+- Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
 
 ---

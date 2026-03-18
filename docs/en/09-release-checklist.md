@@ -51,6 +51,12 @@ Use this list before publishing on GitHub.
 - [ ] New users can follow the guide without extra context.
 - [ ] Scripts run correctly.
 - [ ] Repository metadata is complete.
+- [ ] `npm run typecheck` passes.
+- [ ] `npm run build` passes.
+- [ ] `npm run mcp:smoke` passes.
+- [ ] `npm run mcp:http:smoke` passes.
+- [ ] MCP docs and copy/paste configs are aligned with the current release.
+- [ ] Release tag/version/changelog are aligned.
 
 ## 💡 Quick tips
 

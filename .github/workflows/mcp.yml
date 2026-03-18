@@ -1,0 +1,35 @@
+name: Validate MCP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: MCP stdio smoke test
+        run: npm run mcp:smoke
+
+      - name: MCP HTTP smoke test
+        run: npm run mcp:http:smoke

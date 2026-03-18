@@ -56,6 +56,20 @@ npm run build
 3. Read the setup guide:
 - [docs/en/33-mcp-server-guide.md](./docs/en/33-mcp-server-guide.md)
 
+## 🎬 Fast Adoption Flow
+
+```mermaid
+flowchart LR
+  A["Describe project in plain language"] --> B["Create SDD base"]
+  B --> C["Approve first spec"]
+  C --> D["Align plan and tasks"]
+  D --> E["Validate + gate"]
+  E --> F["Implement only after explicit consent"]
+```
+
+Use a complete example:
+- [examples/002-mcp-end-to-end/README.md](./examples/002-mcp-end-to-end/README.md)
+
 ## 🚨 Mandatory Rule Before Coding
 
 This template enforces policy + gate checks:
@@ -157,6 +171,7 @@ Mandatory spec bundle (for each feature):
 - Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [MCP Server Guide](./docs/en/33-mcp-server-guide.md)
+- Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 
 ---

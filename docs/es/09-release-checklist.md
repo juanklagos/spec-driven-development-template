@@ -85,6 +85,12 @@ git push origin v1.0.0
 - [ ] Cualquier persona puede seguir la guía sin pedir contexto adicional.
 - [ ] La plantilla se puede inicializar con `scripts/init-project.sh`.
 - [ ] La plantilla se puede inicializar con `scripts/init-project-with-spec-kit.sh`.
+- [ ] `npm run typecheck` pasa.
+- [ ] `npm run build` pasa.
+- [ ] `npm run mcp:smoke` pasa.
+- [ ] `npm run mcp:http:smoke` pasa.
+- [ ] La documentación MCP y las configuraciones copy/paste coinciden con la release actual.
+- [ ] Tag, versión y changelog están alineados.
 
 ## 💡 Tips rápidos
 
