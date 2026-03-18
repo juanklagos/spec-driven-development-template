@@ -26,14 +26,14 @@ Tamaño recomendado para GitHub social preview:
 Usa esto como descriptor corto:
 
 ```text
-Framework operativo de SDD con guía para IA y soporte MCP.
+Framework operativo de SDD con guía para IA, onboarding fácil MCP y soporte MCP.
 ```
 
 ## Pitch corto
 
 ```text
 Spec-Driven Development Template ayuda a pasar de idea a implementación con menos fricción.
-Combina un framework de arranque, reglas multi-agente, documentación guiada y una capa MCP local para flujos operativos.
+Combina un framework de arranque, reglas multi-agente, documentación guiada, una capa de onboarding fácil MCP y una capa MCP local para flujos operativos.
 ```
 
 ## Intro para charla o sesión

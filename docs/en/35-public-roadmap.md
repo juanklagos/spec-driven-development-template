@@ -8,14 +8,14 @@ This roadmap makes the next product steps explicit so users know where the frame
 
 ```mermaid
 flowchart LR
-  A["v1.2.0"] --> B["v1.3.0"]
-  B --> C["v1.4.0"]
+  A["v1.3.0"] --> B["v1.4.0"]
+  B --> C["v1.5.0"]
 ```
 
 ## Current state
 
 Released:
-- `v1.2.0`
+- `v1.3.0`
 
 Now available:
 - SDD framework with multi-agent policy
@@ -26,18 +26,18 @@ Now available:
 - MCP tools, resources, prompts, smoke tests, and integration tests
 - client setup recipes and package version alignment
 
-## v1.3.0
+## v1.4.0
 
-Focus: operator experience, visual onboarding, and stricter MCP ergonomics.
+Focus: hosted onboarding hardening and richer operator experience.
 
 Planned:
+- hosted onboarding MCP contract hardening
+- richer easy-mode prompts and client shortcuts
+- more visual client examples and walkthrough assets
 - tested setup guides with screenshots for Cursor, Claude Code, and Codex
-- richer MCP resources for active project insight
-- clearer command-result documentation across scripts and tools
 - stronger release automation and packaging guidance
-- visual onboarding assets for README and diffusion
 
-## v1.4.0
+## v1.5.0
 
 Focus: framework standardization and publishable MCP packaging.
 

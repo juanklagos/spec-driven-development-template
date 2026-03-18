@@ -80,5 +80,9 @@ Config examples:
 Reference docs:
 - `docs/en/43-easy-mcp-guide.md`
 - `docs/es/43-guia-mcp-facil.md`
+- `docs/en/44-hosted-mcp-onboarding-model.md`
+- `docs/es/44-modelo-onboarding-mcp-alojado.md`
+- `docs/en/45-client-visual-examples-for-easy-mcp.md`
+- `docs/es/45-ejemplos-visuales-clientes-mcp-facil.md`
 - `docs/en/33-mcp-server-guide.md`
 - `docs/es/33-guia-servidor-mcp.md`

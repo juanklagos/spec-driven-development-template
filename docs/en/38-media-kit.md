@@ -26,14 +26,14 @@ Recommended GitHub social preview size:
 Use this as the short descriptor:
 
 ```text
-Operational SDD framework with AI guidance and MCP support.
+Operational SDD framework with AI guidance, easy MCP onboarding, and MCP support.
 ```
 
 ## Short pitch
 
 ```text
 Spec-Driven Development Template helps users move from idea to implementation with less friction.
-It combines a starter framework, multi-agent rules, guided documentation, and a local MCP layer for operational workflows.
+It combines a starter framework, multi-agent rules, guided documentation, an easy MCP onboarding layer, and a local MCP layer for operational workflows.
 ```
 
 ## Conference/session intro

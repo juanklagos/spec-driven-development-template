@@ -18,9 +18,9 @@ flowchart LR
 - `@sdd/sdd-core` and `@sdd/sdd-mcp` should stay aligned with the repository minor release
 
 Current alignment:
-- framework: `1.2.0`
-- `@sdd/sdd-core`: `1.2.0`
-- `@sdd/sdd-mcp`: `1.2.0`
+- framework: `1.3.0`
+- `@sdd/sdd-core`: `1.3.0`
+- `@sdd/sdd-mcp`: `1.3.0`
 
 ## Practical release policy
 

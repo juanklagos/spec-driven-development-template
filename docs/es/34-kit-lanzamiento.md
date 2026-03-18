@@ -19,7 +19,7 @@ flowchart LR
 ```text
 Spec-Driven Development Template ahora incluye un servidor MCP real.
 
-Nuevo en v1.2.0:
+Nuevo en v1.3.0:
 - servidor local `sdd-mcp`
 - stdio + Streamable HTTP
 - configuraciones copy/paste para Cursor, Claude Code y Codex
@@ -32,7 +32,7 @@ https://github.com/juanklagos/spec-driven-development-template
 ## Post para LinkedIn
 
 ```text
-Acabo de publicar la versión v1.2.0 de mi Spec-Driven Development Template.
+Acabo de publicar la versión v1.3.0 de mi Spec-Driven Development Template.
 
 Este repositorio está evolucionando hacia un framework operativo de SDD, no solo un starter de documentación.
 
@@ -55,5 +55,5 @@ El objetivo es reducir fricción de idea -> spec -> plan -> tasks -> validación
 ## Nota corta de release
 
 ```text
-v1.2.0 fortalece el framework como sistema operativo de SDD: CI MCP, tests de integración, alineación de versiones internas, recetas de setup por cliente, roadmap público, assets de difusión y ejemplos de adopción.
+v1.3.0 fortalece el framework como sistema operativo de SDD más fácil de adoptar: guías easy MCP, modelo de onboarding alojado, ejemplos visuales por cliente, alineación de versiones internas y una ruta más clara para usuarios no técnicos.
 ```

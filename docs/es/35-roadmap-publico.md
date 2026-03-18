@@ -8,14 +8,14 @@ Este roadmap hace explícitos los siguientes pasos del producto para que los usu
 
 ```mermaid
 flowchart LR
-  A["v1.2.0"] --> B["v1.3.0"]
-  B --> C["v1.4.0"]
+  A["v1.3.0"] --> B["v1.4.0"]
+  B --> C["v1.5.0"]
 ```
 
 ## Estado actual
 
 Release publicada:
-- `v1.2.0`
+- `v1.3.0`
 
 Disponible hoy:
 - framework SDD con política multi-agente
@@ -26,18 +26,18 @@ Disponible hoy:
 - tools, resources, prompts, smoke tests y tests de integración MCP
 - recetas de setup por cliente y alineación de versiones internas
 
-## v1.3.0
+## v1.4.0
 
-Enfoque: experiencia del operador, onboarding visual y ergonomía MCP más estricta.
+Enfoque: endurecer onboarding alojado y enriquecer experiencia del operador.
 
 Planeado:
+- endurecer el contrato de onboarding MCP alojado
+- enriquecer prompts fáciles y atajos por cliente
+- sumar más ejemplos visuales y walkthroughs
 - guías validadas con capturas para Cursor, Claude Code y Codex
-- resources MCP más ricos para insight del proyecto activo
-- documentación más clara del resultado por comando y tool
 - automatización de releases y guía de empaquetado más fuerte
-- assets visuales de onboarding para README y difusión
 
-## v1.4.0
+## v1.5.0
 
 Enfoque: estandarización del framework y empaquetado MCP publicable.
 

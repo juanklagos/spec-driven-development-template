@@ -8,7 +8,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/version-v1.2.0-blue?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-v1.3.0-blue?style=for-the-badge" alt="Version">
     <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NON--TECH-Start-green?style=for-the-badge" alt="Non Technical Start"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_START-Open-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart"></a>
@@ -194,6 +194,8 @@ Mandatory spec bundle (for each feature):
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [Complete Reference](./docs/en/41-complete-mcp-reference.md)
 - MCP Easy Mode: [Easy Guide](./docs/en/43-easy-mcp-guide.md)
+- MCP Hosted Onboarding: [Model](./docs/en/44-hosted-mcp-onboarding-model.md)
+- MCP Client Examples: [Visual Guide](./docs/en/45-client-visual-examples-for-easy-mcp.md)
 - MCP Setup: [Server Guide](./docs/en/33-mcp-server-guide.md)
 - MCP Results: [Command Reference](./docs/en/40-command-results-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)
@@ -201,7 +203,7 @@ Mandatory spec bundle (for each feature):
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
 - Organization: [Project Map](./docs/en/42-project-organization-map.md)
 - Media Kit: [Assets and Positioning](./docs/en/38-media-kit.md)
-- Next Release Prep: [v1.2.0](./docs/en/39-v1.2.0-preparation.md)
+- Next Release Prep: [v1.3.0](./docs/en/46-v1.3.0-preparation.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 
 ---

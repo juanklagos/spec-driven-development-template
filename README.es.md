@@ -8,7 +8,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/version-v1.2.0-blue?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-v1.3.0-blue?style=for-the-badge" alt="Version">
     <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NO_TÉCNICO-Iniciar-green?style=for-the-badge" alt="Inicio no técnico"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_INICIO_IA-Abrir-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
@@ -194,6 +194,8 @@ Paquete obligatorio por feature:
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Referencia completa](./docs/es/41-referencia-completa-mcp.md)
 - MCP Fácil: [Guía fácil](./docs/es/43-guia-mcp-facil.md)
+- MCP Onboarding alojado: [Modelo](./docs/es/44-modelo-onboarding-mcp-alojado.md)
+- MCP Ejemplos por cliente: [Guía visual](./docs/es/45-ejemplos-visuales-clientes-mcp-facil.md)
 - Setup MCP: [Guía del servidor](./docs/es/33-guia-servidor-mcp.md)
 - Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
@@ -201,7 +203,7 @@ Paquete obligatorio por feature:
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
 - Organización: [Mapa del proyecto](./docs/es/42-mapa-organizacion-proyecto.md)
 - Kit de medios: [Assets y posicionamiento](./docs/es/38-kit-medios.md)
-- Preparación próxima release: [v1.2.0](./docs/es/39-preparacion-v1.2.0.md)
+- Preparación próxima release: [v1.3.0](./docs/es/46-preparacion-v1.3.0.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
 
 ---

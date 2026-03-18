@@ -6,6 +6,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.3.0] — 2026-03-18
+
+### Added
+- Easy MCP guides for non-technical users:
+  - `docs/en/43-easy-mcp-guide.md`
+  - `docs/es/43-guia-mcp-facil.md`
+- Hosted onboarding MCP model docs:
+  - `docs/en/44-hosted-mcp-onboarding-model.md`
+  - `docs/es/44-modelo-onboarding-mcp-alojado.md`
+- Client visual examples for easy MCP:
+  - `docs/en/45-client-visual-examples-for-easy-mcp.md`
+  - `docs/es/45-ejemplos-visuales-clientes-mcp-facil.md`
+- Next release preparation docs:
+  - `docs/en/46-v1.3.0-preparation.md`
+  - `docs/es/46-preparacion-v1.3.0.md`
+- Easy MCP resource:
+  - `sdd-easy-mcp-guide`
+- Easy MCP prompts:
+  - `easy_start_project`
+  - `easy_create_spec`
+  - `easy_show_structure`
+  - `easy_validate_project`
+  - `easy_show_next_step`
+  - `easy_close_session`
+
+### Changed
+- README, docs index, AI start guide, and MCP references now surface the easy path before the deep technical path.
+- Media kit positioning now includes easy MCP onboarding.
+- Internal package versions are now aligned with the framework release:
+  - `@sdd/sdd-core` → `1.3.0`
+  - `@sdd/sdd-mcp` → `1.3.0`
+
+### Verified
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:smoke`
+- `npm run mcp:http:smoke`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`
+
 ## [v1.2.0] — 2026-03-18
 
 ### Added
