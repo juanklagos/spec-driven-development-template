@@ -7,6 +7,16 @@ This guide documents what each core script and MCP tool creates, modifies, and r
 For the complete MCP overview, tool intent, resources, and prompts, start here:
 - [Complete MCP Reference](./41-complete-mcp-reference.md)
 
+## Result model
+
+```mermaid
+flowchart LR
+  A["Command or Tool"] --> B["Creates files"]
+  A --> C["Updates files"]
+  A --> D["Returns output"]
+  A --> E["Affects traceability or gate"]
+```
+
 ## Workspace and bootstrap scripts
 
 ### `./scripts/create-www-project.sh <project-name> <assistant> [flags]`

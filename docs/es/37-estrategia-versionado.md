@@ -4,6 +4,14 @@
 
 Este documento define cómo debe funcionar el versionado entre el framework y sus paquetes internos.
 
+## Mapa de alineación de versiones
+
+```mermaid
+flowchart LR
+  A["Versión del framework"] --> B["@sdd/sdd-core"]
+  A --> C["@sdd/sdd-mcp"]
+```
+
 ## Regla actual
 
 - la versión pública canónica es la release del repositorio

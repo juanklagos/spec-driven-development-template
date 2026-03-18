@@ -4,6 +4,15 @@
 
 This guide gives exact copy-paste setup recipes for the main local AI clients used with this framework.
 
+## Client setup map
+
+```mermaid
+flowchart LR
+  A["Build MCP"] --> B["Cursor"]
+  A --> C["Claude Code"]
+  A --> D["Codex"]
+```
+
 ## Shared rule
 
 - Open this repository as the workspace root.

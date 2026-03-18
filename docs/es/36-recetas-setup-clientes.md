@@ -4,6 +4,15 @@
 
 Esta guía entrega recetas exactas y copiables para los principales clientes IA locales usados con este framework.
 
+## Mapa de setup por cliente
+
+```mermaid
+flowchart LR
+  A["Compilar MCP"] --> B["Cursor"]
+  A --> C["Claude Code"]
+  A --> D["Codex"]
+```
+
 ## Regla compartida
 
 - Abre este repositorio como raíz del workspace.

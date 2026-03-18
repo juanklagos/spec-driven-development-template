@@ -4,6 +4,14 @@
 
 This document defines how versioning should work across the framework and its internal packages.
 
+## Version alignment map
+
+```mermaid
+flowchart LR
+  A["Framework version"] --> B["@sdd/sdd-core"]
+  A --> C["@sdd/sdd-mcp"]
+```
+
 ## Current rule
 
 - repository release version is the canonical public version

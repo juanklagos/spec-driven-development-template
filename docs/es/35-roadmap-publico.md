@@ -4,6 +4,14 @@
 
 Este roadmap hace explícitos los siguientes pasos del producto para que los usuarios sepan hacia dónde va el framework.
 
+## Línea del roadmap
+
+```mermaid
+flowchart LR
+  A["v1.2.0"] --> B["v1.3.0"]
+  B --> C["v1.4.0"]
+```
+
 ## Estado actual
 
 Release publicada:

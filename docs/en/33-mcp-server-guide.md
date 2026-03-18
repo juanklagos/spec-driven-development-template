@@ -7,6 +7,16 @@ This guide is only for MCP setup and connectivity.
 If you want the full functional reference, start here:
 - [Complete MCP Reference](./41-complete-mcp-reference.md)
 
+## Setup flow
+
+```mermaid
+flowchart LR
+  A["Install dependencies"] --> B["Build MCP"]
+  B --> C["Register client config"]
+  C --> D["Start transport"]
+  D --> E["Validate connection"]
+```
+
 Product split:
 - repository root: canonical SDD framework
 - `packages/sdd-core`: reusable SDD logic

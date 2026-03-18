@@ -4,6 +4,14 @@
 
 This roadmap makes the next product steps explicit so users know where the framework is going.
 
+## Roadmap timeline
+
+```mermaid
+flowchart LR
+  A["v1.2.0"] --> B["v1.3.0"]
+  B --> C["v1.4.0"]
+```
+
 ## Current state
 
 Released:

@@ -131,6 +131,17 @@ flowchart LR
 Full folder-by-folder map:
 - [docs/en/42-project-organization-map.md](./docs/en/42-project-organization-map.md)
 
+```mermaid
+flowchart TD
+  A["Framework Root"] --> B["idea/"]
+  A --> C["specs/"]
+  A --> D["bitacora/"]
+  A --> E["docs/"]
+  A --> F["scripts/"]
+  A --> G["packages/"]
+  A --> H["www/"]
+```
+
 Mandatory folders:
 - `idea/`: project intent and scope
 - `specs/`: numbered specifications

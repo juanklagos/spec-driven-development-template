@@ -4,6 +4,16 @@
 
 This page stores short launch-ready copy for diffusion of the framework.
 
+## Launch flow
+
+```mermaid
+flowchart LR
+  A["Release"] --> B["Short update"]
+  B --> C["Social post"]
+  C --> D["Media asset"]
+  D --> E["Community feedback"]
+```
+
 ## Short update
 
 ```text

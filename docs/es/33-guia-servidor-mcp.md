@@ -7,6 +7,16 @@ Esta guía es solo para setup y conectividad MCP.
 Si quieres la referencia funcional completa, empieza aquí:
 - [Referencia completa de MCP](./41-referencia-completa-mcp.md)
 
+## Flujo de setup
+
+```mermaid
+flowchart LR
+  A["Instalar dependencias"] --> B["Compilar MCP"]
+  B --> C["Registrar configuración del cliente"]
+  C --> D["Levantar transporte"]
+  D --> E["Validar conexión"]
+```
+
 Separación del producto:
 - raíz del repositorio: framework SDD canónico
 - `packages/sdd-core`: lógica reusable de SDD

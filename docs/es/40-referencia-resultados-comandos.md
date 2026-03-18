@@ -7,6 +7,16 @@ Esta guía documenta qué crea, qué modifica y qué devuelve cada script princi
 Para la visión completa de MCP, intención de tools, resources y prompts, empieza aquí:
 - [Referencia completa de MCP](./41-referencia-completa-mcp.md)
 
+## Modelo de resultado
+
+```mermaid
+flowchart LR
+  A["Comando o Tool"] --> B["Crea archivos"]
+  A --> C["Actualiza archivos"]
+  A --> D["Devuelve salida"]
+  A --> E["Afecta traza o compuerta"]
+```
+
 ## Scripts de workspace e inicialización
 
 ### `./scripts/create-www-project.sh <nombre-proyecto> <assistant> [flags]`

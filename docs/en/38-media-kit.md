@@ -4,6 +4,15 @@
 
 This page centralizes reusable public-facing assets for social posts, repository previews, talks, and product positioning.
 
+## Media structure
+
+```mermaid
+flowchart LR
+  A["Positioning"] --> B["Social preview"]
+  A --> C["Short pitch"]
+  A --> D["Talk intro"]
+```
+
 ## Social preview
 
 Suggested asset:

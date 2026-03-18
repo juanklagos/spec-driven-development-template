@@ -4,6 +4,16 @@
 
 Esta página guarda copy corto y reutilizable para la difusión del framework.
 
+## Flujo de lanzamiento
+
+```mermaid
+flowchart LR
+  A["Release"] --> B["Actualización corta"]
+  B --> C["Post social"]
+  C --> D["Asset de medios"]
+  D --> E["Feedback de comunidad"]
+```
+
 ## Actualización corta
 
 ```text

@@ -4,6 +4,15 @@
 
 Esta página centraliza assets reutilizables de cara al público para posts, preview del repositorio, charlas y posicionamiento del producto.
 
+## Estructura de medios
+
+```mermaid
+flowchart LR
+  A["Posicionamiento"] --> B["Social preview"]
+  A --> C["Pitch corto"]
+  A --> D["Intro de charla"]
+```
+
 ## Social preview
 
 Asset sugerido:

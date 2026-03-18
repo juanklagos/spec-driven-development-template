@@ -4,6 +4,15 @@
 
 Esta página registra la barra mínima para la siguiente minor release.
 
+## Flujo de preparación del release
+
+```mermaid
+flowchart LR
+  A["Validar docs"] --> B["Validar CI"]
+  B --> C["Confirmar versiones"]
+  C --> D["Preparar release"]
+```
+
 ## Tema propuesto de la release
 
 Madurez de adopción.

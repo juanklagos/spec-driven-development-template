@@ -131,6 +131,17 @@ flowchart LR
 Mapa completo carpeta por carpeta:
 - [docs/es/42-mapa-organizacion-proyecto.md](./docs/es/42-mapa-organizacion-proyecto.md)
 
+```mermaid
+flowchart TD
+  A["Raíz del framework"] --> B["idea/"]
+  A --> C["specs/"]
+  A --> D["bitacora/"]
+  A --> E["docs/"]
+  A --> F["scripts/"]
+  A --> G["packages/"]
+  A --> H["www/"]
+```
+
 Carpetas obligatorias:
 - `idea/`: intención y alcance del proyecto
 - `specs/`: especificaciones numeradas
