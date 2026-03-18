@@ -83,6 +83,7 @@ Entrypoints:
 
 Ver también:
 - [Referencia de resultados por comando](./40-referencia-resultados-comandos.md)
+- [Referencia completa de MCP](./41-referencia-completa-mcp.md)
 
 ## Ejemplos listos para copiar
 

@@ -83,6 +83,7 @@ Entrypoints:
 
 See also:
 - [Command Results Reference](./40-command-results-reference.md)
+- [Complete MCP Reference](./41-complete-mcp-reference.md)
 
 ## Copy-paste config examples
 

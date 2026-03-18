@@ -58,6 +58,7 @@ npm run build
 3. Lee la guía de instalación:
 - [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
 - [docs/es/40-referencia-resultados-comandos.md](./docs/es/40-referencia-resultados-comandos.md)
+- [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
 
 ## 🎬 Flujo rápido de adopción
 
@@ -175,6 +176,7 @@ Paquete obligatorio por feature:
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Guía del servidor MCP](./docs/es/33-guia-servidor-mcp.md)
 - Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
+- Tools MCP: [Referencia completa](./docs/es/41-referencia-completa-mcp.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
 - Versionado: [Estrategia](./docs/es/37-estrategia-versionado.md)
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)

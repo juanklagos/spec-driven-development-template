@@ -58,6 +58,7 @@ npm run build
 3. Read the setup guide:
 - [docs/en/33-mcp-server-guide.md](./docs/en/33-mcp-server-guide.md)
 - [docs/en/40-command-results-reference.md](./docs/en/40-command-results-reference.md)
+- [docs/en/41-complete-mcp-reference.md](./docs/en/41-complete-mcp-reference.md)
 
 ## 🎬 Fast Adoption Flow
 
@@ -175,6 +176,7 @@ Mandatory spec bundle (for each feature):
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [MCP Server Guide](./docs/en/33-mcp-server-guide.md)
 - Command Results: [Reference](./docs/en/40-command-results-reference.md)
+- MCP Tools: [Complete Reference](./docs/en/41-complete-mcp-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)
 - Versioning: [Strategy](./docs/en/37-versioning-strategy.md)
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
