@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "@sdd/sdd-core": [
+        "packages/sdd-core/src/index.ts"
+      ]
+    },
+    "rootDir": "../..",
+    "noEmit": true
+  }
+}
