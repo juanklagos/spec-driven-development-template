@@ -41,12 +41,14 @@ If not aligned, refine docs first:
 - `history.md`
 - `bitacora/*`
 
-## 2.1) Execution root / Raíz de ejecución
+## 2.1) Execution workspace / Espacio de ejecución
 
-- EN: For runnable projects in this repository, execute inside `www/<project-name>/`.
-- ES: Para proyectos ejecutables en este repositorio, ejecuta dentro de `www/<nombre-proyecto>/`.
-- EN: Keep runnable projects inside the current chat workspace folder.
-- ES: Mantén proyectos ejecutables dentro de la carpeta actual del chat/workspace.
+- EN: Prefer `www/<project-name>/` as the recommended default workspace inside this template.
+- ES: Prefiere `www/<nombre-proyecto>/` como espacio recomendado por defecto dentro de este template.
+- EN: The user may choose another target path.
+- ES: El usuario puede elegir otra ruta destino.
+- EN: If the runnable project lives inside this repository, keep it under `www/`.
+- ES: Si el proyecto ejecutable vive dentro de este repositorio, mantenlo dentro de `www/`.
 
 Create workspace:
 
@@ -57,6 +59,12 @@ Create workspace:
 Default behavior:
 - EN: creates a recommended scaffold (SDD core + AI context + quality/playbooks essentials).
 - ES: crea un scaffold recomendado (núcleo SDD + contexto IA + esenciales de calidad/playbooks).
+
+External target path:
+
+```bash
+./scripts/init-project.sh /absolute/path/to/project --profile=recommended
+```
 
 Optional minimal scaffold:
 
@@ -93,7 +101,7 @@ Using https://github.com/juanklagos/spec-driven-development-template, create eve
 My project is: [describe your project in plain language].
 If this repository is not available locally, tell me how to get it first.
 Then initialize the template, define the idea, create the first spec, and guide me step by step.
-Use www/<project-name>/ as execution root.
+Prefer `www/<project-name>/` as the default workspace unless I choose another target path.
 Before execution/implementation starts, ask for my approval and record it.
 Do not skip idea, spec, plan, tasks, validation, and logbook.
 
@@ -119,7 +127,7 @@ ES:
 Usando https://github.com/juanklagos/spec-driven-development-template, adapta mi proyecto existente sin romper el comportamiento actual.
 Ruta del proyecto: [RUTA_PROYECTO].
 Integra idea/specs/bitacora, crea la primera spec basada en el comportamiento existente y deja trazabilidad completa.
-Usa www/<nombre-proyecto>/ como raíz de ejecución.
+Prefiere `www/<nombre-proyecto>/` como espacio por defecto salvo que yo elija otra ruta.
 Guíame con lenguaje simple.
 ```
 

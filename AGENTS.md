@@ -33,8 +33,8 @@ Before implementation tasks, explicitly determine:
 1. If the task is `template maintenance` or `target project execution`.
 2. The real target project path when execution is for a user project.
 3. The active specification in that target project.
-4. For target execution in this repository, use `www/<project-name>/` as working root.
-5. Keep runnable target projects inside the current chat workspace folder (do not create them outside this repository/workspace).
+4. Prefer `www/<project-name>/` as the default working root inside this repository, unless the user chooses another target path.
+5. If the target project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
@@ -46,8 +46,9 @@ Before implementation tasks, explicitly determine:
 
 ## 🔧 Mandatory workflow / Flujo obligatorio
 
-1. For runnable target projects, create/use `www/<project-name>/`:
-   - `./scripts/create-www-project.sh <project-name> <assistant>`
+1. Confirm the target project path.
+   - recommended default inside this template: `./scripts/create-www-project.sh <project-name> <assistant>`
+   - external target path: `./scripts/init-project.sh /absolute/path/to/project`
 2. Work from one active specification.
 3. Record explicit user consent before execution/implementation starts on an approved spec:
    - `./scripts/confirm-user-consent.sh "User approved scope X"`

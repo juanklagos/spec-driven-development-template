@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import packageJson from "../package.json" with { type: "json" };
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
@@ -21,7 +22,7 @@ import {
 const frameworkRoot = getFrameworkRoot();
 const projectRootSchema = z
   .string()
-  .describe("Absolute project path inside ./www/<project-name> under the current workspace.");
+  .describe("Absolute target project path. Recommended default inside this template: ./www/<project-name>.");
 
 function toStructuredContent<T>(value: T): Record<string, unknown> {
   return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
@@ -30,7 +31,7 @@ function toStructuredContent<T>(value: T): Record<string, unknown> {
 export function createSddMcpServer(): McpServer {
   const server = new McpServer({
     name: "sdd-mcp",
-    version: "0.1.0"
+    version: packageJson.version
   });
 
   const validationMessageSchema = z.object({
@@ -44,7 +45,7 @@ export function createSddMcpServer(): McpServer {
     "sdd_create_workspace",
     {
       title: "Create SDD workspace",
-      description: "Create a runnable SDD workspace inside ./www/<project-name>.",
+      description: "Create a runnable SDD workspace inside the recommended default folder ./www/<project-name>.",
       inputSchema: {
         projectName: z.string().min(1),
         assistant: z.string().default("codex"),
@@ -362,7 +363,7 @@ export function createSddMcpServer(): McpServer {
       contents: [
         {
           uri: uri.href,
-          text: await fs.readFile(path.join(frameworkRoot, "www", normalizeParam(projectName), "specs/INDEX.md"), "utf8")
+          text: await fs.readFile(path.join(getManagedWorkspaceProjectRoot(projectName), "specs/INDEX.md"), "utf8")
         }
       ]
     })
@@ -377,7 +378,7 @@ export function createSddMcpServer(): McpServer {
         {
           uri: uri.href,
           text: await fs.readFile(
-            path.join(frameworkRoot, "www", normalizeParam(projectName), "bitacora/global/PROJECT_LOG.md"),
+            path.join(getManagedWorkspaceProjectRoot(projectName), "bitacora/global/PROJECT_LOG.md"),
             "utf8"
           )
         }
@@ -390,7 +391,7 @@ export function createSddMcpServer(): McpServer {
     new ResourceTemplate("sdd://project/{projectName}/latest-handoff", { list: undefined }),
     { mimeType: "text/markdown" },
     async (uri, { projectName }) => {
-      const handoffDir = path.join(frameworkRoot, "www", normalizeParam(projectName), "bitacora/handoffs");
+      const handoffDir = path.join(getManagedWorkspaceProjectRoot(projectName), "bitacora/handoffs");
       const entries = await fs.readdir(handoffDir, { withFileTypes: true });
       const latest = entries
         .filter((entry) => entry.isFile())
@@ -417,7 +418,7 @@ export function createSddMcpServer(): McpServer {
       contents: [
         {
           uri: uri.href,
-          text: await fs.readFile(path.join(frameworkRoot, "www", normalizeParam(projectName), "idea/IDEA_GENERAL.md"), "utf8")
+          text: await fs.readFile(path.join(getManagedWorkspaceProjectRoot(projectName), "idea/IDEA_GENERAL.md"), "utf8")
         }
       ]
     })
@@ -435,11 +436,9 @@ export function createSddMcpServer(): McpServer {
             uri: uri.href,
             text: await fs.readFile(
               path.join(
-                frameworkRoot,
-                "www",
-                normalizeParam(projectName),
+                getManagedWorkspaceProjectRoot(projectName),
                 "specs",
-                normalizeParam(specId),
+                normalizeSpecId(specId),
                 normalizedDocument
               ),
               "utf8"
@@ -466,7 +465,7 @@ export function createSddMcpServer(): McpServer {
               `Using this SDD framework, create everything needed to execute the project "${projectName}".`,
               `Project description: ${projectDescription}`,
               "Create the SDD base first.",
-              "Use ./www/<project-name>/ as execution root.",
+              "Prefer ./www/<project-name>/ as the recommended default workspace unless the user chooses another target path.",
               "Do not implement code before approved spec and consistent plan.",
               "Ask for explicit user consent only when implementation is about to start."
             ].join("\n")
@@ -544,4 +543,32 @@ function normalizeDocument(value: string): string {
     throw new Error(`Unsupported spec document: ${value}`);
   }
   return value;
+}
+
+function getManagedWorkspaceProjectRoot(projectNameInput: string | string[]): string {
+  const projectName = normalizeWorkspaceProjectName(projectNameInput);
+  const wwwRoot = path.join(frameworkRoot, "www");
+  const projectRoot = path.join(wwwRoot, projectName);
+
+  if (projectRoot === wwwRoot || !projectRoot.startsWith(wwwRoot + path.sep)) {
+    throw new Error("Managed workspace project must resolve inside ./www");
+  }
+
+  return projectRoot;
+}
+
+function normalizeWorkspaceProjectName(value: string | string[]): string {
+  const name = normalizeParam(value);
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
+    throw new Error("Project name must be a workspace slug such as my-project");
+  }
+  return name;
+}
+
+function normalizeSpecId(value: string | string[]): string {
+  const specId = normalizeParam(value);
+  if (!/^\d{3}-[a-z0-9-]+$/.test(specId)) {
+    throw new Error("Spec id must look like 001-my-feature");
+  }
+  return specId;
 }

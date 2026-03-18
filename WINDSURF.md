@@ -8,8 +8,10 @@ Hard stop:
 - No code before approved spec and consistent plan.
 - No hay código sin spec aprobada y plan consistente.
 
-Execution root:
-- Use `www/<project-name>/` as execution root for runnable code.
-- Usa `www/<nombre-proyecto>/` como raíz de ejecución para código ejecutable.
+Execution workspace:
+- Use `www/<project-name>/` as the recommended default workspace for runnable code.
+- Usa `www/<nombre-proyecto>/` como espacio de trabajo recomendado por defecto para código ejecutable.
+- The user may choose another target path.
+- If the target project lives inside this template, keep it under `www/`.
 
 Use one active specification and keep traceability in `history.md`, `specs/INDEX.md`, and `bitacora/`.

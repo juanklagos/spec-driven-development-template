@@ -111,10 +111,10 @@ for rf in ".cursorrules" ".clauderules" "CLAUDE.md" "GEMINI.md" "WINDSURF.md" "A
       warn "$rf should include explicit hard-stop phrase"
     fi
 
-    if match_q "www/<project-name>|www/<nombre-proyecto>" "$ROOT/$rf"; then
-      ok "$rf includes execution-root phrasing"
+    if match_q "recommended default workspace|espacio de trabajo recomendado por defecto" "$ROOT/$rf"; then
+      ok "$rf includes execution-root guidance"
     else
-      warn "$rf should include explicit execution-root phrasing"
+      warn "$rf should include recommended default workspace phrasing"
     fi
   fi
 done

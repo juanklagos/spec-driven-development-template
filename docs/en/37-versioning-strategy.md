@@ -10,9 +10,9 @@ This document defines how versioning should work across the framework and its in
 - `@sdd/sdd-core` and `@sdd/sdd-mcp` should stay aligned with the repository minor release
 
 Current alignment:
-- framework: `1.1.0`
-- `@sdd/sdd-core`: `1.1.0`
-- `@sdd/sdd-mcp`: `1.1.0`
+- framework: `1.2.0`
+- `@sdd/sdd-core`: `1.2.0`
+- `@sdd/sdd-mcp`: `1.2.0`
 
 ## Practical release policy
 

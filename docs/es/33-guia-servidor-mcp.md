@@ -75,10 +75,14 @@ Entrypoints:
 ## Contrato operativo
 
 - abre este repositorio como raíz del workspace
-- mantén los proyectos ejecutables dentro de `./www/<project-name>/`
+- prefiere `./www/<nombre-proyecto>/` como espacio de trabajo recomendado por defecto
+- también se soportan rutas externas para los tools basados en `projectRoot`
 - crea primero la base SDD
 - no implementes código antes de tener spec aprobada y plan consistente
 - solicita consentimiento explícito solo cuando la implementación vaya a comenzar
+
+Ver también:
+- [Referencia de resultados por comando](./40-referencia-resultados-comandos.md)
 
 ## Ejemplos listos para copiar
 
@@ -167,7 +171,7 @@ npm run mcp:http:start
 ```text
 Usa el servidor MCP sdd conectado para este repositorio.
 Crea primero la base SDD.
-Si el proyecto es ejecutable, mantenlo dentro de ./www/<project-name>.
+Si el proyecto es ejecutable dentro de este template, mantenlo en ./www/<nombre-proyecto>; también se soportan rutas externas.
 Lee primero los resources de policy y quickstart.
 No implementes código antes de spec aprobada y plan consistente.
 Pide consentimiento explícito solo cuando la implementación vaya a comenzar.

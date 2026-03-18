@@ -31,7 +31,7 @@ Combina un framework de arranque, reglas multi-agente, documentación guiada y u
 
 ```text
 Este proyecto no es solo un template de documentación. Es un framework operativo para Spec-Driven Development.
-Guía tanto a usuarios técnicos como no técnicos, mantiene el trabajo ejecutable aislado en ./www/<project-name> y da a los asistentes de IA un flujo consistente mediante policy, specs, disciplina de bitácora y tooling MCP.
+Guía tanto a usuarios técnicos como no técnicos, deja ./www/<nombre-proyecto> como default limpio cuando el proyecto vive dentro del template, sigue soportando rutas externas y da a los asistentes de IA un flujo consistente mediante policy, specs, disciplina de bitácora y tooling MCP.
 ```
 
 ## Checklist visual

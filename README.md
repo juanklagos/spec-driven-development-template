@@ -57,6 +57,7 @@ npm run build
 
 3. Read the setup guide:
 - [docs/en/33-mcp-server-guide.md](./docs/en/33-mcp-server-guide.md)
+- [docs/en/40-command-results-reference.md](./docs/en/40-command-results-reference.md)
 
 ## 🎬 Fast Adoption Flow
 
@@ -107,8 +108,8 @@ Reference files:
 - This repository is a **framework/template**.
 - The professional productization path is: framework root + `packages/sdd-core` + `packages/sdd-mcp`.
 - Your product work should run in your target project using this structure.
-- Inside this repository, use `www/<project-name>/` as execution root for runnable projects.
-- Keep runnable projects inside the current chat/workspace folder (do not create them outside).
+- Inside this repository, prefer `www/<project-name>/` as the recommended default workspace for runnable projects.
+- The user may choose another target path; if the runnable project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
 - If you adapt an existing project, integrate `idea/specs/bitacora` without breaking current behavior.
 
 ## 🗺️ 3-Level Learning Path
@@ -153,9 +154,9 @@ Mandatory spec bundle (for each feature):
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
-| Create execution workspace | `./scripts/create-www-project.sh my-project codex` | Create runnable project under `www/` (recommended scaffold by default) |
-| New Project | `./scripts/init-project.sh` | Bootstrap SDD structure |
-| New Project + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Bootstrap + Spec Kit init |
+| Create execution workspace | `./scripts/create-www-project.sh my-project codex` | Create runnable project under `www/` (recommended default workspace) |
+| New Project | `./scripts/init-project.sh /absolute/path/to/project --profile=recommended` | Bootstrap SDD structure at an external target path |
+| New Project + Spec Kit | `./scripts/init-project-with-spec-kit.sh /absolute/path/to/project codex --profile=recommended` | Bootstrap + Spec Kit init at an external target path |
 | New Spec | `./scripts/new-spec.sh` | Create numbered spec folder |
 | Validation | `./scripts/validate-sdd.sh . --strict` | Validate structure and consistency |
 | Policy Check | `./scripts/check-sdd-policy.sh .` | Validate multi-agent policy files |
@@ -173,6 +174,7 @@ Mandatory spec bundle (for each feature):
 - Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
 - MCP: [MCP Server Guide](./docs/en/33-mcp-server-guide.md)
+- Command Results: [Reference](./docs/en/40-command-results-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)
 - Versioning: [Strategy](./docs/en/37-versioning-strategy.md)
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)

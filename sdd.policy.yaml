@@ -5,13 +5,16 @@ context:
   repository: https://github.com/juanklagos/spec-driven-development-template
   purpose_en: Starter template to bootstrap SDD projects with low friction.
   purpose_es: Plantilla base para iniciar proyectos SDD con baja fricción.
-  execution_workspace_en: Use www/<project-name>/ for runnable target projects.
-  execution_workspace_es: Usa www/<nombre-proyecto>/ para proyectos ejecutables.
+  execution_workspace_en: Prefer www/<project-name>/ as the recommended default workspace for runnable target projects.
+  execution_workspace_es: Prefiere www/<nombre-proyecto>/ como espacio de trabajo recomendado por defecto para proyectos ejecutables.
 
 execution_root:
   required_for_target_execution: true
   default_workspace_parent: www
-  constrained_to_current_chat_workspace: true
+  constrained_to_current_chat_workspace: false
+  allow_external_target_paths: true
+  if_target_inside_template_use_default_workspace: true
+  recommended_not_required: true
   default_creation_command: ./scripts/create-www-project.sh <project-name> <assistant>
   default_scaffold_profile: recommended
   minimal_scaffold_flag: --minimal-template
@@ -60,10 +63,10 @@ agent_rule_markers:
   canonical_source: template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
   hard_stop_phrase_en: No code before approved spec and consistent plan.
   hard_stop_phrase_es: No hay código sin spec aprobada y plan consistente.
-  execution_root_phrase_en: Use www/<project-name>/ as execution root for runnable code.
-  execution_root_phrase_es: Usa www/<nombre-proyecto>/ como raíz de ejecución para código ejecutable.
-  workspace_scope_phrase_en: Keep runnable projects inside the current chat workspace folder.
-  workspace_scope_phrase_es: Mantén proyectos ejecutables dentro de la carpeta actual del chat.
+  execution_root_phrase_en: Use www/<project-name>/ as the recommended default workspace for runnable code.
+  execution_root_phrase_es: Usa www/<nombre-proyecto>/ como espacio de trabajo recomendado por defecto para código ejecutable.
+  workspace_scope_phrase_en: If the target project lives inside this template, keep it inside the current chat workspace folder under www/.
+  workspace_scope_phrase_es: Si el proyecto destino vive dentro de este template, mantenlo dentro de la carpeta actual del chat bajo www/.
 
 session_output_contract:
   - objective

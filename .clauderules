@@ -8,13 +8,15 @@ Hard stop:
 - No code before approved spec and consistent plan.
 - No hay código sin spec aprobada y plan consistente.
 
-Execution root:
-- Use `www/<project-name>/` as execution root for runnable code.
-- Usa `www/<nombre-proyecto>/` como raíz de ejecución para código ejecutable.
+Execution workspace:
+- Use `www/<project-name>/` as the recommended default workspace for runnable code.
+- Usa `www/<nombre-proyecto>/` como espacio de trabajo recomendado por defecto para código ejecutable.
+- The user may choose another target path.
+- If the target project lives inside this template, keep it under `www/`.
 
 Workflow:
 1. Read `AI_START_HERE.md`, `idea/IDEA_GENERAL.md`, `specs/INDEX.md`.
-2. For target execution, use `www/<project-name>/`.
+2. Prefer `www/<project-name>/` unless the user chooses another target path.
 3. Work with one active spec.
 4. If gate not met, refine docs only.
 5. Close with validation and exact next step.

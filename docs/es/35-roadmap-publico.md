@@ -7,40 +7,31 @@ Este roadmap hace explícitos los siguientes pasos del producto para que los usu
 ## Estado actual
 
 Release publicada:
-- `v1.1.0`
+- `v1.2.0`
 
 Disponible hoy:
 - framework SDD con política multi-agente
-- aislamiento de proyectos ejecutables en `./www/<project-name>/`
+- espacio de trabajo recomendado por defecto en `./www/<nombre-proyecto>/`, con soporte para rutas externas
 - `sdd-core` tipado
 - `sdd-mcp` local
 - `stdio` + `Streamable HTTP`
-- tools, resources, prompts y smoke tests MCP
-
-## v1.2.0
-
-Enfoque: adopción y testabilidad más fuertes.
-
-Planeado:
-- tests de integración MCP basados en fixtures
-- un ejemplo completamente documentado end-to-end para proyecto nuevo
-- un ejemplo completamente documentado end-to-end para adaptar un proyecto existente
-- onboarding visual más explícito en el README
-- issue templates para adopción y feedback de casos de uso
+- tools, resources, prompts, smoke tests y tests de integración MCP
+- recetas de setup por cliente y alineación de versiones internas
 
 ## v1.3.0
 
-Enfoque: experiencia del operador entre distintos clientes IA.
+Enfoque: experiencia del operador, onboarding visual y ergonomía MCP más estricta.
 
 Planeado:
 - guías validadas con capturas para Cursor, Claude Code y Codex
-- contratos MCP más estrictos y mayor cobertura de resources
-- mejoras en automatización de releases
-- mejores salidas para status y roadmap del proyecto
+- resources MCP más ricos para insight del proyecto activo
+- documentación más clara del resultado por comando y tool
+- automatización de releases y guía de empaquetado más fuerte
+- assets visuales de onboarding para README y difusión
 
-## v2.0.0
+## v1.4.0
 
-Enfoque: estandarización del framework.
+Enfoque: estandarización del framework y empaquetado MCP publicable.
 
 Planeado:
 - estrategia de empaquetado/versionado más clara para `@sdd/sdd-core` y `@sdd/sdd-mcp`

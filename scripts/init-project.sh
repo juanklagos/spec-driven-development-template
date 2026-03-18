@@ -2,10 +2,10 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-  echo "Uso: $0 ./www/mi-proyecto [--profile=minimal|recommended|full]"
+  echo "Uso: $0 /ruta/destino/proyecto [--profile=minimal|recommended|full]"
   echo "Ejemplo: $0 ./www/mi-proyecto"
-  echo "Ejemplo: $0 ./www/mi-proyecto --profile=recommended"
-  echo "Ejemplo: $0 ./www/mi-proyecto --profile=full"
+  echo "Ejemplo: $0 /tmp/mi-proyecto --profile=recommended"
+  echo "Ejemplo: $0 /tmp/mi-proyecto --profile=full"
   exit 1
 fi
 
@@ -27,7 +27,9 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-TARGET_ABS="$(cd "$(dirname "$TARGET")" && pwd)/$(basename "$TARGET")"
+TARGET_PARENT="$(dirname "$TARGET")"
+mkdir -p "$TARGET_PARENT"
+TARGET_ABS="$(cd "$TARGET_PARENT" && pwd)/$(basename "$TARGET")"
 if [ "$TARGET_ABS" = "$ROOT_DIR" ]; then
   echo "Error: refusing to initialize in template root."
   echo "Use workspace creation instead:"
@@ -37,12 +39,17 @@ fi
 
 case "$TARGET_ABS/" in
   "$ROOT_DIR/"*)
-    ;;
-  *)
-    echo "Error: target must be inside the current workspace root."
-    echo "Keep project execution inside this chat folder under ./www/<project-name>."
-    echo "Use: ./scripts/create-www-project.sh <project-name> <assistant>"
-    exit 1
+    case "$TARGET_ABS/" in
+      "$ROOT_DIR/www/"*)
+        ;;
+      *)
+        echo "Error: targets inside this template must live under ./www/<project-name>."
+        echo "Use one of these options:"
+        echo "  ./scripts/create-www-project.sh <project-name> <assistant>   # recommended default"
+        echo "  ./scripts/init-project.sh /absolute/path/to/project          # external target path"
+        exit 1
+        ;;
+    esac
     ;;
 esac
 
@@ -147,6 +154,12 @@ Next steps / Siguientes pasos:
      ./scripts/check-sdd-gate.sh .
   8) Optional (full profile) / Opcional (perfil full): generate status and roadmap:
      ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
+
+Workspace guidance / Guía de workspace:
+  EN: `./www/<project-name>` is the recommended default inside this template.
+  EN: External target paths are also supported when you want the runnable project elsewhere.
+  ES: `./www/<nombre-proyecto>` es el espacio recomendado por defecto dentro de este template.
+  ES: También se soportan rutas externas cuando quieres el proyecto ejecutable en otro lugar.
 
 📖 Read QUICKSTART.md for a guided walkthrough and Spec Kit-first setup.
    Lee QUICKSTART.md para un recorrido guiado.

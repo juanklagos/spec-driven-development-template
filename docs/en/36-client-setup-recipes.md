@@ -92,7 +92,7 @@ Validation:
 ```text
 Use the connected sdd MCP server for this repository.
 Create the SDD base first.
-Keep runnable work inside ./www/<project-name>.
+Prefer ./www/<project-name> as the recommended default workspace; external target paths are also supported.
 Read the policy and quickstart resources before making changes.
 Do not implement code before approved spec and consistent plan.
 ```

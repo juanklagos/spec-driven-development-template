@@ -117,7 +117,7 @@ export async function createWorkspace(input: CreateWorkspaceInput): Promise<Crea
 
 export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResult> {
   const projectRoot = path.resolve(input.projectRoot);
-  await ensureInsideRunnableWorkspace(projectRoot);
+  await ensureProjectRootAllowed(projectRoot);
 
   const specsRoot = path.join(projectRoot, "specs");
   const templateRoot = path.join(specsRoot, "_template");
@@ -159,7 +159,9 @@ export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResu
 }
 
 export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
-  const specsRoot = path.join(path.resolve(projectRoot), "specs");
+  const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
+  const specsRoot = path.join(root, "specs");
   const entries = await safeReadDir(specsRoot);
   const items: SpecSummary[] = [];
 
@@ -186,6 +188,7 @@ export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
 
 export async function validateProject(projectRoot: string): Promise<ValidationResult> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const messages: ValidationMessage[] = [];
 
   await requireDir(root, "idea", messages);
@@ -240,6 +243,7 @@ export async function validateProject(projectRoot: string): Promise<ValidationRe
 
 export async function checkGate(projectRoot: string): Promise<GateResult> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const messages: ValidationMessage[] = [];
   const specs = await listSpecs(root);
   let approvedSpecs = 0;
@@ -358,6 +362,7 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
 
 export async function recordUserConsent(projectRoot: string, summary: string): Promise<ConsentResult> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const consentDir = path.join(root, ".sdd");
   const logFile = path.join(consentDir, "user-consent.log");
   const timestamp = new Date().toISOString();
@@ -374,6 +379,7 @@ export async function recordUserConsent(projectRoot: string, summary: string): P
 
 export async function generateStatus(projectRoot: string): Promise<FileOutputResult> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const indexPath = path.join(root, "specs/INDEX.md");
   const outputPath = path.join(root, "STATUS.md");
 
@@ -437,6 +443,7 @@ export async function generateStatus(projectRoot: string): Promise<FileOutputRes
 
 export async function generateRoadmap(projectRoot: string): Promise<{ mermaidPath: string; markdownPath: string; mermaid: string; markdown: string }> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const indexPath = path.join(root, "specs/INDEX.md");
   const docsDir = path.join(root, "docs");
   const mermaidPath = path.join(docsDir, "roadmap.mmd");
@@ -502,6 +509,7 @@ export async function generateRoadmap(projectRoot: string): Promise<{ mermaidPat
 
 export async function appendProjectLogEntry(projectRoot: string, entry: string): Promise<FileOutputResult> {
   const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
   const outputPath = path.join(root, "bitacora/global/PROJECT_LOG.md");
   await fs.appendFile(outputPath, `\n${entry.trim()}\n`, "utf8");
   return {
@@ -512,7 +520,9 @@ export async function appendProjectLogEntry(projectRoot: string, entry: string):
 
 export async function writeDailyLog(projectRoot: string, date: string, content: string): Promise<FileOutputResult> {
   const root = path.resolve(projectRoot);
-  const outputPath = path.join(root, "bitacora/diaria", `${date}.md`);
+  await ensureProjectRootAllowed(root);
+  const safeDate = normalizeDate(date);
+  const outputPath = path.join(root, "bitacora/diaria", `${safeDate}.md`);
   await fs.writeFile(outputPath, content, "utf8");
   return {
     path: outputPath,
@@ -522,7 +532,8 @@ export async function writeDailyLog(projectRoot: string, date: string, content: 
 
 export async function writeHandoff(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
   const root = path.resolve(projectRoot);
-  const outputPath = path.join(root, "bitacora/handoffs", fileName);
+  await ensureProjectRootAllowed(root);
+  const outputPath = path.join(root, "bitacora/handoffs", normalizeMarkdownFileName(fileName));
   await fs.writeFile(outputPath, content, "utf8");
   return {
     path: outputPath,
@@ -532,7 +543,8 @@ export async function writeHandoff(projectRoot: string, fileName: string, conten
 
 export async function writeDecision(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
   const root = path.resolve(projectRoot);
-  const outputPath = path.join(root, "bitacora/decisiones", fileName);
+  await ensureProjectRootAllowed(root);
+  const outputPath = path.join(root, "bitacora/decisiones", normalizeMarkdownFileName(fileName));
   await fs.writeFile(outputPath, content, "utf8");
   return {
     path: outputPath,
@@ -540,14 +552,38 @@ export async function writeDecision(projectRoot: string, fileName: string, conte
   };
 }
 
-export async function ensureInsideRunnableWorkspace(projectRoot: string): Promise<void> {
+export async function ensureProjectRootAllowed(projectRoot: string): Promise<void> {
   const root = path.resolve(projectRoot);
   const frameworkRoot = getFrameworkRoot();
   const wwwRoot = path.join(frameworkRoot, "www");
 
-  if (!root.startsWith(wwwRoot + path.sep)) {
-    throw new Error(`Project root must live inside ${wwwRoot}`);
+  if (root === frameworkRoot) {
+    throw new Error("Project root cannot be the template root itself");
   }
+
+  if (isSameOrInside(root, frameworkRoot) && !isSameOrInside(root, wwwRoot)) {
+    throw new Error(`Project roots inside the template must live under ${wwwRoot}. Use an external path or ./www/<project-name>.`);
+  }
+}
+
+function normalizeDate(value: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error("Date must use YYYY-MM-DD");
+  }
+  return value;
+}
+
+function normalizeMarkdownFileName(value: string): string {
+  if (!/^[a-zA-Z0-9._-]+\.md$/.test(value)) {
+    throw new Error("File name must be a simple markdown file name such as 2026-03-18-handoff.md");
+  }
+  return value;
+}
+
+function isSameOrInside(targetPath: string, parentPath: string): boolean {
+  const target = path.resolve(targetPath);
+  const parent = path.resolve(parentPath);
+  return target === parent || target.startsWith(parent + path.sep);
 }
 
 async function requireDir(root: string, relativePath: string, messages: ValidationMessage[]): Promise<void> {

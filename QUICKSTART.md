@@ -34,8 +34,10 @@ cd www/my-project
 ```
 
 Important / Importante:
-- EN: Keep runnable project work inside this current chat/workspace folder (`./www/...`).
-- ES: Mantén el trabajo ejecutable dentro de esta carpeta actual del chat/workspace (`./www/...`).
+- EN: `./www/...` is the recommended default workspace inside this template.
+- ES: `./www/...` es el espacio recomendado por defecto dentro de este template.
+- EN: You can also initialize an external target path when the runnable project should live elsewhere.
+- ES: También puedes inicializar una ruta externa si el proyecto ejecutable debe vivir en otro lugar.
 
 Default:
 - EN: recommended scaffold (best default for project quality).
@@ -53,6 +55,13 @@ Optional full packs:
 ```bash
 ./scripts/create-www-project.sh my-project codex --full-template
 cd www/my-project
+```
+
+External target path / Ruta externa:
+
+```bash
+./scripts/init-project.sh /absolute/path/to/project --profile=recommended
+cd /absolute/path/to/project
 ```
 
 ### 3) Initialize Spec Kit (recommended) / Inicializa Spec Kit (recomendado)
@@ -115,5 +124,6 @@ Update:
 ## Next / Siguiente
 
 - AI detailed starter / Inicio IA detallado: [AI_START_HERE.md](./AI_START_HERE.md)
+- Command results reference / Referencia de resultados por comando: [EN](./docs/en/40-command-results-reference.md) | [ES](./docs/es/40-referencia-resultados-comandos.md)
 - Beginner path / Ruta principiante: [EN](./docs/en/13-quick-guide-non-programmers.md) | [ES](./docs/es/13-guia-rapida-no-programadores.md)
 - Prompt bank / Banco de prompts: [EN](./docs/en/26-validated-prompt-bank.md) | [ES](./docs/es/26-banco-prompts-validados.md)

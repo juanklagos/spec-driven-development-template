@@ -75,10 +75,14 @@ Entrypoints:
 ## Operational contract
 
 - open this repository as the workspace root
-- keep runnable target projects inside `./www/<project-name>/`
+- prefer `./www/<project-name>/` as the recommended default workspace
+- external target paths are also supported for project-root-based tools
 - create the SDD base first
 - do not implement code before approved spec and consistent plan
 - request explicit user consent only when implementation is about to start
+
+See also:
+- [Command Results Reference](./40-command-results-reference.md)
 
 ## Copy-paste config examples
 
@@ -167,7 +171,7 @@ npm run mcp:http:start
 ```text
 Use the connected sdd MCP server for this repository.
 Create the SDD base first.
-If the project is runnable, keep it inside ./www/<project-name>.
+If the project is runnable inside this template, keep it inside ./www/<project-name>; external target paths are also supported.
 Read the policy and quickstart resources first.
 Do not implement code before approved spec and consistent plan.
 Ask for explicit user consent only when implementation is about to start.

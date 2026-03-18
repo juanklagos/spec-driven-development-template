@@ -57,6 +57,7 @@ npm run build
 
 3. Lee la guía de instalación:
 - [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
+- [docs/es/40-referencia-resultados-comandos.md](./docs/es/40-referencia-resultados-comandos.md)
 
 ## 🎬 Flujo rápido de adopción
 
@@ -107,8 +108,8 @@ Archivos de referencia:
 - Este repositorio es un **marco/template**.
 - La ruta profesional de producto es: raíz del framework + `packages/sdd-core` + `packages/sdd-mcp`.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
-- Dentro de este repositorio, usa `www/<nombre-proyecto>/` como raíz de ejecución para proyectos ejecutables.
-- Mantén los proyectos ejecutables dentro de la carpeta actual del chat/workspace (no los crees fuera).
+- Dentro de este repositorio, prefiere `www/<nombre-proyecto>/` como espacio recomendado por defecto para proyectos ejecutables.
+- El usuario puede elegir otra ruta; si el proyecto ejecutable vive dentro de este repositorio, mantenlo bajo `www/` para no mezclar framework y producto.
 - Si adaptas un proyecto existente, integra `idea/specs/bitacora` sin romper comportamiento actual.
 
 ## 🗺️ Ruta de aprendizaje (3 niveles)
@@ -154,8 +155,8 @@ Paquete obligatorio por feature:
 | Herramienta | Comando | Descripción |
 | :--- | :--- | :--- |
 | Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea proyecto ejecutable en `www/` (scaffold recomendado por defecto) |
-| Proyecto nuevo | `./scripts/init-project.sh` | Inicializa estructura SDD |
-| Proyecto nuevo + Spec Kit | `./scripts/init-project-with-spec-kit.sh` | Inicializa estructura + Spec Kit |
+| Proyecto nuevo | `./scripts/init-project.sh /ruta/absoluta/proyecto --profile=recommended` | Inicializa estructura SDD en una ruta externa |
+| Proyecto nuevo + Spec Kit | `./scripts/init-project-with-spec-kit.sh /ruta/absoluta/proyecto codex --profile=recommended` | Inicializa estructura + Spec Kit en una ruta externa |
 | Nueva spec | `./scripts/new-spec.sh` | Crea carpeta numerada de spec |
 | Validación | `./scripts/validate-sdd.sh . --strict` | Valida estructura y consistencia |
 | Chequeo de política | `./scripts/check-sdd-policy.sh .` | Valida política multi-agente |
@@ -173,6 +174,7 @@ Paquete obligatorio por feature:
 - Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
 - MCP: [Guía del servidor MCP](./docs/es/33-guia-servidor-mcp.md)
+- Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
 - Versionado: [Estrategia](./docs/es/37-estrategia-versionado.md)
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)

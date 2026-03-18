@@ -92,7 +92,7 @@ Validación:
 ```text
 Usa el servidor MCP sdd conectado para este repositorio.
 Crea primero la base SDD.
-Mantén el trabajo ejecutable dentro de ./www/<project-name>.
+Prefiere ./www/<nombre-proyecto> como espacio recomendado por defecto; también se soportan rutas externas.
 Lee los resources de policy y quickstart antes de hacer cambios.
 No implementes código antes de spec aprobada y plan consistente.
 ```

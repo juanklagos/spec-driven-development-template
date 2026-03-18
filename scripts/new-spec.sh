@@ -10,7 +10,7 @@ fi
 # Block spec creation in template root to avoid mixing framework and runnable project work.
 if [ -f "sdd.policy.yaml" ] && [ -f "scripts/create-www-project.sh" ] && [ -d "www" ]; then
   echo "Error: refusing to create spec in template root."
-  echo "Create/use a workspace under www/<project-name>/ and run this command there."
+  echo "Create/use a target project under www/<project-name>/ or initialize an external target path first."
   exit 1
 fi
 

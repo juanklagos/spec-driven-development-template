@@ -52,6 +52,7 @@ flowchart LR
 - Versioning strategy: [EN](./en/37-versioning-strategy.md) | [ES](./es/37-estrategia-versionado.md)
 - Media kit: [EN](./en/38-media-kit.md) | [ES](./es/38-kit-medios.md)
 - Next release prep: [EN](./en/39-v1.2.0-preparation.md) | [ES](./es/39-preparacion-v1.2.0.md)
+- Command results reference: [EN](./en/40-command-results-reference.md) | [ES](./es/40-referencia-resultados-comandos.md)
 - Continuous refinement: [EN](./en/11-continuous-refinement.md) | [ES](./es/11-refinamiento-continuo.md)
 - Quality checklists: [EN](./en/21-quality-checklists-by-stage.md) | [ES](./es/21-checklists-calidad-por-etapa.md)
 
@@ -61,8 +62,8 @@ flowchart LR
 - Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
 ## Full index / Índice completo
-- EN docs list: `docs/en/00` to `docs/en/39`
-- ES docs list: `docs/es/00` to `docs/es/39`
+- EN docs list: `docs/en/00` to `docs/en/40`
+- ES docs list: `docs/es/00` to `docs/es/40`
 
 ## Documentation audits / Auditorías de documentación
 - EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)

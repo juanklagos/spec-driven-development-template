@@ -9,7 +9,7 @@ This page stores short launch-ready copy for diffusion of the framework.
 ```text
 Spec-Driven Development Template now includes a real MCP server.
 
-New in v1.1.0:
+New in v1.2.0:
 - local `sdd-mcp` server
 - stdio + Streamable HTTP
 - copy-paste configs for Cursor, Claude Code, and Codex
@@ -29,7 +29,7 @@ This repository is evolving into an operational SDD framework, not just a docume
 What it now includes:
 - GitHub Spec Kit as the primary reference flow
 - multi-agent operating rules
-- runnable work isolated in ./www/<project-name>
+- runnable work defaults cleanly to ./www/<project-name> while still supporting external target paths
 - local MCP server (`sdd-mcp`)
 - stdio + Streamable HTTP
 - typed SDD core
