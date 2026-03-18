@@ -1,6 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { spawn } from "node:child_process";
+import packageJson from "../package.json" with { type: "json" };
 
 const port = 3334;
 const child = spawn("node", ["packages/sdd-mcp/dist/http.js"], {
@@ -43,7 +44,7 @@ async function main() {
   const client = new Client(
     {
       name: "sdd-mcp-http-smoke-test",
-      version: "0.1.0"
+      version: packageJson.version
     },
     {
       capabilities: {}

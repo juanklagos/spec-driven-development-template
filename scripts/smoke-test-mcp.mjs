@@ -1,5 +1,6 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import packageJson from "../package.json" with { type: "json" };
 
 const transport = new StdioClientTransport({
   command: "node",
@@ -11,7 +12,7 @@ const transport = new StdioClientTransport({
 const client = new Client(
   {
     name: "sdd-mcp-smoke-test",
-    version: "0.1.0"
+    version: packageJson.version
   },
   {
     capabilities: {}
