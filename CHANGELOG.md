@@ -6,6 +6,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.2.0] — 2026-03-18
+
+### Added
+- Dedicated MCP CI workflow:
+  - `.github/workflows/mcp.yml`
+- MCP integration test covering:
+  - workspace creation
+  - spec creation
+  - validation
+  - gate checks
+  - status and roadmap generation
+  - project log and resource reads
+- Public roadmap docs:
+  - `docs/en/35-public-roadmap.md`
+  - `docs/es/35-roadmap-publico.md`
+- Tested client setup recipes:
+  - `docs/en/36-client-setup-recipes.md`
+  - `docs/es/36-recetas-setup-clientes.md`
+- Versioning strategy docs:
+  - `docs/en/37-versioning-strategy.md`
+  - `docs/es/37-estrategia-versionado.md`
+- Media/public launch assets:
+  - `docs/assets/social-preview.svg`
+  - `docs/en/38-media-kit.md`
+  - `docs/es/38-kit-medios.md`
+- Next release preparation docs:
+  - `docs/en/39-v1.2.0-preparation.md`
+  - `docs/es/39-preparacion-v1.2.0.md`
+- Adoption-oriented GitHub issue templates:
+  - `bug-report`
+  - `use-case`
+- End-to-end example:
+  - `examples/002-mcp-end-to-end/`
+
+### Changed
+- Internal package versions are now aligned with the framework release:
+  - `@sdd/sdd-core` → `1.2.0`
+  - `@sdd/sdd-mcp` → `1.2.0`
+- README and docs index now surface:
+  - roadmap
+  - client setup recipes
+  - versioning strategy
+  - media kit
+  - next release prep
+- Fixed `sdd_create_spec` to create the spec directory before creating `contracts/`.
+- Repository positioning is now clearly framed as:
+  - operational SDD framework
+  - AI guidance
+  - GitHub Spec Kit reference
+  - MCP support
+
+### Verified
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:smoke`
+- `npm run mcp:http:smoke`
+- `npm run mcp:test`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`
+
 ## [v1.1.0] — 2026-03-18
 
 ### Added

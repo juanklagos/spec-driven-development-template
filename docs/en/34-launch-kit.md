@@ -22,25 +22,28 @@ https://github.com/juanklagos/spec-driven-development-template
 ## LinkedIn post
 
 ```text
-I just shipped v1.1.0 of my Spec-Driven Development Template.
+I just shipped v1.2.0 of my Spec-Driven Development Template.
 
-The goal is simple: reduce the friction of starting real projects with SDD and make AI assistants follow a clean, repeatable flow.
+This repository is evolving into an operational SDD framework, not just a documentation starter.
 
-New in this version:
-- real MCP server support
-- local `sdd-mcp` for operational SDD workflows
+What it now includes:
+- GitHub Spec Kit as the primary reference flow
+- multi-agent operating rules
+- runnable work isolated in ./www/<project-name>
+- local MCP server (`sdd-mcp`)
 - stdio + Streamable HTTP
-- copy-paste configs for Cursor, Claude Code, and Codex
-- active project resources for idea, specs, roadmap, status, logbook, and handoffs
+- typed SDD core
+- MCP integration tests and CI
+- copy-paste client configs for Cursor, Claude Code, and Codex
 
 Repository:
 https://github.com/juanklagos/spec-driven-development-template
 
-This is meant to help teams and solo builders move from idea -> spec -> plan -> tasks -> validation with less ambiguity and better traceability.
+The goal is to reduce friction from idea -> spec -> plan -> tasks -> validation, and make different AI assistants behave more consistently across real project work.
 ```
 
 ## Short release note
 
 ```text
-v1.1.0 adds a real MCP layer to the SDD framework: typed core logic, local MCP server, structured tool outputs, active project resources, HTTP transport, and client-ready configs.
+v1.2.0 strengthens the framework as an operational SDD system: MCP CI, integration tests, package version alignment, client setup recipes, public roadmap, media assets, and adoption examples.
 ```
