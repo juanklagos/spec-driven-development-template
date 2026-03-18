@@ -48,6 +48,7 @@ flowchart LR
 - Easy MCP guide: [EN](./en/43-easy-mcp-guide.md) | [ES](./es/43-guia-mcp-facil.md)
 - Hosted MCP onboarding model: [EN](./en/44-hosted-mcp-onboarding-model.md) | [ES](./es/44-modelo-onboarding-mcp-alojado.md)
 - Client visual examples: [EN](./en/45-client-visual-examples-for-easy-mcp.md) | [ES](./es/45-ejemplos-visuales-clientes-mcp-facil.md)
+- Free external MCP options: [EN](./en/47-free-external-mcp-options.md) | [ES](./es/47-opciones-gratis-mcp-externo.md)
 - MCP complete reference: [EN](./en/41-complete-mcp-reference.md) | [ES](./es/41-referencia-completa-mcp.md)
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
@@ -68,8 +69,8 @@ flowchart LR
 - Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
 ## Full index / Índice completo
-- EN docs list: `docs/en/00` to `docs/en/46`
-- ES docs list: `docs/es/00` to `docs/es/46`
+- EN docs list: `docs/en/00` to `docs/en/47`
+- ES docs list: `docs/es/00` to `docs/es/47`
 
 ## Documentation audits / Auditorías de documentación
 - EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)

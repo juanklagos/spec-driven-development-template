@@ -8,6 +8,9 @@ Esta guía explica el modelo de producto más fácil para este framework:
 
 Usa esta página cuando necesites explicar cómo el framework puede volverse más fácil sin perder rigor.
 
+Referencia relacionada:
+- [47-opciones-gratis-mcp-externo.md](./47-opciones-gratis-mcp-externo.md)
+
 ## Separación del producto
 
 ```mermaid

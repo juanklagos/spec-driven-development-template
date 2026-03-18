@@ -12,6 +12,7 @@ Use it when:
 
 Keep [41-complete-mcp-reference.md](./41-complete-mcp-reference.md) for the full technical reference.
 Keep [42-project-organization-map.md](./42-project-organization-map.md) for the full folder-by-folder map.
+Keep [47-free-external-mcp-options.md](./47-free-external-mcp-options.md) for the dedicated free external MCP comparison.
 
 ## The simple idea
 

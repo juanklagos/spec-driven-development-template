@@ -201,6 +201,7 @@ Mandatory spec bundle (for each feature):
 - MCP Easy Mode: [Easy Guide](./docs/en/43-easy-mcp-guide.md)
 - MCP Hosted Onboarding: [Model](./docs/en/44-hosted-mcp-onboarding-model.md)
 - MCP Client Examples: [Visual Guide](./docs/en/45-client-visual-examples-for-easy-mcp.md)
+- MCP Free External Options: [Guide](./docs/en/47-free-external-mcp-options.md)
 - MCP Setup: [Server Guide](./docs/en/33-mcp-server-guide.md)
 - MCP Results: [Command Reference](./docs/en/40-command-results-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)

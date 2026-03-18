@@ -8,6 +8,9 @@ This guide explains the easiest future-facing product model for this framework:
 
 Use this page when you need to explain how the framework can become easier without losing rigor.
 
+Related reference:
+- [47-free-external-mcp-options.md](./47-free-external-mcp-options.md)
+
 ## The product split
 
 ```mermaid

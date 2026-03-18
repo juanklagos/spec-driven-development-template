@@ -201,6 +201,7 @@ Paquete obligatorio por feature:
 - MCP Fácil: [Guía fácil](./docs/es/43-guia-mcp-facil.md)
 - MCP Onboarding alojado: [Modelo](./docs/es/44-modelo-onboarding-mcp-alojado.md)
 - MCP Ejemplos por cliente: [Guía visual](./docs/es/45-ejemplos-visuales-clientes-mcp-facil.md)
+- MCP Opciones externas gratis: [Guía](./docs/es/47-opciones-gratis-mcp-externo.md)
 - Setup MCP: [Guía del servidor](./docs/es/33-guia-servidor-mcp.md)
 - Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
