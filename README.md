@@ -69,6 +69,7 @@ Reference files:
 ## 🧭 Template vs Real Project
 
 - This repository is a **framework/template**.
+- The professional productization path is: framework root + `packages/sdd-core` + `packages/sdd-mcp`.
 - Your product work should run in your target project using this structure.
 - Inside this repository, use `www/<project-name>/` as execution root for runnable projects.
 - Keep runnable projects inside the current chat/workspace folder (do not create them outside).

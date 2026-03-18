@@ -69,6 +69,7 @@ Archivos de referencia:
 ## 🧭 Template vs proyecto real
 
 - Este repositorio es un **marco/template**.
+- La ruta profesional de producto es: raíz del framework + `packages/sdd-core` + `packages/sdd-mcp`.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
 - Dentro de este repositorio, usa `www/<nombre-proyecto>/` como raíz de ejecución para proyectos ejecutables.
 - Mantén los proyectos ejecutables dentro de la carpeta actual del chat/workspace (no los crees fuera).

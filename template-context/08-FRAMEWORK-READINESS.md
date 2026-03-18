@@ -31,6 +31,12 @@ Este documento captura lo que falta para evolucionar este repositorio desde un t
 - Define roadmap ownership and decision process (RFC/ADR).
 - Define compatibility and deprecation policy.
 
+7. Productized MCP architecture / Arquitectura MCP profesional
+- Keep the repository root as the canonical framework.
+- Move reusable domain logic into `packages/sdd-core`.
+- Build the MCP server in `packages/sdd-mcp`.
+- Keep `scripts/` as compatibility layer during migration.
+
 ## Guiding principle / Principio rector
 
 Always keep GitHub Spec Kit as the reference operating model for the workflow and command sequence.
