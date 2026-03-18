@@ -64,8 +64,15 @@ async function main() {
     throw new Error("Missing HTTP MCP tool: sdd_generate_status");
   }
 
-  if (!templateNames.includes("sdd-spec-document")) {
-    throw new Error("Missing HTTP MCP resource template: sdd-spec-document");
+  const validateTool = tools.tools.find((item) => item.name === "sdd_validate");
+  if (!validateTool?.outputSchema) {
+    throw new Error("Expected HTTP MCP tool sdd_validate to expose outputSchema");
+  }
+
+  for (const templateName of ["sdd-project-index", "sdd-project-log", "sdd-project-latest-handoff", "sdd-project-idea", "sdd-spec-document"]) {
+    if (!templateNames.includes(templateName)) {
+      throw new Error(`Missing HTTP MCP resource template: ${templateName}`);
+    }
   }
 
   if (!promptNames.includes("close_sdd_session")) {

@@ -1,0 +1,3 @@
+[mcp_servers.sdd]
+command = "node"
+args = ["/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"]

@@ -23,167 +23,319 @@ const projectRootSchema = z
   .string()
   .describe("Absolute project path inside ./www/<project-name> under the current workspace.");
 
+function toStructuredContent<T>(value: T): Record<string, unknown> {
+  return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
+}
+
 export function createSddMcpServer(): McpServer {
   const server = new McpServer({
     name: "sdd-mcp",
     version: "0.1.0"
   });
 
-  server.tool(
+  const validationMessageSchema = z.object({
+    level: z.enum(["error", "warning", "info"]),
+    code: z.string(),
+    message: z.string(),
+    path: z.string().optional()
+  });
+
+  server.registerTool(
     "sdd_create_workspace",
     {
-      projectName: z.string().min(1),
-      assistant: z.string().default("codex"),
-      profile: z.enum(["minimal", "recommended", "full"]).default("recommended"),
-      useSpecKit: z.boolean().default(true)
+      title: "Create SDD workspace",
+      description: "Create a runnable SDD workspace inside ./www/<project-name>.",
+      inputSchema: {
+        projectName: z.string().min(1),
+        assistant: z.string().default("codex"),
+        profile: z.enum(["minimal", "recommended", "full"]).default("recommended"),
+        useSpecKit: z.boolean().default(true)
+      },
+      outputSchema: {
+        projectRoot: z.string(),
+        profile: z.enum(["minimal", "recommended", "full"]),
+        assistant: z.string(),
+        usedSpecKit: z.boolean()
+      }
     },
-    async ({ projectName, assistant, profile, useSpecKit }) => ({
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(
-            await createWorkspace({
-              frameworkRoot,
-              projectName,
-              assistant,
-              profile,
-              useSpecKit
-            }),
-            null,
-            2
-          )
-        }
-      ]
-    })
+    async ({ projectName, assistant, profile, useSpecKit }) => {
+      const result = await createWorkspace({
+        frameworkRoot,
+        projectName,
+        assistant,
+        profile,
+        useSpecKit
+      });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_create_spec",
     {
-      projectRoot: projectRootSchema,
-      featureName: z.string().min(1),
-      owner: z.string().optional()
+      title: "Create numbered spec",
+      description: "Create the next numbered spec folder from the template.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        featureName: z.string().min(1),
+        owner: z.string().optional()
+      },
+      outputSchema: {
+        specId: z.string(),
+        specDir: z.string(),
+        indexUpdated: z.boolean()
+      }
     },
-    async ({ projectRoot, featureName, owner }) => ({
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(await createSpec({ projectRoot, featureName, owner }), null, 2)
-        }
-      ]
-    })
+    async ({ projectRoot, featureName, owner }) => {
+      const result = await createSpec({ projectRoot, featureName, owner });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_validate",
     {
-      projectRoot: projectRootSchema
+      title: "Validate SDD project",
+      description: "Validate the SDD structure and required files of a project.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        ok: z.boolean(),
+        errors: z.number(),
+        warnings: z.number(),
+        messages: z.array(validationMessageSchema)
+      }
     },
     async ({ projectRoot }) => {
       const result = await validateProject(projectRoot);
       return {
+        structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         isError: !result.ok
       };
     }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_check_gate",
     {
-      projectRoot: projectRootSchema
+      title: "Check SDD gate",
+      description: "Verify whether implementation can proceed under SDD rules.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        ok: z.boolean(),
+        errors: z.number(),
+        warnings: z.number(),
+        approvedSpecs: z.number(),
+        totalSpecs: z.number(),
+        messages: z.array(validationMessageSchema)
+      }
     },
     async ({ projectRoot }) => {
       const result = await checkGate(projectRoot);
       return {
+        structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         isError: !result.ok
       };
     }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_record_user_consent",
     {
-      projectRoot: projectRootSchema,
-      summary: z.string().min(1)
+      title: "Record user consent",
+      description: "Record explicit user consent before implementation starts.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        summary: z.string().min(1)
+      },
+      outputSchema: {
+        logFile: z.string(),
+        summary: z.string(),
+        timestamp: z.string()
+      }
     },
-    async ({ projectRoot, summary }) => ({
-      content: [{ type: "text", text: JSON.stringify(await recordUserConsent(projectRoot, summary), null, 2) }]
-    })
+    async ({ projectRoot, summary }) => {
+      const result = await recordUserConsent(projectRoot, summary);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_list_specs",
     {
-      projectRoot: projectRootSchema
+      title: "List SDD specs",
+      description: "List numbered specs and their approval status.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        specs: z.array(
+          z.object({
+            id: z.string(),
+            dir: z.string(),
+            status: z.string()
+          })
+        )
+      }
     },
-    async ({ projectRoot }) => ({
-      content: [{ type: "text", text: JSON.stringify(await listSpecs(projectRoot), null, 2) }]
-    })
+    async ({ projectRoot }) => {
+      const specs = await listSpecs(projectRoot);
+      return {
+        structuredContent: toStructuredContent({ specs }),
+        content: [{ type: "text", text: JSON.stringify(specs, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_generate_status",
-    { projectRoot: projectRootSchema },
-    async ({ projectRoot }) => ({
-      content: [{ type: "text", text: JSON.stringify(await generateStatus(projectRoot), null, 2) }]
-    })
+    {
+      title: "Generate status dashboard",
+      description: "Generate STATUS.md from the current project specs and logbook.",
+      inputSchema: { projectRoot: projectRootSchema },
+      outputSchema: {
+        path: z.string(),
+        content: z.string()
+      }
+    },
+    async ({ projectRoot }) => {
+      const result = await generateStatus(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_generate_roadmap",
-    { projectRoot: projectRootSchema },
-    async ({ projectRoot }) => ({
-      content: [{ type: "text", text: JSON.stringify(await generateRoadmap(projectRoot), null, 2) }]
-    })
+    {
+      title: "Generate roadmap",
+      description: "Generate docs/roadmap.mmd and docs/roadmap.md from specs/INDEX.md.",
+      inputSchema: { projectRoot: projectRootSchema },
+      outputSchema: {
+        mermaidPath: z.string(),
+        markdownPath: z.string(),
+        mermaid: z.string(),
+        markdown: z.string()
+      }
+    },
+    async ({ projectRoot }) => {
+      const result = await generateRoadmap(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_append_project_log",
     {
-      projectRoot: projectRootSchema,
-      entry: z.string().min(1)
+      title: "Append project log entry",
+      description: "Append content to bitacora/global/PROJECT_LOG.md.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        entry: z.string().min(1)
+      },
+      outputSchema: {
+        path: z.string(),
+        content: z.string()
+      }
     },
-    async ({ projectRoot, entry }) => ({
-      content: [{ type: "text", text: JSON.stringify(await appendProjectLogEntry(projectRoot, entry), null, 2) }]
-    })
+    async ({ projectRoot, entry }) => {
+      const result = await appendProjectLogEntry(projectRoot, entry);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_write_daily_log",
     {
-      projectRoot: projectRootSchema,
-      date: z.string().min(1).describe("Use YYYY-MM-DD."),
-      content: z.string().min(1)
+      title: "Write daily log",
+      description: "Create or replace a daily log entry in bitacora/diaria.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        date: z.string().min(1).describe("Use YYYY-MM-DD."),
+        content: z.string().min(1)
+      },
+      outputSchema: {
+        path: z.string(),
+        content: z.string()
+      }
     },
-    async ({ projectRoot, date, content }) => ({
-      content: [{ type: "text", text: JSON.stringify(await writeDailyLog(projectRoot, date, content), null, 2) }]
-    })
+    async ({ projectRoot, date, content }) => {
+      const result = await writeDailyLog(projectRoot, date, content);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_write_handoff",
     {
-      projectRoot: projectRootSchema,
-      fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-handoff.md."),
-      content: z.string().min(1)
+      title: "Write handoff",
+      description: "Create or replace a handoff file in bitacora/handoffs.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-handoff.md."),
+        content: z.string().min(1)
+      },
+      outputSchema: {
+        path: z.string(),
+        content: z.string()
+      }
     },
-    async ({ projectRoot, fileName, content }) => ({
-      content: [{ type: "text", text: JSON.stringify(await writeHandoff(projectRoot, fileName, content), null, 2) }]
-    })
+    async ({ projectRoot, fileName, content }) => {
+      const result = await writeHandoff(projectRoot, fileName, content);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
-  server.tool(
+  server.registerTool(
     "sdd_write_decision",
     {
-      projectRoot: projectRootSchema,
-      fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-decision.md."),
-      content: z.string().min(1)
+      title: "Write decision",
+      description: "Create or replace a decision file in bitacora/decisiones.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        fileName: z.string().min(1).describe("Use a markdown filename such as 2026-03-18-decision.md."),
+        content: z.string().min(1)
+      },
+      outputSchema: {
+        path: z.string(),
+        content: z.string()
+      }
     },
-    async ({ projectRoot, fileName, content }) => ({
-      content: [{ type: "text", text: JSON.stringify(await writeDecision(projectRoot, fileName, content), null, 2) }]
-    })
+    async ({ projectRoot, fileName, content }) => {
+      const result = await writeDecision(projectRoot, fileName, content);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
   );
 
   server.resource("sdd-policy", "sdd://policy/current", { mimeType: "text/plain" }, async (uri) => ({
@@ -201,6 +353,61 @@ export function createSddMcpServer(): McpServer {
   server.resource("sdd-spec-template", "sdd://templates/spec", { mimeType: "text/markdown" }, async (uri) => ({
     contents: [{ uri: uri.href, text: await readFrameworkFile("specs/_template/spec.md") }]
   }));
+
+  server.resource(
+    "sdd-project-index",
+    new ResourceTemplate("sdd://project/{projectName}/index", { list: undefined }),
+    { mimeType: "text/markdown" },
+    async (uri, { projectName }) => ({
+      contents: [
+        {
+          uri: uri.href,
+          text: await fs.readFile(path.join(frameworkRoot, "www", normalizeParam(projectName), "specs/INDEX.md"), "utf8")
+        }
+      ]
+    })
+  );
+
+  server.resource(
+    "sdd-project-log",
+    new ResourceTemplate("sdd://project/{projectName}/project-log", { list: undefined }),
+    { mimeType: "text/markdown" },
+    async (uri, { projectName }) => ({
+      contents: [
+        {
+          uri: uri.href,
+          text: await fs.readFile(
+            path.join(frameworkRoot, "www", normalizeParam(projectName), "bitacora/global/PROJECT_LOG.md"),
+            "utf8"
+          )
+        }
+      ]
+    })
+  );
+
+  server.resource(
+    "sdd-project-latest-handoff",
+    new ResourceTemplate("sdd://project/{projectName}/latest-handoff", { list: undefined }),
+    { mimeType: "text/markdown" },
+    async (uri, { projectName }) => {
+      const handoffDir = path.join(frameworkRoot, "www", normalizeParam(projectName), "bitacora/handoffs");
+      const entries = await fs.readdir(handoffDir, { withFileTypes: true });
+      const latest = entries
+        .filter((entry) => entry.isFile())
+        .map((entry) => entry.name)
+        .sort()
+        .at(-1);
+
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: latest ? await fs.readFile(path.join(handoffDir, latest), "utf8") : "No handoff files found."
+          }
+        ]
+      };
+    }
+  );
 
   server.resource(
     "sdd-project-idea",

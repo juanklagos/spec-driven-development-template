@@ -44,6 +44,32 @@ Current MVP tools:
 - `sdd_write_handoff`
 - `sdd_write_decision`
 
+Current resources:
+- `sdd-policy`
+- `sdd-ai-start`
+- `sdd-quickstart`
+- `sdd-spec-template`
+- `sdd-project-index`
+- `sdd-project-log`
+- `sdd-project-latest-handoff`
+- `sdd-project-idea`
+- `sdd-spec-document`
+
+Current prompts:
+- `start_new_sdd_project`
+- `adapt_existing_project_to_sdd`
+- `close_sdd_session`
+
+Implementation notes:
+- tools expose `outputSchema`
+- handlers return `structuredContent`
+- `stdio` and `Streamable HTTP` are both supported
+
+Config examples:
+- `packages/sdd-mcp/examples/.cursor/mcp.json`
+- `packages/sdd-mcp/examples/.mcp.json`
+- `packages/sdd-mcp/examples/codex.config.toml`
+
 Reference docs:
 - `docs/en/33-mcp-server-guide.md`
 - `docs/es/33-guia-servidor-mcp.md`

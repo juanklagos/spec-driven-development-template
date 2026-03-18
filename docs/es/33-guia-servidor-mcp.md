@@ -2,17 +2,16 @@
 
 ## Propósito
 
-Esta guía explica cómo ejecutar y conectar el servidor local `sdd-mcp`.
+Esta guía explica cómo ejecutar, conectar y usar el servidor local `sdd-mcp` como la capa MCP operativa de este framework.
 
-Ahora el repositorio sigue esta ruta de producto:
+Separación del producto:
+- raíz del repositorio: framework SDD canónico
+- `packages/sdd-core`: lógica reusable de SDD
+- `packages/sdd-mcp`: tools, resources, prompts y transportes MCP
 
-- raíz del framework como fuente canónica
-- `packages/sdd-core` para lógica reusable SDD
-- `packages/sdd-mcp` para tools, resources y prompts MCP
+## Lo que ya está implementado
 
-## MVP actual
-
-Transporte:
+Transportes:
 - `stdio`
 - `Streamable HTTP`
 
@@ -30,12 +29,22 @@ Tools:
 - `sdd_write_handoff`
 - `sdd_write_decision`
 
-Resources:
-- política
-- quickstart
-- guía AI start
-- plantilla de spec
-- resource template para idea del proyecto
+Salida estructurada:
+- cada tool expone `outputSchema`
+- los handlers devuelven `structuredContent` y salida textual
+
+Resources estáticos:
+- `sdd-policy`
+- `sdd-ai-start`
+- `sdd-quickstart`
+- `sdd-spec-template`
+
+Resource templates del proyecto:
+- `sdd-project-index`
+- `sdd-project-log`
+- `sdd-project-latest-handoff`
+- `sdd-project-idea`
+- `sdd-spec-document`
 
 Prompts:
 - `start_new_sdd_project`
@@ -52,122 +61,124 @@ npm run mcp:smoke
 npm run mcp:http:smoke
 ```
 
-Ejecuta el servidor:
+Levanta los servidores:
 
 ```bash
 npm run mcp:start
 npm run mcp:http:start
 ```
 
-## Patrón de configuración del cliente
+Entrypoints:
+- stdio: `packages/sdd-mcp/dist/index.js`
+- HTTP: `http://127.0.0.1:3334/mcp`
 
-Usa el entrypoint compilado del servidor:
+## Contrato operativo
 
-```text
-node /RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js
-```
+- abre este repositorio como raíz del workspace
+- mantén los proyectos ejecutables dentro de `./www/<project-name>/`
+- crea primero la base SDD
+- no implementes código antes de tener spec aprobada y plan consistente
+- solicita consentimiento explícito solo cuando la implementación vaya a comenzar
 
-Endpoint HTTP:
+## Ejemplos listos para copiar
 
-```text
-http://127.0.0.1:3334/mcp
-```
-
-Raíz de trabajo recomendada:
-- abre este repositorio como workspace
-- usa `./www/<project-name>/` para proyectos ejecutables
-
-## Ejemplo de configuración MCP
-
-```json
-{
-  "mcpServers": {
-    "sdd": {
-      "command": "node",
-      "args": [
-        "/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
-      ]
-    }
-  }
-}
-```
-
-## Ejemplos por cliente
-
-### Claude Desktop
-
-Ejemplo de entrada MCP:
-
-```json
-{
-  "mcpServers": {
-    "sdd": {
-      "command": "node",
-      "args": [
-        "/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
-      ]
-    }
-  }
-}
-```
-
-Primer mensaje sugerido:
-
-```text
-Usa el servidor MCP sdd conectado.
-Crea primero la base SDD.
-Si el proyecto es ejecutable, mantenlo dentro de ./www/<project-name>.
-No implementes código antes de spec aprobada y plan consistente.
-Usa tools MCP cuando estén disponibles en lugar de edición libre de archivos.
-```
+Archivos de referencia:
+- `packages/sdd-mcp/examples/.cursor/mcp.json`
+- `packages/sdd-mcp/examples/.mcp.json`
+- `packages/sdd-mcp/examples/codex.config.toml`
 
 ### Cursor
 
-Usa el mismo par `command/args` para registrar el servidor MCP local.
+Ruta oficial de configuración en macOS/Linux:
+- `~/.cursor/mcp.json`
 
-Primer mensaje sugerido:
+Alternativa por proyecto:
+- `mcp.json` dentro del workspace, si prefieres registro local al proyecto
 
-```text
-Usa las tools y resources del servidor MCP sdd para este repositorio.
-Comienza leyendo los resources de policy y quickstart.
-Luego crea o inspecciona el proyecto SDD activo dentro de ./www/.
+Ejemplo:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ]
+    }
+  }
+}
 ```
 
-### Codex Desktop
+### Codex
 
-Cuando el registro de servidores MCP esté disponible, apunta al mismo entrypoint compilado.
+Ruta oficial de configuración compartida:
+- `~/.codex/config.toml`
 
-Primer mensaje sugerido:
+Ejemplo:
 
-```text
-Usa el servidor MCP local sdd para operaciones SDD.
-Prefiere tools MCP para workspace, spec, validación, roadmap y bitácora.
+```toml
+[mcp_servers.sdd]
+command = "node"
+args = ["/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"]
 ```
 
-### Clientes Streamable HTTP
+### Claude Code
 
-Cuando el cliente prefiera registro MCP tipo remoto, apunta a:
+Configuración oficial por proyecto:
+- `.mcp.json` en la raíz del repositorio
+
+Configuración oficial por usuario:
+- `~/.claude.json`
+
+Ejemplo por proyecto:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "node",
+      "args": [
+        "/RUTA/ABSOLUTA/A/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+### Clientes con HTTP
+
+Si el cliente soporta MCP remoto vía Streamable HTTP:
 
 ```text
 http://127.0.0.1:3334/mcp
 ```
 
-Levántalo con:
+Usa:
 
 ```bash
 npm run mcp:http:start
 ```
 
-## Reglas operativas
+## Primer mensaje recomendado para la IA
 
-- La raíz del framework sigue siendo la fuente canónica.
-- Los proyectos ejecutables deben vivir en `./www/`.
-- No hay implementación sin spec aprobada y plan consistente.
-- Registra consentimiento explícito solo antes de iniciar implementación.
+```text
+Usa el servidor MCP sdd conectado para este repositorio.
+Crea primero la base SDD.
+Si el proyecto es ejecutable, mantenlo dentro de ./www/<project-name>.
+Lee primero los resources de policy y quickstart.
+No implementes código antes de spec aprobada y plan consistente.
+Pide consentimiento explícito solo cuando la implementación vaya a comenzar.
+```
 
-## Siguiente evolución recomendada
+## Checklist de verificación
 
-- agregar tools `generate_status` y `generate_roadmap`
-- agregar tools directos para bitácora
-- agregar transporte Streamable HTTP
-- agregar documentación de integración por cliente
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:smoke`
+- `npm run mcp:http:smoke`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`

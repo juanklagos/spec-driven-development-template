@@ -2,17 +2,16 @@
 
 ## Purpose
 
-This guide explains how to run and connect the local `sdd-mcp` server.
+This guide explains how to run, connect, and use the local `sdd-mcp` server as the operational MCP layer of this framework.
 
-The repository now follows this product path:
+Product split:
+- repository root: canonical SDD framework
+- `packages/sdd-core`: reusable SDD logic
+- `packages/sdd-mcp`: MCP tools, resources, prompts, and transports
 
-- framework root as canonical source
-- `packages/sdd-core` for reusable SDD logic
-- `packages/sdd-mcp` for MCP tools, resources, and prompts
+## What is already implemented
 
-## Current MVP
-
-Transport:
+Transports:
 - `stdio`
 - `Streamable HTTP`
 
@@ -30,12 +29,22 @@ Tools:
 - `sdd_write_handoff`
 - `sdd_write_decision`
 
-Resources:
-- policy
-- quickstart
-- AI start guide
-- spec template
-- project idea resource template
+Structured tool output:
+- each tool exposes `outputSchema`
+- handlers return `structuredContent` plus text output
+
+Static resources:
+- `sdd-policy`
+- `sdd-ai-start`
+- `sdd-quickstart`
+- `sdd-spec-template`
+
+Project resource templates:
+- `sdd-project-index`
+- `sdd-project-log`
+- `sdd-project-latest-handoff`
+- `sdd-project-idea`
+- `sdd-spec-document`
 
 Prompts:
 - `start_new_sdd_project`
@@ -52,122 +61,124 @@ npm run mcp:smoke
 npm run mcp:http:smoke
 ```
 
-Run the server:
+Run the servers:
 
 ```bash
 npm run mcp:start
 npm run mcp:http:start
 ```
 
-## Client configuration pattern
+Entrypoints:
+- stdio: `packages/sdd-mcp/dist/index.js`
+- HTTP: `http://127.0.0.1:3334/mcp`
 
-Use the built server entrypoint:
+## Operational contract
 
-```text
-node /ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js
-```
+- open this repository as the workspace root
+- keep runnable target projects inside `./www/<project-name>/`
+- create the SDD base first
+- do not implement code before approved spec and consistent plan
+- request explicit user consent only when implementation is about to start
 
-HTTP endpoint:
+## Copy-paste config examples
 
-```text
-http://127.0.0.1:3334/mcp
-```
-
-Recommended working root:
-- open this repository as the workspace
-- use `./www/<project-name>/` for runnable projects
-
-## Example MCP config snippet
-
-```json
-{
-  "mcpServers": {
-    "sdd": {
-      "command": "node",
-      "args": [
-        "/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
-      ]
-    }
-  }
-}
-```
-
-## Client examples
-
-### Claude Desktop
-
-Example MCP config entry:
-
-```json
-{
-  "mcpServers": {
-    "sdd": {
-      "command": "node",
-      "args": [
-        "/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
-      ]
-    }
-  }
-}
-```
-
-Suggested first message:
-
-```text
-Use the connected sdd MCP server.
-Create the SDD base first.
-If the project is runnable, keep it inside ./www/<project-name>.
-Do not implement code before approved spec and consistent plan.
-Use MCP tools when available instead of free-form file edits.
-```
+Reference examples:
+- `packages/sdd-mcp/examples/.cursor/mcp.json`
+- `packages/sdd-mcp/examples/.mcp.json`
+- `packages/sdd-mcp/examples/codex.config.toml`
 
 ### Cursor
 
-Use the same command/args pair to register the local MCP server.
+Official config path on macOS/Linux:
+- `~/.cursor/mcp.json`
 
-Suggested first message:
+Project-scoped alternative:
+- `mcp.json` in the workspace, if you prefer project-local registration
 
-```text
-Use the sdd MCP tools and resources for this repository.
-Start by reading the policy and quickstart resources.
-Then create or inspect the active SDD project under ./www/.
+Example:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ]
+    }
+  }
+}
 ```
 
-### Codex Desktop
+### Codex
 
-When MCP server registration is available, point it to the same built server entrypoint.
+Official shared config path:
+- `~/.codex/config.toml`
 
-Suggested first message:
+Example:
 
-```text
-Use the local sdd MCP server for SDD operations.
-Prefer MCP tools for workspace, spec, validation, roadmap, and logbook actions.
+```toml
+[mcp_servers.sdd]
+command = "node"
+args = ["/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"]
 ```
 
-### Streamable HTTP clients
+### Claude Code
 
-When a client prefers remote-style MCP registration, point it to:
+Official project-scoped config:
+- `.mcp.json` at the repository root
+
+Official user-scoped config:
+- `~/.claude.json`
+
+Project-scoped example:
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "node",
+      "args": [
+        "/ABSOLUTE/PATH/TO/spec-driven-development-template/packages/sdd-mcp/dist/index.js"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+### HTTP-capable clients
+
+If the client supports remote MCP over Streamable HTTP:
 
 ```text
 http://127.0.0.1:3334/mcp
 ```
 
-Run it with:
+Use:
 
 ```bash
 npm run mcp:http:start
 ```
 
-## Operational rules
+## Recommended first message to the agent
 
-- The framework root remains the canonical source.
-- Runnable target projects must live in `./www/`.
-- No implementation without approved spec and consistent plan.
-- Record explicit user consent only before implementation starts.
+```text
+Use the connected sdd MCP server for this repository.
+Create the SDD base first.
+If the project is runnable, keep it inside ./www/<project-name>.
+Read the policy and quickstart resources first.
+Do not implement code before approved spec and consistent plan.
+Ask for explicit user consent only when implementation is about to start.
+```
 
-## Recommended next evolution
+## Verification checklist
 
-- add `generate_status` and `generate_roadmap` tools
-- add direct project logbook tools
-- add Streamable HTTP transport
-- add integration docs for specific clients
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:smoke`
+- `npm run mcp:http:smoke`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`

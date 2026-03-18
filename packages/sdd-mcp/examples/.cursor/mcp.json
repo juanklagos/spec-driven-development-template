@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "sdd": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/packages/sdd-mcp/dist/index.js"
+      ]
+    }
+  }
+}
