@@ -36,6 +36,26 @@ No code before approved spec and consistent plan.
 - Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
 - Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
 
+## 🔌 Connect via MCP
+
+If your AI client supports MCP, this repository now includes a local `sdd-mcp` server and shared project config.
+
+Quick path:
+1. Build the server:
+
+```bash
+npm install
+npm run build
+```
+
+2. Use one of these configs:
+- Claude Code project config: [`.mcp.json`](./.mcp.json)
+- Cursor example: [`packages/sdd-mcp/examples/.cursor/mcp.json`](./packages/sdd-mcp/examples/.cursor/mcp.json)
+- Codex example: [`packages/sdd-mcp/examples/codex.config.toml`](./packages/sdd-mcp/examples/codex.config.toml)
+
+3. Read the setup guide:
+- [docs/en/33-mcp-server-guide.md](./docs/en/33-mcp-server-guide.md)
+
 ## 🚨 Mandatory Rule Before Coding
 
 This template enforces policy + gate checks:
@@ -136,6 +156,7 @@ Mandatory spec bundle (for each feature):
 
 - Essentials: [Structure](./docs/en/01-structure.md) · [Workflow](./docs/en/02-workflow.md)
 - AI: [Supported Agents](./docs/en/10-supported-ai-agents-and-prompts.md) · [Lovable Guide](./docs/en/17-working-with-lovable.md)
+- MCP: [MCP Server Guide](./docs/en/33-mcp-server-guide.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 
 ---

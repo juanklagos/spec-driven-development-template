@@ -36,6 +36,26 @@ No hay código sin spec aprobada y plan consistente.
 - Intermedio: [docs/es/14-guia-intermedia.md](./docs/es/14-guia-intermedia.md)
 - Avanzado: [docs/es/15-guia-avanzada.md](./docs/es/15-guia-avanzada.md)
 
+## 🔌 Conéctalo por MCP
+
+Si tu cliente de IA soporta MCP, este repositorio ya incluye un servidor local `sdd-mcp` y configuración compartida por proyecto.
+
+Ruta rápida:
+1. Compila el servidor:
+
+```bash
+npm install
+npm run build
+```
+
+2. Usa una de estas configuraciones:
+- Configuración de proyecto para Claude Code: [`.mcp.json`](./.mcp.json)
+- Ejemplo para Cursor: [`packages/sdd-mcp/examples/.cursor/mcp.json`](./packages/sdd-mcp/examples/.cursor/mcp.json)
+- Ejemplo para Codex: [`packages/sdd-mcp/examples/codex.config.toml`](./packages/sdd-mcp/examples/codex.config.toml)
+
+3. Lee la guía de instalación:
+- [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
+
 ## 🚨 Regla obligatoria antes de codificar
 
 Este template exige chequeos de política y compuerta:
@@ -136,6 +156,7 @@ Paquete obligatorio por feature:
 
 - Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
 - IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
+- MCP: [Guía del servidor MCP](./docs/es/33-guia-servidor-mcp.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
 
 ---

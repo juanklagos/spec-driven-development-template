@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "node",
+      "args": [
+        "${PWD}/packages/sdd-mcp/dist/index.js"
+      ],
+      "env": {}
+    }
+  }
+}
