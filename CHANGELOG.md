@@ -6,6 +6,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.1.0] — 2026-03-18
+
+### Added
+- `packages/sdd-core` as typed reusable SDD logic for workspace, spec, validation, gate, roadmap, status, and logbook operations.
+- `packages/sdd-mcp` as a real MCP server with:
+  - `stdio` transport
+  - `Streamable HTTP` transport
+  - 12 operational tools
+  - static resources plus active project resource templates
+  - beginner-friendly MCP prompts
+- MCP smoke tests for both transports:
+  - `npm run mcp:smoke`
+  - `npm run mcp:http:smoke`
+- Copy/paste client configuration examples for:
+  - Cursor
+  - Claude Code
+  - Codex
+- Root `.mcp.json` so the repository can be connected quickly in project-scoped MCP workflows.
+- Bilingual MCP setup guides:
+  - `docs/en/33-mcp-server-guide.md`
+  - `docs/es/33-guia-servidor-mcp.md`
+- Launch kit docs for diffusion and reuse:
+  - `docs/en/34-launch-kit.md`
+  - `docs/es/34-kit-lanzamiento.md`
+
+### Changed
+- README and README.es now surface MCP as a first-class entry point with links to setup guides and copy/paste configs.
+- MCP tools now expose `outputSchema` and return `structuredContent` for stronger client compatibility.
+- Project context is now available through MCP resource templates for:
+  - `specs/INDEX.md`
+  - project log
+  - latest handoff
+  - project idea
+  - per-spec documents
+
+### Verified
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:smoke`
+- `npm run mcp:http:smoke`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`
+
 ## [v1.0.1] — 2026-03-14
 
 ### Added
