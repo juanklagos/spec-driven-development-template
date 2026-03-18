@@ -28,6 +28,28 @@ Da a los clientes IA una forma estructurada de:
 
 No es solo acceso a documentación. Es la interfaz ejecutable del framework.
 
+## Arquitectura visual
+
+```mermaid
+flowchart LR
+  A["Usuario"] --> B["Cliente IA"]
+  B --> C["sdd-mcp"]
+  C --> D["sdd-core"]
+  C --> E["Resources MCP"]
+  D --> F["Proyecto destino"]
+  E --> F
+  F --> G["idea/"]
+  F --> H["specs/"]
+  F --> I["bitacora/"]
+  F --> J["docs/"]
+```
+
+Ruta de lectura:
+- el cliente IA lee resources y prompts MCP
+- `sdd-mcp` expone el contrato operativo
+- `sdd-core` ejecuta las mutaciones reales del proyecto
+- el proyecto destino guarda los artefactos SDD resultantes
+
 ## Qué puede esperar el usuario
 
 Cuando un cliente IA está conectado a `sdd-mcp`, el usuario puede esperar:
@@ -428,6 +450,18 @@ Estos resource templates son para proyectos administrados bajo `./www/<nombre-pr
 - espera un resumen con objetivo, cambios, validación, riesgos y próximo paso
 
 ## Flujo recomendado para el usuario
+
+```mermaid
+flowchart LR
+  A["Conectar MCP"] --> B["Leer policy + quickstart"]
+  B --> C["Crear base SDD"]
+  C --> D["Crear primera spec"]
+  D --> E["Validar"]
+  E --> F["Revisar compuerta"]
+  F --> G["Registrar consentimiento"]
+  G --> H["Implementar"]
+  H --> I["Escribir logs y handoff"]
+```
 
 1. Conecta el servidor MCP.
 2. Lee `sdd-policy` y `sdd-quickstart`.

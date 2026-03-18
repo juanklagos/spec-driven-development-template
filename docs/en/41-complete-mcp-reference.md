@@ -28,6 +28,28 @@ It gives AI clients a structured way to:
 
 It is not just documentation access. It is the runnable interface to the framework.
 
+## Visual architecture
+
+```mermaid
+flowchart LR
+  A["User"] --> B["AI Client"]
+  B --> C["sdd-mcp"]
+  C --> D["sdd-core"]
+  C --> E["MCP Resources"]
+  D --> F["Target Project"]
+  E --> F
+  F --> G["idea/"]
+  F --> H["specs/"]
+  F --> I["bitacora/"]
+  F --> J["docs/"]
+```
+
+Reading path:
+- the AI client reads MCP resources and prompts
+- `sdd-mcp` exposes the operational contract
+- `sdd-core` performs the actual project mutations
+- the target project stores the resulting SDD artifacts
+
 ## What the user can expect
 
 When an AI client is connected to `sdd-mcp`, the user can expect:
@@ -428,6 +450,18 @@ These resource templates are for managed projects under `./www/<project-name>/`.
 - expects a summary with objective, changes, validation, risks, and next step
 
 ## Recommended user flow
+
+```mermaid
+flowchart LR
+  A["Connect MCP"] --> B["Read policy + quickstart"]
+  B --> C["Create SDD base"]
+  C --> D["Create first spec"]
+  D --> E["Validate"]
+  E --> F["Check gate"]
+  F --> G["Record consent"]
+  G --> H["Implement"]
+  H --> I["Write logs and handoff"]
+```
 
 1. Connect the MCP server.
 2. Read `sdd-policy` and `sdd-quickstart`.
