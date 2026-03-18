@@ -19,3 +19,10 @@ Target consumers:
 - `scripts/` compatibility layer
 - `packages/sdd-mcp/`
 
+Current exported operations:
+- `createWorkspace`
+- `createSpec`
+- `listSpecs`
+- `validateProject`
+- `checkGate`
+- `recordUserConsent`

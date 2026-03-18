@@ -125,6 +125,7 @@ Paquete obligatorio por feature:
 | Chequeo de política | `./scripts/check-sdd-policy.sh .` | Valida política multi-agente |
 | Compuerta SDD | `./scripts/check-sdd-gate.sh .` | Exige aprobación y consistencia del plan |
 | Dashboard de estado | `./scripts/generate-status.sh` | Genera reporte de estado |
+| MCP Server MVP | `npm run mcp:start` | Inicia el servidor local `sdd-mcp` por stdio |
 
 > [!TIP]
 > Para copia limpia: `npx degit juanklagos/spec-driven-development-template`

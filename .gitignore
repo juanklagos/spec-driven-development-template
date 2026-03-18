@@ -4,3 +4,6 @@ STATUS.md
 analysis/
 docs/roadmap.md
 docs/roadmap.mmd
+node_modules/
+.sdd/
+packages/*/dist/

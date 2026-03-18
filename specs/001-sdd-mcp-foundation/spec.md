@@ -2,11 +2,11 @@
 
 ## Estado de aprobación / Approval status
 
-- Estado / Status: `Pendiente`
+- Estado / Status: `Aprobado`
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
-- Fecha de aprobación / Approval date: `YYYY-MM-DD`
-- Aprobado por / Approved by: `Nombre o rol`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote):
+- Fecha de aprobación / Approval date: `2026-03-18`
+- Aprobado por / Approved by: `Usuario del repositorio`
+- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): `2026-03-18: "listo, hagamoslo asi" y luego "hazlo todo"`
 
 ## Historia de usuario principal
 
@@ -39,4 +39,3 @@ para que múltiples asistentes IA puedan ejecutar el flujo SDD de forma consiste
 - Existe una estructura base en `packages/sdd-core` y `packages/sdd-mcp`.
 - La documentación del repositorio deja claro que la ruta profesional es framework canónico + core reusable + servidor MCP.
 - La implementación futura puede arrancar sobre una base consistente sin rehacer la arquitectura.
-

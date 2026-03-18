@@ -35,6 +35,24 @@
 
 ---
 
+### [2026-03-18 10:30] Session 2 / Sesión 2 — MCP Foundation MVP
+- **Goal / Objetivo:** Convert the framework direction into a real MCP-ready architecture and MVP implementation
+- **Work completed / Trabajo realizado:**
+  - Approved spec `001-sdd-mcp-foundation` with user evidence from the current chat
+  - Added `packages/sdd-core` and `packages/sdd-mcp`
+  - Added root workspace TypeScript configuration
+  - Implemented typed core operations for spec creation, validation, gate checks, and consent logging
+  - Implemented first MCP stdio server with tools, resources, and prompts
+- **Decisions made / Decisiones tomadas:**
+  - Repository root remains the canonical SDD framework
+  - Productized path is `framework root + sdd-core + sdd-mcp`
+  - MVP MCP is stdio-first and keeps compatibility with current shell scripts
+- **Blockers / Bloqueos:** Pending dependency install and type verification against the selected MCP SDK version
+- **Next step / Próximo paso:** Install dependencies, typecheck the packages, fix SDK API mismatches, and document local MCP setup
+- **Owner / Responsable:** Juan Klagos / Codex
+
+---
+
 ### [YYYY-MM-DD HH:MM] Session N / Sesión N
 - **Goal / Objetivo:**
 - **Work completed / Trabajo realizado:**

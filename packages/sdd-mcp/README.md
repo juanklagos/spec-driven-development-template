@@ -18,3 +18,19 @@ Target MCP surface:
 - Resources: policy, templates, quickstart, active project context
 - Prompts: new project, adapt existing project, first spec, session close
 
+Local development:
+
+```bash
+npm install
+npm run typecheck
+npm run build
+npm run mcp:start
+```
+
+Current MVP tools:
+- `sdd_create_workspace`
+- `sdd_create_spec`
+- `sdd_validate`
+- `sdd_check_gate`
+- `sdd_record_user_consent`
+- `sdd_list_specs`

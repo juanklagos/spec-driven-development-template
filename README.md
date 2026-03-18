@@ -125,6 +125,7 @@ Mandatory spec bundle (for each feature):
 | Policy Check | `./scripts/check-sdd-policy.sh .` | Validate multi-agent policy files |
 | SDD Gate | `./scripts/check-sdd-gate.sh .` | Enforce approval and plan consistency |
 | Status Dashboard | `./scripts/generate-status.sh` | Generate project status report |
+| MCP Server MVP | `npm run mcp:start` | Start the local `sdd-mcp` stdio server |
 
 > [!TIP]
 > For a clean copy: `npx degit juanklagos/spec-driven-development-template`
