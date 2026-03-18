@@ -45,6 +45,7 @@ flowchart LR
 ## Core SDD references / Referencias SDD base
 - Workflow: [EN](./en/02-workflow.md) | [ES](./es/02-flujo-de-trabajo.md)
 - Spec Kit integration: [EN](./en/08-github-spec-kit-integration.md) | [ES](./es/08-integracion-github-spec-kit.md)
+- MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Continuous refinement: [EN](./en/11-continuous-refinement.md) | [ES](./es/11-refinamiento-continuo.md)
 - Quality checklists: [EN](./en/21-quality-checklists-by-stage.md) | [ES](./es/21-checklists-calidad-por-etapa.md)
 

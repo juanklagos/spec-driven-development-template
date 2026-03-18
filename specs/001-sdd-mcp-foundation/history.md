@@ -9,3 +9,4 @@
 - Se crea el monorepo TypeScript base en la raíz del framework.
 - Se implementa un primer `sdd-core` con operaciones tipadas para workspace, spec, validación, gate y consentimiento.
 - Se implementa un primer `sdd-mcp` con tools, resources y prompts por `stdio`.
+- Se agrega guía bilingüe de uso del servidor MCP y un smoke test automatizado del protocolo.

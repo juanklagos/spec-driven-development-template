@@ -147,6 +147,19 @@ If context is missing, ask before editing.
 If scope changes, update history.md and logbook.
 ```
 
+## 4) MCP-compatible desktop tools
+
+If your desktop assistant supports MCP servers, connect the local `sdd-mcp` server instead of relying only on free-form prompts.
+
+Reference:
+- [MCP server guide](./33-mcp-server-guide.md)
+
+Why this is better:
+- tools are explicit
+- policy and templates are exposed as resources
+- prompts are reusable and consistent
+- the SDD workflow becomes less dependent on model improvisation
+
 ## 🔒 Safety and control best practices
 
 - Review file paths before confirming changes.

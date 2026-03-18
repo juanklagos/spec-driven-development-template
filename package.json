@@ -10,7 +10,8 @@
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "mcp:start": "npm --workspace @sdd/sdd-mcp run start",
-    "mcp:build": "npm --workspace @sdd/sdd-mcp run build"
+    "mcp:build": "npm --workspace @sdd/sdd-mcp run build",
+    "mcp:smoke": "npm run build && node scripts/smoke-test-mcp.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

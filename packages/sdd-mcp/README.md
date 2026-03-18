@@ -24,6 +24,7 @@ Local development:
 npm install
 npm run typecheck
 npm run build
+npm run mcp:smoke
 npm run mcp:start
 ```
 
@@ -34,3 +35,7 @@ Current MVP tools:
 - `sdd_check_gate`
 - `sdd_record_user_consent`
 - `sdd_list_specs`
+
+Reference docs:
+- `docs/en/33-mcp-server-guide.md`
+- `docs/es/33-guia-servidor-mcp.md`

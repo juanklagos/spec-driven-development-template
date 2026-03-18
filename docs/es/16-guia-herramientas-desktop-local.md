@@ -147,6 +147,19 @@ Si falta contexto, pregunta antes de editar.
 Si cambias alcance, actualiza history.md y bitácora.
 ```
 
+## 4) Herramientas de escritorio compatibles con MCP
+
+Si tu asistente de escritorio soporta servidores MCP, conecta el servidor local `sdd-mcp` en lugar de depender solo de prompts libres.
+
+Referencia:
+- [Guía del servidor MCP](./33-guia-servidor-mcp.md)
+
+Por qué mejora el flujo:
+- las tools son explícitas
+- la política y las plantillas se exponen como resources
+- los prompts son reutilizables y consistentes
+- el flujo SDD depende menos de improvisación del modelo
+
 ## 🔒 Buenas prácticas de seguridad y control
 
 - Revisa rutas antes de confirmar cambios.
