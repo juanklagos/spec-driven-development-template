@@ -128,6 +128,9 @@ flowchart LR
 
 ## 🏗️ Anatomy of an SDD Project
 
+Full folder-by-folder map:
+- [docs/en/42-project-organization-map.md](./docs/en/42-project-organization-map.md)
+
 Mandatory folders:
 - `idea/`: project intent and scope
 - `specs/`: numbered specifications
@@ -180,6 +183,7 @@ Mandatory spec bundle (for each feature):
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)
 - Versioning: [Strategy](./docs/en/37-versioning-strategy.md)
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
+- Organization: [Project Map](./docs/en/42-project-organization-map.md)
 - Media Kit: [Assets and Positioning](./docs/en/38-media-kit.md)
 - Next Release Prep: [v1.2.0](./docs/en/39-v1.2.0-preparation.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)

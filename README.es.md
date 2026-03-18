@@ -128,6 +128,9 @@ flowchart LR
 
 ## 🏗️ Anatomía de un proyecto SDD
 
+Mapa completo carpeta por carpeta:
+- [docs/es/42-mapa-organizacion-proyecto.md](./docs/es/42-mapa-organizacion-proyecto.md)
+
 Carpetas obligatorias:
 - `idea/`: intención y alcance del proyecto
 - `specs/`: especificaciones numeradas
@@ -180,6 +183,7 @@ Paquete obligatorio por feature:
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
 - Versionado: [Estrategia](./docs/es/37-estrategia-versionado.md)
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
+- Organización: [Mapa del proyecto](./docs/es/42-mapa-organizacion-proyecto.md)
 - Kit de medios: [Assets y posicionamiento](./docs/es/38-kit-medios.md)
 - Preparación próxima release: [v1.2.0](./docs/es/39-preparacion-v1.2.0.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
