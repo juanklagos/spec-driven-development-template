@@ -26,11 +26,21 @@ Recommended target-project shape:
 - project root = app code
 - `spec/` = SDD operating system
 
+That means:
+- `spec/idea/`
+- `spec/specs/`
+- `spec/bitacora/`
+
+GitHub Spec Kit remains the base workflow reference for the project.
+This repository adds the structure, sidecar mode, AI rules, and guidance around that base.
+
 
 
 ## idea
 
-Path: `idea/`
+Path:
+- framework root mode: `idea/`
+- real project sidecar mode: `spec/idea/`
 
 Main file:
 
@@ -38,7 +48,9 @@ Main file:
 
 ## specs
 
-Path: `specs/`
+Path:
+- framework root mode: `specs/`
+- real project sidecar mode: `spec/specs/`
 
 Main files:
 
@@ -54,7 +66,9 @@ Each specification lives in a numbered folder:
 
 ## bitacora
 
-Path: `bitacora/`
+Path:
+- framework root mode: `bitacora/`
+- real project sidecar mode: `spec/bitacora/`
 
 Subfolders:
 
@@ -72,7 +86,9 @@ Contains educational documentation for this system.
 
 ## scripts
 
-Path: `scripts/`
+Path:
+- framework root mode: `scripts/`
+- real project sidecar mode: `spec/scripts/`
 
 Contains scripts to initialize this structure in other repositories.
 

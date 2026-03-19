@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Start projects with specification-first discipline and AI-friendly guidance.</b></p>
+  <p><b>Start projects with specification-first discipline, GitHub Spec Kit as the base workflow, and AI-friendly guidance.</b></p>
 
   <p>
     <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Active-blue?style=for-the-badge" alt="English"></a>
@@ -8,7 +8,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/version-v1.3.0-blue?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-v1.4.0-blue?style=for-the-badge" alt="Version">
     <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NON--TECH-Start-green?style=for-the-badge" alt="Non Technical Start"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_START-Open-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart"></a>
@@ -21,6 +21,11 @@
 
 ## ⚡ Start in 30 Seconds
 
+This framework uses [GitHub Spec Kit](https://github.com/github/spec-kit) as the primary workflow reference.
+Use this repository as the practical layer around that base:
+- GitHub Spec Kit = reference workflow engine
+- this repository = starter structure, sidecar installation, AI rules, MCP, and project guidance
+
 1. Open [AI_START_HERE.md](./AI_START_HERE.md)
    or [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) if you are non-technical.
 2. Copy/paste this prompt:
@@ -28,7 +33,7 @@
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
 My project is: [describe your project in plain language].
-If my project is new, initialize from this template.
+If my project is new, initialize from this template and GitHub Spec Kit as the base workflow.
 If it already exists, adapt it without breaking current behavior.
 No code before approved spec and consistent plan.
 ```
@@ -122,6 +127,7 @@ Reference files:
 ## 🧭 Template vs Real Project
 
 - This repository is a **framework/template**.
+- It uses **GitHub Spec Kit as the base operating reference** for the command sequence and SDD flow.
 - The professional productization path is: framework root + `packages/sdd-core` + `packages/sdd-mcp`.
 - Your product work should run in your target project using this structure.
 - For real projects, prefer a compact `spec/` sidecar inside the project and keep code in the project root.
@@ -157,6 +163,8 @@ flowchart TD
   A --> F["scripts/"]
   A --> G["packages/"]
   A --> H["www/"]
+  H --> I["target-project/"]
+  I --> J["spec/"]
 ```
 
 Mandatory folders:
@@ -164,6 +172,11 @@ Mandatory folders:
 - `specs/`: numbered specifications
 - `bitacora/`: execution trace and handoffs
 - `docs/`: usage guides and references
+
+For real target projects, those SDD folders usually live under `./spec/`:
+- `./spec/idea/`
+- `./spec/specs/`
+- `./spec/bitacora/`
 
 Mandatory spec bundle (for each feature):
 1. `spec.md`
@@ -219,7 +232,7 @@ Mandatory spec bundle (for each feature):
 - Roadmap: [Public Roadmap](./docs/en/35-public-roadmap.md)
 - Organization: [Project Map](./docs/en/42-project-organization-map.md)
 - Media Kit: [Assets and Positioning](./docs/en/38-media-kit.md)
-- Next Release Prep: [v1.3.0](./docs/en/46-v1.3.0-preparation.md)
+- Historical Release Prep: [v1.3.0 prep notes](./docs/en/46-v1.3.0-preparation.md)
 - Quality: [Stage Checklists](./docs/en/21-quality-checklists-by-stage.md) · [ADR](./docs/en/24-architecture-decisions.md)
 
 ---

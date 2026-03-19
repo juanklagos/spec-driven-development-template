@@ -10,7 +10,7 @@ Start here / Empieza aquí:
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to carry out my project end-to-end.
 My project is: [describe your project in plain language].
-If my project is new, initialize it with this template + GitHub Spec Kit.
+If my project is new, initialize it with this template, using GitHub Spec Kit as the base workflow.
 If it already exists, adapt it to idea/specs/bitacora without breaking behavior.
 Guide me by level (beginner/intermediate/advanced) using simple language.
 ```

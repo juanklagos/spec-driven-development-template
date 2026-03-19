@@ -26,11 +26,21 @@ Forma recomendada del proyecto destino:
 - raíz del proyecto = código app
 - `spec/` = sistema operativo SDD
 
+Eso significa:
+- `spec/idea/`
+- `spec/specs/`
+- `spec/bitacora/`
+
+GitHub Spec Kit sigue siendo la referencia base del flujo de trabajo.
+Este repositorio agrega la estructura, el modo sidecar, las reglas para IA y la guía alrededor de esa base.
+
 
 
 ## Carpeta idea
 
-Ruta: `idea/`
+Ruta:
+- modo raíz del framework: `idea/`
+- modo sidecar en proyecto real: `spec/idea/`
 
 Archivo principal:
 
@@ -38,7 +48,9 @@ Archivo principal:
 
 ## Carpeta specs
 
-Ruta: `specs/`
+Ruta:
+- modo raíz del framework: `specs/`
+- modo sidecar en proyecto real: `spec/specs/`
 
 Archivos principales:
 
@@ -54,7 +66,9 @@ Cada especificación vive en una carpeta enumerada:
 
 ## Carpeta bitacora
 
-Ruta: `bitacora/`
+Ruta:
+- modo raíz del framework: `bitacora/`
+- modo sidecar en proyecto real: `spec/bitacora/`
 
 Subcarpetas:
 
@@ -72,7 +86,9 @@ Contiene la documentación pedagógica del sistema.
 
 ## Carpeta scripts
 
-Ruta: `scripts/`
+Ruta:
+- modo raíz del framework: `scripts/`
+- modo sidecar en proyecto real: `spec/scripts/`
 
 Contiene scripts para instalar esta estructura en otro repositorio.
 

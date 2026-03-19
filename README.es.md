@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Inicia proyectos con disciplina basada en especificaciones y guía amigable para IA.</b></p>
+  <p><b>Inicia proyectos con disciplina basada en especificaciones, GitHub Spec Kit como flujo base y guía amigable para IA.</b></p>
 
   <p>
     <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Read-blue?style=for-the-badge" alt="English"></a>
@@ -8,7 +8,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/version-v1.3.0-blue?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-v1.4.0-blue?style=for-the-badge" alt="Version">
     <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NO_TÉCNICO-Iniciar-green?style=for-the-badge" alt="Inicio no técnico"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_INICIO_IA-Abrir-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
@@ -21,6 +21,11 @@
 
 ## ⚡ Empieza en 30 segundos
 
+Este framework usa [GitHub Spec Kit](https://github.com/github/spec-kit) como referencia principal del flujo de trabajo.
+Usa este repositorio como la capa práctica alrededor de esa base:
+- GitHub Spec Kit = motor de flujo de referencia
+- este repositorio = estructura inicial, instalación sidecar, reglas para IA, MCP y guía del proyecto
+
 1. Abre [AI_START_HERE.md](./AI_START_HERE.md)
    o [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) si no eres técnico.
 2. Copia y pega este prompt:
@@ -28,7 +33,7 @@
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
 Mi proyecto es: [explica tu proyecto en lenguaje simple].
-Si mi proyecto es nuevo, inicializa desde este template.
+Si mi proyecto es nuevo, inicializa desde este template y GitHub Spec Kit como flujo base.
 Si ya existe, adáptalo sin romper el comportamiento actual.
 No hay código sin spec aprobada y plan consistente.
 ```
@@ -122,6 +127,7 @@ Archivos de referencia:
 ## 🧭 Template vs proyecto real
 
 - Este repositorio es un **marco/template**.
+- Usa **GitHub Spec Kit como referencia operativa base** para la secuencia de comandos y el flujo SDD.
 - La ruta profesional de producto es: raíz del framework + `packages/sdd-core` + `packages/sdd-mcp`.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
 - Para proyectos reales, prefiere un sidecar compacto `spec/` dentro del proyecto y mantén el código en la raíz del proyecto.
@@ -157,6 +163,8 @@ flowchart TD
   A --> F["scripts/"]
   A --> G["packages/"]
   A --> H["www/"]
+  H --> I["proyecto-destino/"]
+  I --> J["spec/"]
 ```
 
 Carpetas obligatorias:
@@ -164,6 +172,11 @@ Carpetas obligatorias:
 - `specs/`: especificaciones numeradas
 - `bitacora/`: trazabilidad y handoffs
 - `docs/`: guías y referencias
+
+En proyectos reales, esas carpetas SDD normalmente viven dentro de `./spec/`:
+- `./spec/idea/`
+- `./spec/specs/`
+- `./spec/bitacora/`
 
 Paquete obligatorio por feature:
 1. `spec.md`
@@ -219,7 +232,7 @@ Paquete obligatorio por feature:
 - Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
 - Organización: [Mapa del proyecto](./docs/es/42-mapa-organizacion-proyecto.md)
 - Kit de medios: [Assets y posicionamiento](./docs/es/38-kit-medios.md)
-- Preparación próxima release: [v1.3.0](./docs/es/46-preparacion-v1.3.0.md)
+- Preparación histórica de release: [notas de v1.3.0](./docs/es/46-preparacion-v1.3.0.md)
 - Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
 
 ---

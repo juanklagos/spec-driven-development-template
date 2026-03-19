@@ -8,25 +8,27 @@ Este roadmap hace explícitos los siguientes pasos del producto para que los usu
 
 ```mermaid
 flowchart LR
-  A["v1.3.0"] --> B["v1.4.0"]
-  B --> C["v1.5.0"]
+  A["v1.4.0"] --> B["v1.5.0"]
+  B --> C["v1.6.0"]
 ```
 
 ## Estado actual
 
 Release publicada:
-- `v1.3.0`
+- `v1.4.0`
 
 Disponible hoy:
 - framework SDD con política multi-agente
-- espacio de trabajo recomendado por defecto en `./www/<nombre-proyecto>/`, con soporte para rutas externas
+- GitHub Spec Kit como referencia base del flujo
+- sidecar `spec/` recomendado para proyectos reales
+- `./www/<nombre-proyecto>/` como contenedor limpio interno cuando el proyecto vive dentro de este repositorio
 - `sdd-core` tipado
 - `sdd-mcp` local
 - `stdio` + `Streamable HTTP`
 - tools, resources, prompts, smoke tests y tests de integración MCP
 - recetas de setup por cliente y alineación de versiones internas
 
-## v1.4.0
+## v1.5.0
 
 Enfoque: endurecer onboarding alojado y enriquecer experiencia del operador.
 
@@ -37,7 +39,7 @@ Planeado:
 - guías validadas con capturas para Cursor, Claude Code y Codex
 - automatización de releases y guía de empaquetado más fuerte
 
-## v1.5.0
+## v1.6.0
 
 Enfoque: estandarización del framework y empaquetado MCP publicable.
 
