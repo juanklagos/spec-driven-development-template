@@ -190,7 +190,7 @@ Propósito:
 
 ## Guías relacionadas
 
-- [Guía fácil de MCP](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/es/43-guia-mcp-facil.md)
-- [Modelo de onboarding MCP alojado](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/es/44-modelo-onboarding-mcp-alojado.md)
-- [Opciones gratis de MCP externo](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/es/47-opciones-gratis-mcp-externo.md)
-- [Mapa de organización del proyecto](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/es/42-mapa-organizacion-proyecto.md)
+- [Guía fácil de MCP](./43-guia-mcp-facil.md)
+- [Modelo de onboarding MCP alojado](./44-modelo-onboarding-mcp-alojado.md)
+- [Opciones gratis de MCP externo](./47-opciones-gratis-mcp-externo.md)
+- [Mapa de organización del proyecto](./42-mapa-organizacion-proyecto.md)

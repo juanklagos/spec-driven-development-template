@@ -50,6 +50,7 @@ flowchart LR
 - Client visual examples: [EN](./en/45-client-visual-examples-for-easy-mcp.md) | [ES](./es/45-ejemplos-visuales-clientes-mcp-facil.md)
 - Free external MCP options: [EN](./en/47-free-external-mcp-options.md) | [ES](./es/47-opciones-gratis-mcp-externo.md)
 - GitMCP connection guide: [EN](./en/48-how-to-connect-this-repo-with-gitmcp.md) | [ES](./es/48-como-conectar-este-repo-con-gitmcp.md)
+- Spec sidecar prompts: [EN](./en/49-spec-sidecar-prompts.md) | [ES](./es/49-prompts-sidecar-spec.md)
 - MCP complete reference: [EN](./en/41-complete-mcp-reference.md) | [ES](./es/41-referencia-completa-mcp.md)
 - MCP server guide: [EN](./en/33-mcp-server-guide.md) | [ES](./es/33-guia-servidor-mcp.md)
 - Launch kit: [EN](./en/34-launch-kit.md) | [ES](./es/34-kit-lanzamiento.md)
@@ -70,8 +71,8 @@ flowchart LR
 - Validated prompt bank: [EN](./en/26-validated-prompt-bank.md) | [ES](./es/26-banco-prompts-validados.md)
 
 ## Full index / Índice completo
-- EN docs list: `docs/en/00` to `docs/en/47`
-- ES docs list: `docs/es/00` to `docs/es/47`
+- EN docs list: `docs/en/00` to `docs/en/49`
+- ES docs list: `docs/es/00` to `docs/es/49`
 
 ## Documentation audits / Auditorías de documentación
 - EN: [32-documentation-audit-2026-03-14](./en/32-documentation-audit-2026-03-14.md)

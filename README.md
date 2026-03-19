@@ -211,6 +211,7 @@ Mandatory spec bundle (for each feature):
 - MCP Client Examples: [Visual Guide](./docs/en/45-client-visual-examples-for-easy-mcp.md)
 - MCP Free External Options: [Guide](./docs/en/47-free-external-mcp-options.md)
 - MCP GitMCP Connection: [Step-by-step](./docs/en/48-how-to-connect-this-repo-with-gitmcp.md)
+- Sidecar Prompts: [Exact prompts for `spec/` mode](./docs/en/49-spec-sidecar-prompts.md)
 - MCP Setup: [Server Guide](./docs/en/33-mcp-server-guide.md)
 - MCP Results: [Command Reference](./docs/en/40-command-results-reference.md)
 - Client Setup: [Recipes](./docs/en/36-client-setup-recipes.md)

@@ -13,6 +13,7 @@ import {
   getFrameworkRoot,
   listSpecs,
   recordUserConsent,
+  resolveSddRoot,
   validateProject,
   writeDailyLog,
   writeDecision,
@@ -54,9 +55,11 @@ export function createSddMcpServer(): McpServer {
       },
       outputSchema: {
         projectRoot: z.string(),
+        sddRoot: z.string(),
         profile: z.enum(["minimal", "recommended", "full"]),
         assistant: z.string(),
-        usedSpecKit: z.boolean()
+        usedSpecKit: z.boolean(),
+        layout: z.enum(["full", "sidecar"])
       }
     },
     async ({ projectName, assistant, profile, useSpecKit }) => {
@@ -367,7 +370,7 @@ export function createSddMcpServer(): McpServer {
       contents: [
         {
           uri: uri.href,
-          text: await fs.readFile(path.join(getManagedWorkspaceProjectRoot(projectName), "specs/INDEX.md"), "utf8")
+          text: await fs.readFile(path.join(await getManagedWorkspaceSddRoot(projectName), "specs/INDEX.md"), "utf8")
         }
       ]
     })
@@ -382,7 +385,7 @@ export function createSddMcpServer(): McpServer {
         {
           uri: uri.href,
           text: await fs.readFile(
-            path.join(getManagedWorkspaceProjectRoot(projectName), "bitacora/global/PROJECT_LOG.md"),
+            path.join(await getManagedWorkspaceSddRoot(projectName), "bitacora/global/PROJECT_LOG.md"),
             "utf8"
           )
         }
@@ -395,7 +398,7 @@ export function createSddMcpServer(): McpServer {
     new ResourceTemplate("sdd://project/{projectName}/latest-handoff", { list: undefined }),
     { mimeType: "text/markdown" },
     async (uri, { projectName }) => {
-      const handoffDir = path.join(getManagedWorkspaceProjectRoot(projectName), "bitacora/handoffs");
+      const handoffDir = path.join(await getManagedWorkspaceSddRoot(projectName), "bitacora/handoffs");
       const entries = await fs.readdir(handoffDir, { withFileTypes: true });
       const latest = entries
         .filter((entry) => entry.isFile())
@@ -422,7 +425,7 @@ export function createSddMcpServer(): McpServer {
       contents: [
         {
           uri: uri.href,
-          text: await fs.readFile(path.join(getManagedWorkspaceProjectRoot(projectName), "idea/IDEA_GENERAL.md"), "utf8")
+          text: await fs.readFile(path.join(await getManagedWorkspaceSddRoot(projectName), "idea/IDEA_GENERAL.md"), "utf8")
         }
       ]
     })
@@ -440,7 +443,7 @@ export function createSddMcpServer(): McpServer {
             uri: uri.href,
             text: await fs.readFile(
               path.join(
-                getManagedWorkspaceProjectRoot(projectName),
+                await getManagedWorkspaceSddRoot(projectName),
                 "specs",
                 normalizeSpecId(specId),
                 normalizedDocument
@@ -711,6 +714,10 @@ function getManagedWorkspaceProjectRoot(projectNameInput: string | string[]): st
   }
 
   return projectRoot;
+}
+
+async function getManagedWorkspaceSddRoot(projectNameInput: string | string[]): Promise<string> {
+  return resolveSddRoot(getManagedWorkspaceProjectRoot(projectNameInput));
 }
 
 function normalizeWorkspaceProjectName(value: string | string[]): string {

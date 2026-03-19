@@ -211,6 +211,7 @@ Paquete obligatorio por feature:
 - MCP Ejemplos por cliente: [Guía visual](./docs/es/45-ejemplos-visuales-clientes-mcp-facil.md)
 - MCP Opciones externas gratis: [Guía](./docs/es/47-opciones-gratis-mcp-externo.md)
 - MCP Conexión GitMCP: [Paso a paso](./docs/es/48-como-conectar-este-repo-con-gitmcp.md)
+- Prompts sidecar: [Prompts exactos para modo `spec/`](./docs/es/49-prompts-sidecar-spec.md)
 - Setup MCP: [Guía del servidor](./docs/es/33-guia-servidor-mcp.md)
 - Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
 - Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)

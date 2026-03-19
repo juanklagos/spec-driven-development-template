@@ -90,4 +90,4 @@ If you need the AI to guide the real SDD workflow and work with project files, y
 
 ## Next guide
 
-If you want the exact step-by-step connection flow for this repository, continue with [How to Connect This Repository with GitMCP](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/48-how-to-connect-this-repo-with-gitmcp.md).
+If you want the exact step-by-step connection flow for this repository, continue with [How to Connect This Repository with GitMCP](./48-how-to-connect-this-repo-with-gitmcp.md).

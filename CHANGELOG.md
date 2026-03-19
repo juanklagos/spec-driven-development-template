@@ -6,6 +6,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.4.0] — 2026-03-19
+
+### Added
+- Exact sidecar-mode prompts to keep advanced projects clean and avoid copying the full framework repository:
+  - `docs/en/49-spec-sidecar-prompts.md`
+  - `docs/es/49-prompts-sidecar-spec.md`
+
+### Changed
+- The professional default architecture is now explicit:
+  - project code stays in the project root
+  - SDD artifacts stay in `./spec/`
+  - full template copy is only for explicit standalone mode
+- `sdd-core` now resolves SDD roots automatically for both:
+  - classic root layout
+  - compact `spec/` sidecar layout
+- `sdd-mcp` resources and tools now work correctly with sidecar projects created under `./www/<project-name>/`.
+- `scripts/create-www-project.sh` now invokes nested scripts through `bash` for reliable execution from MCP/Node-driven flows.
+- GitMCP docs now use local relative links compatible with offline markdown link checks.
+
+### Fixed
+- MCP integration test updated for sidecar workspace outputs (`projectRoot` + `sddRoot` + `layout`).
+- Local link-check failures caused by absolute filesystem links in:
+  - `docs/en/47-free-external-mcp-options.md`
+  - `docs/en/48-how-to-connect-this-repo-with-gitmcp.md`
+  - `docs/es/47-opciones-gratis-mcp-externo.md`
+  - `docs/es/48-como-conectar-este-repo-con-gitmcp.md`
+
+### Verified
+- `npm run typecheck`
+- `npm run build`
+- `npm run mcp:test`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`
+
 ## [v1.3.1] — 2026-03-18
 
 ### Added

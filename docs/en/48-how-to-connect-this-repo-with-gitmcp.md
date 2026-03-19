@@ -190,7 +190,7 @@ Purpose:
 
 ## Related guides
 
-- [Easy MCP Guide](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/43-easy-mcp-guide.md)
-- [Hosted MCP Onboarding Model](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/44-hosted-mcp-onboarding-model.md)
-- [Free External MCP Options](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/47-free-external-mcp-options.md)
-- [Project Organization Map](/Users/juanklagos/www/cucutadev/spec-driven-development-template/docs/en/42-project-organization-map.md)
+- [Easy MCP Guide](./43-easy-mcp-guide.md)
+- [Hosted MCP Onboarding Model](./44-hosted-mcp-onboarding-model.md)
+- [Free External MCP Options](./47-free-external-mcp-options.md)
+- [Project Organization Map](./42-project-organization-map.md)

@@ -58,18 +58,18 @@ fi
 mkdir -p "$ROOT_DIR/www"
 
 if [ "${PROFILE#--profile=}" = "full" ]; then
-  if [ "$USE_SPEC_KIT" = "no" ]; then
-    "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
-  else
-    if "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT" "$PROFILE"; then
+    if [ "$USE_SPEC_KIT" = "no" ]; then
+    bash "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
+    else
+    if bash "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT" "$PROFILE"; then
       :
     else
       echo "[WARN] Spec Kit init failed. Falling back to plain full template init."
-      "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
+      bash "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
     fi
   fi
 else
-  "$SCRIPT_DIR/install-spec-sidecar.sh" "$TARGET" "$PROFILE"
+  bash "$SCRIPT_DIR/install-spec-sidecar.sh" "$TARGET" "$PROFILE"
 
   if [ "$USE_SPEC_KIT" = "yes" ]; then
     (

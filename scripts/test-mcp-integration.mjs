@@ -27,7 +27,8 @@ function asObject(result) {
 }
 
 async function writeApprovedSpecBundle(projectRoot, specId) {
-  const specDir = path.join(projectRoot, "specs", specId);
+  const sddRoot = path.join(projectRoot, "spec");
+  const specDir = path.join(sddRoot, "specs", specId);
 
   await fs.writeFile(
     path.join(specDir, "spec.md"),
@@ -113,7 +114,7 @@ Fixture integration test for MCP.
     "utf8"
   );
 
-  const indexPath = path.join(projectRoot, "specs", "INDEX.md");
+  const indexPath = path.join(sddRoot, "specs", "INDEX.md");
   await fs.writeFile(
     indexPath,
     `# Specs Index / Índice de specs
@@ -145,7 +146,10 @@ async function main() {
 
     const workspaceData = asObject(createWorkspaceResult);
     projectRoot = String(workspaceData.projectRoot);
+    const sddRoot = String(workspaceData.sddRoot);
     assert.ok(projectRoot.includes(path.join("www", projectName)));
+    assert.equal(sddRoot, path.join(projectRoot, "spec"));
+    assert.equal(String(workspaceData.layout), "sidecar");
 
     const createSpecResult = await client.callTool({
       name: "sdd_create_spec",
@@ -159,6 +163,7 @@ async function main() {
     const specData = asObject(createSpecResult);
     const specId = String(specData.specId);
     assert.equal(specId, "001-fixture-landing");
+    assert.equal(String(specData.specDir), path.join(sddRoot, "specs", specId));
 
     await writeApprovedSpecBundle(projectRoot, specId);
 

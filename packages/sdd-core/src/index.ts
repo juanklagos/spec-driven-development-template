@@ -18,9 +18,11 @@ export interface CreateWorkspaceInput {
 
 export interface CreateWorkspaceResult {
   projectRoot: string;
+  sddRoot: string;
   profile: ScaffoldProfile;
   assistant: string;
   usedSpecKit: boolean;
+  layout: "full" | "sidecar";
 }
 
 export interface CreateSpecInput {
@@ -105,21 +107,25 @@ export async function createWorkspace(input: CreateWorkspaceInput): Promise<Crea
     args.push("--recommended-template");
   }
 
-  await execFileAsync(scriptPath, args, { cwd: frameworkRoot });
+  await execFileAsync("bash", [scriptPath, ...args], { cwd: frameworkRoot });
 
+  const projectRoot = path.join(frameworkRoot, "www", slugify(input.projectName));
+  const layout = profile === "full" ? "full" : "sidecar";
   return {
-    projectRoot: path.join(frameworkRoot, "www", slugify(input.projectName)),
+    projectRoot,
+    sddRoot: layout === "sidecar" ? path.join(projectRoot, "spec") : projectRoot,
     profile,
     assistant,
-    usedSpecKit: useSpecKit
+    usedSpecKit: useSpecKit,
+    layout
   };
 }
 
 export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResult> {
   const projectRoot = path.resolve(input.projectRoot);
-  await ensureProjectRootAllowed(projectRoot);
+  const sddRoot = await resolveSddRoot(projectRoot);
 
-  const specsRoot = path.join(projectRoot, "specs");
+  const specsRoot = path.join(sddRoot, "specs");
   const templateRoot = path.join(specsRoot, "_template");
   const slug = slugify(input.featureName);
   if (!slug) {
@@ -159,8 +165,7 @@ export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResu
 }
 
 export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const specsRoot = path.join(root, "specs");
   const entries = await safeReadDir(specsRoot);
   const items: SpecSummary[] = [];
@@ -187,8 +192,7 @@ export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
 }
 
 export async function validateProject(projectRoot: string): Promise<ValidationResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const messages: ValidationMessage[] = [];
 
   await requireDir(root, "idea", messages);
@@ -242,8 +246,7 @@ export async function validateProject(projectRoot: string): Promise<ValidationRe
 }
 
 export async function checkGate(projectRoot: string): Promise<GateResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const messages: ValidationMessage[] = [];
   const specs = await listSpecs(root);
   let approvedSpecs = 0;
@@ -361,8 +364,7 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
 }
 
 export async function recordUserConsent(projectRoot: string, summary: string): Promise<ConsentResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const consentDir = path.join(root, ".sdd");
   const logFile = path.join(consentDir, "user-consent.log");
   const timestamp = new Date().toISOString();
@@ -378,8 +380,7 @@ export async function recordUserConsent(projectRoot: string, summary: string): P
 }
 
 export async function generateStatus(projectRoot: string): Promise<FileOutputResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const indexPath = path.join(root, "specs/INDEX.md");
   const outputPath = path.join(root, "STATUS.md");
 
@@ -442,8 +443,7 @@ export async function generateStatus(projectRoot: string): Promise<FileOutputRes
 }
 
 export async function generateRoadmap(projectRoot: string): Promise<{ mermaidPath: string; markdownPath: string; mermaid: string; markdown: string }> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const indexPath = path.join(root, "specs/INDEX.md");
   const docsDir = path.join(root, "docs");
   const mermaidPath = path.join(docsDir, "roadmap.mmd");
@@ -508,8 +508,7 @@ export async function generateRoadmap(projectRoot: string): Promise<{ mermaidPat
 }
 
 export async function appendProjectLogEntry(projectRoot: string, entry: string): Promise<FileOutputResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const outputPath = path.join(root, "bitacora/global/PROJECT_LOG.md");
   await fs.appendFile(outputPath, `\n${entry.trim()}\n`, "utf8");
   return {
@@ -519,8 +518,7 @@ export async function appendProjectLogEntry(projectRoot: string, entry: string):
 }
 
 export async function writeDailyLog(projectRoot: string, date: string, content: string): Promise<FileOutputResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const safeDate = normalizeDate(date);
   const outputPath = path.join(root, "bitacora/diaria", `${safeDate}.md`);
   await fs.writeFile(outputPath, content, "utf8");
@@ -531,8 +529,7 @@ export async function writeDailyLog(projectRoot: string, date: string, content: 
 }
 
 export async function writeHandoff(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const outputPath = path.join(root, "bitacora/handoffs", normalizeMarkdownFileName(fileName));
   await fs.writeFile(outputPath, content, "utf8");
   return {
@@ -542,8 +539,7 @@ export async function writeHandoff(projectRoot: string, fileName: string, conten
 }
 
 export async function writeDecision(projectRoot: string, fileName: string, content: string): Promise<FileOutputResult> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  const root = await resolveSddRoot(projectRoot);
   const outputPath = path.join(root, "bitacora/decisiones", normalizeMarkdownFileName(fileName));
   await fs.writeFile(outputPath, content, "utf8");
   return {
@@ -564,6 +560,22 @@ export async function ensureProjectRootAllowed(projectRoot: string): Promise<voi
   if (isSameOrInside(root, frameworkRoot) && !isSameOrInside(root, wwwRoot)) {
     throw new Error(`Project roots inside the template must live under ${wwwRoot}. Use an external path or ./www/<project-name>.`);
   }
+}
+
+export async function resolveSddRoot(projectRoot: string): Promise<string> {
+  const root = path.resolve(projectRoot);
+  await ensureProjectRootAllowed(root);
+
+  if (await isSddRoot(root)) {
+    return root;
+  }
+
+  const sidecarRoot = path.join(root, "spec");
+  if (await isSddRoot(sidecarRoot)) {
+    return sidecarRoot;
+  }
+
+  throw new Error(`Could not find an SDD root at ${root} or ${sidecarRoot}`);
 }
 
 function normalizeDate(value: string): string {
@@ -637,6 +649,15 @@ async function exists(filePath: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+async function isSddRoot(candidate: string): Promise<boolean> {
+  return (
+    (await exists(path.join(candidate, "sdd.policy.yaml"))) &&
+    (await exists(path.join(candidate, "idea"))) &&
+    (await exists(path.join(candidate, "specs"))) &&
+    (await exists(path.join(candidate, "bitacora")))
+  );
 }
 
 function extractApprovalStatus(content: string): string {
