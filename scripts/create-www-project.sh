@@ -57,14 +57,40 @@ fi
 
 mkdir -p "$ROOT_DIR/www"
 
-if [ "$USE_SPEC_KIT" = "no" ]; then
-  "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
-else
-  if "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT" "$PROFILE"; then
-    :
-  else
-    echo "[WARN] Spec Kit init failed. Falling back to plain template init."
+if [ "${PROFILE#--profile=}" = "full" ]; then
+  if [ "$USE_SPEC_KIT" = "no" ]; then
     "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
+  else
+    if "$SCRIPT_DIR/init-project-with-spec-kit.sh" "$TARGET" "$ASSISTANT" "$PROFILE"; then
+      :
+    else
+      echo "[WARN] Spec Kit init failed. Falling back to plain full template init."
+      "$SCRIPT_DIR/init-project.sh" "$TARGET" "$PROFILE"
+    fi
+  fi
+else
+  "$SCRIPT_DIR/install-spec-sidecar.sh" "$TARGET" "$PROFILE"
+
+  if [ "$USE_SPEC_KIT" = "yes" ]; then
+    (
+      cd "$TARGET"
+      if command -v specify >/dev/null 2>&1; then
+        specify init . --ai "$ASSISTANT" --force
+      elif command -v uv >/dev/null 2>&1; then
+        uv tool install specify-cli --from git+https://github.com/github/spec-kit.git >/dev/null
+        if command -v specify >/dev/null 2>&1; then
+          specify init . --ai "$ASSISTANT" --force
+        else
+          uvx --from git+https://github.com/github/spec-kit.git specify init . --ai "$ASSISTANT" --force
+        fi
+      elif command -v uvx >/dev/null 2>&1; then
+        uvx --from git+https://github.com/github/spec-kit.git specify init . --ai "$ASSISTANT" --force
+      else
+        echo "[WARN] Spec Kit was requested, but neither 'specify', 'uv', nor 'uvx' were found."
+      fi
+    )
+  else
+    :
   fi
 fi
 
@@ -76,19 +102,21 @@ Profile:
    ${PROFILE#--profile=}
 
 EN:
-- Work and implement inside this folder.
+- Work in this project root.
+- Keep SDD artifacts in ./spec/ unless you explicitly chose the full template mode.
 - Keep template root for framework maintenance only.
 
 ES:
-- Trabaja e implementa dentro de esta carpeta.
+- Trabaja en la raíz de este proyecto.
+- Mantén los artefactos SDD dentro de ./spec/ salvo que hayas elegido el modo full.
 - Mantén la raíz del template solo para mantenimiento del framework.
 
 Next / Siguiente:
   cd "$TARGET"
-  ./scripts/new-spec.sh "first-feature" "Owner"
+  ./spec/scripts/new-spec.sh "first-feature" "Owner"
   # Record consent only right before implementation starts:
-  ./scripts/confirm-user-consent.sh "User approved implementation for spec 001"
-  ./scripts/validate-sdd.sh . --strict
-  ./scripts/check-sdd-policy.sh .
-  ./scripts/check-sdd-gate.sh .
+  ./spec/scripts/confirm-user-consent.sh "User approved implementation for spec 001"
+  ./spec/scripts/validate-sdd.sh . --strict
+  ./spec/scripts/check-sdd-policy.sh .
+  ./spec/scripts/check-sdd-gate.sh .
 MSG

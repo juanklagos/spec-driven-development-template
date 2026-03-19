@@ -15,11 +15,16 @@
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 ```text
-Usando https://github.com/juanklagos/spec-driven-development-template, prepara la estructura de mi proyecto con idea/specs/bitacora y guíame con lenguaje simple.
+Usando https://github.com/juanklagos/spec-driven-development-template, prepara la estructura de mi proyecto con un sidecar compacto spec/ y guíame con lenguaje simple.
 Mi proyecto es: [explica el proyecto].
-Si es nuevo, inicializa todo.
+No clones el template completo dentro de mi proyecto salvo que yo pida un workspace standalone.
+Si es nuevo, crea una raíz de proyecto limpia e instala spec/.
 Si ya existe, adáptalo sin romper el comportamiento actual.
 ```
+
+Forma recomendada del proyecto destino:
+- raíz del proyecto = código app
+- `spec/` = sistema operativo SDD
 
 
 

@@ -20,7 +20,23 @@ Hay dos niveles que debes entender:
    Este repositorio en sí mismo. Contiene el framework SDD reusable, el servidor MCP, las guías, los scripts y las plantillas.
 
 2. **Proyecto destino**
-   El proyecto ejecutable o adaptado que usa el framework. Dentro de este repositorio, el default limpio es `./www/<nombre-proyecto>/`. Fuera de este repositorio, el proyecto destino puede vivir en otra ruta elegida por el usuario.
+   El proyecto ejecutable o adaptado que usa el framework. El default profesional ahora es:
+   - código del proyecto en la raíz del proyecto
+   - sidecar SDD en `./spec/`
+   Dentro de este repositorio, el contenedor limpio para ese proyecto destino es `./www/<nombre-proyecto>/`. Fuera de este repositorio, el proyecto destino puede vivir en otra ruta elegida por el usuario.
+
+## Forma recomendada del proyecto destino
+
+```mermaid
+flowchart TD
+  A["Raíz del proyecto destino"] --> B["código app"]
+  A --> C["spec/"]
+  C --> D["idea/"]
+  C --> E["specs/"]
+  C --> F["bitacora/"]
+  C --> G["scripts/"]
+  C --> H["template-context/"]
+```
 
 ## Organigrama organizativo
 

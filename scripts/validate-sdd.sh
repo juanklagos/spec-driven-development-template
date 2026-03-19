@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="${1:-.}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/sdd-root.sh"
+
+ROOT_INPUT="${1:-.}"
 STRICT="${2:-}"
+ROOT="$(sdd_resolve_root "$ROOT_INPUT" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
+
+if [ -z "$ROOT" ]; then
+  echo "Error: could not resolve SDD root from: $ROOT_INPUT"
+  exit 1
+fi
 
 errors=0
 warnings=0
@@ -67,7 +76,7 @@ require_file "specs/_template/research.md"
 require_file "specs/_template/history.md"
 
 if [ -f "$ROOT/scripts/check-sdd-policy.sh" ]; then
-  if "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
+  if bash "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
     ok "SDD policy check"
   else
     fail "SDD policy check failed"
@@ -108,18 +117,25 @@ else
 fi
 
 if [ "$STRICT" = "--strict" ]; then
-  if command -v git >/dev/null 2>&1 && [ -d "$ROOT/.git" ]; then
+  PROJECT_ROOT="$(sdd_project_root "$ROOT")"
+  PREFIX="$(sdd_relative_prefix "$PROJECT_ROOT" "$ROOT")"
+  SPEC_PREFIX="specs"
+  if [ -n "$PREFIX" ]; then
+    SPEC_PREFIX="$PREFIX/specs"
+  fi
+
+  if command -v git >/dev/null 2>&1 && [ -d "$PROJECT_ROOT/.git" ]; then
     while IFS= read -r spec_path; do
-      spec_name="${spec_path#specs/}"
+      spec_name="${spec_path#$SPEC_PREFIX/}"
       spec_name="${spec_name%%/*}"
       if [ -n "$spec_name" ] && [[ "$spec_name" =~ ^[0-9]{3}- ]]; then
-        if ! git -C "$ROOT" diff --name-only -- "specs/$spec_name/history.md" | grep -q .; then
+        if ! git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/$spec_name/history.md" | grep -q .; then
           warn "Strict mode: $spec_name changed but history.md was not updated in working tree."
         fi
       fi
-    done < <(git -C "$ROOT" diff --name-only -- 'specs/*' | grep -Ev 'specs/.*/history\.md$' || true)
+    done < <(git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/*" | grep -Ev "$SPEC_PREFIX/.*/history\.md$" || true)
   else
-    warn "Strict mode requested, but git repository is not available in root."
+    warn "Strict mode requested, but git repository is not available in the project root."
   fi
 fi
 

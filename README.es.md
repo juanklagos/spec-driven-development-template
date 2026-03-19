@@ -88,14 +88,20 @@ Usa un ejemplo completo:
 Este template exige chequeos de política y compuerta:
 
 ```bash
+# workspace standalone del framework
 ./scripts/check-sdd-policy.sh .
 ./scripts/check-sdd-gate.sh .
+
+# sidecar compacto dentro de un proyecto real
+./spec/scripts/check-sdd-policy.sh .
+./spec/scripts/check-sdd-gate.sh .
 ```
 
 Parada dura:
 - No hay código sin `spec.md` aprobada y `plan.md` consistente.
 - Registra consentimiento explícito del usuario antes de iniciar ejecución/implementación:
-  `./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
+  - sidecar: `./spec/scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
+  - standalone: `./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
 
 Archivos de referencia:
 - [sdd.policy.yaml](./sdd.policy.yaml)
@@ -118,7 +124,9 @@ Archivos de referencia:
 - Este repositorio es un **marco/template**.
 - La ruta profesional de producto es: raíz del framework + `packages/sdd-core` + `packages/sdd-mcp`.
 - El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
-- Dentro de este repositorio, prefiere `www/<nombre-proyecto>/` como espacio recomendado por defecto para proyectos ejecutables.
+- Para proyectos reales, prefiere un sidecar compacto `spec/` dentro del proyecto y mantén el código en la raíz del proyecto.
+- No clones ni copies el repositorio completo del framework dentro del proyecto destino salvo que quieras explícitamente un workspace standalone completo.
+- Dentro de este repositorio, usa `www/<nombre-proyecto>/` como contenedor limpio cuando el proyecto deba vivir aquí.
 - El usuario puede elegir otra ruta; si el proyecto ejecutable vive dentro de este repositorio, mantenlo bajo `www/` para no mezclar framework y producto.
 - Si adaptas un proyecto existente, integra `idea/specs/bitacora` sin romper comportamiento actual.
 
@@ -178,18 +186,18 @@ Paquete obligatorio por feature:
 
 | Herramienta | Comando | Descripción |
 | :--- | :--- | :--- |
-| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea proyecto ejecutable en `www/` (scaffold recomendado por defecto) |
-| Proyecto nuevo | `./scripts/init-project.sh /ruta/absoluta/proyecto --profile=recommended` | Inicializa estructura SDD en una ruta externa |
-| Proyecto nuevo + Spec Kit | `./scripts/init-project-with-spec-kit.sh /ruta/absoluta/proyecto codex --profile=recommended` | Inicializa estructura + Spec Kit en una ruta externa |
-| Nueva spec | `./scripts/new-spec.sh` | Crea carpeta numerada de spec |
-| Validación | `./scripts/validate-sdd.sh . --strict` | Valida estructura y consistencia |
-| Chequeo de política | `./scripts/check-sdd-policy.sh .` | Valida política multi-agente |
-| Compuerta SDD | `./scripts/check-sdd-gate.sh .` | Exige aprobación y consistencia del plan |
-| Dashboard de estado | `./scripts/generate-status.sh` | Genera reporte de estado |
+| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea una raíz de proyecto limpia en `www/` e instala el sidecar compacto `spec/` |
+| Instalar sidecar compacto | `./scripts/install-spec-sidecar.sh /ruta/absoluta/proyecto --profile=recommended` | Instala solo el sidecar SDD dentro de un proyecto existente o externo |
+| Workspace standalone full | `./scripts/init-project.sh /ruta/absoluta/proyecto --profile=full` | Copia el template amplio standalone solo cuando se necesite explícitamente |
+| Nueva spec | `./spec/scripts/new-spec.sh` | Crea carpeta numerada de spec en modo sidecar compacto |
+| Validación | `./spec/scripts/validate-sdd.sh . --strict` | Valida estructura y consistencia en modo sidecar compacto |
+| Chequeo de política | `./spec/scripts/check-sdd-policy.sh .` | Valida política multi-agente en modo sidecar compacto |
+| Compuerta SDD | `./spec/scripts/check-sdd-gate.sh .` | Exige aprobación y consistencia del plan en modo sidecar compacto |
+| Dashboard de estado | `./spec/scripts/generate-status.sh` | Genera reporte de estado cuando ese script exista en el layout del proyecto |
 | MCP Server MVP | `npm run mcp:start` | Inicia el servidor local `sdd-mcp` por stdio |
 
 > [!TIP]
-> Para copia limpia: `npx degit juanklagos/spec-driven-development-template`
+> Ruta profesional por defecto: instala solo el sidecar compacto `spec/` en proyectos reales. Usa copia completa solo cuando realmente necesites un workspace standalone.
 
 ---
 

@@ -15,11 +15,16 @@
 ## 🗣️ Friendly prompt (copy/paste)
 
 ```text
-Using https://github.com/juanklagos/spec-driven-development-template, set up my project structure with idea/specs/bitacora and guide me in simple language.
+Using https://github.com/juanklagos/spec-driven-development-template, set up my project structure with a compact spec/ sidecar and guide me in simple language.
 My project is: [describe project].
-If it is new, initialize everything.
+Do not clone the full template into my project unless I explicitly ask for a standalone workspace.
+If it is new, create a clean project root and install spec/.
 If it already exists, adapt it without breaking current behavior.
 ```
+
+Recommended target-project shape:
+- project root = app code
+- `spec/` = SDD operating system
 
 
 

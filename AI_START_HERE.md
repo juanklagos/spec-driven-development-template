@@ -43,39 +43,43 @@ If not aligned, refine docs first:
 
 ## 2.1) Execution workspace / Espacio de ejecución
 
-- EN: Prefer `www/<project-name>/` as the recommended default workspace inside this template.
-- ES: Prefiere `www/<nombre-proyecto>/` como espacio recomendado por defecto dentro de este template.
+- EN: For real projects, default to a compact `spec/` sidecar inside the project and keep code in the project root.
+- ES: Para proyectos reales, usa por defecto un sidecar compacto `spec/` dentro del proyecto y mantén el código en la raíz.
+- EN: Do not clone or copy the full framework repository into the target project unless the user explicitly asks for that mode.
+- ES: No clones ni copies el repositorio completo del framework dentro del proyecto destino salvo que el usuario pida explícitamente ese modo.
+- EN: Use `www/<project-name>/` only when the project itself should live inside this template repository.
+- ES: Usa `www/<nombre-proyecto>/` solo cuando el proyecto deba vivir dentro de este repositorio template.
 - EN: The user may choose another target path.
 - ES: El usuario puede elegir otra ruta destino.
 - EN: If the runnable project lives inside this repository, keep it under `www/`.
 - ES: Si el proyecto ejecutable vive dentro de este repositorio, mantenlo dentro de `www/`.
 
-Create workspace:
+Create clean internal workspace:
 
 ```bash
 ./scripts/create-www-project.sh my-project codex
 ```
 
 Default behavior:
-- EN: creates a recommended scaffold (SDD core + AI context + quality/playbooks essentials).
-- ES: crea un scaffold recomendado (núcleo SDD + contexto IA + esenciales de calidad/playbooks).
+- EN: creates a clean project root and installs the compact `spec/` sidecar by default.
+- ES: crea una raíz de proyecto limpia e instala por defecto el sidecar compacto `spec/`.
 
 External target path:
 
 ```bash
-./scripts/init-project.sh /absolute/path/to/project --profile=recommended
+./scripts/install-spec-sidecar.sh /absolute/path/to/project --profile=recommended
 ```
 
-Optional minimal scaffold:
+Full standalone workspace only when explicitly requested:
+
+```bash
+./scripts/init-project.sh /absolute/path/to/project --profile=full
+```
+
+Optional minimal sidecar:
 
 ```bash
 ./scripts/create-www-project.sh my-project codex --minimal-template
-```
-
-Optional full scaffold:
-
-```bash
-./scripts/create-www-project.sh my-project codex --full-template
 ```
 
 ## 2.2) Easy MCP mode / Modo fácil MCP
@@ -110,17 +114,16 @@ Primary easy MCP guide:
 EN:
 Using https://github.com/juanklagos/spec-driven-development-template, create everything needed to execute my project end-to-end.
 My project is: [describe your project in plain language].
-If this repository is not available locally, tell me how to get it first.
-Then initialize the template, define the idea, create the first spec, and guide me step by step.
-Prefer `www/<project-name>/` as the default workspace unless I choose another target path.
+Do not clone or copy the full repository into my project unless I explicitly ask for a full standalone workspace.
+Install only the compact `spec/` sidecar by default, then define the idea, create the first spec, and guide me step by step.
 Before execution/implementation starts, ask for my approval and record it.
 Do not skip idea, spec, plan, tasks, validation, and logbook.
 
 ES:
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para ejecutar mi proyecto de inicio a fin.
 Mi proyecto es: [explica tu proyecto en lenguaje simple].
-Si este repositorio no está disponible en local, indícame primero cómo obtenerlo.
-Luego inicializa el template, define la idea, crea la primera spec y guíame paso a paso.
+No clones ni copies el repositorio completo dentro de mi proyecto salvo que yo pida un workspace standalone completo.
+Instala solo el sidecar compacto `spec/` por defecto, luego define la idea, crea la primera spec y guíame paso a paso.
 Antes de iniciar ejecución/implementación, pide mi aprobación y regístrala.
 No omitas idea, spec, plan, tasks, validación y bitácora.
 ```
@@ -131,14 +134,13 @@ No omitas idea, spec, plan, tasks, validación y bitácora.
 EN:
 Using https://github.com/juanklagos/spec-driven-development-template, adapt my existing project without breaking current behavior.
 Project path: [PROJECT_PATH].
-Integrate idea/specs/bitacora, create the first spec based on existing behavior, and leave full traceability.
+Do not copy the full template. Install only the `spec/` sidecar, integrate idea/specs/bitacora there, create the first spec based on existing behavior, and leave full traceability.
 Guide me in simple language.
 
 ES:
 Usando https://github.com/juanklagos/spec-driven-development-template, adapta mi proyecto existente sin romper el comportamiento actual.
 Ruta del proyecto: [RUTA_PROYECTO].
-Integra idea/specs/bitacora, crea la primera spec basada en el comportamiento existente y deja trazabilidad completa.
-Prefiere `www/<nombre-proyecto>/` como espacio por defecto salvo que yo elija otra ruta.
+No copies el template completo. Instala solo el sidecar `spec/`, integra allí idea/specs/bitacora, crea la primera spec basada en el comportamiento existente y deja trazabilidad completa.
 Guíame con lenguaje simple.
 ```
 
@@ -258,6 +260,12 @@ and give me the next exact step. Use beginner-friendly language.
 Local validation:
 
 ```bash
+# compact sidecar inside a real project
+./spec/scripts/validate-sdd.sh . --strict
+./spec/scripts/check-sdd-policy.sh .
+./spec/scripts/check-sdd-gate.sh .
+
+# full standalone workspace
 ./scripts/validate-sdd.sh . --strict
 ./scripts/check-sdd-policy.sh .
 ./scripts/check-sdd-gate.sh .

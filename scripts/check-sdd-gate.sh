@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="${1:-.}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/sdd-root.sh"
+
+ROOT_INPUT="${1:-.}"
+ROOT="$(sdd_resolve_root "$ROOT_INPUT" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
+if [ -z "$ROOT" ]; then
+  echo "Error: could not resolve SDD root from: $ROOT_INPUT"
+  exit 1
+fi
 
 errors=0
 warnings=0
@@ -69,7 +77,7 @@ count_matches() {
 printf "Checking SDD gate in: %s\n" "$(cd "$ROOT" && pwd)"
 
 if [ -f "$ROOT/scripts/check-sdd-policy.sh" ]; then
-  if "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
+  if bash "$ROOT/scripts/check-sdd-policy.sh" "$ROOT"; then
     ok "SDD policy check"
   else
     fail "SDD policy check failed"

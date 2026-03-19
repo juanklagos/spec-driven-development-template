@@ -88,14 +88,20 @@ Use a complete example:
 This template enforces policy + gate checks:
 
 ```bash
+# standalone framework workspace
 ./scripts/check-sdd-policy.sh .
 ./scripts/check-sdd-gate.sh .
+
+# compact sidecar inside a real project
+./spec/scripts/check-sdd-policy.sh .
+./spec/scripts/check-sdd-gate.sh .
 ```
 
 Hard stop:
 - No code before approved `spec.md` and consistent `plan.md`.
 - Record explicit user consent before execution/implementation starts:
-  `./scripts/confirm-user-consent.sh "User approved scope X"`
+  - sidecar: `./spec/scripts/confirm-user-consent.sh "User approved scope X"`
+  - standalone: `./scripts/confirm-user-consent.sh "User approved scope X"`
 
 Reference files:
 - [sdd.policy.yaml](./sdd.policy.yaml)
@@ -118,7 +124,9 @@ Reference files:
 - This repository is a **framework/template**.
 - The professional productization path is: framework root + `packages/sdd-core` + `packages/sdd-mcp`.
 - Your product work should run in your target project using this structure.
-- Inside this repository, prefer `www/<project-name>/` as the recommended default workspace for runnable projects.
+- For real projects, prefer a compact `spec/` sidecar inside the project and keep code in the project root.
+- Do not clone or copy the full framework repository into the target project unless you explicitly want a full standalone workspace.
+- Inside this repository, use `www/<project-name>/` as the clean container when the target project should live here.
 - The user may choose another target path; if the runnable project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
 - If you adapt an existing project, integrate `idea/specs/bitacora` without breaking current behavior.
 
@@ -178,18 +186,18 @@ Mandatory spec bundle (for each feature):
 
 | Tool | Command | Description |
 | :--- | :--- | :--- |
-| Create execution workspace | `./scripts/create-www-project.sh my-project codex` | Create runnable project under `www/` (recommended default workspace) |
-| New Project | `./scripts/init-project.sh /absolute/path/to/project --profile=recommended` | Bootstrap SDD structure at an external target path |
-| New Project + Spec Kit | `./scripts/init-project-with-spec-kit.sh /absolute/path/to/project codex --profile=recommended` | Bootstrap + Spec Kit init at an external target path |
-| New Spec | `./scripts/new-spec.sh` | Create numbered spec folder |
-| Validation | `./scripts/validate-sdd.sh . --strict` | Validate structure and consistency |
-| Policy Check | `./scripts/check-sdd-policy.sh .` | Validate multi-agent policy files |
-| SDD Gate | `./scripts/check-sdd-gate.sh .` | Enforce approval and plan consistency |
-| Status Dashboard | `./scripts/generate-status.sh` | Generate project status report |
+| Create execution workspace | `./scripts/create-www-project.sh my-project codex` | Create clean project root under `www/` and install compact `spec/` sidecar |
+| Install compact sidecar | `./scripts/install-spec-sidecar.sh /absolute/path/to/project --profile=recommended` | Install only the SDD sidecar inside an existing or external project |
+| Full standalone workspace | `./scripts/init-project.sh /absolute/path/to/project --profile=full` | Copy the larger standalone template only when explicitly needed |
+| New Spec | `./spec/scripts/new-spec.sh` | Create numbered spec folder in compact sidecar mode |
+| Validation | `./spec/scripts/validate-sdd.sh . --strict` | Validate structure and consistency in compact sidecar mode |
+| Policy Check | `./spec/scripts/check-sdd-policy.sh .` | Validate multi-agent policy files in compact sidecar mode |
+| SDD Gate | `./spec/scripts/check-sdd-gate.sh .` | Enforce approval and plan consistency in compact sidecar mode |
+| Status Dashboard | `./spec/scripts/generate-status.sh` | Generate project status report when that script is present in the project layout |
 | MCP Server MVP | `npm run mcp:start` | Start the local `sdd-mcp` stdio server |
 
 > [!TIP]
-> For a clean copy: `npx degit juanklagos/spec-driven-development-template`
+> Default professional path: install only the compact `spec/` sidecar in real projects. Use a full copy only when you explicitly need a standalone workspace.
 
 ---
 

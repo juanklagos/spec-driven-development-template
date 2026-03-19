@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INDEX_FILE="specs/INDEX.md"
-OUT_MERMAID="docs/roadmap.mmd"
-OUT_MARKDOWN="docs/roadmap.md"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/sdd-root.sh"
+
+ROOT="$(sdd_resolve_root "$PWD" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
+if [ -z "$ROOT" ]; then
+  echo "Error: could not resolve SDD root."
+  exit 1
+fi
+
+INDEX_FILE="$ROOT/specs/INDEX.md"
+OUT_MERMAID="$ROOT/docs/roadmap.mmd"
+OUT_MARKDOWN="$ROOT/docs/roadmap.md"
 
 if [ ! -f "$INDEX_FILE" ]; then
   echo "Missing $INDEX_FILE"
   exit 1
 fi
 
-mkdir -p docs
+mkdir -p "$ROOT/docs"
 
 echo "flowchart LR" > "$OUT_MERMAID"
 echo "  START[\"Idea\"]" >> "$OUT_MERMAID"
@@ -61,4 +70,4 @@ $(cat "$OUT_MERMAID")
 \`\`\`
 EOF2
 
-echo "Generated $OUT_MERMAID and $OUT_MARKDOWN"
+echo "Generated $(sdd_rel_from "$(sdd_project_root "$ROOT")" "$OUT_MERMAID") and $(sdd_rel_from "$(sdd_project_root "$ROOT")" "$OUT_MARKDOWN")"

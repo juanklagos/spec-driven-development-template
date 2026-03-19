@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUT="STATUS.md"
-INDEX="specs/INDEX.md"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/sdd-root.sh"
+
+ROOT="$(sdd_resolve_root "$PWD" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
+if [ -z "$ROOT" ]; then
+  echo "Error: could not resolve SDD root."
+  exit 1
+fi
+
+OUT="$ROOT/STATUS.md"
+INDEX="$ROOT/specs/INDEX.md"
 
 if [ ! -f "$INDEX" ]; then
   echo "Missing specs/INDEX.md"
@@ -40,11 +49,11 @@ while IFS= read -r task_file; do
   c=$(rg -c "^- \[[xX]\]" "$task_file" || true)
   pending_total=$((pending_total + p))
   completed_total=$((completed_total + c))
-done < <(find specs -mindepth 2 -maxdepth 2 -type f -name tasks.md | sort)
+done < <(find "$ROOT/specs" -mindepth 2 -maxdepth 2 -type f -name tasks.md | sort)
 
 last_log="No entries"
-if [ -f "bitacora/global/PROJECT_LOG.md" ]; then
-  last_log=$(tail -n 8 bitacora/global/PROJECT_LOG.md | sed 's/^/  /')
+if [ -f "$ROOT/bitacora/global/PROJECT_LOG.md" ]; then
+  last_log=$(tail -n 8 "$ROOT/bitacora/global/PROJECT_LOG.md" | sed 's/^/  /')
 fi
 
 cat > "$OUT" <<EOF2
@@ -76,4 +85,4 @@ $last_log
 \`\`\`
 EOF2
 
-echo "Generated $OUT"
+echo "Generated $(sdd_rel_from "$(sdd_project_root "$ROOT")" "$OUT")"

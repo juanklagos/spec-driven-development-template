@@ -1,0 +1,75 @@
+version: 1
+name: sdd-sidecar-policy
+
+context:
+  repository: https://github.com/juanklagos/spec-driven-development-template
+  purpose_en: Compact SDD sidecar installed inside a real project.
+  purpose_es: Sidecar compacto SDD instalado dentro de un proyecto real.
+  execution_workspace_en: Keep runnable code in project root and keep SDD assets inside spec/.
+  execution_workspace_es: Mantén el código ejecutable en la raíz del proyecto y los artefactos SDD dentro de spec/.
+
+execution_root:
+  required_for_target_execution: true
+  default_workspace_parent: spec
+  constrained_to_current_chat_workspace: false
+  allow_external_target_paths: true
+  if_target_inside_template_use_default_workspace: false
+  recommended_not_required: true
+  default_creation_command: ./scripts/new-spec.sh <feature-name> <owner>
+  default_scaffold_profile: recommended
+  do_not_implement_in_template_root: false
+
+user_consent:
+  required_before_execution_after_spec_approval: true
+  required_before_gate_execution_when_specs_exist: true
+  log_file: .sdd/user-consent.log
+  command: ./scripts/confirm-user-consent.sh "User approved scope"
+
+hard_stop:
+  no_code_before_spec_approved: true
+  no_code_before_plan_consistent: true
+
+gates:
+  required_order:
+    - idea
+    - spec
+    - plan
+    - tasks
+    - implement
+    - validate
+    - logbook
+  validate_commands:
+    - ./scripts/validate-sdd.sh . --strict
+    - ./scripts/check-sdd-gate.sh .
+
+required_files:
+  - AGENTS.md
+  - AI_START_HERE.md
+  - INSTRUCTIONS.md
+  - template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
+  - .cursorrules
+  - .clauderules
+  - CLAUDE.md
+  - GEMINI.md
+  - WINDSURF.md
+  - AIDER.md
+  - ROO.md
+  - .github/copilot-instructions.md
+  - scripts/confirm-user-consent.sh
+
+agent_rule_markers:
+  canonical_source: template-context/core-instructions/AGENT_OPERATING_SYSTEM.md
+  hard_stop_phrase_en: No code before approved spec and consistent plan.
+  hard_stop_phrase_es: No hay código sin spec aprobada y plan consistente.
+  execution_root_phrase_en: Use spec/ as the SDD sidecar and keep runnable code in project root.
+  execution_root_phrase_es: Usa spec/ como sidecar SDD y mantén el código ejecutable en la raíz del proyecto.
+  workspace_scope_phrase_en: Do not clone or copy the full framework repository into this project unless the user explicitly asks for a standalone workspace.
+  workspace_scope_phrase_es: No clones ni copies el repositorio completo del framework dentro de este proyecto salvo que el usuario pida explícitamente un workspace standalone.
+
+session_output_contract:
+  - objective
+  - active_spec
+  - changes
+  - validation
+  - risks
+  - next_step

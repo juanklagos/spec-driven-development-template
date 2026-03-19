@@ -6,6 +6,13 @@ Cloning is optional. The mandatory requirement is to work with this repository t
 
 Clonar es opcional. Lo obligatorio es trabajar con este template y sus guías como referencia principal.
 
+Default target-project rule / Regla por defecto para proyecto destino:
+
+- EN: Do not clone or copy this full repository into the user's project unless the user explicitly asks for a full standalone workspace.
+- ES: No clones ni copies este repositorio completo dentro del proyecto del usuario salvo que el usuario pida explícitamente un workspace standalone completo.
+- EN: For real projects, install only the compact `spec/` sidecar and keep project code in the project root.
+- ES: Para proyectos reales, instala solo el sidecar compacto `spec/` y mantén el código del proyecto en la raíz del proyecto.
+
 Quick start for AI tools / Inicio rápido para herramientas de IA:
 
 - [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
@@ -33,8 +40,9 @@ Before implementation tasks, explicitly determine:
 1. If the task is `template maintenance` or `target project execution`.
 2. The real target project path when execution is for a user project.
 3. The active specification in that target project.
-4. Prefer `www/<project-name>/` as the default working root inside this repository, unless the user chooses another target path.
-5. If the target project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
+4. Default to the compact `spec/` sidecar for target projects.
+5. Use `www/<project-name>/` only as the clean container when the target project should live inside this repository.
+6. If the target project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
 
 ## 📚 Mandatory reading order / Orden obligatorio de lectura
 
@@ -47,11 +55,13 @@ Before implementation tasks, explicitly determine:
 ## 🔧 Mandatory workflow / Flujo obligatorio
 
 1. Confirm the target project path.
-   - recommended default inside this template: `./scripts/create-www-project.sh <project-name> <assistant>`
-   - external target path: `./scripts/init-project.sh /absolute/path/to/project`
+   - recommended clean workspace inside this template: `./scripts/create-www-project.sh <project-name> <assistant>`
+   - recommended external target path: `./scripts/install-spec-sidecar.sh /absolute/path/to/project`
+   - full standalone workspace only when explicitly requested: `./scripts/init-project.sh /absolute/path/to/project --profile=full`
 2. Work from one active specification.
 3. Record explicit user consent before execution/implementation starts on an approved spec:
-   - `./scripts/confirm-user-consent.sh "User approved scope X"`
+   - sidecar mode: `./spec/scripts/confirm-user-consent.sh "User approved scope X"`
+   - standalone full mode: `./scripts/confirm-user-consent.sh "User approved scope X"`
 4. If GitHub Spec Kit is available, use:
    - `/speckit.constitution`
    - `/speckit.specify`
@@ -59,9 +69,15 @@ Before implementation tasks, explicitly determine:
    - `/speckit.tasks`
    - `/speckit.implement`
 5. Keep `specs/` and `bitacora/` updated at session end.
-6. Run `./scripts/validate-sdd.sh . --strict` before finishing.
-7. Run `./scripts/check-sdd-policy.sh .` before finishing.
-8. Run `./scripts/check-sdd-gate.sh .` before finishing.
+6. Run validation before finishing.
+   - sidecar mode: `./spec/scripts/validate-sdd.sh . --strict`
+   - standalone full mode: `./scripts/validate-sdd.sh . --strict`
+7. Run policy check before finishing.
+   - sidecar mode: `./spec/scripts/check-sdd-policy.sh .`
+   - standalone full mode: `./scripts/check-sdd-policy.sh .`
+8. Run gate check before finishing.
+   - sidecar mode: `./spec/scripts/check-sdd-gate.sh .`
+   - standalone full mode: `./scripts/check-sdd-gate.sh .`
 9. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
@@ -128,7 +144,8 @@ Prompt sugerido para la IA:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template crea un proyecto nuevo para [OBJETIVO].
-Si no tengo este repositorio disponible en local, indícame cómo obtenerlo; luego inicializa la estructura y guíame paso a paso para definir idea, primera spec y bitácora.
+No clones ni copies el repositorio completo dentro de mi proyecto salvo que yo lo pida.
+Instala solo la carpeta compacta `spec/` y guíame paso a paso para definir idea, primera spec y bitácora.
 No saltes pasos.
 ```
 
@@ -138,7 +155,7 @@ Prompt sugerido para la IA:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template y su guía, adapta este proyecto existente: [RUTA_DEL_PROYECTO].
-Mantén el código actual, integra la estructura idea/specs/bitacora, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
+No copies el template completo. Integra solo el sidecar `spec/`, mantén el código actual en la raíz, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
 ```
 
 ### ✅ Resultado mínimo esperado
@@ -162,7 +179,8 @@ Suggested prompt for the Artificial Intelligence assistant:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
-If this repository is not available locally, tell me how to get access to it; then initialize the structure and guide me step by step to define idea, first specification, and logbook.
+Do not clone or copy the full repository into my project unless I explicitly ask for that mode.
+Install only the compact `spec/` sidecar and guide me step by step to define idea, first specification, and logbook.
 Do not skip steps.
 ```
 
@@ -172,7 +190,7 @@ Suggested prompt for the Artificial Intelligence assistant:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: [PROJECT_PATH].
-Keep current code, integrate the idea/specs/logbook structure, create the first specification based on existing behavior, and leave complete traceability.
+Do not copy the full template. Install only the `spec/` sidecar, keep current code in the project root, create the first specification based on existing behavior, and leave complete traceability.
 ```
 
 ### ✅ Minimum expected outcome
@@ -194,10 +212,14 @@ Keep current code, integrate the idea/specs/logbook structure, create the first 
 ```text
 EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
 My project is: [describe project in plain language].
+Do not clone the full repository into my project unless I explicitly ask for a standalone workspace.
+Install only the `spec/` sidecar by default.
 Do not skip idea, spec, plan, tasks, logbook, and validation.
 
 ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
 Mi proyecto es: [explica el proyecto en lenguaje simple].
+No clones el repositorio completo dentro de mi proyecto salvo que yo pida un workspace standalone.
+Instala solo el sidecar `spec/` por defecto.
 No omitas idea, spec, plan, tasks, bitácora y validación.
 ```
 

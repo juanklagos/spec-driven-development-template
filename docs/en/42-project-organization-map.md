@@ -20,7 +20,23 @@ There are two levels to understand:
    This repository itself. It contains the reusable SDD framework, MCP server, guides, scripts, and templates.
 
 2. **Target project**
-   The runnable or adapted project that uses the framework. Inside this repository, the clean default is `./www/<project-name>/`. Outside this repository, the target project can live in another path chosen by the user.
+   The runnable or adapted project that uses the framework. The professional default is now:
+   - project code in the project root
+   - SDD sidecar in `./spec/`
+   Inside this repository, the clean container for that target project is `./www/<project-name>/`. Outside this repository, the target project can live in another path chosen by the user.
+
+## Recommended target-project shape
+
+```mermaid
+flowchart TD
+  A["Target project root"] --> B["app code"]
+  A --> C["spec/"]
+  C --> D["idea/"]
+  C --> E["specs/"]
+  C --> F["bitacora/"]
+  C --> G["scripts/"]
+  C --> H["template-context/"]
+```
 
 ## Organizational map
 
