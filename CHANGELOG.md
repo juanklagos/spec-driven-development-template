@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v1.4.1] — 2026-03-19
+
+### Changed
+- Core documentation now states explicitly that GitHub Spec Kit is the base workflow reference for this framework.
+- README, docs index, and structure guides now align the real-project model with the `spec/` sidecar architecture.
+- Roadmap, launch kit, and versioning docs are now aligned with the current `v1.4.x` state.
+
+### Verified
+- `npm run build`
+- `./scripts/validate-sdd.sh . --strict`
+- `./scripts/check-sdd-policy.sh .`
+- `./scripts/check-sdd-gate.sh .`
+
 ## [v1.4.0] — 2026-03-19
 
 ### Added
