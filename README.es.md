@@ -143,6 +143,10 @@ Cada feature recibe un paquete de spec numerado:
 
 Y cada sesión deja rastro en `bitacora/`: decisiones, handoffs, próximo paso.
 
+Mira el flujo real (crear spec → validar → compuerta), regenerado automáticamente en cada release:
+
+![Demo del flujo SDD: crear una spec, validar la estructura, pasar la compuerta](./docs/assets/demo.gif)
+
 Ejemplo completo de inicio a fin: [examples/002-mcp-end-to-end](./examples/002-mcp-end-to-end/README.md)
 
 ## 🧭 Aplícalo en un proyecto real

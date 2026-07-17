@@ -143,6 +143,10 @@ Every feature gets a numbered spec bundle:
 
 And every session leaves a trace in `bitacora/` (logbook): decisions, handoffs, next step.
 
+See the real flow (create spec → validate → gate), regenerated automatically on every release:
+
+![SDD flow demo: create a spec, validate the structure, pass the gate](./docs/assets/demo.gif)
+
 Full walkthrough example: [examples/002-mcp-end-to-end](./examples/002-mcp-end-to-end/README.md)
 
 ## 🧭 Apply it to a real project

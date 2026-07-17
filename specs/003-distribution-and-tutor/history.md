@@ -6,3 +6,9 @@
 - El autor aprueba con "hazlo y continua con todo nivel senior"; consentimiento registrado en `.sdd/user-consent.log`.
 - Se añade al alcance el arreglo del workflow de demo (R7): la primera corrida real reveló que vhs-action@v2 falla instalando ffmpeg.
 - Publicación efectiva en npm/Marketplace queda fuera de alcance (requiere cuentas del autor); se deja preparada y documentada.
+
+## 2026-07-17 (cierre)
+
+- Workflow de demo corregido y verificado en CI real: run 29594585862 en verde, `docs/assets/demo.gif` (211 KB) commiteado por el bot y embebido en README EN/ES.
+- R1-R7 entregados; T11 (publicar npm/Marketplace y verificar `/plugin install` end-to-end) queda como paso del autor.
+- Validación: 3 scripts SDD en 0 errores; `npm run build` y `typecheck` en verde con el paquete nuevo; 0 enlaces rotos.
