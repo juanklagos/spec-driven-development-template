@@ -17,6 +17,22 @@ const GITHUB = 'https://github.com/juanklagos/spec-driven-development-template/b
 
 const slugOf = (file) => file.replace(/\.md$/, '').toLowerCase();
 
+// Curated learning-level map (guide number -> level). Everything else = reference.
+const LEVELS = {
+	beginner: ['00', '02', '04', '05', '13', '18', '23'],
+	intermediate: ['11', '12', '14', '19', '21', '22', '25', '26', '30'],
+	advanced: ['08', '15', '16', '17', '20', '24', '27', '28', '29', '33', '36', '40', '41', '43', '44', '45', '47', '48', '49'],
+};
+const BADGE = {
+	en: { beginner: ['Beginner', 'success'], intermediate: ['Intermediate', 'caution'], advanced: ['Advanced', 'danger'], reference: ['Reference', 'note'] },
+	es: { beginner: ['Básico', 'success'], intermediate: ['Intermedio', 'caution'], advanced: ['Avanzado', 'danger'], reference: ['Referencia', 'note'] },
+};
+function levelOf(file) {
+	const n = file.slice(0, 2);
+	for (const [lvl, nums] of Object.entries(LEVELS)) if (nums.includes(n)) return lvl;
+	return 'reference';
+}
+
 function transform(src, locale, file) {
 	let text = readFileSync(src, 'utf8');
 
@@ -45,7 +61,8 @@ function transform(src, locale, file) {
 		return `](${GITHUB}/${resolved})`;
 	});
 
-	return `---\ntitle: "${title}"\n---\n\n${text}`;
+	const [badgeText, badgeVariant] = BADGE[locale][levelOf(file)];
+	return `---\ntitle: "${title}"\nsidebar:\n  badge:\n    text: ${badgeText}\n    variant: ${badgeVariant}\n---\n\n${text}`;
 }
 
 for (const locale of ['en', 'es']) {
