@@ -19,7 +19,7 @@ flowchart LR
 ```text
 Spec-Driven Development Template now defaults to a clean `spec/` sidecar architecture for real projects.
 
-New in v1.4.0:
+New in v1.4.x:
 - compact `spec/` sidecar prompts for AI tools
 - cleaner project layout for advanced or existing codebases
 - MCP contracts aligned with sidecar projects
@@ -32,7 +32,7 @@ https://github.com/juanklagos/spec-driven-development-template
 ## LinkedIn post
 
 ```text
-I just shipped v1.4.0 of my Spec-Driven Development Template.
+I just shipped v1.4.x of my Spec-Driven Development Template.
 
 This repository is evolving into an operational SDD framework, not just a documentation starter.
 
@@ -56,5 +56,5 @@ The goal is to reduce friction from idea -> spec -> plan -> tasks -> validation,
 ## Short release note
 
 ```text
-v1.4.0 makes the framework cleaner to apply in real projects: `spec/` sidecar by default, GitHub Spec Kit as the base workflow reference, MCP behavior aligned with sidecar projects, and exact prompts that stop AI tools from copying the whole repository into advanced codebases.
+v1.4.x makes the framework cleaner to apply in real projects: `spec/` sidecar by default, GitHub Spec Kit as the base workflow reference, MCP behavior aligned with sidecar projects, and exact prompts that stop AI tools from copying the whole repository into advanced codebases.
 ```

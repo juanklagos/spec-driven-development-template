@@ -13,6 +13,8 @@ Execution workspace:
 - Usa `www/<nombre-proyecto>/` como espacio de trabajo recomendado por defecto para código ejecutable.
 - The user may choose another target path.
 - If the target project lives inside this template, keep it under `www/`.
+- For real external projects, install the compact `spec/` sidecar and keep code in the project root.
+- Para proyectos reales externos, instala el sidecar compacto `spec/` y mantén el código en la raíz del proyecto.
 
 Required behavior:
 1. Treat this repository as a starter template, not a product backlog.

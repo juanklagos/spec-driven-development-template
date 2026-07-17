@@ -35,26 +35,42 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 This template recommends GitHub Spec Kit as the main workflow engine.
 
-## Quick map
+> [!NOTE]
+> Since late 2025 all Spec Kit commands live under the `speckit.*` namespace (older docs show `/specify`, `/plan`, etc.). Spec Kit supports 30+ AI agents (Copilot, Claude Code, Cursor, Gemini CLI, Codex CLI, Windsurf...).
 
-| Phase | Command | Purpose |
-|---|---|---|
-| 1 | <kbd>/speckit.constitution</kbd> | Define project principles |
-| 2 | <kbd>/speckit.specify</kbd> | Define what to build |
-| 3 | <kbd>/speckit.plan</kbd> | Define how to build |
-| 4 | <kbd>/speckit.tasks</kbd> | Generate executable tasks |
-| 5 | <kbd>/speckit.implement</kbd> | Execute implementation |
+## Quick map (current command set)
+
+| Phase | Command | Purpose | Required? |
+|---|---|---|---|
+| 1 | <kbd>/speckit.constitution</kbd> | Define project principles | Recommended |
+| 2 | <kbd>/speckit.specify</kbd> | Define what to build and why | Yes |
+| 3 | <kbd>/speckit.clarify</kbd> | Answer open questions before planning | Optional |
+| 4 | <kbd>/speckit.plan</kbd> | Define how to build | Yes |
+| 5 | <kbd>/speckit.tasks</kbd> | Generate executable tasks | Yes |
+| 6 | <kbd>/speckit.analyze</kbd> | Check spec/plan/tasks consistency | Optional |
+| 7 | <kbd>/speckit.checklist</kbd> | Generate quality checklists | Optional |
+| 8 | <kbd>/speckit.taskstoissues</kbd> | Convert tasks into GitHub issues | Optional (teams) |
+| 9 | <kbd>/speckit.implement</kbd> | Execute implementation | Yes |
 
 ## Visual flow
 
 ```mermaid
 flowchart LR
   A["Constitution"] --> B["Specification"]
-  B --> C["Plan"]
+  B --> B2["Clarify (optional)"]
+  B2 --> C["Plan"]
   C --> D["Tasks"]
-  D --> E["Implementation"]
+  D --> D2["Analyze + Checklist (optional)"]
+  D2 --> E["Implementation"]
   E --> F["Logbook + Refinement"]
 ```
+
+## How the optional commands fit this template's gate
+
+- <kbd>/speckit.clarify</kbd> before planning reduces the back-and-forth that usually blocks spec approval.
+- <kbd>/speckit.analyze</kbd> is the natural step right before `./scripts/check-sdd-gate.sh .`: it verifies consistency between `spec.md`, `plan.md`, and `tasks.md`; the gate then verifies approval + consent.
+- <kbd>/speckit.checklist</kbd> complements this template's [quality checklists by stage](./21-quality-checklists-by-stage.md).
+- <kbd>/speckit.taskstoissues</kbd> is useful in [team mode](./22-team-mode-and-collaboration.md) to assign tasks as GitHub issues.
 
 ## Recommended installation
 

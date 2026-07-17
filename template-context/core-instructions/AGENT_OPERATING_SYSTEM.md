@@ -33,6 +33,11 @@ Consent rule:
 - **MUST** ask and record explicit user consent right before execution/implementation starts on an approved spec.
 - **MUST** keep runnable project work inside the currently opened chat workspace (use `./www/<project-name>/` in this template).
 
+Workspace rule:
+- **SHOULD** default to the compact `spec/` sidecar for real target projects outside this repository (`./scripts/install-spec-sidecar.sh <path> --profile=recommended`), keeping product code in the project root.
+- **SHOULD** use `./www/<project-name>/` only when the runnable project lives inside this template repository.
+- **MUST NOT** copy the full framework repository into a target project unless the user explicitly requests a standalone workspace.
+
 ## 📐 3. Required Workflow / Flujo de Trabajo Obligatorio
 
 1. **Observe:** Read `idea/IDEA_GENERAL.md` and `specs/INDEX.md` first.
@@ -41,6 +46,7 @@ Consent rule:
    - `specify init . --ai <agent>`
    - or `uvx --from git+https://github.com/github/spec-kit.git specify init . --ai <agent>`
 4. **Run Spec Kit flow:** `/speckit.constitution` -> `/speckit.specify` -> `/speckit.plan` -> `/speckit.tasks` -> `/speckit.implement`
+   - Optional quality steps: `/speckit.clarify` (before plan), `/speckit.analyze` + `/speckit.checklist` (before implement), `/speckit.taskstoissues` (team mode).
 5. **Focus:** Work from only one active specification at a time.
 6. **Trace:** Every scope/requirement change MUST be recorded in:
    - `history.md` (inside the spec folder)

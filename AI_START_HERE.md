@@ -252,8 +252,12 @@ and give me the next exact step. Use beginner-friendly language.
 ```bash
 /speckit.constitution
 /speckit.specify
+/speckit.clarify      # optional / opcional
 /speckit.plan
 /speckit.tasks
+/speckit.analyze      # optional / opcional
+/speckit.checklist    # optional / opcional
+/speckit.taskstoissues # optional, teams / opcional, equipos
 /speckit.implement
 ```
 

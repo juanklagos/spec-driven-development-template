@@ -89,14 +89,49 @@ When [action or event]
 Then [expected result]
 ```
 
-## 6) Recommended combined strategy (TDD + BDD)
+## 6) EARS: verifiable acceptance criteria (industry standard)
 
-1. Define behavior in `spec.md` (BDD).
-2. Translate behavior into technical tasks in `tasks.md` (TDD).
-3. Implement in short iterations.
-4. Register findings and updates in `history.md` and `bitacora/`.
+EARS (Easy Approach to Requirements Syntax) is the notation the SDD industry consolidated for acceptance criteria — AWS Kiro generates its `requirements.md` in EARS, and each line maps almost 1:1 to a test case. Use it inside the acceptance criteria section of `spec.md`.
 
-## 7) Common mistakes
+Base patterns:
+
+| Pattern | Template | Use for |
+|---|---|---|
+| Ubiquitous | THE SYSTEM SHALL [behavior] | Rules that always apply |
+| Event-driven | WHEN [trigger], THE SYSTEM SHALL [behavior] | Responses to events |
+| State-driven | WHILE [state], THE SYSTEM SHALL [behavior] | Behavior during a state |
+| Unwanted behavior | IF [error condition], THEN THE SYSTEM SHALL [behavior] | Error handling |
+| Optional feature | WHERE [feature is enabled], THE SYSTEM SHALL [behavior] | Configurable features |
+
+Example (login feature):
+
+```text
+THE SYSTEM SHALL store passwords hashed, never in plain text.
+WHEN the user submits valid credentials, THE SYSTEM SHALL create a session and redirect to the dashboard.
+IF the user submits invalid credentials 5 times, THEN THE SYSTEM SHALL lock the account for 15 minutes.
+```
+
+How EARS and Given/When/Then work together:
+
+- Given/When/Then describes an **example** in business language (great for conversation and review).
+- EARS states the **rule** in verifiable language (great for testing and for AI agents).
+- A strong spec uses both: scenarios for understanding, EARS lines for verification.
+
+EARS checklist:
+
+- [ ] Every EARS line has exactly one SHALL and one observable behavior.
+- [ ] No vague words ("fast", "easy", "intuitive") without a measurable value.
+- [ ] Every acceptance criterion maps to at least one test task in `tasks.md`.
+
+## 7) Recommended combined strategy (TDD + BDD + EARS)
+
+1. Define behavior in `spec.md` (BDD scenarios).
+2. Write acceptance criteria as EARS lines in `spec.md`.
+3. Translate behavior into technical tasks in `tasks.md` (TDD).
+4. Implement in short iterations.
+5. Register findings and updates in `history.md` and `bitacora/`.
+
+## 8) Common mistakes
 
 - Writing vague specs without verifiable criteria.
 - Mixing business scope and technical detail in one section.

@@ -14,6 +14,13 @@
 
 1. Dado ..., cuando ..., entonces ...
 
+## Criterios de aceptación (formato EARS recomendado) / Acceptance criteria (EARS format recommended)
+
+- CUANDO [disparador], EL SISTEMA DEBERÁ [comportamiento observable].
+- SI [condición de error], ENTONCES EL SISTEMA DEBERÁ [comportamiento observable].
+- EN: WHEN [trigger], THE SYSTEM SHALL [observable behavior].
+- Guía / Guide: <https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/12-tdd-y-bdd-como-escribir-specs.md>
+
 ## Requisitos
 
 - Requisito 1

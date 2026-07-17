@@ -8,14 +8,14 @@ Este roadmap hace explícitos los siguientes pasos del producto para que los usu
 
 ```mermaid
 flowchart LR
-  A["v1.4.0"] --> B["v1.5.0"]
+  A["v1.4.1"] --> B["v1.5.0"]
   B --> C["v1.6.0"]
 ```
 
 ## Estado actual
 
 Release publicada:
-- `v1.4.0`
+- `v1.4.1`
 
 Disponible hoy:
 - framework SDD con política multi-agente

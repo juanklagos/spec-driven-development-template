@@ -35,26 +35,42 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 Esta plantilla recomienda usar GitHub Spec Kit como motor de flujo de trabajo.
 
-## Mapa rápido
+> [!NOTE]
+> Desde finales de 2025 todos los comandos de Spec Kit viven bajo el namespace `speckit.*` (docs antiguas muestran `/specify`, `/plan`, etc.). Spec Kit soporta 30+ agentes de IA (Copilot, Claude Code, Cursor, Gemini CLI, Codex CLI, Windsurf...).
 
-| Fase | Comando | Propósito |
-|---|---|---|
-| 1 | <kbd>/speckit.constitution</kbd> | Definir principios del proyecto |
-| 2 | <kbd>/speckit.specify</kbd> | Definir qué se construye |
-| 3 | <kbd>/speckit.plan</kbd> | Definir cómo se construye |
-| 4 | <kbd>/speckit.tasks</kbd> | Generar tareas ejecutables |
-| 5 | <kbd>/speckit.implement</kbd> | Ejecutar implementación |
+## Mapa rápido (set de comandos actual)
+
+| Fase | Comando | Propósito | ¿Requerido? |
+|---|---|---|---|
+| 1 | <kbd>/speckit.constitution</kbd> | Definir principios del proyecto | Recomendado |
+| 2 | <kbd>/speckit.specify</kbd> | Definir qué se construye y por qué | Sí |
+| 3 | <kbd>/speckit.clarify</kbd> | Resolver preguntas abiertas antes de planificar | Opcional |
+| 4 | <kbd>/speckit.plan</kbd> | Definir cómo se construye | Sí |
+| 5 | <kbd>/speckit.tasks</kbd> | Generar tareas ejecutables | Sí |
+| 6 | <kbd>/speckit.analyze</kbd> | Verificar consistencia spec/plan/tareas | Opcional |
+| 7 | <kbd>/speckit.checklist</kbd> | Generar checklists de calidad | Opcional |
+| 8 | <kbd>/speckit.taskstoissues</kbd> | Convertir tareas en issues de GitHub | Opcional (equipos) |
+| 9 | <kbd>/speckit.implement</kbd> | Ejecutar implementación | Sí |
 
 ## Flujo visual
 
 ```mermaid
 flowchart LR
   A["Constitución"] --> B["Especificación"]
-  B --> C["Plan"]
+  B --> B2["Clarify (opcional)"]
+  B2 --> C["Plan"]
   C --> D["Tareas"]
-  D --> E["Implementación"]
+  D --> D2["Analyze + Checklist (opcional)"]
+  D2 --> E["Implementación"]
   E --> F["Bitácora + Refinamiento"]
 ```
+
+## Cómo encajan los comandos opcionales con la compuerta de este template
+
+- <kbd>/speckit.clarify</kbd> antes de planificar reduce el ir y venir que suele bloquear la aprobación de la spec.
+- <kbd>/speckit.analyze</kbd> es el paso natural justo antes de `./scripts/check-sdd-gate.sh .`: verifica consistencia entre `spec.md`, `plan.md` y `tasks.md`; la compuerta verifica luego aprobación + consentimiento.
+- <kbd>/speckit.checklist</kbd> complementa los [checklists de calidad por etapa](./21-checklists-calidad-por-etapa.md) de este template.
+- <kbd>/speckit.taskstoissues</kbd> es útil en [modo equipo](./22-modo-equipo-y-colaboracion.md) para asignar tareas como issues de GitHub.
 
 ## Instalación recomendada
 

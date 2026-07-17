@@ -57,10 +57,17 @@ Optional full packs:
 cd www/my-project
 ```
 
-External target path / Ruta externa:
+External target path (compact sidecar, recommended) / Ruta externa (sidecar compacto, recomendado):
 
 ```bash
-./scripts/init-project.sh /absolute/path/to/project --profile=recommended
+./scripts/install-spec-sidecar.sh /absolute/path/to/project --profile=recommended
+cd /absolute/path/to/project
+```
+
+Full standalone workspace only when explicitly needed / Workspace standalone completo solo cuando se necesite explícitamente:
+
+```bash
+./scripts/init-project.sh /absolute/path/to/project --profile=full
 cd /absolute/path/to/project
 ```
 

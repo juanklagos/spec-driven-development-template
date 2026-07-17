@@ -27,6 +27,8 @@ If a tool does not support local rule files, paste `template-context/core-instru
 Execution workspace note:
 - EN: For runnable target projects in this repository, use `www/<project-name>/`.
 - ES: Para proyectos ejecutables en este repositorio, usa `www/<nombre-proyecto>/`.
+- EN: For real external projects, install the compact `spec/` sidecar (`./scripts/install-spec-sidecar.sh`) and keep code in the project root.
+- ES: Para proyectos reales externos, instala el sidecar compacto `spec/` (`./scripts/install-spec-sidecar.sh`) y mantén el código en la raíz del proyecto.
 
 ## 🌐 Bilingual support / Soporte bilingüe
 

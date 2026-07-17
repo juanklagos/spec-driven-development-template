@@ -89,14 +89,51 @@ Cuando [acción o evento]
 Entonces [resultado esperado]
 ```
 
-## 6) Estrategia combinada recomendada (TDD + BDD)
+## 6) EARS: criterios de aceptación verificables (estándar de la industria)
 
-1. Define comportamiento en `spec.md` (BDD).
-2. Traduce a tareas técnicas en `tasks.md` (TDD).
-3. Implementa por iteraciones cortas.
-4. Registra hallazgos y ajustes en `history.md` y `bitacora/`.
+EARS (Easy Approach to Requirements Syntax) es la notación que la industria SDD consolidó para criterios de aceptación — AWS Kiro genera su `requirements.md` en EARS, y cada línea mapea casi 1:1 a un caso de prueba. Úsala dentro de la sección de criterios de aceptación de `spec.md`.
 
-## 7) Errores comunes
+Patrones base:
+
+| Patrón | Plantilla | Úsalo para |
+|---|---|---|
+| Ubicuo | EL SISTEMA DEBERÁ [comportamiento] | Reglas que aplican siempre |
+| Por evento | CUANDO [disparador], EL SISTEMA DEBERÁ [comportamiento] | Respuestas a eventos |
+| Por estado | MIENTRAS [estado], EL SISTEMA DEBERÁ [comportamiento] | Comportamiento durante un estado |
+| Comportamiento no deseado | SI [condición de error], ENTONCES EL SISTEMA DEBERÁ [comportamiento] | Manejo de errores |
+| Funcionalidad opcional | DONDE [funcionalidad activada], EL SISTEMA DEBERÁ [comportamiento] | Funcionalidades configurables |
+
+Ejemplo (feature de login):
+
+```text
+EL SISTEMA DEBERÁ guardar las contraseñas con hash, nunca en texto plano.
+CUANDO el usuario envíe credenciales válidas, EL SISTEMA DEBERÁ crear una sesión y redirigir al dashboard.
+SI el usuario envía credenciales inválidas 5 veces, ENTONCES EL SISTEMA DEBERÁ bloquear la cuenta por 15 minutos.
+```
+
+Nota: en equipos que trabajan en inglés se usa la forma original `WHEN ... THE SYSTEM SHALL ...`; ambas son válidas mientras seas consistente.
+
+Cómo se complementan EARS y Dado/Cuando/Entonces:
+
+- Dado/Cuando/Entonces describe un **ejemplo** en lenguaje de negocio (ideal para conversar y revisar).
+- EARS enuncia la **regla** en lenguaje verificable (ideal para pruebas y para agentes de IA).
+- Una spec sólida usa ambos: escenarios para entender, líneas EARS para verificar.
+
+Checklist EARS:
+
+- [ ] Cada línea EARS tiene exactamente un DEBERÁ y un comportamiento observable.
+- [ ] Sin palabras vagas ("rápido", "fácil", "intuitivo") sin un valor medible.
+- [ ] Cada criterio de aceptación mapea al menos a una tarea de prueba en `tasks.md`.
+
+## 7) Estrategia combinada recomendada (TDD + BDD + EARS)
+
+1. Define comportamiento en `spec.md` (escenarios BDD).
+2. Escribe los criterios de aceptación como líneas EARS en `spec.md`.
+3. Traduce a tareas técnicas en `tasks.md` (TDD).
+4. Implementa por iteraciones cortas.
+5. Registra hallazgos y ajustes en `history.md` y `bitacora/`.
+
+## 8) Errores comunes
 
 - Escribir specs vagas sin criterios verificables.
 - Mezclar alcance de negocio con detalles técnicos en la misma sección.

@@ -14,3 +14,9 @@
 - Se agregan ejemplos iniciales de configuración por cliente.
 - Se agregan resource templates por archivo de spec.
 - Se agrega transporte `Streamable HTTP` junto con smoke test dedicado.
+
+## 2026-07-17
+
+- La fundación MCP descrita en esta spec quedó implementada y liberada a lo largo de v1.1.0 → v1.4.1 (`sdd-core`, `sdd-mcp` stdio + HTTP, smoke tests, ejemplos por cliente).
+- Se actualiza el estado en `specs/INDEX.md` de `Draft / Borrador` a `Done / Completada` para reflejar la realidad del release.
+- Cambio realizado durante la revisión general de organización y documentación del template (investigación SDD 2026 + auditoría interna).
