@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Inicia proyectos con disciplina basada en especificaciones, GitHub Spec Kit como flujo base y guía amigable para IA.</b></p>
+  <p><b>Aprende Spec-Driven Development (SDD) y aplícalo en proyectos reales — con la IA como copiloto y GitHub Spec Kit como flujo base.</b></p>
 
   <p>
     <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Read-blue?style=for-the-badge" alt="English"></a>
@@ -8,10 +8,11 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/version-v1.4.0-blue?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-v1.4.1-blue?style=for-the-badge" alt="Version">
     <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NO_TÉCNICO-Iniciar-green?style=for-the-badge" alt="Inicio no técnico"></a>
     <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_INICIO_IA-Abrir-purple?style=for-the-badge" alt="AI Start"></a>
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
+    <a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Abrir-181717?style=for-the-badge&logo=github" alt="Abrir en GitHub Codespaces"></a>
   </p>
 </div>
 
@@ -19,16 +20,45 @@
 
 ---
 
+## 🌟 ¿Qué es esto?
+
+**Spec-Driven Development (SDD)** significa escribir y aprobar una especificación clara *antes* de escribir código — para que las decisiones, el alcance y la calidad sobrevivan más allá de una ventana de chat. En 2026 es la práctica dominante para construir software con agentes de IA.
+
+Este repositorio es **dos cosas a la vez**:
+
+1. **Una escuela** — una ruta bilingüe (EN/ES) por niveles para aprender SDD desde cero, incluso si no programas.
+2. **Una caja de herramientas** — una estructura lista para aplicar SDD en proyectos reales: scripts de cumplimiento, reglas para agentes de IA, un servidor MCP local y un sidecar compacto `spec/` para codebases existentes.
+
+Usa [GitHub Spec Kit](https://github.com/github/spec-kit) como motor de flujo de referencia; este repo es la capa práctica a su alrededor (estructura inicial, guía, reglas y validación).
+
+| ❌ Sin SDD | ✅ Con este template |
+| :--- | :--- |
+| Decisiones perdidas en chats | Fuente única de verdad en `specs/` |
+| Código sin planeación | Compuerta obligatoria `spec.md` + `plan.md`, verificada por máquina |
+| Onboarding difícil para equipo/IA | Estructura estándar y guías por nivel |
+| Trazabilidad débil | Registro de sesiones en `bitacora/`, historia por spec |
+
+> 🔭 ¿Quieres el mapa de la industria? Lee [SDD en 2026: estado del arte y cómo se compara este template](./docs/es/50-estado-del-arte-sdd-2026.md).
+
+## 🚪 Elige tu puerta
+
+Tres puntos de entrada, uno para cada tipo de visitante:
+
+| Tú eres... | Empieza aquí | Qué obtienes |
+| :--- | :--- | :--- |
+| 🧑‍💼 **No técnico** (fundador, PM, curioso) | [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) | Inicio guiado ultra simple, sin jerga |
+| 👩‍💻 **Desarrollador** | [QUICKSTART.md](./QUICKSTART.md) | Comandos para crear y validar en 5 minutos |
+| 🤖 **Agente de IA** (o tú, pegándolo en uno) | [AI_START_HERE.md](./AI_START_HERE.md) | Reglas operativas + prompts copy/paste por nivel |
+
+Luego elige tu nivel de aprendizaje:
+
+- Principiante: [docs/es/13-guia-rapida-no-programadores.md](./docs/es/13-guia-rapida-no-programadores.md)
+- Intermedio: [docs/es/14-guia-intermedia.md](./docs/es/14-guia-intermedia.md)
+- Avanzado: [docs/es/15-guia-avanzada.md](./docs/es/15-guia-avanzada.md)
+
 ## ⚡ Empieza en 30 segundos
 
-Este framework usa [GitHub Spec Kit](https://github.com/github/spec-kit) como referencia principal del flujo de trabajo.
-Usa este repositorio como la capa práctica alrededor de esa base:
-- GitHub Spec Kit = motor de flujo de referencia
-- este repositorio = estructura inicial, instalación sidecar, reglas para IA, MCP y guía del proyecto
-
-1. Abre [AI_START_HERE.md](./AI_START_HERE.md)
-   o [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) si no eres técnico.
-2. Copia y pega este prompt:
+Copia y pega este prompt en tu asistente de IA (Claude, Cursor, Copilot, Gemini...):
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
@@ -38,208 +68,128 @@ Si ya existe, adáptalo sin romper el comportamiento actual.
 No hay código sin spec aprobada y plan consistente.
 ```
 
-3. Elige tu nivel y continúa:
-- Principiante: [docs/es/13-guia-rapida-no-programadores.md](./docs/es/13-guia-rapida-no-programadores.md)
-- Intermedio: [docs/es/14-guia-intermedia.md](./docs/es/14-guia-intermedia.md)
-- Avanzado: [docs/es/15-guia-avanzada.md](./docs/es/15-guia-avanzada.md)
+## 🎛️ Comandos integrados para tu agente de IA
 
-## 🔌 Conéctalo por MCP
+Si usas **Claude Code**, este repo trae slash commands listos — empieza con `/sdd:help`:
 
-Si tu cliente de IA soporta MCP, este repositorio ya incluye un servidor local `sdd-mcp` y configuración compartida por proyecto.
+| Comando | Qué hace |
+| :--- | :--- |
+| `/sdd:help` | Diagnostica tu etapa actual y te da el único siguiente paso |
+| `/sdd:new` | Inicio guiado: idea → primera spec lista para aprobar |
+| `/sdd:spec` | Crea o refina un paquete de spec con criterios EARS |
+| `/sdd:gate` | Ejecuta la compuerta verificada por máquina y registra tu consentimiento |
+| `/sdd:close` | Valida y cierra la sesión con el contrato de salida |
 
-Si quieres la explicación más simple primero:
-- [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
+- **VS Code / Copilot:** los mismos flujos como prompt files en [`.github/prompts/`](./.github/prompts/).
+- **Cualquier agente (32+ herramientas):** Agent Skill portable en [skills/sdd-workflow/SKILL.md](./skills/sdd-workflow/SKILL.md).
+- **Contexto para IA:** [llms.txt](./llms.txt) indexa toda la documentación para agentes de código (regenéralo con `./scripts/generate-llms-txt.sh`).
 
-Diferencia importante:
-- `GitMCP` o similar puede ayudar a una IA a leer y entender este repositorio público gratis.
-- No reemplaza el comportamiento propio de `sdd-mcp` dentro del framework.
-- Usa `GitMCP` para contexto remoto del repo y `sdd-mcp` para el flujo real guiado de SDD.
+## 🚨 La regla de oro
 
-Ruta rápida:
-1. Compila el servidor:
+> **No hay código sin `spec.md` aprobada y `plan.md` consistente.**
+
+Y no es solo prosa — se verifica por máquina:
+
+```bash
+./scripts/check-sdd-policy.sh .   # los archivos de política multi-agente están alineados
+./scripts/check-sdd-gate.sh .     # spec aprobada + plan consistente + consentimiento registrado
+```
+
+Antes de iniciar la implementación, se registra consentimiento explícito del usuario:
+
+```bash
+./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"
+```
+
+(En proyectos sidecar los mismos scripts viven bajo `./spec/scripts/`.)
+
+Archivos de referencia: [sdd.policy.yaml](./sdd.policy.yaml) · [INSTRUCTIONS.md](./INSTRUCTIONS.md) · [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
+
+## 🎬 Cómo funciona
+
+```mermaid
+flowchart LR
+  A["Idea en lenguaje simple"] --> B["spec.md aprobada"]
+  B --> C["plan.md consistente"]
+  C --> D["tasks.md priorizadas"]
+  D --> E["Compuerta + consentimiento explícito"]
+  E --> F["Implementación"]
+  F --> G["Validación + bitácora"]
+```
+
+Cada feature recibe un paquete de spec numerado:
+
+1. `spec.md` — qué y por qué (aprobada por ti)
+2. `plan.md` — cómo (consistente con la spec)
+3. `tasks.md` — pasos concretos
+4. `history.md` — cómo evolucionó
+
+Y cada sesión deja rastro en `bitacora/`: decisiones, handoffs, próximo paso.
+
+Ejemplo completo de inicio a fin: [examples/002-mcp-end-to-end](./examples/002-mcp-end-to-end/README.md)
+
+## 🧭 Aplícalo en un proyecto real
+
+Tres formas de usar el template, de la más ligera a la más pesada:
+
+| Modo | Cuándo | Comando |
+| :--- | :--- | :--- |
+| **Sidecar compacto `spec/`** (recomendado) | Proyecto real o existente: artefactos SDD en `./spec/`, el código queda en la raíz de tu proyecto | `./scripts/install-spec-sidecar.sh /ruta/al/proyecto --profile=recommended` |
+| **Workspace interno `www/`** | El proyecto ejecutable debe vivir dentro de este repositorio template | `./scripts/create-www-project.sh mi-proyecto codex` |
+| **Copia standalone completa** | Quieres explícitamente todo el framework como workspace | `./scripts/init-project.sh /ruta/al/proyecto --profile=full` |
+
+> [!TIP]
+> Ruta profesional por defecto: instala solo el sidecar compacto `spec/`. Nunca copies el framework completo dentro de un codebase real salvo que quieras explícitamente el modo standalone.
+
+Comandos del día a día (se muestra el modo sidecar; los mismos scripts existen en la raíz en modo standalone):
+
+| Acción | Comando |
+| :--- | :--- |
+| Nueva spec | `./spec/scripts/new-spec.sh "mi-feature" "Responsable"` |
+| Validar estructura | `./spec/scripts/validate-sdd.sh . --strict` |
+| Chequeo de política | `./spec/scripts/check-sdd-policy.sh .` |
+| Compuerta SDD | `./spec/scripts/check-sdd-gate.sh .` |
+| Dashboard de estado | `./spec/scripts/generate-status.sh` |
+
+Anatomía de carpetas, mapa del proyecto y detalles de layout: [docs/es/42-mapa-organizacion-proyecto.md](./docs/es/42-mapa-organizacion-proyecto.md)
+
+```mermaid
+flowchart TD
+  A["Raíz de tu proyecto (código)"] --> B["spec/"]
+  B --> C["idea/"]
+  B --> D["specs/ (paquetes numerados)"]
+  B --> E["bitacora/"]
+  B --> F["scripts/ (compuerta + validación)"]
+```
+
+## 🔌 Conéctalo por MCP (opcional, avanzado)
+
+Si tu cliente de IA soporta MCP, este repo incluye un servidor local `sdd-mcp` que convierte el flujo SDD en comandos guiados (`/start-project`, `/create-spec ...`).
 
 ```bash
 npm install
 npm run build
+npm run mcp:start
 ```
 
-2. Usa una de estas configuraciones:
-- Configuración de proyecto para Claude Code: [`.mcp.json`](./.mcp.json)
-- Ejemplo para Cursor: [`packages/sdd-mcp/examples/.cursor/mcp.json`](./packages/sdd-mcp/examples/.cursor/mcp.json)
-- Ejemplo para Codex: [`packages/sdd-mcp/examples/codex.config.toml`](./packages/sdd-mcp/examples/codex.config.toml)
+- La explicación más simple primero: [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
+- Configuraciones por cliente: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
+- Referencia completa: [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
 
-3. Lee en este orden:
-- [docs/es/43-guia-mcp-facil.md](./docs/es/43-guia-mcp-facil.md)
-- [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
-- [docs/es/33-guia-servidor-mcp.md](./docs/es/33-guia-servidor-mcp.md)
-- [docs/es/40-referencia-resultados-comandos.md](./docs/es/40-referencia-resultados-comandos.md)
+Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `sdd-mcp` local ejecuta el *flujo guiado real*. Se complementan: [guía GitMCP](./docs/es/48-como-conectar-este-repo-con-gitmcp.md).
 
-## 🎬 Flujo rápido de adopción
+## 📚 Documentación
 
-```mermaid
-flowchart LR
-  A["Describe el proyecto en lenguaje simple"] --> B["Crea la base SDD"]
-  B --> C["Aprueba la primera spec"]
-  C --> D["Alinea plan y tareas"]
-  D --> E["Valida + compuerta"]
-  E --> F["Implementa solo después de consentimiento explícito"]
-```
+**Tres lecturas esenciales:**
 
-Usa un ejemplo completo:
-- [examples/002-mcp-end-to-end/README.md](./examples/002-mcp-end-to-end/README.md)
+1. [Flujo de trabajo](./docs/es/02-flujo-de-trabajo.md) — el flujo SDD paso a paso
+2. [Estructura](./docs/es/01-estructura.md) — para qué sirve cada carpeta
+3. [SDD en 2026: estado del arte](./docs/es/50-estado-del-arte-sdd-2026.md) — el mapa de la industria y dónde está este template
 
-## 🚨 Regla obligatoria antes de codificar
-
-Este template exige chequeos de política y compuerta:
-
-```bash
-# workspace standalone del framework
-./scripts/check-sdd-policy.sh .
-./scripts/check-sdd-gate.sh .
-
-# sidecar compacto dentro de un proyecto real
-./spec/scripts/check-sdd-policy.sh .
-./spec/scripts/check-sdd-gate.sh .
-```
-
-Parada dura:
-- No hay código sin `spec.md` aprobada y `plan.md` consistente.
-- Registra consentimiento explícito del usuario antes de iniciar ejecución/implementación:
-  - sidecar: `./spec/scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
-  - standalone: `./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"`
-
-Archivos de referencia:
-- [sdd.policy.yaml](./sdd.policy.yaml)
-- [INSTRUCTIONS.md](./INSTRUCTIONS.md)
-- [template-context/core-instructions/AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
-
----
-
-## 🎯 Problema vs solución
-
-| ❌ Problema | ✅ Solución SDD |
-| :--- | :--- |
-| Decisiones perdidas en chats | Fuente única de verdad en `specs/` |
-| Código sin planeación | Compuerta obligatoria `spec.md` + `plan.md` |
-| Onboarding difícil para equipo/IA | Estructura estándar y guías por nivel |
-| Trazabilidad débil | Registro de sesiones en `bitacora/` |
-
-## 🧭 Template vs proyecto real
-
-- Este repositorio es un **marco/template**.
-- Usa **GitHub Spec Kit como referencia operativa base** para la secuencia de comandos y el flujo SDD.
-- La ruta profesional de producto es: raíz del framework + `packages/sdd-core` + `packages/sdd-mcp`.
-- El trabajo de producto debe ejecutarse en tu proyecto destino usando esta estructura.
-- Para proyectos reales, prefiere un sidecar compacto `spec/` dentro del proyecto y mantén el código en la raíz del proyecto.
-- No clones ni copies el repositorio completo del framework dentro del proyecto destino salvo que quieras explícitamente un workspace standalone completo.
-- Dentro de este repositorio, usa `www/<nombre-proyecto>/` como contenedor limpio cuando el proyecto deba vivir aquí.
-- El usuario puede elegir otra ruta; si el proyecto ejecutable vive dentro de este repositorio, mantenlo bajo `www/` para no mezclar framework y producto.
-- Si adaptas un proyecto existente, integra `idea/specs/bitacora` sin romper comportamiento actual.
-
-## 🗺️ Ruta de aprendizaje (3 niveles)
-
-```mermaid
-flowchart LR
-  A["Principiante"] --> B["Intermedio"]
-  B --> C["Avanzado"]
-  A --> D["Primera idea + primera spec"]
-  B --> E["Sesiones consistentes en equipo"]
-  C --> F["Gobernanza + compuertas de calidad"]
-```
-
----
-
-## 🏗️ Anatomía de un proyecto SDD
-
-Mapa completo carpeta por carpeta:
-- [docs/es/42-mapa-organizacion-proyecto.md](./docs/es/42-mapa-organizacion-proyecto.md)
-
-```mermaid
-flowchart TD
-  A["Raíz del framework"] --> B["idea/"]
-  A --> C["specs/"]
-  A --> D["bitacora/"]
-  A --> E["docs/"]
-  A --> F["scripts/"]
-  A --> G["packages/"]
-  A --> H["www/"]
-  H --> I["proyecto-destino/"]
-  I --> J["spec/"]
-```
-
-Carpetas obligatorias:
-- `idea/`: intención y alcance del proyecto
-- `specs/`: especificaciones numeradas
-- `bitacora/`: trazabilidad y handoffs
-- `docs/`: guías y referencias
-
-En proyectos reales, esas carpetas SDD normalmente viven dentro de `./spec/`:
-- `./spec/idea/`
-- `./spec/specs/`
-- `./spec/bitacora/`
-
-Paquete obligatorio por feature:
-1. `spec.md`
-2. `plan.md`
-3. `tasks.md`
-4. `history.md`
-
----
-
-## 👤 Ruta no técnica
-
-- Empieza aquí: [AI_START_HERE.md](./AI_START_HERE.md)
-- Inicio ultra simple: [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md)
-- Sigue la ruta por nivel: [docs/es/18-ruta-completa-3-niveles.md](./docs/es/18-ruta-completa-3-niveles.md)
-- Usa prompts listos:
-  - [docs/es/19-matriz-prompts-por-objetivo.md](./docs/es/19-matriz-prompts-por-objetivo.md)
-  - [docs/es/26-banco-prompts-validados.md](./docs/es/26-banco-prompts-validados.md)
-
-## 🛠️ Ruta técnica
-
-| Herramienta | Comando | Descripción |
-| :--- | :--- | :--- |
-| Crear espacio de ejecución | `./scripts/create-www-project.sh mi-proyecto codex` | Crea una raíz de proyecto limpia en `www/` e instala el sidecar compacto `spec/` |
-| Instalar sidecar compacto | `./scripts/install-spec-sidecar.sh /ruta/absoluta/proyecto --profile=recommended` | Instala solo el sidecar SDD dentro de un proyecto existente o externo |
-| Workspace standalone full | `./scripts/init-project.sh /ruta/absoluta/proyecto --profile=full` | Copia el template amplio standalone solo cuando se necesite explícitamente |
-| Nueva spec | `./spec/scripts/new-spec.sh` | Crea carpeta numerada de spec en modo sidecar compacto |
-| Validación | `./spec/scripts/validate-sdd.sh . --strict` | Valida estructura y consistencia en modo sidecar compacto |
-| Chequeo de política | `./spec/scripts/check-sdd-policy.sh .` | Valida política multi-agente en modo sidecar compacto |
-| Compuerta SDD | `./spec/scripts/check-sdd-gate.sh .` | Exige aprobación y consistencia del plan en modo sidecar compacto |
-| Dashboard de estado | `./spec/scripts/generate-status.sh` | Genera reporte de estado cuando ese script exista en el layout del proyecto |
-| MCP Server MVP | `npm run mcp:start` | Inicia el servidor local `sdd-mcp` por stdio |
-
-> [!TIP]
-> Ruta profesional por defecto: instala solo el sidecar compacto `spec/` en proyectos reales. Usa copia completa solo cuando realmente necesites un workspace standalone.
-
----
-
-## 📚 Descubrimiento de documentación
-
-- Esenciales: [Estructura](./docs/es/01-estructura.md) · [Flujo](./docs/es/02-flujo-de-trabajo.md)
-- IA: [Agentes soportados](./docs/es/10-agentes-ia-soportados-y-prompts.md) · [Guía Lovable](./docs/es/17-trabajar-con-lovable.md)
-- MCP: [Referencia completa](./docs/es/41-referencia-completa-mcp.md)
-- MCP Fácil: [Guía fácil](./docs/es/43-guia-mcp-facil.md)
-- MCP Onboarding alojado: [Modelo](./docs/es/44-modelo-onboarding-mcp-alojado.md)
-- MCP Ejemplos por cliente: [Guía visual](./docs/es/45-ejemplos-visuales-clientes-mcp-facil.md)
-- MCP Opciones externas gratis: [Guía](./docs/es/47-opciones-gratis-mcp-externo.md)
-- MCP Conexión GitMCP: [Paso a paso](./docs/es/48-como-conectar-este-repo-con-gitmcp.md)
-- Prompts sidecar: [Prompts exactos para modo `spec/`](./docs/es/49-prompts-sidecar-spec.md)
-- Setup MCP: [Guía del servidor](./docs/es/33-guia-servidor-mcp.md)
-- Resultado por comando: [Referencia](./docs/es/40-referencia-resultados-comandos.md)
-- Setup clientes: [Recetas](./docs/es/36-recetas-setup-clientes.md)
-- Versionado: [Estrategia](./docs/es/37-estrategia-versionado.md)
-- Roadmap: [Roadmap público](./docs/es/35-roadmap-publico.md)
-- Organización: [Mapa del proyecto](./docs/es/42-mapa-organizacion-proyecto.md)
-- Kit de medios: [Assets y posicionamiento](./docs/es/38-kit-medios.md)
-- Preparación histórica de release: [notas de v1.3.0](./docs/es/46-preparacion-v1.3.0.md)
-- Calidad: [Checklists por etapa](./docs/es/21-checklists-calidad-por-etapa.md) · [ADR](./docs/es/24-decisiones-de-arquitectura.md)
-
----
+**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 51 guías (EN/ES) por tema: ruta de aprendizaje, prompts, MCP, calidad, modo equipo, migración legacy, legal.
 
 ## ⚖️ Legal y autoría
 
-- Licencia: PolyForm Noncommercial 1.0.0
-- Marco legal: [docs/es/31-marco-legal-y-uso-comercial.md](./docs/es/31-marco-legal-y-uso-comercial.md)
+- Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
 - Historial: [CHANGELOG.md](./CHANGELOG.md)
 - Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
