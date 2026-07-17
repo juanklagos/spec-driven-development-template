@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [v1.5.0] — 2026-07-17
 
 ### Added
 - New guide 50, "SDD in 2026: state of the art and how this template compares", based on fresh industry research (Spec Kit, Kiro, OpenSpec, BMAD, Tessl, Agent OS, community critiques, 2026 trends):
@@ -54,6 +54,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 - Stale `v1.4.0` version strings updated to `v1.4.1` in README badges (EN/ES), versioning strategy (doc 37), and public roadmap (doc 35); launch kit copy (doc 34) now uses generic `v1.4.x`.
+
+### Verified
+- `npm run build` · `npm run typecheck`
+- `./scripts/validate-sdd.sh . --strict` · `./scripts/check-sdd-policy.sh .` · `./scripts/check-sdd-gate.sh .`
+- Site build (155 pages) + GitHub Pages deploy · demo-gif workflow run · course flow end-to-end in CI
 
 ## [v1.4.1] — 2026-03-19
 
