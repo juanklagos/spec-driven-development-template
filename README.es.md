@@ -14,6 +14,12 @@
     <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
     <a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Abrir-181717?style=for-the-badge&logo=github" alt="Abrir en GitHub Codespaces"></a>
   </p>
+
+  <p>
+    <a href="https://juanklagos.github.io/spec-driven-development-template/es/"><img src="https://img.shields.io/badge/📖_Sitio_de_Docs-Navegar-0ea5e9?style=for-the-badge" alt="Sitio de documentación"></a>
+    <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Curso-Aprende_haciendo-16a34a?style=for-the-badge" alt="Curso interactivo"></a>
+    <a href="https://github.com/marketplace/actions/sdd-validate"><img src="https://img.shields.io/badge/✅_Action-Marketplace-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="SDD Validate en GitHub Marketplace"></a>
+  </p>
 </div>
 
 ![Social Preview](./docs/assets/social-preview.svg)
@@ -113,10 +119,10 @@ Antes de iniciar la implementación, se registra consentimiento explícito del u
 
 (En proyectos sidecar los mismos scripts viven bajo `./spec/scripts/`.)
 
-Exígela también en CI — este repo funciona además como GitHub Action:
+Exígela también en CI — este repo funciona además como GitHub Action, listada en el [GitHub Marketplace](https://github.com/marketplace/actions/sdd-validate):
 
 ```yaml
-- uses: juanklagos/spec-driven-development-template@main
+- uses: juanklagos/spec-driven-development-template@v1.5.0
   with:
     path: "."      # raíz del proyecto (sidecar o standalone, autodetectado)
     strict: "true"
@@ -195,6 +201,7 @@ npm run build
 npm run mcp:start
 ```
 
+- **Dashboard visual:** corre `npm run mcp:http:start` y abre `http://127.0.0.1:3334/dashboard` — specs, estados y compuerta de tu workspace de un vistazo.
 - La explicación más simple primero: [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
 - Configuraciones por cliente: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Referencia completa: [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
@@ -202,6 +209,8 @@ npm run mcp:start
 Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `sdd-mcp` local ejecuta el *flujo guiado real*. Se complementan: [guía GitMCP](./docs/es/48-como-conectar-este-repo-con-gitmcp.md).
 
 ## 📚 Documentación
+
+**Navega online:** el [sitio de documentación](https://juanklagos.github.io/spec-driven-development-template/es/) tiene todas las guías con búsqueda, selector de idioma EN/ES y badges de nivel (Básico/Intermedio/Avanzado).
 
 **Tres lecturas esenciales:**
 
@@ -222,5 +231,5 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 ## ⚖️ Legal y autoría
 
 - Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
-- Historial: [CHANGELOG.md](./CHANGELOG.md)
+- Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.5.0)
 - Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
