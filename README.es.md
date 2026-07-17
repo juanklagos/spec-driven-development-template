@@ -209,6 +209,13 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 
 **Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 51 guías (EN/ES) por tema: ruta de aprendizaje, prompts, MCP, calidad, modo equipo, migración legacy, legal.
 
+## 💬 Comunidad
+
+- 📖 Sitio de documentación navegable: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/) — las 51 guías con búsqueda, EN/ES.
+- 💬 Preguntas, ideas, muestra tu proyecto: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions).
+- 🐛 Bugs y propuestas concretas: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues).
+- 🎓 ¿Terminaste un nivel del tutor? `/sdd:tutor` lo registra en tu bitácora y te da un badge de completación para tu README.
+
 ## ⚖️ Legal y autoría
 
 - Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)

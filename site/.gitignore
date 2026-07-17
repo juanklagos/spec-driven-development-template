@@ -1,0 +1,4 @@
+src/content/docs/en/guides/
+src/content/docs/es/guides/
+dist/
+node_modules/

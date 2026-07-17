@@ -34,5 +34,7 @@ L1 sidecar vs standalone layouts → L2 Spec Kit flow (`/speckit.*`) on top of t
 - Record each completed lesson in `bitacora/diaria/YYYY-MM-DD.md` under "Learning log" (create the file from the template if missing).
 - On session end: summarize what was learned, what's next, and leave one exercise for next time.
 - Completion: when a level is done, say so explicitly and point to the next level or to `/sdd:new` to start a real project.
+- Certificate: on level completion, record it in the logbook with the date, and give the user a completion badge to paste in their README:
+  `![SDD Level N](https://img.shields.io/badge/SDD_Template-Level_N_completed-16a34a)` (link it to this repo). Levels are self-certified — the evidence is their logbook and validated exercises.
 
 Hard stop applies even while learning: never write project code for the user before an approved spec and consistent plan — that IS the lesson.

@@ -5,6 +5,7 @@
 | 001 | sdd-mcp-foundation | Done / Completada | High / Alta | Juan Klagos / Codex | 2026-07-17 |
 | 002 | interactive-onboarding | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 003 | distribution-and-tutor | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
+| 004 | site-dashboard-community | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 
 ## 🌐 Bilingual support / Soporte bilingüe
 

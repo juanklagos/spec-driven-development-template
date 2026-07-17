@@ -30,6 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - `packages/create-sdd-project`: zero-dependency npm scaffolder (`npx create-sdd-project`), prepared for publication.
   - README (EN/ES): tutor row, plugin install, CI snippet.
 
+- Spec `004-site-dashboard-community` (Level 3 of the proposals), user-approved and implemented:
+  - Documentation site (`site/`): Astro Starlight with EN/ES i18n, search, and auto-sync of all 51 guides from `docs/` (frontmatter injection + link rewriting); deployed to GitHub Pages at https://juanklagos.github.io/spec-driven-development-template/ via the `site` workflow.
+  - Visual dashboard: `GET /dashboard` on the `sdd-mcp` HTTP transport — specs, statuses, gate state and approval count for the resolved workspace (`SDD_PROJECT_ROOT` override supported), with graceful degradation outside SDD workspaces.
+  - Community: GitHub Discussions enabled, "Community" section in README (EN/ES), and completion badges in `/sdd:tutor`.
+  - MCP Registry preparation: `packages/sdd-mcp/server.json` (io.github.juanklagos/sdd-mcp).
+
 ### Fixed
 - `demo-gif` workflow: replaced broken `charmbracelet/vhs-action@v2` (ffmpeg installer failure found in the first real run) with direct vhs/ttyd/ffmpeg installation from the Charm apt repo.
 
