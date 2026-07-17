@@ -12,7 +12,11 @@ jobs:
   vhs:
     runs-on: ubuntu-latest
     steps:
+      # Always work on main: release events check out the tag (detached
+      # HEAD), which breaks the commit/push step.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       # Install vhs directly (charmbracelet/vhs-action@v2 fails on its
       # ffmpeg installer as of 2026-07; the Charm apt repo is reliable).
