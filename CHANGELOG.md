@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+- New guide 50, "SDD in 2026: state of the art and how this template compares", based on fresh industry research (Spec Kit, Kiro, OpenSpec, BMAD, Tessl, Agent OS, community critiques, 2026 trends):
+  - `docs/en/50-sdd-state-of-the-art-2026.md`
+  - `docs/es/50-estado-del-arte-sdd-2026.md`
+- EARS notation (industry-standard verifiable acceptance criteria) taught in guide 12 (EN/ES) with patterns table, example, and checklist; EARS blocks added to `specs/_template/spec.md` and `templates/spec/spec.template.md`.
+- Spec `002-interactive-onboarding` (Level 1 of `idea/PROPUESTAS_2026-07-17.md`), user-approved and implemented:
+  - Portable Agent Skill: `skills/sdd-workflow/SKILL.md` (open Agent Skills standard, readable by 32+ tools).
+  - Claude Code slash commands: `.claude/commands/sdd/` — `/sdd:help` (stage router), `/sdd:new`, `/sdd:spec`, `/sdd:gate`, `/sdd:close`.
+  - VS Code / Copilot mirror: `.github/prompts/sdd-{new,gate,close}.prompt.md` + `.github/instructions/sdd-specs.instructions.md` (`applyTo: specs/**`).
+  - `llms.txt` at the root + generator `scripts/generate-llms-txt.sh`.
+  - `.devcontainer/devcontainer.json` + "Open in Codespaces" badge in both READMEs.
+  - `demo.tape` (VHS) + `.github/workflows/demo.yml` to regenerate `docs/assets/demo.gif` on release/dispatch.
+  - New "Built-in commands for your AI agent" section in README (EN/ES).
+- Ideas backlog from fresh ecosystem research: `idea/PROPUESTAS_2026-07-17.md` (16 proposals in 3 effort tiers).
+
+### Changed
+- Guide 08 (EN/ES) updated to the current Spec Kit command set: `speckit.*` namespace note, full command table including `/speckit.clarify`, `/speckit.analyze`, `/speckit.checklist`, `/speckit.taskstoissues`, and how the optional commands fit this template's gate; optional commands also reflected in `AGENT_OPERATING_SYSTEM.md` and `AI_START_HERE.md`.
+- README (EN/ES) fully reorganized for first-time visitors: "What is this?" and "Choose your door" sections first, golden rule simplified, MCP moved to an optional advanced section, three essential reads highlighted.
+- `docs/README.md` now indexes all 51 guides (EN/ES) grouped by topic; removed duplicate MCP entry and the stale "Next release prep" label.
+- Sidecar-first workspace guidance propagated to the canonical `AGENT_OPERATING_SYSTEM.md`, `template-context/06-AI-RULES-MATRIX.md`, and all per-agent rule files (`CLAUDE.md`, `GEMINI.md`, `WINDSURF.md`, `ROO.md`, `AIDER.md`, `.cursorrules`, `.clauderules`, `.github/copilot-instructions.md`).
+- `QUICKSTART.md` external-path route now recommends `install-spec-sidecar.sh` (sidecar) and reserves `init-project.sh --profile=full` for explicit standalone mode.
+- Spec `001-sdd-mcp-foundation` status updated to `Done / Completada` in `specs/INDEX.md`; `STATUS.md` regenerated.
+
+### Fixed
+- Stale `v1.4.0` version strings updated to `v1.4.1` in README badges (EN/ES), versioning strategy (doc 37), and public roadmap (doc 35); launch kit copy (doc 34) now uses generic `v1.4.x`.
+
 ## [v1.4.1] — 2026-03-19
 
 ### Changed

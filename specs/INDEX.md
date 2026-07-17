@@ -2,7 +2,8 @@
 
 | Number / Número | Name / Nombre | Status / Estado | Priority / Prioridad | Owner / Responsable | Updated / Actualización |
 |---|---|---|---|---|---|
-| 001 | sdd-mcp-foundation | Draft / Borrador | High / Alta | Juan Klagos / Codex | 2026-03-18 |
+| 001 | sdd-mcp-foundation | Done / Completada | High / Alta | Juan Klagos / Codex | 2026-07-17 |
+| 002 | interactive-onboarding | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 
 ## 🌐 Bilingual support / Soporte bilingüe
 

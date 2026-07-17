@@ -1,0 +1,128 @@
+# Spec-Driven Development Template
+
+> Bilingual (EN/ES) template to learn Spec-Driven Development and apply it to real projects with AI agents. GitHub Spec Kit is the base workflow; this repo adds starter structure, a machine-checked gate (no code before approved spec and consistent plan), agent rules, a local MCP server, and a compact spec/ sidecar for existing codebases.
+
+Key rules for agents: read AGENTS.md and template-context/core-instructions/AGENT_OPERATING_SYSTEM.md first. Validation: ./scripts/validate-sdd.sh . --strict, ./scripts/check-sdd-policy.sh ., ./scripts/check-sdd-gate.sh .
+
+## Start here
+
+- [README](https://github.com/juanklagos/spec-driven-development-template/blob/main/README.md): overview, entry doors, golden rule
+- [AGENTS.md](https://github.com/juanklagos/spec-driven-development-template/blob/main/AGENTS.md): rules for AI agents
+- [AI_START_HERE](https://github.com/juanklagos/spec-driven-development-template/blob/main/AI_START_HERE.md): operating rules and prompts by level
+- [QUICKSTART](https://github.com/juanklagos/spec-driven-development-template/blob/main/QUICKSTART.md): technical quickstart
+- [sdd.policy.yaml](https://github.com/juanklagos/spec-driven-development-template/blob/main/sdd.policy.yaml): machine-readable policy
+
+## Docs (English)
+
+- [Introduction](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/00-introduction.md)
+- [Detailed structure](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/01-structure.md)
+- [🧭 Workflow](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/02-workflow.md)
+- [How to use with any Artificial Intelligence tool](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/03-how-to-use-with-any-ai.md)
+- [Glossary](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/04-glossary.md)
+- [Frequently asked questions](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/05-faq.md)
+- [What this template uses](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/06-what-this-template-uses.md)
+- [How to publish on GitHub step by step](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/07-how-to-publish-on-github-step-by-step.md)
+- [🤖 GitHub Spec Kit integration](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/08-github-spec-kit-integration.md)
+- [Release checklist](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/09-release-checklist.md)
+- [Supported Artificial Intelligence agents and recommended prompts](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/10-supported-ai-agents-and-prompts.md)
+- [🔁 Continuous refinement (Idea and Specifications)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/11-continuous-refinement.md)
+- [🧪 TDD and BDD: how to write strong specifications](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/12-tdd-and-bdd-how-to-write-specs.md)
+- [🚀 Quick guide for non-programmers](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/13-quick-guide-non-programmers.md)
+- [🛠️ Intermediate guide (teams and real projects)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/14-intermediate-guide.md)
+- [🧭 Advanced guide (high-consistency teams)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/15-advanced-guide.md)
+- [🖥️ Guide: desktop tools with local project access](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/16-local-desktop-tools-guide.md)
+- [💜 How to work with Lovable and Spec-Driven Development](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/17-working-with-lovable.md)
+- [🧭 Complete 3-level learning path (full system)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/18-complete-3-level-path.md)
+- [Prompt matrix by goal](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/19-prompt-matrix-by-goal.md)
+- [Anti-patterns and common errors](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/20-anti-patterns-and-common-errors.md)
+- [Quality checklists by stage](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/21-quality-checklists-by-stage.md)
+- [Team mode and collaboration](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/22-team-mode-and-collaboration.md)
+- [30-minute onboarding](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/23-30-minute-onboarding.md)
+- [Architecture decisions](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/24-architecture-decisions.md)
+- [From written idea to specs with SDD (3 levels)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/25-idea-to-spec-with-sdd-3-levels.md)
+- [Validated prompt bank](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/26-validated-prompt-bank.md)
+- [Project type playbooks](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/27-project-type-playbooks.md)
+- [Advanced legacy migration mode](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/28-advanced-legacy-migration-mode.md)
+- [Status dashboard and auto roadmap](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/29-status-dashboard-and-auto-roadmap.md)
+- [Prompt guide by template feature](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/30-prompts-by-template-feature.md)
+- [Legal framework and commercial use](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/31-legal-framework-and-commercial-use.md)
+- [Documentation audit (2026-03-14)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/32-documentation-audit-2026-03-14.md)
+- [MCP Server Guide](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/33-mcp-server-guide.md)
+- [Launch Kit](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/34-launch-kit.md)
+- [Public Roadmap](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/35-public-roadmap.md)
+- [Client Setup Recipes](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/36-client-setup-recipes.md)
+- [Versioning Strategy](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/37-versioning-strategy.md)
+- [Media Kit](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/38-media-kit.md)
+- [v1.2.0 Preparation](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/39-v1.2.0-preparation.md)
+- [Command Results Reference](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/40-command-results-reference.md)
+- [Complete MCP Reference](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/41-complete-mcp-reference.md)
+- [Project Organization Map](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/42-project-organization-map.md)
+- [Easy MCP Guide for Non-Technical Users](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/43-easy-mcp-guide.md)
+- [Hosted MCP Onboarding Model](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/44-hosted-mcp-onboarding-model.md)
+- [Client Visual Examples for Easy MCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/45-client-visual-examples-for-easy-mcp.md)
+- [v1.3.0 Preparation](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/46-v1.3.0-preparation.md)
+- [Free External MCP Options](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/47-free-external-mcp-options.md)
+- [How to Connect This Repository with GitMCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/48-how-to-connect-this-repo-with-gitmcp.md)
+- [Spec Sidecar Prompts](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/49-spec-sidecar-prompts.md)
+- [SDD in 2026: State of the Art and How This Template Compares](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/50-sdd-state-of-the-art-2026.md)
+
+## Docs (Español)
+
+- [Introducción](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/00-introduccion.md)
+- [Estructura detallada](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/01-estructura.md)
+- [🧭 Flujo de trabajo](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/02-flujo-de-trabajo.md)
+- [Cómo usar con cualquier herramienta de Inteligencia Artificial](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/03-como-usar-con-cualquier-inteligencia-artificial.md)
+- [Glosario](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/04-glosario.md)
+- [Preguntas frecuentes](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/05-preguntas-frecuentes.md)
+- [Qué usa esta plantilla](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/06-que-usa-esta-plantilla.md)
+- [Cómo publicar en GitHub paso a paso](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/07-como-publicar-en-github-paso-a-paso.md)
+- [🤖 Integración con GitHub Spec Kit](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/08-integracion-github-spec-kit.md)
+- [Checklist de publicación (Release Checklist)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/09-release-checklist.md)
+- [Agentes de Inteligencia Artificial soportados y prompts recomendados](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/10-agentes-ia-soportados-y-prompts.md)
+- [🔁 Refinamiento continuo (Idea y Especificaciones)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/11-refinamiento-continuo.md)
+- [🧪 TDD y BDD: cómo escribir buenas especificaciones](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/12-tdd-y-bdd-como-escribir-specs.md)
+- [🚀 Guía rápida para no programadores](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/13-guia-rapida-no-programadores.md)
+- [🛠️ Guía intermedia (equipos y proyectos reales)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/14-guia-intermedia.md)
+- [🧭 Guía avanzada (estandarización y alta consistencia)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/15-guia-avanzada.md)
+- [🖥️ Guía: herramientas de escritorio con acceso local](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/16-guia-herramientas-desktop-local.md)
+- [💜 Cómo trabajar con Lovable y Spec-Driven Development](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/17-trabajar-con-lovable.md)
+- [🧭 Ruta completa de aprendizaje en 3 niveles (todo el sistema)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/18-ruta-completa-3-niveles.md)
+- [Matriz de prompts por objetivo](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/19-matriz-prompts-por-objetivo.md)
+- [Anti-patrones y errores comunes](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/20-anti-patrones-y-errores-comunes.md)
+- [Checklists de calidad por etapa](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/21-checklists-calidad-por-etapa.md)
+- [Modo equipo y colaboración](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/22-modo-equipo-y-colaboracion.md)
+- [Onboarding de 30 minutos](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/23-onboarding-30-minutos.md)
+- [Decisiones de arquitectura](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/24-decisiones-de-arquitectura.md)
+- [De idea escrita a specs con SDD (3 niveles)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/25-de-idea-a-spec-con-sdd-3-niveles.md)
+- [Banco de prompts validados](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/26-banco-prompts-validados.md)
+- [Playbooks por tipo de proyecto](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/27-playbooks-por-tipo-de-proyecto.md)
+- [Modo migración legado avanzado](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/28-modo-migracion-legado-avanzado.md)
+- [Dashboard de status y roadmap automático](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/29-dashboard-status-y-roadmap.md)
+- [Guía de prompts por característica del template](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/30-guia-prompts-por-caracteristica.md)
+- [Marco legal y uso comercial](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/31-marco-legal-y-uso-comercial.md)
+- [Auditoría de documentación (2026-03-14)](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/32-auditoria-documentacion-2026-03-14.md)
+- [Guía del servidor MCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/33-guia-servidor-mcp.md)
+- [Kit de lanzamiento](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/34-kit-lanzamiento.md)
+- [Roadmap público](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/35-roadmap-publico.md)
+- [Recetas de setup por cliente](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/36-recetas-setup-clientes.md)
+- [Estrategia de versionado](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/37-estrategia-versionado.md)
+- [Kit de medios](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/38-kit-medios.md)
+- [Preparación v1.2.0](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/39-preparacion-v1.2.0.md)
+- [Referencia de resultados por comando](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/40-referencia-resultados-comandos.md)
+- [Referencia completa de MCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/41-referencia-completa-mcp.md)
+- [Mapa de organización del proyecto](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/42-mapa-organizacion-proyecto.md)
+- [Guía fácil de MCP para usuarios no técnicos](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/43-guia-mcp-facil.md)
+- [Modelo de onboarding MCP alojado](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/44-modelo-onboarding-mcp-alojado.md)
+- [Ejemplos visuales por cliente para MCP fácil](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/45-ejemplos-visuales-clientes-mcp-facil.md)
+- [Preparación v1.3.0](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/46-preparacion-v1.3.0.md)
+- [Opciones gratuitas de MCP externo](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/47-opciones-gratis-mcp-externo.md)
+- [Cómo conectar este repositorio con GitMCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/48-como-conectar-este-repo-con-gitmcp.md)
+- [Prompts para sidecar `spec/`](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/49-prompts-sidecar-spec.md)
+- [SDD en 2026: estado del arte y cómo se compara este template](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/50-estado-del-arte-sdd-2026.md)
+
+## Optional
+
+- [CHANGELOG](https://github.com/juanklagos/spec-driven-development-template/blob/main/CHANGELOG.md): release history
+- [Examples](https://github.com/juanklagos/spec-driven-development-template/blob/main/examples/README.md): complete worked examples
+- [MCP server](https://github.com/juanklagos/spec-driven-development-template/blob/main/packages/sdd-mcp/README.md): local sdd-mcp server
+- [SDD skill](https://github.com/juanklagos/spec-driven-development-template/blob/main/skills/sdd-workflow/SKILL.md): portable Agent Skill of this workflow

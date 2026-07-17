@@ -1,0 +1,16 @@
+{
+  "name": "SDD Template",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "postCreateCommand": "npm install && npm run build && ./scripts/validate-sdd.sh . --strict",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bierner.markdown-mermaid",
+        "davidanson.vscode-markdownlint"
+      ]
+    }
+  },
+  "hostRequirements": {
+    "cpus": 2
+  }
+}

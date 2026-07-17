@@ -59,6 +59,27 @@
 
 ---
 
+### [2026-07-17 12:00] Session 3 / Sesión 3 — SDD 2026 research + repo reorganization
+- **Goal / Objetivo:** Research the 2026 SDD state of the art, compare it with this template, and reorganize the repo for first-time visitors / Investigar el estado del arte SDD 2026, compararlo con el template y reorganizar el repo para visitantes nuevos
+- **Work completed / Trabajo realizado:**
+  - Added guide 50 (EN/ES): "SDD in 2026: state of the art and how this template compares" with sourced research (Spec Kit, Kiro, OpenSpec, BMAD, Tessl, Agent OS, Thoughtworks/martinfowler critiques, AGENTS.md standard)
+  - Reorganized README (EN/ES): what-is-SDD first, three explained entry doors, simplified golden rule, MCP moved to optional advanced section, three essential reads
+  - Rebuilt docs/README.md as a full thematic index of all 51 guides (EN/ES)
+  - Fixed stale v1.4.0 strings (README badges, docs 35/37; doc 34 now generic v1.4.x)
+  - Propagated sidecar-first guidance to AGENT_OPERATING_SYSTEM.md, 06-AI-RULES-MATRIX.md, and all 8 per-agent rule files (additive only; policy marker phrases intact)
+  - Aligned QUICKSTART external route with sidecar model (install-spec-sidecar.sh)
+  - Spec 001 marked Done in specs/INDEX.md (recorded in its history.md); STATUS.md regenerated; CHANGELOG [Unreleased] added
+- **Decisions made / Decisiones tomadas:**
+  - Template positioning confirmed: practical layer around GitHub Spec Kit, spec-anchored model, bilingual teaching + sidecar application
+  - Launch kit copy uses generic v1.4.x to avoid re-staling on each release
+- **Blockers / Bloqueos:** None
+  - Follow-up same session: EARS section added to guide 12 (EN/ES) + EARS blocks in spec templates; guide 08 (EN/ES) updated to current Spec Kit command set (clarify/analyze/checklist/taskstoissues); optional commands reflected in AGENT_OPERATING_SYSTEM.md and AI_START_HERE.md; guide 50 short-term items marked done
+  - Level 1 of the evolution proposals implemented under user-approved spec 002-interactive-onboarding: portable Agent Skill, /sdd:* slash commands, Copilot prompt files + scoped instructions, llms.txt + generator, devcontainer + Codespaces badge, VHS demo tape + CI workflow, README command section (EN/ES)
+- **Next step / Próximo paso:** Medium-term items from guide 50: optional "spec properties" section in the spec template (bridge to executable specs) and a template-native tasks-to-issues flow for team mode
+- **Owner / Responsable:** Juan Klagos / Claude
+
+---
+
 ### [YYYY-MM-DD HH:MM] Session N / Sesión N
 - **Goal / Objetivo:**
 - **Work completed / Trabajo realizado:**
