@@ -1,5 +1,5 @@
 name: 'SDD Validate'
-description: 'Enforce Spec-Driven Development in CI: no code before approved spec and consistent plan. Validates SDD structure, multi-agent policy, and the approval gate.'
+description: 'No code before approved spec and consistent plan — validates SDD structure, policy, and gate in CI.'
 author: 'Juan Klagos'
 branding:
   icon: 'check-circle'
