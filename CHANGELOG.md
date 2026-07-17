@@ -36,6 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Community: GitHub Discussions enabled, "Community" section in README (EN/ES), and completion badges in `/sdd:tutor`.
   - MCP Registry preparation: `packages/sdd-mcp/server.json` (io.github.juanklagos/sdd-mcp).
 
+- Spec `005-learning-for-everyone`, user-approved and implemented:
+  - Level badges (Beginner/Intermediate/Advanced/Reference, bilingual) on every guide in the docs site sidebar, driven by a curated map in `site/scripts/sync-docs.mjs`; landing cards link the three level paths.
+  - Interactive course `aprende-sdd` (GitHub Skills format, template repo): 4 auto-graded steps ending with the real SDD gate as exam, verified end-to-end in CI including the "Use this template" path — https://github.com/juanklagos/aprende-sdd
+  - Course linked from README (EN/ES) learning section and Community, and from the site landings.
+
 ### Fixed
 - `demo-gif` workflow: replaced broken `charmbracelet/vhs-action@v2` (ffmpeg installer failure found in the first real run) with direct vhs/ttyd/ffmpeg installation from the Charm apt repo.
 

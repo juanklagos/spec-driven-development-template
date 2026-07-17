@@ -56,6 +56,8 @@ Then pick your learning level:
 - Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
 - Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
 
+Prefer learning by doing? Take the **[interactive course](https://github.com/juanklagos/aprende-sdd)** (GitHub Skills format): 4 steps, ~35 min, auto-graded by Actions — finish with the real SDD gate as your exam.
+
 ## ⚡ Start in 30 seconds
 
 Copy/paste this prompt into your AI assistant (Claude, Cursor, Copilot, Gemini...):
@@ -214,6 +216,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 - 📖 Browsable docs site: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/) — all 51 guides with search, EN/ES.
 - 💬 Questions, ideas, show-and-tell: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions).
 - 🐛 Bugs and concrete proposals: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues).
+- 🎓 Interactive course: [aprende-sdd](https://github.com/juanklagos/aprende-sdd) — learn by doing, auto-graded by Actions.
 - 🎓 Finished a tutor level? `/sdd:tutor` records it in your logbook and gives you a completion badge for your README.
 
 ## ⚖️ Legal & authorship

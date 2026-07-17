@@ -1,6 +1,6 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-17 16:14 UTC
+Generated at / Generado en: 2026-07-17 16:42 UTC
 
 ## Active specs / Specs activas
 
@@ -16,11 +16,12 @@ Generated at / Generado en: 2026-07-17 16:14 UTC
 | 002 | interactive-onboarding | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 003 | distribution-and-tutor | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 004 | site-dashboard-community | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
+| 005 | learning-for-everyone | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 
 ## Task progress / Progreso de tareas
 
 - Pending / Pendientes: 3
-- Completed / Completadas: 41
+- Completed / Completadas: 45
 
 ## Recent log excerpt / Extracto reciente de bitácora
 
