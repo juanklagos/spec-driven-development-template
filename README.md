@@ -1,28 +1,25 @@
 <div align="center">
-  <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Learn Spec-Driven Development (SDD) and apply it to real projects — with AI as your co-pilot and GitHub Spec Kit as the base workflow.</b></p>
 
-  <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Active-blue?style=for-the-badge" alt="English"></a>
-    <a href="./README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-Read-green?style=for-the-badge" alt="Español"></a>
-  </p>
+<img src="./docs/assets/social-preview.svg" alt="Spec-Driven Development Template" width="720">
 
-  <p>
-    <img src="https://img.shields.io/badge/version-v1.5.0-blue?style=for-the-badge" alt="Version">
-    <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NON--TECH-Start-green?style=for-the-badge" alt="Non Technical Start"></a>
-    <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_START-Open-purple?style=for-the-badge" alt="AI Start"></a>
-    <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutes-ff6b35?style=for-the-badge" alt="Quickstart"></a>
-    <a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Open-181717?style=for-the-badge&logo=github" alt="Open in GitHub Codespaces"></a>
-  </p>
+# 🌱 Spec-Driven Development Template
 
-  <p>
-    <a href="https://juanklagos.github.io/spec-driven-development-template/"><img src="https://img.shields.io/badge/📖_Docs_Site-Browse-0ea5e9?style=for-the-badge" alt="Documentation site"></a>
-    <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Course-Learn_by_doing-16a34a?style=for-the-badge" alt="Interactive course"></a>
-    <a href="https://github.com/marketplace/actions/sdd-validate"><img src="https://img.shields.io/badge/✅_Action-Marketplace-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="SDD Validate on GitHub Marketplace"></a>
-  </p>
+**Learn Spec-Driven Development and apply it to real projects —<br>with AI as your co-pilot and one golden rule, checked by machine.**
+
+🇺🇸 **English** · [🇪🇸 Español](./README.es.md)
+
+<img src="https://img.shields.io/badge/version-v1.5.0-3b82f6?style=for-the-badge" alt="Version">
+<img src="https://img.shields.io/badge/license-PolyForm_NC-8b5cf6?style=for-the-badge" alt="License">
+<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.5.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Latest release"></a>
+
+<a href="https://juanklagos.github.io/spec-driven-development-template/"><img src="https://img.shields.io/badge/📖_Docs_Site-Browse-0ea5e9?style=for-the-badge" alt="Documentation site"></a>
+<a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Course-Learn_by_doing-16a34a?style=for-the-badge" alt="Interactive course"></a>
+<a href="https://github.com/marketplace/actions/sdd-validate"><img src="https://img.shields.io/badge/✅_Action-Marketplace-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="SDD Validate on GitHub Marketplace"></a>
+<a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Open-181717?style=for-the-badge&logo=github" alt="Open in GitHub Codespaces"></a>
+
+[Non-technical start](./START_HERE_NON_TECH.md) · [Quickstart](./QUICKSTART.md) · [AI agent start](./AI_START_HERE.md) · [Commands](#️-built-in-commands-for-your-ai-agent) · [Community](#-community)
+
 </div>
-
-![Social Preview](./docs/assets/social-preview.svg)
 
 ---
 
@@ -32,10 +29,21 @@
 
 This repository is **two things at once**:
 
-1. **A school** — a bilingual (EN/ES), level-based path to learn SDD from zero, even if you don't program.
-2. **A toolkit** — a ready-to-use structure to apply SDD in real projects: enforcement scripts, AI agent rules, a local MCP server, and a compact `spec/` sidecar for existing codebases.
+|  | 🎓 A school | 🧰 A toolkit |
+| :--- | :--- | :--- |
+| **What** | Bilingual (EN/ES), level-based path to learn SDD from zero | Ready-to-use structure to apply SDD in real projects |
+| **How** | Guides, interactive course, conversational tutor | Enforcement scripts, agent rules, MCP server, compact `spec/` sidecar |
+| **For whom** | Even if you don't program | Solo devs, teams, and AI agents |
 
-It uses [GitHub Spec Kit](https://github.com/github/spec-kit) as the reference workflow engine; this repo is the practical layer around it (starter structure, guidance, rules, and validation).
+It uses [GitHub Spec Kit](https://github.com/github/spec-kit) as the reference workflow engine; this repo is the practical layer around it.
+
+<div align="center">
+
+**The flow in action** — create a spec, validate, pass the gate *(regenerated on every release)*:
+
+<img src="./docs/assets/demo.gif" alt="SDD flow demo: create a spec, validate the structure, pass the gate" width="720">
+
+</div>
 
 | ❌ Without SDD | ✅ With this template |
 | :--- | :--- |
@@ -48,21 +56,20 @@ It uses [GitHub Spec Kit](https://github.com/github/spec-kit) as the reference w
 
 ## 🚪 Choose your door
 
-Three entry points, one for each kind of visitor:
-
 | You are... | Start here | What you get |
 | :--- | :--- | :--- |
 | 🧑‍💼 **Non-technical** (founder, PM, curious) | [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) | Ultra-simple guided start, no jargon |
 | 👩‍💻 **Developer** | [QUICKSTART.md](./QUICKSTART.md) | Commands to scaffold and validate in 5 minutes |
 | 🤖 **AI agent** (or you, pasting into one) | [AI_START_HERE.md](./AI_START_HERE.md) | Operating rules + copy/paste prompts by level |
 
-Then pick your learning level:
+Then pick your learning level — every guide on the [docs site](https://juanklagos.github.io/spec-driven-development-template/) carries its level badge:
 
-- Beginner: [docs/en/13-quick-guide-non-programmers.md](./docs/en/13-quick-guide-non-programmers.md)
-- Intermediate: [docs/en/14-intermediate-guide.md](./docs/en/14-intermediate-guide.md)
-- Advanced: [docs/en/15-advanced-guide.md](./docs/en/15-advanced-guide.md)
+- 🟢 Beginner: [quick guide for non-programmers](./docs/en/13-quick-guide-non-programmers.md)
+- 🟡 Intermediate: [team discipline guide](./docs/en/14-intermediate-guide.md)
+- 🔴 Advanced: [governance and standardization](./docs/en/15-advanced-guide.md)
 
-Prefer learning by doing? Take the **[interactive course](https://github.com/juanklagos/aprende-sdd)** (GitHub Skills format): 4 steps, ~35 min, auto-graded by Actions — finish with the real SDD gate as your exam.
+> [!TIP]
+> Prefer learning by doing? Take the **[interactive course](https://github.com/juanklagos/aprende-sdd)** (GitHub Skills format): 4 steps, ~35 min, auto-graded by Actions — finish with the real SDD gate as your exam.
 
 ## ⚡ Start in 30 seconds
 
@@ -102,18 +109,13 @@ If you use **Claude Code**, this repo ships slash commands out of the box — st
 
 ## 🚨 The golden rule
 
+> [!IMPORTANT]
 > **No code before an approved `spec.md` and a consistent `plan.md`.**
-
-This is not just prose — it is machine-checked:
+> Not just prose — it is machine-checked, and implementation only starts after your recorded consent.
 
 ```bash
 ./scripts/check-sdd-policy.sh .   # multi-agent policy files are aligned
 ./scripts/check-sdd-gate.sh .     # spec approved + plan consistent + consent recorded
-```
-
-Before implementation starts, explicit user consent is recorded:
-
-```bash
 ./scripts/confirm-user-consent.sh "User approved scope X"
 ```
 
@@ -134,26 +136,20 @@ Reference files: [sdd.policy.yaml](./sdd.policy.yaml) · [INSTRUCTIONS.md](./INS
 
 ```mermaid
 flowchart LR
-  A["Idea in plain language"] --> B["spec.md approved"]
-  B --> C["plan.md consistent"]
-  C --> D["tasks.md prioritized"]
-  D --> E["Gate + explicit consent"]
-  E --> F["Implementation"]
-  F --> G["Validation + logbook"]
+  A["💡 Idea in plain language"] --> B["📋 spec.md approved"]
+  B --> C["🗺️ plan.md consistent"]
+  C --> D["✅ tasks.md prioritized"]
+  D --> E["🚦 Gate + explicit consent"]
+  E --> F["⚙️ Implementation"]
+  F --> G["🔍 Validation + logbook"]
 ```
 
-Every feature gets a numbered spec bundle:
+Every feature gets a numbered spec bundle, and every session leaves a trace in `bitacora/` (logbook):
 
-1. `spec.md` — what and why (approved by you)
-2. `plan.md` — how (consistent with the spec)
+1. `spec.md` — what and why *(approved by you)*
+2. `plan.md` — how *(consistent with the spec)*
 3. `tasks.md` — concrete steps
 4. `history.md` — how it evolved
-
-And every session leaves a trace in `bitacora/` (logbook): decisions, handoffs, next step.
-
-See the real flow (create spec → validate → gate), regenerated automatically on every release:
-
-![SDD flow demo: create a spec, validate the structure, pass the gate](./docs/assets/demo.gif)
 
 Full walkthrough example: [examples/002-mcp-end-to-end](./examples/002-mcp-end-to-end/README.md)
 
@@ -163,14 +159,17 @@ Three ways to use the template, from lightest to heaviest:
 
 | Mode | When | Command |
 | :--- | :--- | :--- |
-| **Compact `spec/` sidecar** (recommended) | Real or existing project: SDD artifacts in `./spec/`, code stays in your project root | `./scripts/install-spec-sidecar.sh /path/to/project --profile=recommended` |
+| **Compact `spec/` sidecar** ⭐ | Real or existing project: SDD artifacts in `./spec/`, code stays in your project root | `./scripts/install-spec-sidecar.sh /path/to/project --profile=recommended` |
 | **Internal workspace `www/`** | The runnable project should live inside this template repo | `./scripts/create-www-project.sh my-project codex` |
 | **Full standalone copy** | You explicitly want the whole framework as your workspace | `./scripts/init-project.sh /path/to/project --profile=full` |
 
 > [!TIP]
 > Default professional path: install only the compact `spec/` sidecar. Never copy the full framework into a real codebase unless you explicitly want standalone mode.
 
-Everyday commands (sidecar mode shown; same scripts exist at root in standalone mode):
+<details>
+<summary><b>📟 Everyday commands</b> (sidecar mode shown; same scripts exist at root in standalone mode)</summary>
+
+<br>
 
 | Action | Command |
 | :--- | :--- |
@@ -180,7 +179,7 @@ Everyday commands (sidecar mode shown; same scripts exist at root in standalone 
 | SDD gate | `./spec/scripts/check-sdd-gate.sh .` |
 | Status dashboard | `./spec/scripts/generate-status.sh` |
 
-Folder anatomy, project map and layout details: [docs/en/42-project-organization-map.md](./docs/en/42-project-organization-map.md)
+Folder anatomy and layout details: [project organization map](./docs/en/42-project-organization-map.md)
 
 ```mermaid
 flowchart TD
@@ -191,7 +190,12 @@ flowchart TD
   B --> F["scripts/ (gate + validation)"]
 ```
 
-## 🔌 Connect via MCP (optional, advanced)
+</details>
+
+<details>
+<summary><b>🔌 Connect via MCP</b> (optional, advanced)</summary>
+
+<br>
 
 If your AI client supports MCP, this repo ships a local `sdd-mcp` server so the SDD workflow becomes guided commands (`/start-project`, `/create-spec ...`).
 
@@ -208,9 +212,11 @@ npm run mcp:start
 
 Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sdd-mcp` runs the *real guided workflow*. They complement each other: [GitMCP guide](./docs/en/48-how-to-connect-this-repo-with-gitmcp.md).
 
+</details>
+
 ## 📚 Documentation
 
-**Browse online:** the [documentation site](https://juanklagos.github.io/spec-driven-development-template/) has every guide with search, EN/ES language picker, and level badges (Beginner/Intermediate/Advanced).
+**Browse online:** the [documentation site](https://juanklagos.github.io/spec-driven-development-template/) has every guide with search, EN/ES language picker, and level badges.
 
 **Three essential reads:**
 
@@ -218,18 +224,30 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 2. [Structure](./docs/en/01-structure.md) — what each folder is for
 3. [SDD in 2026: state of the art](./docs/en/50-sdd-state-of-the-art-2026.md) — the industry map and where this template stands
 
-**Everything else:** the [full documentation index](./docs/README.md) organizes all 51 guides (EN/ES) by topic: learning path, prompts, MCP, quality, team mode, legacy migration, legal.
+**Everything else:** the [full documentation index](./docs/README.md) organizes all 51 guides (EN/ES) by topic.
 
 ## 💬 Community
 
-- 📖 Browsable docs site: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/) — all 51 guides with search, EN/ES.
-- 💬 Questions, ideas, show-and-tell: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions).
-- 🐛 Bugs and concrete proposals: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues).
-- 🎓 Interactive course: [aprende-sdd](https://github.com/juanklagos/aprende-sdd) — learn by doing, auto-graded by Actions.
-- 🎓 Finished a tutor level? `/sdd:tutor` records it in your logbook and gives you a completion badge for your README.
+- 📖 Docs site: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/)
+- 💬 Questions, ideas, show-and-tell: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions)
+- 🐛 Bugs and concrete proposals: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues)
+- 🎓 Interactive course: [aprende-sdd](https://github.com/juanklagos/aprende-sdd) — learn by doing, auto-graded by Actions
+- 🏅 Finished a tutor level? `/sdd:tutor` records it in your logbook and gives you a completion badge for your README
 
 ## ⚖️ Legal & authorship
 
 - License: PolyForm Noncommercial 1.0.0 — [legal guide](./docs/en/31-legal-framework-and-commercial-use.md)
 - Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.5.0)
 - Author: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
+
+---
+
+<div align="center">
+
+**If this template helps you build with discipline, ⭐ star the repo — it helps others find it.**
+
+🌱 *No code before approved spec and consistent plan.*
+
+[⬆️ Back to top](#-spec-driven-development-template)
+
+</div>

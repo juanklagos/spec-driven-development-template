@@ -1,28 +1,25 @@
 <div align="center">
-  <h1>🌱 Spec-Driven Development Template</h1>
-  <p><b>Aprende Spec-Driven Development (SDD) y aplícalo en proyectos reales — con la IA como copiloto y GitHub Spec Kit como flujo base.</b></p>
 
-  <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/🇺🇸_English-Read-blue?style=for-the-badge" alt="English"></a>
-    <a href="./README.es.md"><img src="https://img.shields.io/badge/🇪🇸_Español-Activo-green?style=for-the-badge" alt="Español"></a>
-  </p>
+<img src="./docs/assets/social-preview.svg" alt="Spec-Driven Development Template" width="720">
 
-  <p>
-    <img src="https://img.shields.io/badge/version-v1.5.0-blue?style=for-the-badge" alt="Version">
-    <a href="./START_HERE_NON_TECH.md"><img src="https://img.shields.io/badge/🧑‍💼_NO_TÉCNICO-Iniciar-green?style=for-the-badge" alt="Inicio no técnico"></a>
-    <a href="./AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_INICIO_IA-Abrir-purple?style=for-the-badge" alt="AI Start"></a>
-    <a href="./QUICKSTART.md"><img src="https://img.shields.io/badge/🚀_QUICKSTART-5_Minutos-ff6b35?style=for-the-badge" alt="Quickstart"></a>
-    <a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Abrir-181717?style=for-the-badge&logo=github" alt="Abrir en GitHub Codespaces"></a>
-  </p>
+# 🌱 Spec-Driven Development Template
 
-  <p>
-    <a href="https://juanklagos.github.io/spec-driven-development-template/es/"><img src="https://img.shields.io/badge/📖_Sitio_de_Docs-Navegar-0ea5e9?style=for-the-badge" alt="Sitio de documentación"></a>
-    <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Curso-Aprende_haciendo-16a34a?style=for-the-badge" alt="Curso interactivo"></a>
-    <a href="https://github.com/marketplace/actions/sdd-validate"><img src="https://img.shields.io/badge/✅_Action-Marketplace-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="SDD Validate en GitHub Marketplace"></a>
-  </p>
+**Aprende Spec-Driven Development y aplícalo en proyectos reales —<br>con la IA como copiloto y una regla de oro, verificada por máquina.**
+
+[🇺🇸 English](./README.md) · 🇪🇸 **Español**
+
+<img src="https://img.shields.io/badge/version-v1.5.0-3b82f6?style=for-the-badge" alt="Versión">
+<img src="https://img.shields.io/badge/licencia-PolyForm_NC-8b5cf6?style=for-the-badge" alt="Licencia">
+<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.5.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Último release"></a>
+
+<a href="https://juanklagos.github.io/spec-driven-development-template/es/"><img src="https://img.shields.io/badge/📖_Sitio_de_Docs-Navegar-0ea5e9?style=for-the-badge" alt="Sitio de documentación"></a>
+<a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Curso-Aprende_haciendo-16a34a?style=for-the-badge" alt="Curso interactivo"></a>
+<a href="https://github.com/marketplace/actions/sdd-validate"><img src="https://img.shields.io/badge/✅_Action-Marketplace-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="SDD Validate en GitHub Marketplace"></a>
+<a href="https://codespaces.new/juanklagos/spec-driven-development-template"><img src="https://img.shields.io/badge/⚡_Codespaces-Abrir-181717?style=for-the-badge&logo=github" alt="Abrir en GitHub Codespaces"></a>
+
+[Inicio no técnico](./START_HERE_NON_TECH.md) · [Quickstart](./QUICKSTART.md) · [Inicio para agentes IA](./AI_START_HERE.md) · [Comandos](#️-comandos-integrados-para-tu-agente-de-ia) · [Comunidad](#-comunidad)
+
 </div>
-
-![Social Preview](./docs/assets/social-preview.svg)
 
 ---
 
@@ -32,10 +29,21 @@
 
 Este repositorio es **dos cosas a la vez**:
 
-1. **Una escuela** — una ruta bilingüe (EN/ES) por niveles para aprender SDD desde cero, incluso si no programas.
-2. **Una caja de herramientas** — una estructura lista para aplicar SDD en proyectos reales: scripts de cumplimiento, reglas para agentes de IA, un servidor MCP local y un sidecar compacto `spec/` para codebases existentes.
+|  | 🎓 Una escuela | 🧰 Una caja de herramientas |
+| :--- | :--- | :--- |
+| **Qué** | Ruta bilingüe (EN/ES) por niveles para aprender SDD desde cero | Estructura lista para aplicar SDD en proyectos reales |
+| **Cómo** | Guías, curso interactivo, tutor conversacional | Scripts de cumplimiento, reglas para agentes, servidor MCP, sidecar compacto `spec/` |
+| **Para quién** | Incluso si no programas | Devs solos, equipos y agentes de IA |
 
-Usa [GitHub Spec Kit](https://github.com/github/spec-kit) como motor de flujo de referencia; este repo es la capa práctica a su alrededor (estructura inicial, guía, reglas y validación).
+Usa [GitHub Spec Kit](https://github.com/github/spec-kit) como motor de flujo de referencia; este repo es la capa práctica a su alrededor.
+
+<div align="center">
+
+**El flujo en acción** — crear una spec, validar, pasar la compuerta *(regenerado en cada release)*:
+
+<img src="./docs/assets/demo.gif" alt="Demo del flujo SDD: crear una spec, validar la estructura, pasar la compuerta" width="720">
+
+</div>
 
 | ❌ Sin SDD | ✅ Con este template |
 | :--- | :--- |
@@ -48,21 +56,20 @@ Usa [GitHub Spec Kit](https://github.com/github/spec-kit) como motor de flujo de
 
 ## 🚪 Elige tu puerta
 
-Tres puntos de entrada, uno para cada tipo de visitante:
-
 | Tú eres... | Empieza aquí | Qué obtienes |
 | :--- | :--- | :--- |
 | 🧑‍💼 **No técnico** (fundador, PM, curioso) | [START_HERE_NON_TECH.md](./START_HERE_NON_TECH.md) | Inicio guiado ultra simple, sin jerga |
 | 👩‍💻 **Desarrollador** | [QUICKSTART.md](./QUICKSTART.md) | Comandos para crear y validar en 5 minutos |
 | 🤖 **Agente de IA** (o tú, pegándolo en uno) | [AI_START_HERE.md](./AI_START_HERE.md) | Reglas operativas + prompts copy/paste por nivel |
 
-Luego elige tu nivel de aprendizaje:
+Luego elige tu nivel — cada guía del [sitio de docs](https://juanklagos.github.io/spec-driven-development-template/es/) lleva su badge de nivel:
 
-- Principiante: [docs/es/13-guia-rapida-no-programadores.md](./docs/es/13-guia-rapida-no-programadores.md)
-- Intermedio: [docs/es/14-guia-intermedia.md](./docs/es/14-guia-intermedia.md)
-- Avanzado: [docs/es/15-guia-avanzada.md](./docs/es/15-guia-avanzada.md)
+- 🟢 Básico: [guía rápida para no programadores](./docs/es/13-guia-rapida-no-programadores.md)
+- 🟡 Intermedio: [guía de disciplina en equipo](./docs/es/14-guia-intermedia.md)
+- 🔴 Avanzado: [gobernanza y estandarización](./docs/es/15-guia-avanzada.md)
 
-¿Prefieres aprender haciendo? Toma el **[curso interactivo](https://github.com/juanklagos/aprende-sdd)** (formato GitHub Skills): 4 pasos, ~35 min, corregido automáticamente por Actions — terminas con la compuerta SDD real como examen.
+> [!TIP]
+> ¿Prefieres aprender haciendo? Toma el **[curso interactivo](https://github.com/juanklagos/aprende-sdd)** (formato GitHub Skills): 4 pasos, ~35 min, corregido automáticamente por Actions — terminas con la compuerta SDD real como examen.
 
 ## ⚡ Empieza en 30 segundos
 
@@ -102,18 +109,13 @@ Si usas **Claude Code**, este repo trae slash commands listos — empieza con `/
 
 ## 🚨 La regla de oro
 
+> [!IMPORTANT]
 > **No hay código sin `spec.md` aprobada y `plan.md` consistente.**
-
-Y no es solo prosa — se verifica por máquina:
+> No es solo prosa — se verifica por máquina, y la implementación solo empieza tras registrar tu consentimiento.
 
 ```bash
 ./scripts/check-sdd-policy.sh .   # los archivos de política multi-agente están alineados
 ./scripts/check-sdd-gate.sh .     # spec aprobada + plan consistente + consentimiento registrado
-```
-
-Antes de iniciar la implementación, se registra consentimiento explícito del usuario:
-
-```bash
 ./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"
 ```
 
@@ -134,26 +136,20 @@ Archivos de referencia: [sdd.policy.yaml](./sdd.policy.yaml) · [INSTRUCTIONS.md
 
 ```mermaid
 flowchart LR
-  A["Idea en lenguaje simple"] --> B["spec.md aprobada"]
-  B --> C["plan.md consistente"]
-  C --> D["tasks.md priorizadas"]
-  D --> E["Compuerta + consentimiento explícito"]
-  E --> F["Implementación"]
-  F --> G["Validación + bitácora"]
+  A["💡 Idea en lenguaje simple"] --> B["📋 spec.md aprobada"]
+  B --> C["🗺️ plan.md consistente"]
+  C --> D["✅ tasks.md priorizadas"]
+  D --> E["🚦 Compuerta + consentimiento"]
+  E --> F["⚙️ Implementación"]
+  F --> G["🔍 Validación + bitácora"]
 ```
 
-Cada feature recibe un paquete de spec numerado:
+Cada feature recibe un paquete de spec numerado, y cada sesión deja rastro en `bitacora/`:
 
-1. `spec.md` — qué y por qué (aprobada por ti)
-2. `plan.md` — cómo (consistente con la spec)
+1. `spec.md` — qué y por qué *(aprobada por ti)*
+2. `plan.md` — cómo *(consistente con la spec)*
 3. `tasks.md` — pasos concretos
 4. `history.md` — cómo evolucionó
-
-Y cada sesión deja rastro en `bitacora/`: decisiones, handoffs, próximo paso.
-
-Mira el flujo real (crear spec → validar → compuerta), regenerado automáticamente en cada release:
-
-![Demo del flujo SDD: crear una spec, validar la estructura, pasar la compuerta](./docs/assets/demo.gif)
 
 Ejemplo completo de inicio a fin: [examples/002-mcp-end-to-end](./examples/002-mcp-end-to-end/README.md)
 
@@ -163,14 +159,17 @@ Tres formas de usar el template, de la más ligera a la más pesada:
 
 | Modo | Cuándo | Comando |
 | :--- | :--- | :--- |
-| **Sidecar compacto `spec/`** (recomendado) | Proyecto real o existente: artefactos SDD en `./spec/`, el código queda en la raíz de tu proyecto | `./scripts/install-spec-sidecar.sh /ruta/al/proyecto --profile=recommended` |
+| **Sidecar compacto `spec/`** ⭐ | Proyecto real o existente: artefactos SDD en `./spec/`, el código queda en la raíz | `./scripts/install-spec-sidecar.sh /ruta/al/proyecto --profile=recommended` |
 | **Workspace interno `www/`** | El proyecto ejecutable debe vivir dentro de este repositorio template | `./scripts/create-www-project.sh mi-proyecto codex` |
 | **Copia standalone completa** | Quieres explícitamente todo el framework como workspace | `./scripts/init-project.sh /ruta/al/proyecto --profile=full` |
 
 > [!TIP]
 > Ruta profesional por defecto: instala solo el sidecar compacto `spec/`. Nunca copies el framework completo dentro de un codebase real salvo que quieras explícitamente el modo standalone.
 
-Comandos del día a día (se muestra el modo sidecar; los mismos scripts existen en la raíz en modo standalone):
+<details>
+<summary><b>📟 Comandos del día a día</b> (modo sidecar; los mismos scripts existen en la raíz en modo standalone)</summary>
+
+<br>
 
 | Acción | Comando |
 | :--- | :--- |
@@ -180,7 +179,7 @@ Comandos del día a día (se muestra el modo sidecar; los mismos scripts existen
 | Compuerta SDD | `./spec/scripts/check-sdd-gate.sh .` |
 | Dashboard de estado | `./spec/scripts/generate-status.sh` |
 
-Anatomía de carpetas, mapa del proyecto y detalles de layout: [docs/es/42-mapa-organizacion-proyecto.md](./docs/es/42-mapa-organizacion-proyecto.md)
+Anatomía de carpetas y detalles de layout: [mapa de organización del proyecto](./docs/es/42-mapa-organizacion-proyecto.md)
 
 ```mermaid
 flowchart TD
@@ -191,7 +190,12 @@ flowchart TD
   B --> F["scripts/ (compuerta + validación)"]
 ```
 
-## 🔌 Conéctalo por MCP (opcional, avanzado)
+</details>
+
+<details>
+<summary><b>🔌 Conéctalo por MCP</b> (opcional, avanzado)</summary>
+
+<br>
 
 Si tu cliente de IA soporta MCP, este repo incluye un servidor local `sdd-mcp` que convierte el flujo SDD en comandos guiados (`/start-project`, `/create-spec ...`).
 
@@ -208,9 +212,11 @@ npm run mcp:start
 
 Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `sdd-mcp` local ejecuta el *flujo guiado real*. Se complementan: [guía GitMCP](./docs/es/48-como-conectar-este-repo-con-gitmcp.md).
 
+</details>
+
 ## 📚 Documentación
 
-**Navega online:** el [sitio de documentación](https://juanklagos.github.io/spec-driven-development-template/es/) tiene todas las guías con búsqueda, selector de idioma EN/ES y badges de nivel (Básico/Intermedio/Avanzado).
+**Navega online:** el [sitio de documentación](https://juanklagos.github.io/spec-driven-development-template/es/) tiene todas las guías con búsqueda, selector de idioma EN/ES y badges de nivel.
 
 **Tres lecturas esenciales:**
 
@@ -218,18 +224,30 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 2. [Estructura](./docs/es/01-estructura.md) — para qué sirve cada carpeta
 3. [SDD en 2026: estado del arte](./docs/es/50-estado-del-arte-sdd-2026.md) — el mapa de la industria y dónde está este template
 
-**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 51 guías (EN/ES) por tema: ruta de aprendizaje, prompts, MCP, calidad, modo equipo, migración legacy, legal.
+**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 51 guías (EN/ES) por tema.
 
 ## 💬 Comunidad
 
-- 📖 Sitio de documentación navegable: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/) — las 51 guías con búsqueda, EN/ES.
-- 💬 Preguntas, ideas, muestra tu proyecto: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions).
-- 🐛 Bugs y propuestas concretas: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues).
-- 🎓 Curso interactivo: [aprende-sdd](https://github.com/juanklagos/aprende-sdd) — aprende haciendo, corregido por Actions.
-- 🎓 ¿Terminaste un nivel del tutor? `/sdd:tutor` lo registra en tu bitácora y te da un badge de completación para tu README.
+- 📖 Sitio de docs: [juanklagos.github.io/spec-driven-development-template](https://juanklagos.github.io/spec-driven-development-template/es/)
+- 💬 Preguntas, ideas, muestra tu proyecto: [GitHub Discussions](https://github.com/juanklagos/spec-driven-development-template/discussions)
+- 🐛 Bugs y propuestas concretas: [Issues](https://github.com/juanklagos/spec-driven-development-template/issues)
+- 🎓 Curso interactivo: [aprende-sdd](https://github.com/juanklagos/aprende-sdd) — aprende haciendo, corregido por Actions
+- 🏅 ¿Terminaste un nivel del tutor? `/sdd:tutor` lo registra en tu bitácora y te da un badge de completación para tu README
 
 ## ⚖️ Legal y autoría
 
 - Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
 - Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.5.0)
 - Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
+
+---
+
+<div align="center">
+
+**Si este template te ayuda a construir con disciplina, dale una ⭐ al repo — ayuda a que otros lo encuentren.**
+
+🌱 *No hay código sin spec aprobada y plan consistente.*
+
+[⬆️ Volver arriba](#-spec-driven-development-template)
+
+</div>
