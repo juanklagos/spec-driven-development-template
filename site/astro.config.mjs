@@ -6,6 +6,9 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	site: 'https://juanklagos.github.io',
 	base: '/spec-driven-development-template',
+	redirects: {
+		'/': '/spec-driven-development-template/en/',
+	},
 	integrations: [
 		starlight({
 			title: 'SDD Template',
