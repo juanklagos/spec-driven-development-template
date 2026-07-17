@@ -1,0 +1,55 @@
+name: 'SDD Validate'
+description: 'Enforce Spec-Driven Development in CI: no code before approved spec and consistent plan. Validates SDD structure, multi-agent policy, and the approval gate.'
+author: 'Juan Klagos'
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  path:
+    description: 'Project root to validate (repo root, or a subfolder containing the SDD workspace)'
+    required: false
+    default: '.'
+  strict:
+    description: 'Run structure validation in strict mode (true/false)'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run SDD validation (structure + policy + gate)
+      shell: bash
+      run: |
+        set -euo pipefail
+        TARGET="${{ inputs.path }}"
+
+        # Layout autodetection:
+        # 1) compact sidecar   -> <target>/spec/scripts/
+        # 2) standalone/root   -> <target>/scripts/validate-sdd.sh
+        # 3) fallback          -> scripts bundled with this action
+        if [ -f "$TARGET/spec/scripts/validate-sdd.sh" ]; then
+          SCRIPTS="$TARGET/spec/scripts"
+        elif [ -f "$TARGET/scripts/validate-sdd.sh" ]; then
+          SCRIPTS="$TARGET/scripts"
+        else
+          SCRIPTS="${{ github.action_path }}/scripts"
+          echo "No SDD scripts found in target; using scripts bundled with the action."
+        fi
+
+        STRICT_FLAG=""
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          STRICT_FLAG="--strict"
+        fi
+
+        echo "::group::validate-sdd"
+        bash "$SCRIPTS/validate-sdd.sh" "$TARGET" $STRICT_FLAG
+        echo "::endgroup::"
+
+        echo "::group::check-sdd-policy"
+        bash "$SCRIPTS/check-sdd-policy.sh" "$TARGET"
+        echo "::endgroup::"
+
+        echo "::group::check-sdd-gate"
+        bash "$SCRIPTS/check-sdd-gate.sh" "$TARGET"
+        echo "::endgroup::"

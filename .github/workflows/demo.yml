@@ -14,11 +14,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Install vhs directly (charmbracelet/vhs-action@v2 fails on its
+      # ffmpeg installer as of 2026-07; the Charm apt repo is reliable).
+      - name: Install vhs, ttyd and ffmpeg
+        run: |
+          set -euo pipefail
+          sudo mkdir -p /etc/apt/keyrings
+          curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+          sudo apt-get update
+          sudo apt-get install -y vhs ffmpeg
+          curl -fsSLo /tmp/ttyd https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64
+          sudo install -m 755 /tmp/ttyd /usr/local/bin/ttyd
+          vhs --version && ttyd --version && ffmpeg -version | head -1
+
       # The tape creates a throwaway spec inside the CI checkout only;
       # nothing but the regenerated GIF is committed back.
-      - uses: charmbracelet/vhs-action@v2
-        with:
-          path: demo.tape
+      - name: Record demo
+        run: vhs demo.tape
 
       - name: Commit regenerated demo GIF
         run: |
@@ -29,5 +42,6 @@ jobs:
             echo "Demo GIF unchanged"
           else
             git commit -m "docs: regenerate demo.gif from demo.tape"
+            git pull --rebase origin main
             git push
           fi

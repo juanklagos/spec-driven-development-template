@@ -1,6 +1,6 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-17 15:48 UTC
+Generated at / Generado en: 2026-07-17 16:01 UTC
 
 ## Active specs / Specs activas
 
@@ -14,11 +14,12 @@ Generated at / Generado en: 2026-07-17 15:48 UTC
 |---|---|---|---|---|---|
 | 001 | sdd-mcp-foundation | Done / Completada | High / Alta | Juan Klagos / Codex | 2026-07-17 |
 | 002 | interactive-onboarding | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
+| 003 | distribution-and-tutor | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 
 ## Task progress / Progreso de tareas
 
-- Pending / Pendientes: 15
-- Completed / Completadas: 8
+- Pending / Pendientes: 14
+- Completed / Completadas: 20
 
 ## Recent log excerpt / Extracto reciente de bitácora
 

@@ -22,6 +22,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - `demo.tape` (VHS) + `.github/workflows/demo.yml` to regenerate `docs/assets/demo.gif` on release/dispatch.
   - New "Built-in commands for your AI agent" section in README (EN/ES).
 - Ideas backlog from fresh ecosystem research: `idea/PROPUESTAS_2026-07-17.md` (16 proposals in 3 effort tiers).
+- Spec `003-distribution-and-tutor` (Level 2 of the proposals), user-approved and implemented:
+  - Claude Code plugin + own marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json` — install with `/plugin marketplace add juanklagos/spec-driven-development-template` then `/plugin install sdd@sdd-template`.
+  - Conversational tutor `/sdd:tutor` (levels 1-3, graded by the real validation scripts) + Copilot mirror.
+  - GSD-style discovery interview reinforced in `/sdd:new`.
+  - GitHub Action (composite) at `action.yml`: `uses: juanklagos/spec-driven-development-template@main` runs structure + policy + gate in any CI, with sidecar/standalone autodetection.
+  - `packages/create-sdd-project`: zero-dependency npm scaffolder (`npx create-sdd-project`), prepared for publication.
+  - README (EN/ES): tutor row, plugin install, CI snippet.
+
+### Fixed
+- `demo-gif` workflow: replaced broken `charmbracelet/vhs-action@v2` (ffmpeg installer failure found in the first real run) with direct vhs/ttyd/ffmpeg installation from the Charm apt repo.
 
 ### Changed
 - Guide 08 (EN/ES) updated to the current Spec Kit command set: `speckit.*` namespace note, full command table including `/speckit.clarify`, `/speckit.analyze`, `/speckit.checklist`, `/speckit.taskstoissues`, and how the optional commands fit this template's gate; optional commands also reflected in `AGENT_OPERATING_SYSTEM.md` and `AI_START_HERE.md`.

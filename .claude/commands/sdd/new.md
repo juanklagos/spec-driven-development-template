@@ -5,7 +5,13 @@ argument-hint: [project description in plain language]
 
 Guide the user from zero to a first spec ready for approval. Respond in the user's language (EN/ES). Ask ONE short question at a time; no jargon.
 
-1. If `$ARGUMENTS` is empty, ask for the project in plain language. Then ask, one by one, only what is missing: problem, main goal, MVP scope (what is IN and what is OUT).
+1. If `$ARGUMENTS` is empty, ask for the project in plain language. Then run a short discovery interview — one question at a time, only what is missing:
+   - Problem and main goal (who hurts today, what changes when this works?).
+   - MVP scope: what is IN and what is explicitly OUT.
+   - Constraints: deadline, budget, tech the user must/can't use, existing systems to respect.
+   - Stack: only if the user has one in mind; otherwise propose later in `plan.md`, not here.
+   - Edge cases and risks: "what's the worst realistic thing a user could do or expect?"
+   Summarize the interview back in 5 bullets and get a "yes" before writing anything.
 2. Decide the layout with the user:
    - Existing/external project → compact sidecar: `./scripts/install-spec-sidecar.sh <path> --profile=recommended` (SDD artifacts in `./spec/`, code stays in the project root).
    - Project living inside this template repo → `./scripts/create-www-project.sh <name> <agent>`.

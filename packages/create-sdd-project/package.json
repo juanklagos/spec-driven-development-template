@@ -1,0 +1,31 @@
+{
+  "name": "create-sdd-project",
+  "version": "1.4.1",
+  "description": "Scaffold a Spec-Driven Development project: compact spec/ sidecar (recommended) or full standalone workspace. Bilingual EN/ES.",
+  "type": "module",
+  "bin": {
+    "create-sdd-project": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node --check index.mjs",
+    "typecheck": "node --check index.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanklagos/spec-driven-development-template.git",
+    "directory": "packages/create-sdd-project"
+  },
+  "keywords": ["sdd", "spec-driven-development", "scaffold", "create", "specs", "ai-agents"],
+  "author": "Juan Klagos",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "publishConfig": {
+    "access": "public"
+  }
+}

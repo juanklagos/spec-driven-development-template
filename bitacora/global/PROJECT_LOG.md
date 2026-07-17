@@ -75,6 +75,7 @@
 - **Blockers / Bloqueos:** None
   - Follow-up same session: EARS section added to guide 12 (EN/ES) + EARS blocks in spec templates; guide 08 (EN/ES) updated to current Spec Kit command set (clarify/analyze/checklist/taskstoissues); optional commands reflected in AGENT_OPERATING_SYSTEM.md and AI_START_HERE.md; guide 50 short-term items marked done
   - Level 1 of the evolution proposals implemented under user-approved spec 002-interactive-onboarding: portable Agent Skill, /sdd:* slash commands, Copilot prompt files + scoped instructions, llms.txt + generator, devcontainer + Codespaces badge, VHS demo tape + CI workflow, README command section (EN/ES)
+  - Level 2 implemented under user-approved spec 003-distribution-and-tutor: Claude Code plugin + marketplace, /sdd:tutor conversational course, reinforced /sdd:new interview, composite GitHub Action (action.yml), create-sdd-project npm scaffolder (prepared), demo workflow fixed (direct vhs install)
 - **Next step / Próximo paso:** Medium-term items from guide 50: optional "spec properties" section in the spec template (bridge to executable specs) and a template-native tasks-to-issues flow for team mode
 - **Owner / Responsable:** Juan Klagos / Claude
 

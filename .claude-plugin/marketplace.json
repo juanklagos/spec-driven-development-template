@@ -1,0 +1,25 @@
+{
+  "name": "sdd-template",
+  "owner": {
+    "name": "Juan Klagos",
+    "url": "https://github.com/juanklagos"
+  },
+  "metadata": {
+    "description": "Spec-Driven Development workflow: bilingual (EN/ES) commands, portable skill, and machine-checked gate. No code before approved spec and consistent plan.",
+    "version": "1.4.1"
+  },
+  "plugins": [
+    {
+      "name": "sdd",
+      "source": "./",
+      "description": "SDD workflow commands (/sdd:help, /sdd:new, /sdd:spec, /sdd:gate, /sdd:close, /sdd:tutor) plus the portable sdd-workflow skill. Bilingual EN/ES.",
+      "version": "1.4.1",
+      "author": {
+        "name": "Juan Klagos"
+      },
+      "homepage": "https://github.com/juanklagos/spec-driven-development-template",
+      "license": "PolyForm-Noncommercial-1.0.0",
+      "keywords": ["sdd", "spec-driven-development", "specs", "workflow", "education"]
+    }
+  ]
+}
