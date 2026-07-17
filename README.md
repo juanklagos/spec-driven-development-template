@@ -79,6 +79,14 @@ If you use **Claude Code**, this repo ships slash commands out of the box — st
 | `/sdd:spec` | Create or refine a spec bundle with EARS criteria |
 | `/sdd:gate` | Runs the machine-checked gate and records your consent |
 | `/sdd:close` | Validates and closes the session with the output contract |
+| `/sdd:tutor` | Conversational SDD course by levels, graded by the real validation scripts |
+
+**Install in any project as a plugin** (no cloning):
+
+```text
+/plugin marketplace add juanklagos/spec-driven-development-template
+/plugin install sdd@sdd-template
+```
 
 - **VS Code / Copilot:** the same flows as prompt files in [`.github/prompts/`](./.github/prompts/).
 - **Any agent (32+ tools):** portable Agent Skill at [skills/sdd-workflow/SKILL.md](./skills/sdd-workflow/SKILL.md).
@@ -102,6 +110,15 @@ Before implementation starts, explicit user consent is recorded:
 ```
 
 (In sidecar projects the same scripts live under `./spec/scripts/`.)
+
+Enforce it in CI too — this repo doubles as a GitHub Action:
+
+```yaml
+- uses: juanklagos/spec-driven-development-template@main
+  with:
+    path: "."      # project root (sidecar or standalone auto-detected)
+    strict: "true"
+```
 
 Reference files: [sdd.policy.yaml](./sdd.policy.yaml) · [INSTRUCTIONS.md](./INSTRUCTIONS.md) · [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 

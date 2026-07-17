@@ -79,6 +79,14 @@ Si usas **Claude Code**, este repo trae slash commands listos — empieza con `/
 | `/sdd:spec` | Crea o refina un paquete de spec con criterios EARS |
 | `/sdd:gate` | Ejecuta la compuerta verificada por máquina y registra tu consentimiento |
 | `/sdd:close` | Valida y cierra la sesión con el contrato de salida |
+| `/sdd:tutor` | Curso conversacional de SDD por niveles, corregido por los scripts de validación reales |
+
+**Instálalo en cualquier proyecto como plugin** (sin clonar):
+
+```text
+/plugin marketplace add juanklagos/spec-driven-development-template
+/plugin install sdd@sdd-template
+```
 
 - **VS Code / Copilot:** los mismos flujos como prompt files en [`.github/prompts/`](./.github/prompts/).
 - **Cualquier agente (32+ herramientas):** Agent Skill portable en [skills/sdd-workflow/SKILL.md](./skills/sdd-workflow/SKILL.md).
@@ -102,6 +110,15 @@ Antes de iniciar la implementación, se registra consentimiento explícito del u
 ```
 
 (En proyectos sidecar los mismos scripts viven bajo `./spec/scripts/`.)
+
+Exígela también en CI — este repo funciona además como GitHub Action:
+
+```yaml
+- uses: juanklagos/spec-driven-development-template@main
+  with:
+    path: "."      # raíz del proyecto (sidecar o standalone, autodetectado)
+    strict: "true"
+```
 
 Archivos de referencia: [sdd.policy.yaml](./sdd.policy.yaml) · [INSTRUCTIONS.md](./INSTRUCTIONS.md) · [AGENT_OPERATING_SYSTEM.md](./template-context/core-instructions/AGENT_OPERATING_SYSTEM.md)
 
