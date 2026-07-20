@@ -705,3 +705,5 @@ function parseIndexRows(content: string): IndexRow[] {
 function formatIndexRow(row: IndexRow): string {
   return `| ${row.number} | ${row.name} | ${row.status} | ${row.priority} | ${row.owner} | ${row.updated} |`;
 }
+
+export * from "./board.js";

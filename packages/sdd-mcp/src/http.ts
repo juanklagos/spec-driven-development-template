@@ -4,7 +4,18 @@ import http from "node:http";
 import path from "node:path";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
-import { checkGate, listSpecs } from "@juanklagos/sdd-core";
+import {
+  checkGate,
+  createSpec,
+  listSpecs,
+  parseTasksMarkdown,
+  readBoard,
+  readSpecDocument,
+  setTaskDone,
+  writeBoard,
+  writeSpecDocument
+} from "@juanklagos/sdd-core";
+import { fileURLToPath } from "node:url";
 import { createSddMcpServer } from "./server.js";
 
 const port = Number(process.env.SDD_MCP_HTTP_PORT ?? "3334");
@@ -120,7 +131,118 @@ function readBody(req: http.IncomingMessage): Promise<unknown> {
   });
 }
 
+const BUILDER_DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../builder/dist");
+const MIME: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".json": "application/json",
+  ".woff2": "font/woff2"
+};
+
+async function handleApi(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<boolean> {
+  const route = url.pathname;
+  try {
+    if (req.method === "GET" && route === "/api/board") {
+      const [canvas, specs] = await Promise.all([readBoard(projectRoot), listSpecs(projectRoot)]);
+      const withTasks = await Promise.all(
+        specs.map(async (s) => {
+          try {
+            const items = parseTasksMarkdown(await readSpecDocument(projectRoot, s.id, "tasks.md"));
+            return { ...s, tasks: { done: items.filter((i) => i.done).length, total: items.length } };
+          } catch {
+            return { ...s, tasks: { done: 0, total: 0 } };
+          }
+        })
+      );
+      json(res, 200, { projectRoot, canvas, specs: withTasks });
+      return true;
+    }
+    if (req.method === "PUT" && route === "/api/board") {
+      await writeBoard(projectRoot, (await readBody(req)) as never);
+      json(res, 200, { ok: true });
+      return true;
+    }
+    const specMatch = route.match(/^\/api\/spec\/([^/]+)$/);
+    if (req.method === "GET" && specMatch) {
+      const id = specMatch[1];
+      const [spec, plan, tasks] = await Promise.all([
+        readSpecDocument(projectRoot, id, "spec.md"),
+        readSpecDocument(projectRoot, id, "plan.md"),
+        readSpecDocument(projectRoot, id, "tasks.md")
+      ]);
+      json(res, 200, { id, docs: { spec, plan, tasks }, tasks: parseTasksMarkdown(tasks) });
+      return true;
+    }
+    const taskMatch = route.match(/^\/api\/spec\/([^/]+)\/tasks$/);
+    if (req.method === "PUT" && taskMatch) {
+      const id = taskMatch[1];
+      const body = (await readBody(req)) as { line?: number; done?: boolean };
+      if (typeof body?.line !== "number" || typeof body?.done !== "boolean") {
+        json(res, 400, { error: "Expected { line: number, done: boolean }" });
+        return true;
+      }
+      const current = await readSpecDocument(projectRoot, id, "tasks.md");
+      await writeSpecDocument(projectRoot, id, "tasks.md", setTaskDone(current, body.line, body.done));
+      json(res, 200, { tasks: parseTasksMarkdown(await readSpecDocument(projectRoot, id, "tasks.md")) });
+      return true;
+    }
+    if (req.method === "POST" && route === "/api/spec") {
+      const body = (await readBody(req)) as { name?: string; owner?: string };
+      if (!body?.name) {
+        json(res, 400, { error: "Expected { name: string, owner?: string }" });
+        return true;
+      }
+      const result = await createSpec({ projectRoot, featureName: body.name, owner: body.owner ?? "Owner" });
+      json(res, 201, result);
+      return true;
+    }
+  } catch (error) {
+    json(res, 422, { error: error instanceof Error ? error.message : String(error) });
+    return true;
+  }
+  return false;
+}
+
+async function serveBuilder(res: http.ServerResponse, pathname: string): Promise<void> {
+  const rel = pathname.replace(/^\/builder\/?/, "") || "index.html";
+  const filePath = path.normalize(path.join(BUILDER_DIST, rel));
+  if (!filePath.startsWith(BUILDER_DIST)) {
+    res.writeHead(403).end("Forbidden");
+    return;
+  }
+  try {
+    const data = await (await import("node:fs/promises")).readFile(filePath);
+    res.writeHead(200, { "content-type": MIME[path.extname(filePath)] ?? "application/octet-stream" });
+    res.end(data);
+  } catch {
+    try {
+      const index = await (await import("node:fs/promises")).readFile(path.join(BUILDER_DIST, "index.html"));
+      res.writeHead(200, { "content-type": MIME[".html"] });
+      res.end(index);
+    } catch {
+      res.writeHead(503, { "content-type": "text/plain; charset=utf-8" });
+      res.end("SDD Builder not built yet. Run: cd builder && npm install && npm run build");
+    }
+  }
+}
+
 const server = http.createServer(async (req, res) => {
+  const parsedUrl = req.url ? new URL(req.url, "http://localhost") : null;
+
+  if (parsedUrl?.pathname.startsWith("/api/")) {
+    if (await handleApi(req, res, parsedUrl)) return;
+    res.writeHead(404).end("Unknown API route");
+    return;
+  }
+
+  if (req.method === "GET" && parsedUrl && (parsedUrl.pathname === "/builder" || parsedUrl.pathname.startsWith("/builder/"))) {
+    await serveBuilder(res, parsedUrl.pathname);
+    return;
+  }
+
   if (req.method === "GET" && req.url && (req.url === "/dashboard" || req.url.startsWith("/dashboard?"))) {
     try {
       const html = await renderDashboard();
