@@ -19,6 +19,7 @@ import {
   type XYPosition
 } from "@xyflow/react";
 import { api } from "./api";
+import { startLive } from "./live";
 import { LabeledEdge } from "./components/LabeledEdge";
 import { NewSpecModal } from "./components/NewSpecModal";
 import { NoteNode } from "./components/NoteNode";
@@ -62,7 +63,8 @@ function LoadErrorScreen({ message, onRetry }: { message: string; onRetry: () =>
         <h2>No se pudo cargar el tablero / Could not load the board</h2>
         <p className="load-error-detail">{message}</p>
         <p>
-          ¿Está corriendo el servidor? / Is the server running? <code>npm run mcp:http:start</code>
+          ¿Está corriendo el servidor? / Is the server running?{" "}
+          <code>SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start</code>
         </p>
         <button className="btn primary" onClick={onRetry}>
           Reintentar / Retry
@@ -75,6 +77,7 @@ function LoadErrorScreen({ message, onRetry }: { message: string; onRetry: () =>
 function Shell() {
   const loading = useBuilderStore((s) => s.loading);
   const loadError = useBuilderStore((s) => s.loadError);
+  const workspaceChanged = useBuilderStore((s) => s.workspaceChanged);
   const nodes = useBuilderStore((s) => s.nodes);
   const edges = useBuilderStore((s) => s.edges);
   const saveState = useBuilderStore((s) => s.saveState);
@@ -102,6 +105,7 @@ function Shell() {
 
   useEffect(() => {
     void load();
+    startLive();
   }, [load]);
 
   // Fit the view once the board has loaded (nodes arrive after mount).
@@ -179,6 +183,14 @@ function Shell() {
   return (
     <div className="app">
       <TopBar />
+      {workspaceChanged ? (
+        <div className="workspace-banner" role="alert">
+          ⚠ El workspace del servidor cambió — recarga / Server workspace changed — reload
+          <button className="btn small" onClick={() => window.location.reload()}>
+            Recargar / Reload
+          </button>
+        </div>
+      ) : null}
       {saveState === "error" && saveError ? (
         <div className="save-banner" role="alert">
           ⚠ {saveError}

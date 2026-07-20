@@ -103,9 +103,14 @@ export async function writeSpecDocument(
   await atomicWrite(filePath, content);
 }
 
-export async function boardPath(projectRoot: string): Promise<string> {
+/** Absolute path to the specs/ directory of the resolved SDD root (workspace or spec/ sidecar). */
+export async function specsRoot(projectRoot: string): Promise<string> {
   const root = await resolveSddRoot(projectRoot);
-  return path.join(root, "specs", "board.canvas");
+  return path.join(root, "specs");
+}
+
+export async function boardPath(projectRoot: string): Promise<string> {
+  return path.join(await specsRoot(projectRoot), "board.canvas");
 }
 
 function isCanvas(value: unknown): value is BoardCanvas {

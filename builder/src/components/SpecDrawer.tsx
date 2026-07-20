@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
 import { useBuilderStore } from "../store";
 import type { SpecDetail, TaskItem } from "../types";
@@ -8,6 +8,7 @@ const EXCERPT_LINES = 25;
 export function SpecDrawer() {
   const specId = useBuilderStore((s) => s.selectedSpecId);
   const summary = useBuilderStore((s) => (s.selectedSpecId ? s.specs[s.selectedSpecId] : undefined));
+  const specsVersion = useBuilderStore((s) => s.specsVersion);
   const selectSpec = useBuilderStore((s) => s.selectSpec);
   const applyTasks = useBuilderStore((s) => s.applyTasks);
 
@@ -15,6 +16,8 @@ export function SpecDrawer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingLine, setPendingLine] = useState<number | null>(null);
+  const pendingRef = useRef<number | null>(null);
+  pendingRef.current = pendingLine;
 
   useEffect(() => {
     if (!specId) {
@@ -40,6 +43,28 @@ export function SpecDrawer() {
       cancelled = true;
     };
   }, [specId]);
+
+  // Live sync: when spec documents change on disk (specsVersion bump from the
+  // SSE watcher), silently re-fetch the open spec so the drawer reflects the
+  // disk without a loading flash. Skipped while a checkbox toggle is in
+  // flight — that PUT already returns the fresh tasks.
+  useEffect(() => {
+    if (!specId || specsVersion === 0) return;
+    if (pendingRef.current !== null) return;
+    let cancelled = false;
+    api
+      .getSpec(specId)
+      .then((d) => {
+        if (!cancelled) setDetail(d);
+      })
+      .catch(() => {
+        // Keep showing the last good detail; the next change will retry.
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [specsVersion, specId]);
 
   if (!specId) return null;
 

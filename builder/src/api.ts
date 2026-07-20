@@ -10,7 +10,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     });
   } catch {
     throw new Error(
-      "No se pudo conectar con la API / Could not reach the API (npm run mcp:http:start)"
+      "No se pudo conectar con la API / Could not reach the API — arranca el servidor / start the server: " +
+        "SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start"
     );
   }
   if (!res.ok) {

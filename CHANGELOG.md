@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **SDD Builder (phase 1, spec 006)**: visual drag-and-drop spec builder at `http://127.0.0.1:3334/builder` — React Flow canvas with typed cards (Idea/Epic/Spec) showing status and task progress, connections with editable labels, palette, and a detail drawer with clickable task checkboxes. Markdown stays the source of truth; layout persists to `specs/board.canvas` (open JSON Canvas format). New `board` module in `sdd-core`, REST API on the HTTP transport, and `builder/` frontend (Vite + React Flow + dnd-kit, all MIT). Build once with `npm run builder:build`.
 
+- **SDD Builder phase 2 — live sync**: `GET /api/events` (SSE) with a debounced recursive watcher on `specs/`; the builder updates cards, progress bars and the open drawer in real time when files change on disk, reconciling by stable id without touching local positions; echo-guard after own saves; live indicator with auto-reconnect and a 60s ping watchdog (detects proxy-masked disconnects); amber banner when the server workspace changed; error hints now include `SDD_PROJECT_ROOT`.
+
 ### Fixed
 - `createSpec` no longer leaves a half-created bundle behind when `specs/_template/` is missing (atomic cleanup on failure).
 

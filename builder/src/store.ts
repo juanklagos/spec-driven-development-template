@@ -10,10 +10,21 @@ import {
 import { create } from "zustand";
 import { api, errorMessage } from "./api";
 import { ARROW, EPIC_COLOR, IDEA_COLOR, NOTE_CARD, SPEC_CARD, boardToFlow, flowToBoard } from "./convert";
-import type { AppEdge, AppNode, SaveState, SpecSummary, TaskItem } from "./types";
+import type { AppEdge, AppNode, ChangeKind, LiveStatus, SaveState, SpecSummary, TaskItem } from "./types";
 
 const SAVE_DEBOUNCE_MS = 500;
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+// --- Live sync bookkeeping (module-level: not render state) ---------------
+/** True while the user is dragging a node; external board changes are held off. */
+let dragActive = false;
+/**
+ * Echo guard: our own PUT /api/board makes the server watcher emit a
+ * `change kind=board` right back at us. Any board change arriving within
+ * this window of our last successful PUT is our own echo and is ignored.
+ */
+const BOARD_ECHO_WINDOW_MS = 1000;
+let lastBoardPutAt = 0;
 
 const uid = (): string => crypto.randomUUID().slice(0, 8);
 
@@ -28,6 +39,10 @@ interface BuilderStore {
   saveError: string | null;
   selectedSpecId: string | null;
   editingEdgeId: string | null;
+  liveStatus: LiveStatus;
+  workspaceChanged: boolean;
+  /** Bumped when spec documents change on disk so open views (drawer) re-sync. */
+  specsVersion: number;
 
   load: () => Promise<void>;
   onNodesChange: (changes: NodeChange<AppNode>[]) => void;
@@ -43,6 +58,9 @@ interface BuilderStore {
   refreshSpecs: () => Promise<void>;
   scheduleSave: () => void;
   flushSave: () => Promise<void>;
+  setLiveStatus: (status: LiveStatus) => void;
+  handleHello: (serverRoot: string) => void;
+  handleLiveChange: (kind: ChangeKind) => Promise<void>;
 }
 
 export const useBuilderStore = create<BuilderStore>()((set, get) => ({
@@ -56,6 +74,9 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   saveError: null,
   selectedSpecId: null,
   editingEdgeId: null,
+  liveStatus: "off",
+  workspaceChanged: false,
+  specsVersion: 0,
 
   load: async () => {
     set({ loading: true, loadError: null });
@@ -77,6 +98,9 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   onNodesChange: (changes) => {
+    for (const c of changes) {
+      if (c.type === "position" && typeof c.dragging === "boolean") dragActive = c.dragging;
+    }
     set({ nodes: applyNodeChanges(changes, get().nodes) });
     const persistent = changes.some(
       (c) => c.type === "remove" || (c.type === "position" && c.dragging === false)
@@ -196,9 +220,86 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     set({ saveState: "saving", saveError: null });
     try {
       await api.putBoard(flowToBoard(nodes, edges));
+      lastBoardPutAt = Date.now();
       set({ saveState: "saved" });
     } catch (error) {
       set({ saveState: "error", saveError: errorMessage(error) });
+    }
+  },
+
+  setLiveStatus: (status) => set({ liveStatus: status }),
+
+  // SSE `hello`: the server announces its workspace. If it differs from the
+  // one this page loaded (server restarted with another SDD_PROJECT_ROOT),
+  // the canvas on screen no longer matches the disk — ask for a reload.
+  handleHello: (serverRoot) => {
+    const current = get().projectRoot;
+    if (current && serverRoot && current !== serverRoot) {
+      set({ workspaceChanged: true });
+    }
+  },
+
+  // SSE `change`: something on disk changed under specs/.
+  handleLiveChange: async (kind) => {
+    if (get().loading || get().loadError) return;
+
+    if (kind === "specs") {
+      // Spec documents changed on disk (tasks.md, spec.md, new bundles...).
+      // Re-fetch and reconcile by stable spec id: update card status/progress,
+      // append cards for brand-new specs — but NEVER touch existing node
+      // positions, which may hold unsaved local moves.
+      try {
+        const board = await api.getBoard();
+        const specs = Object.fromEntries(board.specs.map((s) => [s.id, s]));
+        const nodes = get().nodes;
+        const known = new Set(nodes.map((n) => n.id));
+        const fresh = board.specs.filter((s) => !known.has(s.id));
+        let maxBottom = 0;
+        for (const n of nodes) maxBottom = Math.max(maxBottom, n.position.y + (n.data.height ?? 0));
+        const appended: AppNode[] = fresh.map((spec, i) => ({
+          id: spec.id,
+          type: "spec",
+          position: {
+            x: (i % 3) * (SPEC_CARD.width + 40),
+            y: (nodes.length > 0 ? maxBottom + 60 : 0) + Math.floor(i / 3) * (SPEC_CARD.height + 40)
+          },
+          data: { specId: spec.id, file: `specs/${spec.id}/spec.md`, ...SPEC_CARD }
+        }));
+        set({
+          specs,
+          ...(appended.length > 0 ? { nodes: [...nodes, ...appended] } : {}),
+          specsVersion: get().specsVersion + 1
+        });
+      } catch {
+        // Transient fetch failure: the next change event will retry.
+      }
+      return;
+    }
+
+    // kind === "board": the canvas file itself changed.
+    // 1) Echo guard: skip changes right after our own PUT (see BOARD_ECHO_WINDOW_MS).
+    if (Date.now() - lastBoardPutAt < BOARD_ECHO_WINDOW_MS) return;
+    // 2) Last-writer-wins: if there are unsaved local changes (save debounce
+    //    pending, PUT in flight, or an active drag), IGNORE the external board
+    //    change — our upcoming PUT will overwrite board.canvas anyway, and
+    //    applying the stale disk state here would yank cards out from under
+    //    the user. The .md files are never at risk (they are the source of
+    //    truth and travel on kind=specs).
+    const { saveState } = get();
+    if (saveState === "dirty" || saveState === "saving" || dragActive) return;
+    try {
+      const board = await api.getBoard();
+      const { nodes, edges } = boardToFlow(board.canvas, board.specs);
+      set({
+        projectRoot: board.projectRoot,
+        specs: Object.fromEntries(board.specs.map((s) => [s.id, s])),
+        nodes,
+        edges,
+        saveState: "saved",
+        saveError: null
+      });
+    } catch {
+      // Transient fetch failure: the next change event will retry.
     }
   }
 }));

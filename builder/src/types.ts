@@ -89,3 +89,14 @@ export type AppEdge = Edge<EdgeData, "labeled">;
 
 export type SaveState = "saved" | "dirty" | "saving" | "error";
 export type PaletteKind = "idea" | "epic" | "spec";
+
+// --- Live sync (SSE /api/events) -------------------------------------------
+
+/** Payload of the `change` SSE event emitted by the server watcher. */
+export interface LiveChange {
+  path: string;
+  kind: ChangeKind;
+}
+
+export type ChangeKind = "board" | "specs";
+export type LiveStatus = "on" | "off";
