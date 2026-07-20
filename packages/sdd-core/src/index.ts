@@ -138,18 +138,24 @@ export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResu
   const specDir = path.join(specsRoot, specId);
 
   await fs.mkdir(specDir, { recursive: false });
-  await fs.mkdir(path.join(specDir, "contracts"), { recursive: false });
+  try {
+    await fs.mkdir(path.join(specDir, "contracts"), { recursive: false });
 
-  for (const file of ["spec.md", "plan.md", "tasks.md", "research.md", "history.md"] as const) {
-    const template = await fs.readFile(path.join(templateRoot, file), "utf8");
-    const content = template
-      .replaceAll("[Feature Name]", input.featureName)
-      .replaceAll("[Spec Number]", nextNumber);
-    await fs.writeFile(path.join(specDir, file), content, "utf8");
+    for (const file of ["spec.md", "plan.md", "tasks.md", "research.md", "history.md"] as const) {
+      const template = await fs.readFile(path.join(templateRoot, file), "utf8");
+      const content = template
+        .replaceAll("[Feature Name]", input.featureName)
+        .replaceAll("[Spec Number]", nextNumber);
+      await fs.writeFile(path.join(specDir, file), content, "utf8");
+    }
+
+    const contractTemplate = await fs.readFile(path.join(templateRoot, "contracts/README.md"), "utf8");
+    await fs.writeFile(path.join(specDir, "contracts/README.md"), contractTemplate, "utf8");
+  } catch (error) {
+    // Never leave a half-created bundle behind (e.g. missing specs/_template).
+    await fs.rm(specDir, { recursive: true, force: true });
+    throw error;
   }
-
-  const contractTemplate = await fs.readFile(path.join(templateRoot, "contracts/README.md"), "utf8");
-  await fs.writeFile(path.join(specDir, "contracts/README.md"), contractTemplate, "utf8");
 
   const indexPath = path.join(specsRoot, "INDEX.md");
   const owner = input.owner ?? "TBD / Por definir";

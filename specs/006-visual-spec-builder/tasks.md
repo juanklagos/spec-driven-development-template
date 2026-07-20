@@ -3,8 +3,8 @@
 ## Fase 1 (MVP)
 - [x] T1 (R1): sdd-core `board.ts` + exports + smoke test de parse/serialize y board.canvas.
 - [x] T2 (R2): API REST en http.ts + estáticos /builder.
-- [ ] T3 (R3): frontend builder/ con canvas, tarjetas, uniones, paleta y detalle de tareas.
-- [ ] T4: verificación end-to-end en workspace sidecar de prueba; validaciones y build en verde; commit por hito.
+- [x] T3 (R3): frontend builder/ con canvas, tarjetas, uniones, paleta y detalle de tareas.
+- [x] T4: verificación end-to-end en workspace sidecar de prueba; validaciones y build en verde; commit por hito.
 ## Fase 2
 - [ ] T5 (R4): watcher + SSE + reconciliación en front.
 ## Fase 3

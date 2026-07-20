@@ -15,7 +15,8 @@
     "mcp:build": "npm --workspace @juanklagos/sdd-mcp run build",
     "mcp:test": "npm run build && node scripts/test-mcp-integration.mjs",
     "mcp:smoke": "npm run build && node scripts/smoke-test-mcp.mjs",
-    "mcp:http:smoke": "npm run build && node scripts/smoke-test-mcp-http.mjs"
+    "mcp:http:smoke": "npm run build && node scripts/smoke-test-mcp-http.mjs",
+    "builder:build": "cd builder && npm install && npm run build"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
