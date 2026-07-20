@@ -23,3 +23,7 @@
 - UX: mensaje de error de API sugiere `SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start`; tooltip del TopBar muestra el workspace completo.
 - Verificado de verdad (sandbox sidecar en tmp con 2 specs): curl a /api/events recibió hello + change kind=specs (sed en tasks.md) + kind=board (PUT board, .tmp filtrado); en navegador la tarjeta pasó 0/3→2/3→3/3 y el drawer refrescó checkboxes sin recargar (screenshots); banner ámbar apareció tras reiniciar el server con otro SDD_PROJECT_ROOT. Build + typecheck raíz y builder en verde; 3 scripts SDD en verde.
 - Nota honesta: el estado "🌗 Sin conexión en vivo" no se observó visualmente porque el túnel del navegador de prueba enmascara el cierre TCP (por eso existe el watchdog, que sí se ejercitó: la reconexión que mostró el banner vino de él); la supresión de eco se verifica por código e indirectamente (sin bucles de re-render observados).
+
+## 2026-07-20 (decisión Fase 3 + Fase 4)
+
+- Fase 2 verificada y en main. Decisión senior aprobada por el autor ("hazlo continua, nivel senior"): posponer la Fase 3 (MCP App) hasta después del 2026-07-28 (publicación de la spec MCP final) para no construir sobre un estándar en movimiento; ejecutar ahora la Fase 4 (guía 51 + release v1.6.0). La demo interactiva en Pages queda como mejora futura (requiere FS Access API solo-Chrome); la guía 51 con el flujo completo cubre la documentación de usuario.

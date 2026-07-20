@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [v1.6.0] — 2026-07-20
 
 ### Added
 - Packages published to npm under the author scope: [`@juanklagos/sdd-core`](https://www.npmjs.com/package/@juanklagos/sdd-core), [`@juanklagos/sdd-mcp`](https://www.npmjs.com/package/@juanklagos/sdd-mcp), and [`@juanklagos/create-sdd-project`](https://www.npmjs.com/package/@juanklagos/create-sdd-project) (the unscoped name `create-sdd-project` is taken by a third party).
@@ -22,6 +22,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - Internal `@sdd/*` scope renamed to `@juanklagos/*` across packages, imports, workspace scripts, and docs.
+
+### Verified
+- `npm run build` (monorepo + builder) · 3 SDD scripts at 0 errors
+- Builder phases 1-2 verified end-to-end against real sidecar workspaces (browser screenshots, live sync via SSE, atomicity fix exercised)
 
 ## [v1.5.0] — 2026-07-17
 

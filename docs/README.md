@@ -98,6 +98,7 @@ flowchart LR
 | 27 | Project-type playbooks / Playbooks por tipo de proyecto | [EN](./en/27-project-type-playbooks.md) | [ES](./es/27-playbooks-por-tipo-de-proyecto.md) |
 | 28 | Advanced legacy migration / Migración legacy avanzada | [EN](./en/28-advanced-legacy-migration-mode.md) | [ES](./es/28-modo-migracion-legado-avanzado.md) |
 | 42 | Project organization map / Mapa de organización | [EN](./en/42-project-organization-map.md) | [ES](./es/42-mapa-organizacion-proyecto.md) |
+| 51 | SDD Builder visual guide / Guía visual del SDD Builder | [EN](./en/51-sdd-builder-visual-guide.md) | [ES](./es/51-guia-visual-sdd-builder.md) |
 
 ### 🔌 MCP
 

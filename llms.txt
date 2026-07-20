@@ -65,6 +65,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [How to Connect This Repository with GitMCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/48-how-to-connect-this-repo-with-gitmcp.md)
 - [Spec Sidecar Prompts](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/49-spec-sidecar-prompts.md)
 - [SDD in 2026: State of the Art and How This Template Compares](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/50-sdd-state-of-the-art-2026.md)
+- [🎨 SDD Builder: build your specs visually](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/51-sdd-builder-visual-guide.md)
 
 ## Docs (Español)
 
@@ -119,6 +120,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [Cómo conectar este repositorio con GitMCP](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/48-como-conectar-este-repo-con-gitmcp.md)
 - [Prompts para sidecar `spec/`](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/49-prompts-sidecar-spec.md)
 - [SDD en 2026: estado del arte y cómo se compara este template](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/50-estado-del-arte-sdd-2026.md)
+- [🎨 SDD Builder: construye tus specs visualmente](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/51-guia-visual-sdd-builder.md)
 
 ## Optional
 
