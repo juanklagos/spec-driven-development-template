@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Spec-Driven Development workflow: bilingual (EN/ES) commands, portable skill, and machine-checked gate. No code before approved spec and consistent plan.",
-    "version": "1.6.0"
+    "version": "1.6.1"
   },
   "plugins": [
     {
       "name": "sdd",
       "source": "./",
       "description": "SDD workflow commands (/sdd:help, /sdd:new, /sdd:spec, /sdd:gate, /sdd:close, /sdd:tutor) plus the portable sdd-workflow skill. Bilingual EN/ES.",
-      "version": "1.6.0",
+      "version": "1.6.1",
       "author": {
         "name": "Juan Klagos"
       },

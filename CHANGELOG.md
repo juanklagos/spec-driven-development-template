@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [v1.6.1] — 2026-07-20
 
 ### Added
 - **MCP board tools (spec 006 coherence review)**: agents connected over MCP can now see and drive the same board as `/builder` — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect` (idempotent labeled edges), `sdd_read_tasks`, `sdd_set_task_done`. REST API and MCP tools share one composed layer in `sdd-core` (`getBoardView`, `readSpecTasks`, `setSpecTaskDone`, `connectBoardCards`): zero duplicated logic between transports. Integration test extended to cover all five tools (toggle written to disk, edge persisted in `board.canvas`).

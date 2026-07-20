@@ -8,9 +8,9 @@
 
 🇺🇸 **English** · [🇪🇸 Español](./README.es.md)
 
-<img src="https://img.shields.io/badge/version-v1.6.0-3b82f6?style=for-the-badge" alt="Version">
+<img src="https://img.shields.io/badge/version-v1.6.1-3b82f6?style=for-the-badge" alt="Version">
 <img src="https://img.shields.io/badge/license-PolyForm_NC-8b5cf6?style=for-the-badge" alt="License">
-<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Latest release"></a>
+<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.1"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Latest release"></a>
 
 <a href="https://juanklagos.github.io/spec-driven-development-template/"><img src="https://img.shields.io/badge/📖_Docs_Site-Browse-0ea5e9?style=for-the-badge" alt="Documentation site"></a>
 <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Course-Learn_by_doing-16a34a?style=for-the-badge" alt="Interactive course"></a>
@@ -124,7 +124,7 @@ If you use **Claude Code**, this repo ships slash commands out of the box — st
 Enforce it in CI too — this repo doubles as a GitHub Action, listed on the [GitHub Marketplace](https://github.com/marketplace/actions/sdd-validate):
 
 ```yaml
-- uses: juanklagos/spec-driven-development-template@v1.6.0
+- uses: juanklagos/spec-driven-development-template@v1.6.1
   with:
     path: "."      # project root (sidecar or standalone auto-detected)
     strict: "true"
@@ -247,7 +247,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 ## ⚖️ Legal & authorship
 
 - License: PolyForm Noncommercial 1.0.0 — [legal guide](./docs/en/31-legal-framework-and-commercial-use.md)
-- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.0)
+- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.1)
 - Author: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
 
 ---

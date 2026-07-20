@@ -1,6 +1,6 @@
 {
   "name": "sdd",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Spec-Driven Development workflow: /sdd:* commands, portable skill, machine-checked gate. Bilingual EN/ES. No code before approved spec and consistent plan.",
   "author": {
     "name": "Juan Klagos",
