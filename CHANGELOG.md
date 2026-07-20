@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+- Packages published to npm under the author scope: [`@juanklagos/sdd-core`](https://www.npmjs.com/package/@juanklagos/sdd-core), [`@juanklagos/sdd-mcp`](https://www.npmjs.com/package/@juanklagos/sdd-mcp), and [`@juanklagos/create-sdd-project`](https://www.npmjs.com/package/@juanklagos/create-sdd-project) (the unscoped name `create-sdd-project` is taken by a third party).
+- README (EN/ES): `npx @juanklagos/create-sdd-project` as the fastest no-clone start, and npx-based MCP client config.
+- `sdd-mcp` 1.5.1: `mcpName` field for MCP Registry ownership validation.
+
+### Changed
+- Internal `@sdd/*` scope renamed to `@juanklagos/*` across packages, imports, workspace scripts, and docs.
+
 ## [v1.5.0] — 2026-07-17
 
 ### Added

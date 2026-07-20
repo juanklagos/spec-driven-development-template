@@ -155,6 +155,14 @@ Full walkthrough example: [examples/002-mcp-end-to-end](./examples/002-mcp-end-t
 
 ## 🧭 Apply it to a real project
 
+**Fastest start (no clone needed):**
+
+```bash
+npx @juanklagos/create-sdd-project my-app
+```
+
+It scaffolds the recommended `spec/` sidecar (or a full workspace) interactively from the latest template.
+
 Three ways to use the template, from lightest to heaviest:
 
 | Mode | When | Command |
@@ -205,6 +213,7 @@ npm run build
 npm run mcp:start
 ```
 
+- **No clone?** Point your MCP client straight at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
 - **Visual dashboard:** run `npm run mcp:http:start` and open `http://127.0.0.1:3334/dashboard` — specs, statuses, and gate state of your workspace at a glance.
 - Easiest explanation first: [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 - Client configs: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)

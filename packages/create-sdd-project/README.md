@@ -13,6 +13,5 @@ npx @juanklagos/create-sdd-project my-ws --mode full      # full standalone work
 
 Requires `git` and `bash` on PATH (Node >= 18).
 
-> Publishing status: this package is prepared for npm but not published yet. Until then, use it from a local clone: `node packages/create-sdd-project/index.mjs <target>`.
 
 License: PolyForm Noncommercial 1.0.0.
