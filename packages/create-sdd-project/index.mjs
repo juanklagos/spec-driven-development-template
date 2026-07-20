@@ -28,16 +28,16 @@ if (flags.has("help") || flags.has("h")) {
 create-sdd-project — Spec-Driven Development scaffolder
 
 Usage:
-  npx create-sdd-project <target-dir> [--mode sidecar|full] [--profile recommended|minimal|full] [--yes]
+  npx @juanklagos/create-sdd-project <target-dir> [--mode sidecar|full] [--profile recommended|minimal|full] [--yes]
 
 Modes:
   sidecar (default)  SDD artifacts in <target>/spec/, your code stays in the target root
   full               Copy the full standalone template workspace
 
 Examples:
-  npx create-sdd-project my-app
-  npx create-sdd-project . --mode sidecar --yes
-  npx create-sdd-project my-workspace --mode full
+  npx @juanklagos/create-sdd-project my-app
+  npx @juanklagos/create-sdd-project . --mode sidecar --yes
+  npx @juanklagos/create-sdd-project my-workspace --mode full
 `);
   process.exit(0);
 }

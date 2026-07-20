@@ -18,7 +18,7 @@ import {
   writeDailyLog,
   writeDecision,
   writeHandoff
-} from "@sdd/sdd-core";
+} from "@juanklagos/sdd-core";
 
 const frameworkRoot = getFrameworkRoot();
 const projectRootSchema = z

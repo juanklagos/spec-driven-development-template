@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "../..",
     "paths": {
-      "@sdd/sdd-core": [
+      "@juanklagos/sdd-core": [
         "packages/sdd-core/src/index.ts"
       ]
     },

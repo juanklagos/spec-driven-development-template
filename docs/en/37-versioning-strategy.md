@@ -8,19 +8,19 @@ This document defines how versioning should work across the framework and its in
 
 ```mermaid
 flowchart LR
-  A["Framework version"] --> B["@sdd/sdd-core"]
-  A --> C["@sdd/sdd-mcp"]
+  A["Framework version"] --> B["@juanklagos/sdd-core"]
+  A --> C["@juanklagos/sdd-mcp"]
 ```
 
 ## Current rule
 
 - repository release version is the canonical public version
-- `@sdd/sdd-core` and `@sdd/sdd-mcp` should stay aligned with the repository minor release
+- `@juanklagos/sdd-core` and `@juanklagos/sdd-mcp` should stay aligned with the repository minor release
 
 Current alignment:
 - framework: `1.5.0`
-- `@sdd/sdd-core`: `1.5.0`
-- `@sdd/sdd-mcp`: `1.5.0`
+- `@juanklagos/sdd-core`: `1.5.0`
+- `@juanklagos/sdd-mcp`: `1.5.0`
 
 ## Practical release policy
 

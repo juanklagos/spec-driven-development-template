@@ -1,7 +1,6 @@
 {
-  "name": "@sdd/sdd-core",
+  "name": "@juanklagos/sdd-core",
   "version": "1.5.0",
-  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,6 +12,30 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "description": "Typed core operations for Spec-Driven Development: workspaces, specs, validation, gate, consent, status and logbook. Bilingual EN/ES.",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanklagos/spec-driven-development-template.git",
+    "directory": "packages/sdd-core"
+  },
+  "keywords": [
+    "sdd",
+    "spec-driven-development",
+    "specs",
+    "workflow"
+  ],
+  "author": "Juan Klagos",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

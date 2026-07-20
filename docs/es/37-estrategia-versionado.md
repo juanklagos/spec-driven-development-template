@@ -8,19 +8,19 @@ Este documento define cómo debe funcionar el versionado entre el framework y su
 
 ```mermaid
 flowchart LR
-  A["Versión del framework"] --> B["@sdd/sdd-core"]
-  A --> C["@sdd/sdd-mcp"]
+  A["Versión del framework"] --> B["@juanklagos/sdd-core"]
+  A --> C["@juanklagos/sdd-mcp"]
 ```
 
 ## Regla actual
 
 - la versión pública canónica es la release del repositorio
-- `@sdd/sdd-core` y `@sdd/sdd-mcp` deben mantenerse alineados con la release minor del repositorio
+- `@juanklagos/sdd-core` y `@juanklagos/sdd-mcp` deben mantenerse alineados con la release minor del repositorio
 
 Alineación actual:
 - framework: `1.5.0`
-- `@sdd/sdd-core`: `1.5.0`
-- `@sdd/sdd-mcp`: `1.5.0`
+- `@juanklagos/sdd-core`: `1.5.0`
+- `@juanklagos/sdd-mcp`: `1.5.0`
 
 ## Política práctica de releases
 

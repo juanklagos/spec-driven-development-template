@@ -4,7 +4,7 @@ import http from "node:http";
 import path from "node:path";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
-import { checkGate, listSpecs } from "@sdd/sdd-core";
+import { checkGate, listSpecs } from "@juanklagos/sdd-core";
 import { createSddMcpServer } from "./server.js";
 
 const port = Number(process.env.SDD_MCP_HTTP_PORT ?? "3334");

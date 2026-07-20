@@ -44,7 +44,7 @@ Planeado:
 Enfoque: estandarización del framework y empaquetado MCP publicable.
 
 Planeado:
-- estrategia de empaquetado/versionado más clara para `@sdd/sdd-core` y `@sdd/sdd-mcp`
+- estrategia de empaquetado/versionado más clara para `@juanklagos/sdd-core` y `@juanklagos/sdd-mcp`
 - flujo opcional para publicar el paquete MCP
 - modelo de gobernanza para contribuciones de comunidad
 - showcase de proyectos reales usando el framework

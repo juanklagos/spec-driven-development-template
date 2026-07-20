@@ -44,7 +44,7 @@ Planned:
 Focus: framework standardization and publishable MCP packaging.
 
 Planned:
-- clearer packaging/version strategy for `@sdd/sdd-core` and `@sdd/sdd-mcp`
+- clearer packaging/version strategy for `@juanklagos/sdd-core` and `@juanklagos/sdd-mcp`
 - optional publishable MCP package workflow
 - governance model for community contributions
 - showcase of real projects using the framework
