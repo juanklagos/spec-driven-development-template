@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.juanklagos/sdd-mcp",
-  "description": "Spec-Driven Development workflow server: specs, plans, gates, consent, status and logbook tools. Bilingual EN/ES. No code before approved spec and consistent plan.",
+  "description": "Spec-Driven Development workflow: specs, plans, gates, status and logbook tools. Bilingual EN/ES.",
   "repository": {
     "url": "https://github.com/juanklagos/spec-driven-development-template",
     "source": "github"
