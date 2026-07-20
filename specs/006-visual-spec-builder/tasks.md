@@ -1,8 +1,8 @@
 # Tareas 006 - visual-spec-builder
 
 ## Fase 1 (MVP)
-- [ ] T1 (R1): sdd-core `board.ts` + exports + smoke test de parse/serialize y board.canvas.
-- [ ] T2 (R2): API REST en http.ts + estáticos /builder.
+- [x] T1 (R1): sdd-core `board.ts` + exports + smoke test de parse/serialize y board.canvas.
+- [x] T2 (R2): API REST en http.ts + estáticos /builder.
 - [ ] T3 (R3): frontend builder/ con canvas, tarjetas, uniones, paleta y detalle de tareas.
 - [ ] T4: verificación end-to-end en workspace sidecar de prueba; validaciones y build en verde; commit por hito.
 ## Fase 2
