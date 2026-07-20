@@ -1,0 +1,81 @@
+// REST API for the SDD Builder frontend. Every route delegates to the shared
+// board layer in @juanklagos/sdd-core — the same functions the MCP board
+// tools use (see server.ts) — so no board logic lives in the transport.
+
+import http from "node:http";
+import {
+  createSpec,
+  getBoardView,
+  parseTasksMarkdown,
+  readSpecDocument,
+  setSpecTaskDone,
+  writeBoard
+} from "@juanklagos/sdd-core";
+import { json, readBody } from "./http-utils.js";
+
+export interface ApiDeps {
+  projectRoot: string;
+  /** SSE endpoint handler (GET /api/events), provided by the event hub. */
+  handleEvents(req: http.IncomingMessage, res: http.ServerResponse): void;
+}
+
+export type ApiHandler = (req: http.IncomingMessage, res: http.ServerResponse, url: URL) => Promise<boolean>;
+
+/** Returns a handler that resolves to true when it owned the route. */
+export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHandler {
+  return async function handleApi(req, res, url) {
+    const route = url.pathname;
+    try {
+      if (req.method === "GET" && route === "/api/events") {
+        handleEvents(req, res);
+        return true;
+      }
+      if (req.method === "GET" && route === "/api/board") {
+        const view = await getBoardView(projectRoot);
+        json(res, 200, { projectRoot, ...view });
+        return true;
+      }
+      if (req.method === "PUT" && route === "/api/board") {
+        await writeBoard(projectRoot, (await readBody(req)) as never);
+        json(res, 200, { ok: true });
+        return true;
+      }
+      const specMatch = route.match(/^\/api\/spec\/([^/]+)$/);
+      if (req.method === "GET" && specMatch) {
+        const id = specMatch[1];
+        const [spec, plan, tasks] = await Promise.all([
+          readSpecDocument(projectRoot, id, "spec.md"),
+          readSpecDocument(projectRoot, id, "plan.md"),
+          readSpecDocument(projectRoot, id, "tasks.md")
+        ]);
+        json(res, 200, { id, docs: { spec, plan, tasks }, tasks: parseTasksMarkdown(tasks) });
+        return true;
+      }
+      const taskMatch = route.match(/^\/api\/spec\/([^/]+)\/tasks$/);
+      if (req.method === "PUT" && taskMatch) {
+        const id = taskMatch[1];
+        const body = (await readBody(req)) as { line?: number; done?: boolean };
+        if (typeof body?.line !== "number" || typeof body?.done !== "boolean") {
+          json(res, 400, { error: "Expected { line: number, done: boolean }" });
+          return true;
+        }
+        json(res, 200, { tasks: await setSpecTaskDone(projectRoot, id, body.line, body.done) });
+        return true;
+      }
+      if (req.method === "POST" && route === "/api/spec") {
+        const body = (await readBody(req)) as { name?: string; owner?: string };
+        if (!body?.name) {
+          json(res, 400, { error: "Expected { name: string, owner?: string }" });
+          return true;
+        }
+        const result = await createSpec({ projectRoot, featureName: body.name, owner: body.owner ?? "Owner" });
+        json(res, 201, result);
+        return true;
+      }
+    } catch (error) {
+      json(res, 422, { error: error instanceof Error ? error.message : String(error) });
+      return true;
+    }
+    return false;
+  };
+}

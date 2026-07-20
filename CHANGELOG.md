@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+- **MCP board tools (spec 006 coherence review)**: agents connected over MCP can now see and drive the same board as `/builder` — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect` (idempotent labeled edges), `sdd_read_tasks`, `sdd_set_task_done`. REST API and MCP tools share one composed layer in `sdd-core` (`getBoardView`, `readSpecTasks`, `setSpecTaskDone`, `connectBoardCards`): zero duplicated logic between transports. Integration test extended to cover all five tools (toggle written to disk, edge persisted in `board.canvas`).
+
+### Changed
+- **SOLID refactor of the HTTP transport**: `packages/sdd-mcp/src/http.ts` (monolith with workspace resolution, dashboard HTML, REST, SSE, statics, and MCP transport) split into cohesive modules — `workspace.ts`, `events.ts` (SSE hub factory with `dispose()`), `dashboard.ts`, `api.ts`, `static.ts`, `transport.ts`, `http-utils.ts` — with `http.ts` as thin composition. Same routes, formats, and status codes (smoke-verified against a sandbox sidecar).
+- **sdd-core internal structure**: shared workspace primitives (`resolveSddRoot`, `listSpecs`, `getFrameworkRoot`, `ensureProjectRootAllowed`) extracted to an internal `workspace.ts` module, removing the `board.ts` ↔ `index.ts` circular import; stale compiled artifacts (`src/index.js`, `src/index.js.map`, `src/index.d.ts`) removed from version control.
+
+### Docs
+- Guide 42 (EN/ES) now documents `site/`, `builder/`, and `skills/`; guide 41 (EN/ES) documents the five new board tools; guide 51 (EN/ES) and `skills/sdd-workflow/SKILL.md` mention the MCP board tools; `/sdd:help`, `/sdd:new`, and `/sdd:tutor` briefly point to the builder as the visual alternative.
+
 ## [v1.6.0] — 2026-07-20
 
 ### Added

@@ -57,6 +57,9 @@ flowchart TD
   A --> N["www/"]
   A --> O[".github/"]
   A --> P[".githooks/"]
+  A --> Q["site/"]
+  A --> R["builder/"]
+  A --> S["skills/"]
 ```
 
 ## Folder-by-folder explanation
@@ -222,6 +225,54 @@ When to update:
 - when framework behavior changes in code
 - when MCP tools, resources, prompts, or transports evolve
 
+### `site/`
+
+Role:
+- public documentation site source
+
+What belongs here:
+- the Astro Starlight site that auto-syncs every guide from `docs/en/` and `docs/es/`
+- i18n configuration and site theming
+
+Meaning:
+- `docs/` remains the source of truth; `site/` renders it
+- deployed to GitHub Pages by the `site` workflow
+
+When to update:
+- when the site framework, navigation, or sync pipeline changes
+- guide content itself is edited in `docs/`, not here
+
+### `builder/`
+
+Role:
+- frontend of the visual SDD Builder
+
+What belongs here:
+- the Vite + React Flow canvas app (cards, connections, palette, task drawer)
+- its build output in `builder/dist/`, served by the MCP HTTP transport at `/builder`
+
+Meaning:
+- this is framework product code, like `packages/`, not a target project
+- all reads and writes go through the REST API backed by `packages/sdd-core` — markdown stays the source of truth
+
+When to update:
+- when the builder UI or its API contract evolves
+- rebuild with `npm run builder:build`
+
+### `skills/`
+
+Role:
+- portable Agent Skills (open standard readable by many AI tools)
+
+What belongs here:
+- one folder per skill with a `SKILL.md`
+
+Important contents:
+- `skills/sdd-workflow/SKILL.md`
+
+When to update:
+- when the SDD workflow guidance for agents changes
+
 ### `examples/`
 
 Role:
@@ -327,6 +378,9 @@ These areas are framework structure and should not change casually:
 - `packages/`
 - `scripts/`
 - `docs/`
+- `site/`
+- `builder/`
+- `skills/`
 - `.github/`
 
 ## What changes frequently during real project work
@@ -354,4 +408,7 @@ These areas move most during normal usage:
 - `template-context/` instructs AI behavior.
 - `templates/` standardize reusable artifacts.
 - `packages/` implement the productized core and MCP.
+- `site/` renders the docs as a public website.
+- `builder/` is the visual canvas over the specs.
+- `skills/` package the workflow as a portable Agent Skill.
 - `www/` hosts managed runnable projects inside this repo.

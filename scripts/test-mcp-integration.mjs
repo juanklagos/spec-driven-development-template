@@ -227,6 +227,66 @@ async function main() {
       }
     });
 
+    // --- SDD Builder board tools (same sdd-core layer as the REST API) ---
+
+    const boardRead = asObject(
+      await client.callTool({ name: "sdd_board_read", arguments: { projectRoot } })
+    );
+    assert.ok(Array.isArray(boardRead.canvas.nodes));
+    const specNode = boardRead.canvas.nodes.find((node) => node.id === specId);
+    assert.ok(specNode, "board should contain a node for the fixture spec");
+    const specCard = boardRead.specs.find((spec) => spec.id === specId);
+    assert.equal(specCard.tasks.total, 4);
+    assert.equal(specCard.tasks.done, 3);
+
+    const tasksRead = asObject(
+      await client.callTool({ name: "sdd_read_tasks", arguments: { projectRoot, specId } })
+    );
+    const pendingTask = tasksRead.tasks.find((task) => !task.done);
+    assert.ok(pendingTask, "fixture should have one pending task");
+
+    const toggled = asObject(
+      await client.callTool({
+        name: "sdd_set_task_done",
+        arguments: { projectRoot, specId, line: pendingTask.line, done: true }
+      })
+    );
+    assert.equal(toggled.tasks.filter((task) => task.done).length, 4);
+    const tasksOnDisk = await fs.readFile(
+      path.join(projectRoot, "spec", "specs", specId, "tasks.md"),
+      "utf8"
+    );
+    assert.doesNotMatch(tasksOnDisk, /^- \[ \]/m, "tasks.md should have no pending checkbox left");
+
+    await client.callTool({
+      name: "sdd_board_write",
+      arguments: {
+        projectRoot,
+        canvas: {
+          nodes: [
+            ...boardRead.canvas.nodes,
+            { id: "note-1", type: "text", text: "Fixture note", x: 400, y: 0, width: 200, height: 100 }
+          ],
+          edges: []
+        }
+      }
+    });
+
+    const connected = asObject(
+      await client.callTool({
+        name: "sdd_board_connect",
+        arguments: { projectRoot, fromNode: specId, toNode: "note-1", label: "depends on" }
+      })
+    );
+    assert.equal(connected.canvas.edges.length, 1);
+    assert.equal(connected.canvas.edges[0].fromNode, specId);
+    assert.equal(connected.canvas.edges[0].toNode, "note-1");
+
+    const boardAfter = asObject(
+      await client.callTool({ name: "sdd_board_read", arguments: { projectRoot } })
+    );
+    assert.equal(boardAfter.canvas.edges.length, 1, "edge should persist in specs/board.canvas");
+
     const indexResource = await client.readResource({
       uri: `sdd://project/${projectName}/index`
     });

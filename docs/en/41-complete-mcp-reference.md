@@ -387,6 +387,110 @@ Structured output:
 - `path`
 - `content`
 
+### `sdd_board_read`
+
+Purpose:
+- read the visual SDD Builder board of a target project
+
+When to use:
+- when the AI needs the canvas layout plus every spec with status and task progress
+
+Input:
+- `projectRoot`
+
+What it does:
+- reads `specs/board.canvas` (JSON Canvas), generating a default layout if missing
+- lists specs with approval status and done/total task counts
+
+What the user should expect:
+- the exact same view the `/builder` canvas renders
+
+Structured output:
+- `canvas` (nodes, edges)
+- `specs` (id, dir, status, tasks)
+
+### `sdd_board_write`
+
+Purpose:
+- replace the board canvas layout
+
+When to use:
+- when the AI arranges or reorganizes cards and connections as a whole
+
+Rules:
+- only layout is stored; markdown files are never touched
+
+What it does:
+- validates and atomically writes `specs/board.canvas`
+
+Input:
+- `projectRoot`
+- `canvas`
+
+Structured output:
+- `ok`
+- `nodes`
+- `edges`
+
+### `sdd_board_connect`
+
+Purpose:
+- connect two existing board cards with an optional labeled edge
+
+When to use:
+- when the AI records a dependency or relation between cards
+
+Rules:
+- both node ids must exist on the board
+- identical edges are not duplicated (idempotent)
+
+Input:
+- `projectRoot`
+- `fromNode`
+- `toNode`
+- `label`
+
+Structured output:
+- `canvas`
+
+### `sdd_read_tasks`
+
+Purpose:
+- read the checkbox tasks of one spec's `tasks.md`
+
+When to use:
+- before toggling a task, to get line numbers and done state
+
+Input:
+- `projectRoot`
+- `specId`
+
+Structured output:
+- `specId`
+- `tasks` (text, done, line)
+
+### `sdd_set_task_done`
+
+Purpose:
+- toggle one checkbox line in a spec's `tasks.md`
+
+When to use:
+- when a task is completed or reopened during a session
+
+Rules:
+- surgical edit of the single `- [ ]` / `- [x]` line, atomic write
+- `line` comes from `sdd_read_tasks`
+
+Input:
+- `projectRoot`
+- `specId`
+- `line`
+- `done`
+
+Structured output:
+- `specId`
+- `tasks`
+
 ## Resource reference
 
 ### Static resources

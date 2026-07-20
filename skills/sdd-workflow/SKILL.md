@@ -39,6 +39,10 @@ Always end with: objective, active spec, changes, validation result, risks, exac
 - Inside this template repo: runnable projects go under `www/<project-name>/`.
 - Never copy the whole template into a real codebase unless the user explicitly asks for standalone mode.
 
+## Visual alternative / Alternativa visual
+
+The SDD Builder (guide 51) shows specs as connected cards at `http://127.0.0.1:3334/builder`; over MCP the same board is available through `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, and `sdd_set_task_done`. / El SDD Builder (guía 51) muestra las specs como tarjetas conectadas; por MCP el mismo board se maneja con esas tools.
+
 ## Reference
 
 Canonical rules: `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` and `sdd.policy.yaml` in https://github.com/juanklagos/spec-driven-development-template

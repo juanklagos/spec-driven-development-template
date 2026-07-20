@@ -29,6 +29,10 @@ Nota: dentro de este repositorio template el builder está bloqueado por diseño
 | Añade tarjetas 💡 Idea / 📦 Épica | Notas libres (con color) en `board.canvas` |
 | Mueve tarjetas | Posiciones guardadas (con debounce) — nunca toca tus .md |
 
+## Desde un agente IA (MCP)
+
+Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board mediante cinco tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Ver guía 41 (referencia completa de MCP).
+
 ## Sincronización en vivo
 
 El servidor vigila tu directorio `specs/`. Edita cualquier `tasks.md` en tu editor y la barra de progreso de la tarjeta se actualiza sola — sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es "último escritor gana" (una fase futura añade merge más fino).

@@ -387,6 +387,110 @@ Salida estructurada:
 - `path`
 - `content`
 
+### `sdd_board_read`
+
+Propósito:
+- leer el board visual del SDD Builder de un proyecto destino
+
+Cuándo usarlo:
+- cuando la IA necesita el layout del lienzo más cada spec con estado y progreso de tareas
+
+Entrada:
+- `projectRoot`
+
+Qué hace:
+- lee `specs/board.canvas` (JSON Canvas), generando un layout por defecto si falta
+- lista las specs con estado de aprobación y conteo de tareas hechas/totales
+
+Qué debe esperar el usuario:
+- exactamente la misma vista que renderiza el lienzo `/builder`
+
+Salida estructurada:
+- `canvas` (nodes, edges)
+- `specs` (id, dir, status, tasks)
+
+### `sdd_board_write`
+
+Propósito:
+- reemplazar el layout del lienzo del board
+
+Cuándo usarlo:
+- cuando la IA organiza o reordena tarjetas y uniones en conjunto
+
+Reglas:
+- solo se guarda layout; los archivos markdown nunca se tocan
+
+Qué hace:
+- valida y escribe atómicamente `specs/board.canvas`
+
+Entrada:
+- `projectRoot`
+- `canvas`
+
+Salida estructurada:
+- `ok`
+- `nodes`
+- `edges`
+
+### `sdd_board_connect`
+
+Propósito:
+- conectar dos tarjetas existentes del board con una unión etiquetada opcional
+
+Cuándo usarlo:
+- cuando la IA registra una dependencia o relación entre tarjetas
+
+Reglas:
+- ambos ids de nodo deben existir en el board
+- las uniones idénticas no se duplican (idempotente)
+
+Entrada:
+- `projectRoot`
+- `fromNode`
+- `toNode`
+- `label`
+
+Salida estructurada:
+- `canvas`
+
+### `sdd_read_tasks`
+
+Propósito:
+- leer las tareas checkbox del `tasks.md` de una spec
+
+Cuándo usarlo:
+- antes de marcar una tarea, para obtener números de línea y estado
+
+Entrada:
+- `projectRoot`
+- `specId`
+
+Salida estructurada:
+- `specId`
+- `tasks` (text, done, line)
+
+### `sdd_set_task_done`
+
+Propósito:
+- marcar o desmarcar una línea checkbox del `tasks.md` de una spec
+
+Cuándo usarlo:
+- cuando una tarea se completa o se reabre durante una sesión
+
+Reglas:
+- edición quirúrgica de la única línea `- [ ]` / `- [x]`, escritura atómica
+- `line` viene de `sdd_read_tasks`
+
+Entrada:
+- `projectRoot`
+- `specId`
+- `line`
+- `done`
+
+Salida estructurada:
+- `specId`
+- `tasks`
+
 ## Referencia de resources
 
 ### Resources estáticos

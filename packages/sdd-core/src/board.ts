@@ -2,14 +2,29 @@
 // The .md files are the source of truth; the canvas only stores layout
 // (JSON Canvas format, https://jsoncanvas.org) in specs/board.canvas.
 
+import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { listSpecs, resolveSddRoot } from "./index.js";
+import { listSpecs, resolveSddRoot, type SpecSummary } from "./workspace.js";
 
 export interface TaskItem {
   text: string;
   done: boolean;
   line: number;
+}
+
+export interface TaskProgress {
+  done: number;
+  total: number;
+}
+
+export interface BoardSpecCard extends SpecSummary {
+  tasks: TaskProgress;
+}
+
+export interface BoardView {
+  canvas: BoardCanvas;
+  specs: BoardSpecCard[];
 }
 
 export interface CanvasNode {
@@ -150,4 +165,74 @@ export async function writeBoard(projectRoot: string, canvas: BoardCanvas): Prom
     throw new Error("Invalid canvas payload: expected { nodes: [], edges: [] }");
   }
   await atomicWrite(await boardPath(projectRoot), JSON.stringify(canvas, null, 2) + "\n");
+}
+
+// ---------------------------------------------------------------------------
+// Composed board operations. These are the single shared layer used by both
+// the REST API (packages/sdd-mcp/src/api.ts) and the MCP board tools
+// (packages/sdd-mcp/src/server.ts) so no transport re-implements board logic.
+// ---------------------------------------------------------------------------
+
+/** Parsed checkbox tasks of one spec's tasks.md. */
+export async function readSpecTasks(projectRoot: string, specId: string): Promise<TaskItem[]> {
+  return parseTasksMarkdown(await readSpecDocument(projectRoot, specId, "tasks.md"));
+}
+
+/**
+ * Toggle a single checkbox line in tasks.md (surgical edit, atomic write)
+ * and return the tasks as re-read from disk.
+ */
+export async function setSpecTaskDone(
+  projectRoot: string,
+  specId: string,
+  line: number,
+  done: boolean
+): Promise<TaskItem[]> {
+  const current = await readSpecDocument(projectRoot, specId, "tasks.md");
+  await writeSpecDocument(projectRoot, specId, "tasks.md", setTaskDone(current, line, done));
+  return readSpecTasks(projectRoot, specId);
+}
+
+/** Canvas plus every spec with its approval status and task progress. */
+export async function getBoardView(projectRoot: string): Promise<BoardView> {
+  const [canvas, specs] = await Promise.all([readBoard(projectRoot), listSpecs(projectRoot)]);
+  const cards = await Promise.all(
+    specs.map(async (spec): Promise<BoardSpecCard> => {
+      try {
+        const items = await readSpecTasks(projectRoot, spec.id);
+        return { ...spec, tasks: { done: items.filter((item) => item.done).length, total: items.length } };
+      } catch {
+        return { ...spec, tasks: { done: 0, total: 0 } };
+      }
+    })
+  );
+  return { canvas, specs: cards };
+}
+
+/**
+ * Connect two existing cards with a labeled edge and persist the canvas.
+ * Idempotent: an edge with the same endpoints and label is not duplicated.
+ */
+export async function connectBoardCards(
+  projectRoot: string,
+  fromNode: string,
+  toNode: string,
+  label?: string
+): Promise<BoardCanvas> {
+  const canvas = await readBoard(projectRoot);
+  const knownIds = new Set(canvas.nodes.map((node) => node.id));
+  for (const nodeId of [fromNode, toNode]) {
+    if (!knownIds.has(nodeId)) {
+      throw new Error(`Unknown board node: ${nodeId}. Known nodes: ${[...knownIds].join(", ") || "(none)"}`);
+    }
+  }
+
+  const duplicate = canvas.edges.find(
+    (edge) => edge.fromNode === fromNode && edge.toNode === toNode && (edge.label ?? "") === (label ?? "")
+  );
+  if (!duplicate) {
+    canvas.edges.push({ id: `edge-${randomUUID().slice(0, 8)}`, fromNode, toNode, ...(label ? { label } : {}) });
+    await writeBoard(projectRoot, canvas);
+  }
+  return canvas;
 }

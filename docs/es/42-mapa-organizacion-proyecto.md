@@ -57,6 +57,9 @@ flowchart TD
   A --> N["www/"]
   A --> O[".github/"]
   A --> P[".githooks/"]
+  A --> Q["site/"]
+  A --> R["builder/"]
+  A --> S["skills/"]
 ```
 
 ## Explicación carpeta por carpeta
@@ -222,6 +225,54 @@ Cuándo se actualiza:
 - cuando cambia el comportamiento del framework en código
 - cuando evolucionan tools, resources, prompts o transportes MCP
 
+### `site/`
+
+Rol:
+- código fuente del sitio público de documentación
+
+Qué va aquí:
+- el sitio Astro Starlight que sincroniza automáticamente todas las guías de `docs/en/` y `docs/es/`
+- configuración de i18n y tema del sitio
+
+Significado:
+- `docs/` sigue siendo la fuente de verdad; `site/` la renderiza
+- se despliega a GitHub Pages con el workflow `site`
+
+Cuándo se actualiza:
+- cuando cambia el framework del sitio, la navegación o el pipeline de sincronización
+- el contenido de las guías se edita en `docs/`, no aquí
+
+### `builder/`
+
+Rol:
+- frontend del SDD Builder visual
+
+Qué va aquí:
+- la app de lienzo Vite + React Flow (tarjetas, uniones, paleta, drawer de tareas)
+- su build en `builder/dist/`, servido por el transporte HTTP de MCP en `/builder`
+
+Significado:
+- es código de producto del framework, como `packages/`, no un proyecto destino
+- todas las lecturas y escrituras pasan por la API REST respaldada por `packages/sdd-core` — el markdown sigue siendo la fuente de verdad
+
+Cuándo se actualiza:
+- cuando evoluciona la UI del builder o su contrato de API
+- recompila con `npm run builder:build`
+
+### `skills/`
+
+Rol:
+- Agent Skills portables (estándar abierto legible por muchas herramientas IA)
+
+Qué va aquí:
+- una carpeta por skill con su `SKILL.md`
+
+Contenidos importantes:
+- `skills/sdd-workflow/SKILL.md`
+
+Cuándo se actualiza:
+- cuando cambia la guía del flujo SDD para agentes
+
 ### `examples/`
 
 Rol:
@@ -327,6 +378,9 @@ Estas áreas son estructura del framework y no deberían cambiarse a la ligera:
 - `packages/`
 - `scripts/`
 - `docs/`
+- `site/`
+- `builder/`
+- `skills/`
 - `.github/`
 
 ## Qué cambia con frecuencia en trabajo real
@@ -354,4 +408,7 @@ Estas áreas se mueven más durante el uso normal:
 - `template-context/` instruye el comportamiento de la IA.
 - `templates/` estandariza artefactos reutilizables.
 - `packages/` implementa el core productizado y MCP.
+- `site/` renderiza la documentación como sitio público.
+- `builder/` es el lienzo visual sobre las specs.
+- `skills/` empaqueta el flujo como Agent Skill portable.
 - `www/` aloja proyectos ejecutables administrados dentro de este repo.

@@ -1,8 +1,8 @@
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import { exists, getFrameworkRoot, listSpecs, resolveSddRoot, safeReadFile } from "./workspace.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -65,17 +65,6 @@ export interface ConsentResult {
 export interface FileOutputResult {
   path: string;
   content: string;
-}
-
-export interface SpecSummary {
-  id: string;
-  dir: string;
-  status: string;
-}
-
-export function getFrameworkRoot(): string {
-  const currentFile = fileURLToPath(import.meta.url);
-  return path.resolve(path.dirname(currentFile), "../../../");
 }
 
 export function slugify(value: string): string {
@@ -168,33 +157,6 @@ export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResu
     specDir,
     indexUpdated: true
   };
-}
-
-export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
-  const root = await resolveSddRoot(projectRoot);
-  const specsRoot = path.join(root, "specs");
-  const entries = await safeReadDir(specsRoot);
-  const items: SpecSummary[] = [];
-
-  for (const entry of entries) {
-    if (!entry.isDirectory() || !/^\d{3}-/.test(entry.name)) {
-      continue;
-    }
-
-    const specPath = path.join(specsRoot, entry.name, "spec.md");
-    if (!(await exists(specPath))) {
-      continue;
-    }
-
-    const content = await fs.readFile(specPath, "utf8");
-    items.push({
-      id: entry.name,
-      dir: path.join(specsRoot, entry.name),
-      status: extractApprovalStatus(content)
-    });
-  }
-
-  return items.sort((a, b) => a.id.localeCompare(b.id));
 }
 
 export async function validateProject(projectRoot: string): Promise<ValidationResult> {
@@ -554,36 +516,6 @@ export async function writeDecision(projectRoot: string, fileName: string, conte
   };
 }
 
-export async function ensureProjectRootAllowed(projectRoot: string): Promise<void> {
-  const root = path.resolve(projectRoot);
-  const frameworkRoot = getFrameworkRoot();
-  const wwwRoot = path.join(frameworkRoot, "www");
-
-  if (root === frameworkRoot) {
-    throw new Error("Project root cannot be the template root itself");
-  }
-
-  if (isSameOrInside(root, frameworkRoot) && !isSameOrInside(root, wwwRoot)) {
-    throw new Error(`Project roots inside the template must live under ${wwwRoot}. Use an external path or ./www/<project-name>.`);
-  }
-}
-
-export async function resolveSddRoot(projectRoot: string): Promise<string> {
-  const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
-
-  if (await isSddRoot(root)) {
-    return root;
-  }
-
-  const sidecarRoot = path.join(root, "spec");
-  if (await isSddRoot(sidecarRoot)) {
-    return sidecarRoot;
-  }
-
-  throw new Error(`Could not find an SDD root at ${root} or ${sidecarRoot}`);
-}
-
 function normalizeDate(value: string): string {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     throw new Error("Date must use YYYY-MM-DD");
@@ -596,12 +528,6 @@ function normalizeMarkdownFileName(value: string): string {
     throw new Error("File name must be a simple markdown file name such as 2026-03-18-handoff.md");
   }
   return value;
-}
-
-function isSameOrInside(targetPath: string, parentPath: string): boolean {
-  const target = path.resolve(targetPath);
-  const parent = path.resolve(parentPath);
-  return target === parent || target.startsWith(parent + path.sep);
 }
 
 async function requireDir(root: string, relativePath: string, messages: ValidationMessage[]): Promise<void> {
@@ -630,45 +556,6 @@ async function appendLine(filePath: string, line: string): Promise<void> {
   const current = await safeReadFile(filePath);
   const suffix = current.endsWith("\n") ? "" : "\n";
   await fs.writeFile(filePath, `${current}${suffix}${line}\n`, "utf8");
-}
-
-async function safeReadFile(filePath: string): Promise<string> {
-  try {
-    return await fs.readFile(filePath, "utf8");
-  } catch {
-    return "";
-  }
-}
-
-async function safeReadDir(dirPath: string) {
-  try {
-    return await fs.readdir(dirPath, { withFileTypes: true });
-  } catch {
-    return [];
-  }
-}
-
-async function exists(filePath: string): Promise<boolean> {
-  try {
-    await fs.access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function isSddRoot(candidate: string): Promise<boolean> {
-  return (
-    (await exists(path.join(candidate, "sdd.policy.yaml"))) &&
-    (await exists(path.join(candidate, "idea"))) &&
-    (await exists(path.join(candidate, "specs"))) &&
-    (await exists(path.join(candidate, "bitacora")))
-  );
-}
-
-function extractApprovalStatus(content: string): string {
-  const match = content.match(/Estado \/ Status:\s*`([^`]+)`/i);
-  return match?.[1] ?? "Pendiente";
 }
 
 function summarize(messages: ValidationMessage[]): ValidationResult {
@@ -712,4 +599,6 @@ function formatIndexRow(row: IndexRow): string {
   return `| ${row.number} | ${row.name} | ${row.status} | ${row.priority} | ${row.owner} | ${row.updated} |`;
 }
 
+export { ensureProjectRootAllowed, getFrameworkRoot, listSpecs, resolveSddRoot } from "./workspace.js";
+export type { SpecSummary } from "./workspace.js";
 export * from "./board.js";

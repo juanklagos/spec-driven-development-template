@@ -29,6 +29,10 @@ Note: inside this template repository itself the builder is blocked by design (n
 | Add 💡 Idea / 📦 Epic cards | Free note nodes (color-coded) in `board.canvas` |
 | Move cards around | Positions saved (debounced) — never touches your .md files |
 
+## From an AI agent (MCP)
+
+Any MCP client connected to `sdd-mcp` can work with the same board through five tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — backed by the exact same `sdd-core` layer as the canvas, so what your agent writes is what you see in `/builder` (and vice versa). See guide 41 (complete MCP reference).
+
 ## Live sync
 
 The server watches your `specs/` directory. Edit any `tasks.md` in your editor and the card's progress bar updates by itself — no reload. The top bar shows **🟢 Live**; if the server restarts on a different workspace, an amber banner asks you to reload. Concurrency rule: your markdown always wins; canvas layout is last-writer-wins (a future phase adds finer merging).

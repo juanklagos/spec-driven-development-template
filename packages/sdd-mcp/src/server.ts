@@ -6,24 +6,34 @@ import { z } from "zod";
 import {
   appendProjectLogEntry,
   checkGate,
+  connectBoardCards,
   createSpec,
   createWorkspace,
   generateRoadmap,
   generateStatus,
+  getBoardView,
   getFrameworkRoot,
   listSpecs,
+  readSpecTasks,
   recordUserConsent,
   resolveSddRoot,
+  setSpecTaskDone,
   validateProject,
+  writeBoard,
   writeDailyLog,
   writeDecision,
-  writeHandoff
+  writeHandoff,
+  type BoardCanvas
 } from "@juanklagos/sdd-core";
 
 const frameworkRoot = getFrameworkRoot();
 const projectRootSchema = z
   .string()
   .describe("Absolute target project path. Recommended default inside this template: ./www/<project-name>.");
+const specIdSchema = z
+  .string()
+  .regex(/^\d{3}-[a-z0-9][a-z0-9-]*$/, "Spec id must look like 001-my-feature")
+  .describe("Numbered spec folder id such as 001-my-feature.");
 
 function toStructuredContent<T>(value: T): Record<string, unknown> {
   return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
@@ -335,6 +345,175 @@ export function createSddMcpServer(): McpServer {
     },
     async ({ projectRoot, fileName, content }) => {
       const result = await writeDecision(projectRoot, fileName, content);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  // --- SDD Builder board tools -------------------------------------------
+  // Same shared layer as the builder's REST API (@juanklagos/sdd-core board
+  // module): agents connected over MCP see exactly what /builder shows.
+
+  const canvasNodeSchema = z.object({
+    id: z.string(),
+    type: z.enum(["file", "text"]),
+    x: z.number(),
+    y: z.number(),
+    width: z.number(),
+    height: z.number(),
+    file: z.string().optional(),
+    text: z.string().optional(),
+    color: z.string().optional()
+  });
+
+  const canvasEdgeSchema = z.object({
+    id: z.string(),
+    fromNode: z.string(),
+    toNode: z.string(),
+    fromSide: z.string().optional(),
+    toSide: z.string().optional(),
+    label: z.string().optional()
+  });
+
+  const canvasSchema = z.object({
+    nodes: z.array(canvasNodeSchema),
+    edges: z.array(canvasEdgeSchema)
+  });
+
+  const taskItemSchema = z.object({
+    text: z.string(),
+    done: z.boolean(),
+    line: z.number()
+  });
+
+  const boardSpecCardSchema = z.object({
+    id: z.string(),
+    dir: z.string(),
+    status: z.string(),
+    tasks: z.object({ done: z.number(), total: z.number() })
+  });
+
+  server.registerTool(
+    "sdd_board_read",
+    {
+      title: "Read SDD board",
+      description:
+        "Read the visual SDD Builder board: the specs/board.canvas layout (JSON Canvas) plus every spec with its approval status and task progress.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        canvas: canvasSchema,
+        specs: z.array(boardSpecCardSchema)
+      }
+    },
+    async ({ projectRoot }) => {
+      const result = await getBoardView(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_board_write",
+    {
+      title: "Write SDD board",
+      description:
+        "Replace the specs/board.canvas layout (JSON Canvas: nodes + edges). Only layout is stored; markdown files are never touched by this tool.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        canvas: canvasSchema
+      },
+      outputSchema: {
+        ok: z.boolean(),
+        nodes: z.number(),
+        edges: z.number()
+      }
+    },
+    async ({ projectRoot, canvas }) => {
+      await writeBoard(projectRoot, canvas as BoardCanvas);
+      const result = { ok: true, nodes: canvas.nodes.length, edges: canvas.edges.length };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_board_connect",
+    {
+      title: "Connect board cards",
+      description:
+        "Connect two existing board cards with an optional labeled edge and persist specs/board.canvas. Idempotent for identical edges.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        fromNode: z.string().min(1).describe("Source node id, e.g. a spec id like 001-my-feature."),
+        toNode: z.string().min(1).describe("Target node id."),
+        label: z.string().optional()
+      },
+      outputSchema: {
+        canvas: canvasSchema
+      }
+    },
+    async ({ projectRoot, fromNode, toNode, label }) => {
+      const canvas = await connectBoardCards(projectRoot, fromNode, toNode, label);
+      const result = { canvas };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_read_tasks",
+    {
+      title: "Read spec tasks",
+      description: "Read the checkbox tasks of a spec's tasks.md with their line numbers and done state.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId }) => {
+      const tasks = await readSpecTasks(projectRoot, specId);
+      const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_set_task_done",
+    {
+      title: "Set spec task done",
+      description:
+        "Toggle one checkbox line in a spec's tasks.md (surgical edit, atomic write) and return the updated tasks.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        line: z.number().int().min(0).describe("Zero-based line number of the task, as returned by sdd_read_tasks."),
+        done: z.boolean()
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId, line, done }) => {
+      const tasks = await setSpecTaskDone(projectRoot, specId, line, done);
+      const result = { specId, tasks };
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
