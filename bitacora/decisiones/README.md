@@ -21,7 +21,7 @@ Capture one interactively with `/sdd:decision`. / Captura una conversando con `/
 Chronological, oldest first. Dates come from git history, not from memory.
 Cronológico, del más antiguo al más reciente. Las fechas vienen del historial de git.
 
-### 2026-03-12 — [PolyForm Noncommercial 1.0.0](2026-03-12-polyform-noncommercial-source-available.md)
+### 2026-03-12 — [PolyForm Noncommercial 1.0.0](2026-03-12-polyform-noncommercial-source-available.md) · superseded 2026-07-21
 
 - **ES:** Se abandona MIT y se adopta PolyForm Noncommercial 1.0.0 (source-available, no open source), con marco legal completo en `legal/`; el uso comercial exige autorización escrita.
 - **EN:** MIT dropped for PolyForm Noncommercial 1.0.0 — source-available, not open source — with a full legal frame; commercial use needs written permission.
@@ -106,3 +106,8 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 - ES: Agrega aquí la fila nueva al escribir un registro — este índice es lo que hace navegable la carpeta.
 - EN: Learn the practice in guide 24: [`docs/en/24-architecture-decisions.md`](../../docs/en/24-architecture-decisions.md).
 - ES: Aprende la práctica en la guía 24: [`docs/es/24-decisiones-de-arquitectura.md`](../../docs/es/24-decisiones-de-arquitectura.md).
+
+### 2026-07-21 — [Relicencia a MIT](2026-07-21-relicencia-mit.md)
+
+- **ES:** Se vuelve a MIT en todo el repositorio. PolyForm hacía que GitHub reportara `NOASSERTION` y prohibía el uso interno en empresas, que era justo el requisito. La propiedad pasa a apoyarse en el scope de npm, el namespace MCP y la línea de copyright, no en la licencia.
+- **EN:** Back to MIT repo-wide. PolyForm made GitHub report `NOASSERTION` and barred the internal company use that was the actual requirement. Ownership now rests on the npm scope, the MCP namespace and the copyright line rather than on the license.

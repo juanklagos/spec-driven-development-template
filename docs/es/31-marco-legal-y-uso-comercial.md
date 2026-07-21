@@ -29,46 +29,51 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 ## 📋 Estado de licenciamiento del proyecto
 
-Este repositorio está licenciado bajo **PolyForm Noncommercial 1.0.0**. Es **código disponible** pero **no es open source aprobado por OSI**.
+Este repositorio está licenciado bajo **Licencia MIT**. Es open source aprobado por OSI.
 
 | Aspecto | Detalle |
 |---|---|
-| Tipo de licencia | PolyForm Noncommercial 1.0.0 |
-| Disponibilidad del código | Público, legible, forkeable |
-| Open-source OSI | ❌ No |
-| Uso comercial | ❌ Requiere autorización escrita |
+| Licencia | MIT |
+| Open-source OSI | ✅ Sí |
+| Uso comercial | ✅ Permitido, gratis, sin pedir permiso |
+| Titular del copyright | Juan Carlos Alvarez Lagos |
 
-## ✅ Qué está permitido (sin autorización)
+## ✅ Qué puedes hacer
+
+Todo lo de abajo está permitido, no cuesta nada y no exige avisarle a nadie.
 
 | Caso de uso | ¿Permitido? | Notas |
 |---|---|---|
-| Aprendizaje personal y experimentación | ✅ Sí | Usa libremente para autoeducación |
+| Aprendizaje personal y experimentación | ✅ Sí | |
 | Uso académico y educativo | ✅ Sí | Aulas, talleres, investigación |
-| Uso por organizaciones sin fines de lucro | ✅ Sí | Bajo términos PolyForm Noncommercial |
-| Contribuir a este repositorio | ✅ Sí | Bajo términos del CLA (ver abajo) |
-| Crear proyectos personales con este template | ✅ Sí | Siempre que los servicios construidos sean no-comerciales |
-| Referenciar en blog posts o charlas | ✅ Sí | Con atribución apropiada |
+| Uso dentro de una empresa, a cualquier escala | ✅ Sí | Incluido el CI de tu equipo |
+| Construir un producto o SaaS de pago encima | ✅ Sí | Vende lo que construyas |
+| Venderlo, hospedarlo, hacer white-label | ✅ Sí | Renómbralo si quieres |
+| Incluirlo en un curso o formación de pago | ✅ Sí | |
+| Usarlo en un proyecto open source | ✅ Sí | MIT es compatible con toda licencia habitual |
+| Hacer un fork y publicarlo con tu marca | ✅ Sí | Ver la página de nombres, abajo |
+| Contribuir a este repositorio | ✅ Sí | Bajo los términos del CLA (ver abajo) |
 
-## ❌ Qué requiere autorización escrita previa
+## La única condición
 
-| Caso de uso | Estado | Cómo obtener permiso |
-|---|---|---|
-| Vender el template o derivados | ❌ Necesita licencia | Contactar al autor |
-| Usar en un producto SaaS pagado | ❌ Necesita licencia | Contactar al autor |
-| Incluir en cursos o capacitaciones pagadas | ❌ Necesita licencia | Contactar al autor |
-| White-labeling para clientes | ❌ Necesita licencia | Contactar al autor |
-| Integración en herramientas CI/CD comerciales | ❌ Necesita licencia | Contactar al autor |
+Conserva el aviso de copyright. La Licencia MIT exige que el aviso de [LICENSE](../../LICENSE)
+acompañe a las copias y a las porciones sustanciales del software. Esa es toda la obligación.
+
+Hay dos cosas que son de identidad y no de código, y no son condiciones de la licencia: no presentes
+un fork como respaldado oficialmente por el autor, y no publiques bajo su nombre, usuario, scope de
+npm o namespace MCP. Hacer fork y renombrar están expresamente permitidos.
 
 ## 📄 Documentos legales en este repositorio
 
 | Documento | Propósito |
 |---|---|
-| [LICENSE](../../LICENSE) | Texto completo PolyForm Noncommercial 1.0.0 |
-| [NOTICE](../../NOTICE) | Aviso de copyright y atribución |
-| [COMMERCIAL_LICENSE.md](../../legal/COMMERCIAL_LICENSE.md) | Términos para solicitudes de licencia comercial |
+| [LICENSE](../../LICENSE) | Texto completo de la Licencia MIT |
+| [NOTICE](../../NOTICE) | Aviso de atribución por cortesía |
+| [TEMPLATE-OUTPUT.md](../../TEMPLATE-OUTPUT.md) | Los documentos que escribes con las plantillas son tuyos |
+| [COMMERCIAL_SUPPORT.md](../../legal/COMMERCIAL_SUPPORT.md) | Soporte de pago opcional. Nada que comprar para el uso normal |
 | [DISCLAIMER.md](../../legal/DISCLAIMER.md) | Descargo de garantía y responsabilidad |
-| [TRADEMARK_POLICY.md](../../legal/TRADEMARK_POLICY.md) | Reglas para usar nombre y branding del proyecto |
-| [ENFORCEMENT.md](../../legal/ENFORCEMENT.md) | Cómo se manejan violaciones de licencia |
+| [TRADEMARK_POLICY.md](../../legal/TRADEMARK_POLICY.md) | Nombres y cuentas. Qué se reclama y qué está permitido |
+| [ENFORCEMENT.md](../../legal/ENFORCEMENT.md) | Cómo reportar atribución eliminada o identidad usada indebidamente |
 | [CLA.md](../../legal/CLA.md) | Acuerdo de Licencia de Contribuidor |
 | [LEGAL_OVERVIEW.md](../../legal/LEGAL_OVERVIEW.md) | Resumen de todos los documentos legales |
 

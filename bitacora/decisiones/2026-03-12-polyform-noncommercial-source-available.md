@@ -49,7 +49,7 @@ Regla operativa: **el uso comercial exige autorización escrita explícita del a
 Ambos puntos pesaron como bloqueadores en `bitacora/decisiones/2026-07-21-no-app-escritorio.md:48` y `:34`.
 
 **Vigencia**
-- **Vigente.** No hay decisión posterior que la revierta. La evaluación de 2026-07-21 expone el costo (pérdida de beneficios exclusivos de OSI) pero **no reabre la elección de licencia**.
+- **Superseded (2026-07-21).** Revertida por [`2026-07-21-relicencia-mit.md`](2026-07-21-relicencia-mit.md): el proyecto vuelve a MIT. Se cumplieron dos de los disparadores listados abajo (canal que exige licencia OSI, y el paso de control a adopción). Este registro se conserva como historia; no describe el estado actual. La evaluación de 2026-07-21 expone el costo (pérdida de beneficios exclusivos de OSI) pero **no reabre la elección de licencia**.
 
 ## Cuándo revisar esta decisión / When to revisit
 

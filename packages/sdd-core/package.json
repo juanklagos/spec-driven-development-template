@@ -21,7 +21,9 @@
   "files": [
     "dist",
     "framework",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE",
+    "TEMPLATE-OUTPUT.md"
   ],
   "repository": {
     "type": "git",
@@ -34,8 +36,8 @@
     "specs",
     "workflow"
   ],
-  "author": "Juan Klagos",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "author": "Juan Carlos Alvarez Lagos",
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   },

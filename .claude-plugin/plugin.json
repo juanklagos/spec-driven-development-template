@@ -3,11 +3,11 @@
   "version": "1.7.0",
   "description": "Spec-Driven Development workflow: /sdd:* commands, portable skill, machine-checked gate. Bilingual EN/ES. No code before approved spec and consistent plan.",
   "author": {
-    "name": "Juan Klagos",
+    "name": "Juan Carlos Alvarez Lagos",
     "url": "https://github.com/juanklagos"
   },
   "homepage": "https://github.com/juanklagos/spec-driven-development-template",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "MIT",
   "commands": ["./.claude/commands/sdd"],
   "skills": ["./skills/sdd-workflow"]
 }

@@ -14,4 +14,4 @@ npx @juanklagos/create-sdd-project my-ws --mode full      # full standalone work
 Requires `git` and `bash` on PATH (Node >= 18).
 
 
-License: PolyForm Noncommercial 1.0.0.
+License: MIT. Copyright (c) 2026 Juan Carlos Alvarez Lagos.

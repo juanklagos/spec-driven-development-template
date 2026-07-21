@@ -1,84 +1,48 @@
-# Enforcement Policy / Política de Cumplimiento
+# Reporting a problem / Reportar un problema
 
 ## English
 
-If you detect misuse (commercial use without authorization, removed notices, false attribution, or trademark abuse), report with evidence.
+This software is MIT licensed. Using it commercially, inside a company, in a paid product, or in an
+open-source project is allowed and needs no permission — none of that is a violation, and there is
+nothing to report.
 
-Recommended report content:
+Two things are still worth reporting:
 
-1. URL/repository or company details.
-2. Description of suspected violation.
-3. Evidence (screenshots, contracts, product pages, commit history).
-4. Dates and impact assessment.
+**Attribution stripped.** The MIT License requires the copyright notice to travel with copies and
+substantial portions of the software. A redistribution that removes it is a license violation.
 
-Report channel:
+**Identity misused.** Someone presenting a fork as officially endorsed, certified or supported by the
+author, or publishing under his name, handle, npm scope or MCP namespace. See `TRADEMARK_POLICY.md`
+for what is claimed and what is expressly permitted — forking and renaming are permitted.
 
-- Open an issue titled `License Violation Report`.
+Useful report contents: the URL or repository, what you believe happened, evidence such as a
+screenshot or commit history, and dates.
 
-The author may apply one or more actions:
+Channel: open an issue titled `Attribution report`.
 
-- Request voluntary compliance correction.
-- Issue cease-and-desist notice.
-- Submit platform takedown request.
-- Escalate through legal counsel when required.
+Possible responses: a request to correct it voluntarily, a formal notice, a platform takedown
+request, or legal counsel where warranted. The first step is always the first one.
 
 ## Español
 
-Si detecta uso indebido (uso comercial sin autorización, eliminación de avisos, falsa atribución o abuso de marca), repórtelo con evidencia.
+Este software es MIT. Usarlo comercialmente, dentro de una empresa, en un producto de pago o en un
+proyecto open source está permitido y no requiere permiso — nada de eso es una infracción y no hay
+nada que reportar.
 
-Contenido recomendado del reporte:
+Dos cosas sí vale la pena reportarlas:
 
-1. URL/repositorio o datos de empresa.
-2. Descripción de la posible violación.
-3. Evidencia (capturas, contratos, páginas de producto, historial de commits).
-4. Fechas y evaluación de impacto.
+**Atribución eliminada.** La Licencia MIT exige que el aviso de copyright acompañe a las copias y a
+las porciones sustanciales del software. Una redistribución que lo quita infringe la licencia.
 
-Canal de reporte:
+**Identidad usada indebidamente.** Alguien que presenta un fork como respaldado, certificado o
+soportado oficialmente por el autor, o que publica bajo su nombre, usuario, scope de npm o namespace
+MCP. En `TRADEMARK_POLICY.md` está qué se reclama y qué está expresamente permitido — hacer fork y
+renombrar están permitidos.
 
-- Abrir un issue con título `License Violation Report`.
+Contenido útil del reporte: la URL o repositorio, qué crees que pasó, evidencia como una captura o el
+historial de commits, y fechas.
 
-El autor podrá aplicar una o más acciones:
+Canal: abrir un issue con el título `Attribution report`.
 
-- Solicitar corrección voluntaria de cumplimiento.
-- Emitir requerimiento de cese de uso.
-- Presentar solicitud de baja en plataformas.
-- Escalar vía asesoría legal cuando sea necesario.
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+Respuestas posibles: pedir la corrección voluntaria, un requerimiento formal, una solicitud de baja
+en la plataforma, o asesoría legal si el caso lo amerita. El primer paso es siempre el primero.

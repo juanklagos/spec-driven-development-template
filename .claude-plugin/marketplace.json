@@ -1,7 +1,7 @@
 {
   "name": "sdd-template",
   "owner": {
-    "name": "Juan Klagos",
+    "name": "Juan Carlos Alvarez Lagos",
     "url": "https://github.com/juanklagos"
   },
   "metadata": {
@@ -15,10 +15,10 @@
       "description": "SDD workflow commands (/sdd:help, /sdd:new, /sdd:spec, /sdd:gate, /sdd:decision, /sdd:close, /sdd:tutor) plus the portable sdd-workflow skill. Bilingual EN/ES.",
       "version": "1.7.0",
       "author": {
-        "name": "Juan Klagos"
+        "name": "Juan Carlos Alvarez Lagos"
       },
       "homepage": "https://github.com/juanklagos/spec-driven-development-template",
-      "license": "PolyForm-Noncommercial-1.0.0",
+      "license": "MIT",
       "keywords": ["sdd", "spec-driven-development", "specs", "workflow", "education"]
     }
   ]

@@ -1,72 +1,67 @@
-# Trademark Policy / Política de Marca
+# Naming and Attribution / Nombre y atribución
 
 ## English
 
-"Spec-Driven Development Template" naming, branding references, and author attribution may not be used to imply endorsement, partnership, certification, or official support without prior written permission.
+The software is under the MIT License (see `LICENSE`). This page is about **names and accounts**, not
+about permission to use the software. Nothing here restricts what MIT grants you.
 
-Not allowed without written permission:
+### What is not claimed
 
-- Using the project name/logo as your product brand.
-- Stating or implying official partnership with the author.
-- Using author identity for marketing claims.
+No claim is made over the phrase "spec-driven development" or "spec-driven development template".
+Those describe a practice and a category. They are generic terms and anyone may use them, including
+in the name of a competing project.
 
-Allowed:
+### What is claimed
 
-- Factual attribution and citation.
-- Linking to the original repository.
-- Internal reference for educational noncommercial use.
+- The personal name **Juan Carlos Alvarez Lagos** and the handle **juanklagos**.
+- The npm scope **@juanklagos** and the packages published under it.
+- The MCP Registry namespace **io.github.juanklagos**.
+- The repository, the GitHub Pages site, and the Marketplace listing bound to them.
+
+These identify a person and their accounts. Using them to suggest that someone else's work is his,
+or that he endorses, certifies, partners with or supports a product, is not permitted.
+
+### Expressly permitted
+
+- **Fork it.** Publicly or privately, for any purpose.
+- **Rename it and ship it as your own product**, including commercially, under your own brand.
+- **Sell it, host it, offer it as a service**, or bundle it into something you charge for.
+- **Use it inside any company**, at any scale, with no notice to anyone and no fee.
+- **Quote and cite it**, link to it, teach from it, translate it.
+
+The one condition is the one MIT already imposes: keep the copyright notice with copies and
+substantial portions of the software. Do not publish a fork under this author's name, handle, npm
+scope or MCP namespace, because those identify him rather than the code.
 
 ## Español
 
-El nombre "Spec-Driven Development Template", referencias de marca y atribución del autor no pueden usarse para implicar respaldo, alianza, certificación o soporte oficial sin permiso escrito previo.
+El software está bajo Licencia MIT (ver `LICENSE`). Esta página trata de **nombres y cuentas**, no del
+permiso para usar el software. Nada de lo que sigue restringe lo que MIT te concede.
 
-No permitido sin permiso escrito:
+### Lo que no se reclama
 
-- Usar el nombre/logo del proyecto como marca de su producto.
-- Afirmar o insinuar alianza oficial con el autor.
-- Usar identidad del autor para reclamos de marketing.
+No se reclama derecho alguno sobre la expresión "spec-driven development" ni "spec-driven development
+template". Describen una práctica y una categoría. Son términos genéricos y cualquiera puede usarlos,
+incluso en el nombre de un proyecto competidor.
 
-Permitido:
+### Lo que sí se reclama
 
-- Atribución factual y cita.
-- Enlace al repositorio original.
-- Referencia interna para uso educativo no comercial.
+- El nombre personal **Juan Carlos Alvarez Lagos** y el usuario **juanklagos**.
+- El scope de npm **@juanklagos** y los paquetes publicados bajo él.
+- El namespace del MCP Registry **io.github.juanklagos**.
+- El repositorio, el sitio de GitHub Pages y la ficha de Marketplace asociada.
 
-## 🌐 Bilingual support / Soporte bilingüe
+Identifican a una persona y sus cuentas. No se permite usarlos para sugerir que el trabajo de otro es
+suyo, ni que él respalda, certifica, se alía con o da soporte a un producto.
 
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
+### Expresamente permitido
 
-## 🗣️ Prompt base / Base prompt
+- **Hacer un fork.** Público o privado, para cualquier fin.
+- **Renombrarlo y publicarlo como producto propio**, incluso comercialmente, bajo tu marca.
+- **Venderlo, hospedarlo, ofrecerlo como servicio** o integrarlo en algo por lo que cobres.
+- **Usarlo dentro de cualquier empresa**, a cualquier escala, sin avisar a nadie y sin pagar nada.
+- **Citarlo**, enlazarlo, enseñar con él, traducirlo.
 
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+La única condición es la que MIT ya impone: conservar el aviso de copyright junto a las copias y a las
+porciones sustanciales del software. No publiques un fork bajo el nombre, usuario, scope de npm o
+namespace MCP del autor, porque esos lo identifican a él y no al código.

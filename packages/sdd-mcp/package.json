@@ -24,7 +24,9 @@
   "description": "Spec-Driven Development MCP server: specs, plans, gates, consent, status, logbook tools and a visual dashboard. Bilingual EN/ES.",
   "files": [
     "dist",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE",
+    "TEMPLATE-OUTPUT.md"
   ],
   "repository": {
     "type": "git",
@@ -38,8 +40,8 @@
     "model-context-protocol",
     "specs"
   ],
-  "author": "Juan Klagos",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "author": "Juan Carlos Alvarez Lagos",
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   },

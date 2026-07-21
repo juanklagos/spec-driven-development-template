@@ -7,16 +7,11 @@
   - **LinkedIn:** [Juan Carlos Alvarez Lagos](https://www.linkedin.com/in/juan-carlos-alvarez-lagos-672298103/)
   - **Portfolio:** [juanklagos.github.io](https://juanklagos.github.io/)
 
+Copyright holder / Titular del copyright: **Juan Carlos Alvarez Lagos**.
+
 ### Professional Profile / Perfil Profesional
 
-CTO and software developer, more than 10 years leading the full development cycle of digital products. Most of that time went into multi-tenant SaaS architectures and microservices. Day-to-day stack: Laravel, Node.js, Vue 3 and Inertia.js, with AWS, Docker and CI/CD automation around it.
-
-### Experience / Experiencia
-
-- **CTO @ Praxis Studio SAS** (2022 — Present)
-- **Team Lead @ Cuemby Inc** (2020 — 2023)
-- **Front-End Developer @ IPCOM AI** (2021)
-- **Full-Stack Developer** (Various Roles since 2015)
+Software developer, more than 10 years leading the full development cycle of digital products. Most of that time went into multi-tenant SaaS architectures and microservices. Day-to-day stack: Laravel, Node.js, Vue 3 and Inertia.js, with AWS, Docker and CI/CD automation around it.
 
 ### Skills / Habilidades
 

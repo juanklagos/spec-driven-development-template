@@ -2,68 +2,43 @@
 
 ## English
 
-This project uses a noncommercial source-available model:
+This project is open source under the **MIT License**. You may use it for anything, including
+commercially and inside a company, without asking permission and without paying anything.
 
-- License: `LICENSE` (PolyForm Noncommercial 1.0.0)
-- Required notices: `NOTICE`
-- Commercial permissions: `COMMERCIAL_LICENSE.md`
-- Liability and warranty summary: `DISCLAIMER.md`
-- Brand and naming restrictions: `TRADEMARK_POLICY.md`
-- Violation reporting and actions: `ENFORCEMENT.md`
-- Contributor terms: `CLA.md`
+| File | What it covers |
+|---|---|
+| `../LICENSE` | The MIT License. The only license that governs this software. |
+| `../NOTICE` | Courtesy attribution. Adds no obligation. |
+| `../TEMPLATE-OUTPUT.md` | The documents you write with the templates are yours. |
+| `DISCLAIMER.md` | No warranty, no liability. |
+| `TRADEMARK_POLICY.md` | Names and accounts. Forking and renaming are expressly permitted. |
+| `COMMERCIAL_SUPPORT.md` | Paid support, training and sponsorship. Optional, never required. |
+| `CLA.md` | Terms for contributing code back to this repository. |
+| `ENFORCEMENT.md` | How to report a problem. |
+
+Copyright is held by Juan Carlos Alvarez Lagos. The MIT License is a grant, not a transfer: the
+copyright stays with the author while the permission to use travels with every copy.
 
 ## Español
 
-Este proyecto usa un modelo source-available no comercial:
+Este proyecto es open source bajo **Licencia MIT**. Puedes usarlo para lo que quieras, incluido uso
+comercial y dentro de una empresa, sin pedir permiso y sin pagar nada.
 
-- Licencia: `LICENSE` (PolyForm Noncommercial 1.0.0)
-- Avisos obligatorios: `NOTICE`
-- Permisos comerciales: `COMMERCIAL_LICENSE.md`
-- Resumen de garantía y responsabilidad: `DISCLAIMER.md`
-- Restricciones de marca y nombre: `TRADEMARK_POLICY.md`
-- Reporte de violaciones y acciones: `ENFORCEMENT.md`
-- Términos de contribución: `CLA.md`
+| Archivo | Qué cubre |
+|---|---|
+| `../LICENSE` | La Licencia MIT. La única licencia que rige este software. |
+| `../NOTICE` | Atribución por cortesía. No añade obligaciones. |
+| `../TEMPLATE-OUTPUT.md` | Los documentos que escribes con las plantillas son tuyos. |
+| `DISCLAIMER.md` | Sin garantía, sin responsabilidad. |
+| `TRADEMARK_POLICY.md` | Nombres y cuentas. Hacer fork y renombrar está expresamente permitido. |
+| `COMMERCIAL_SUPPORT.md` | Soporte, formación y patrocinio de pago. Opcional, nunca obligatorio. |
+| `CLA.md` | Términos para contribuir código a este repositorio. |
+| `ENFORCEMENT.md` | Cómo reportar un problema. |
+
+El copyright es de Juan Carlos Alvarez Lagos. La Licencia MIT es una concesión, no una cesión: el
+copyright se queda con el autor mientras el permiso de uso viaja con cada copia.
 
 ## Important / Importante
 
 This summary is informational and does not replace legal advice.
 Este resumen es informativo y no sustituye asesoría legal.
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```

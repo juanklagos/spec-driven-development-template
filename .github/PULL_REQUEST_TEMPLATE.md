@@ -11,8 +11,8 @@
 - [ ] `./scripts/validate-sdd.sh .` executed
 - [ ] `history.md` updated when scope changed
 - [ ] Logbook updated (`bitacora/`)
-- [ ] CLA accepted (`CLA.md`)
-- [ ] License policy reviewed (`LICENSE` + `COMMERCIAL_LICENSE.md`)
+- [ ] CLA accepted (`legal/CLA.md`)
+- [ ] License policy reviewed (`LICENSE`)
 
 ## Beginner impact / Impacto en personas nuevas
 

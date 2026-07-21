@@ -9,7 +9,7 @@
 [🇺🇸 English](./README.md) · 🇪🇸 **Español**
 
 <img src="https://img.shields.io/badge/version-v1.7.0-3b82f6?style=for-the-badge" alt="Versión">
-<img src="https://img.shields.io/badge/licencia-PolyForm_NC-8b5cf6?style=for-the-badge" alt="Licencia">
+<img src="https://img.shields.io/badge/licencia-MIT-8b5cf6?style=for-the-badge" alt="Licencia">
 <a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Último release"></a>
 
 <a href="https://juanklagos.github.io/spec-driven-development-template/es/"><img src="https://img.shields.io/badge/📖_Sitio_de_Docs-Navegar-0ea5e9?style=for-the-badge" alt="Sitio de documentación"></a>
@@ -238,9 +238,11 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 
 ## Legal y autoría
 
-- Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
+- Licencia: **MIT** — úsalo donde quieras, incluido uso comercial y dentro de una empresa, gratis y sin
+  pedir permiso. Conserva el aviso de copyright. [Marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
+- Lo que escribes con las plantillas es tuyo: [TEMPLATE-OUTPUT.md](./TEMPLATE-OUTPUT.md)
 - Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.7.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
-- Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
+- Copyright (c) 2026 Juan Carlos Alvarez Lagos ([AUTHORS.md](./AUTHORS.md))
 
 ---
 
