@@ -8,9 +8,9 @@
 
 [🇺🇸 English](./README.md) · 🇪🇸 **Español**
 
-<img src="https://img.shields.io/badge/version-v1.6.1-3b82f6?style=for-the-badge" alt="Versión">
+<img src="https://img.shields.io/badge/version-v1.7.0-3b82f6?style=for-the-badge" alt="Versión">
 <img src="https://img.shields.io/badge/licencia-PolyForm_NC-8b5cf6?style=for-the-badge" alt="Licencia">
-<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.1"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Último release"></a>
+<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Último release"></a>
 
 <a href="https://juanklagos.github.io/spec-driven-development-template/es/"><img src="https://img.shields.io/badge/📖_Sitio_de_Docs-Navegar-0ea5e9?style=for-the-badge" alt="Sitio de documentación"></a>
 <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Curso-Aprende_haciendo-16a34a?style=for-the-badge" alt="Curso interactivo"></a>
@@ -124,7 +124,7 @@ Si usas **Claude Code**, este repo trae slash commands listos — empieza con `/
 Exígela también en CI — este repo funciona además como GitHub Action, listada en el [GitHub Marketplace](https://github.com/marketplace/actions/sdd-validate):
 
 ```yaml
-- uses: juanklagos/spec-driven-development-template@v1.6.1
+- uses: juanklagos/spec-driven-development-template@v1.7.0
   with:
     path: "."      # raíz del proyecto (sidecar o standalone, autodetectado)
     strict: "true"
@@ -247,7 +247,7 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 ## ⚖️ Legal y autoría
 
 - Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
-- Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.6.1)
+- Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
 - Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
 
 ---

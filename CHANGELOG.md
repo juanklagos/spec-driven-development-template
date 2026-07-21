@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [v1.7.0] — 2026-07-21
 
 ### Added
 - **SDD Builder v2 — easy mode (spec 007)**: six features that let a beginner run the whole SDD loop from the canvas.
@@ -27,6 +27,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - **Tasks → GitHub issues (R3)**: a "🐙 Crear issues / Create issues" button in the drawer calls `POST /api/spec/:id/issues` → new transport module `packages/sdd-mcp/src/github.ts` (gh CLI via `execFile`, argument arrays, no shell). One issue per PENDING task with traceable title `[<specId>] <task>` and a bilingual body linking the bundle's `tasks.md`; basic idempotency by title (`gh issue list --search` narrowed + exact local prefix filter) reports created/skipped/failed per task, shown as a visual summary with issue links. Preconditions fail with clear bilingual errors the UI shows as-is (not a git repo, no remote, gh not installed, gh not authenticated, remote not resolvable as a GitHub repo).
   - **Presence over SSE (R4)**: the existing `/api/events` hub broadcasts `presence {count}` on every connect/disconnect; the top bar shows a "👥 N" chip when more than one client is viewing the workspace (tooltip "N personas viendo este workspace / people viewing this workspace"), hidden while live sync is off.
 - Integration test (`npm run mcp:test`) extended for spec 009: typed-edge color persisted by `sdd_board_connect`, spec→note typed edges never warn, a real approved→unapproved "depende de" edge produces exactly one `dependencyWarnings` entry in `sdd_gate_summary` (gate stays open), and the gh issue title/body builders are exercised without ever invoking the gh CLI.
+
+### Verified
+- Root + builder builds and typecheck · extended mcp:test · 3 SDD scripts at 0 errors
+- Browser verification of all three packs against fresh sandbox workspaces (screenshots)
 
 ## [v1.6.1] — 2026-07-20
 
