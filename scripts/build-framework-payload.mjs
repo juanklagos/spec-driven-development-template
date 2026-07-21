@@ -50,7 +50,9 @@ const ENTRIES = [
   "bitacora/templates",
   "playbooks",
   "quality",
-  "legal",
+  // "legal" was removed on 2026-07-21: init-project.sh used to copy this
+  // project's CLA and trademark policy into the user's repo. Scaffolders now
+  // emit THIRD-PARTY-NOTICES.md via scripts/lib/sdd-attribution.sh instead.
   // Guides copied by the full profile; docs/en/43-easy-mcp-guide.md also backs
   // the sdd://docs/easy-mcp resource.
   "docs/README.md",

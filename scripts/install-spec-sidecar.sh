@@ -24,6 +24,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPT_DIR/lib/sdd-attribution.sh"
 
 TARGET_PARENT="$(dirname "$TARGET")"
 mkdir -p "$TARGET_PARENT"
@@ -150,6 +151,7 @@ copy_if_absent "$ROOT_DIR/.sdd.README.template.md" "$SPEC_ROOT/.sdd/README.md"
 # The gate and its dependencies are refreshed on every install, not preserved:
 # they are the enforcement machinery, not user content.
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$SPEC_ROOT/scripts/lib/sdd-root.sh"
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-attribution.sh" "$SPEC_ROOT/scripts/lib/sdd-attribution.sh"
 copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$SPEC_ROOT/scripts/validate-sdd.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$SPEC_ROOT/scripts/check-sdd-policy.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$SPEC_ROOT/scripts/check-sdd-gate.sh"
@@ -297,6 +299,8 @@ write_root_md_stub "$TARGET_ABS/ROO.md"
 write_root_text_stub "$TARGET_ABS/.cursorrules"
 write_root_text_stub "$TARGET_ABS/.clauderules"
 write_root_text_stub "$TARGET_ABS/.github/copilot-instructions.md"
+
+sdd_write_attribution "$SPEC_ROOT" "$ROOT_DIR"
 
 if [ -n "$STUB_CONFLICTS" ]; then
   cat > "$SPEC_ROOT/ROOT_AI_STUB_CONFLICTS.md" <<EOF

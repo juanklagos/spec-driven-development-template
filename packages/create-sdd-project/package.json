@@ -1,6 +1,6 @@
 {
   "name": "@juanklagos/create-sdd-project",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "description": "Scaffold a Spec-Driven Development project: compact spec/ sidecar (recommended) or full standalone workspace. Bilingual EN/ES.",
   "type": "module",
   "bin": {

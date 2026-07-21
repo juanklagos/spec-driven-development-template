@@ -8,6 +8,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+Nothing yet.
+
+---
+
+## [v2.0.0] — 2026-07-21
+
+### BREAKING — relicensed to MIT
+- **The license changed from PolyForm Noncommercial 1.0.0 to `MIT`.** Anyone may now use this at any company, in any product, commercially, and inside an open-source project, free and without asking. The only condition is the one MIT imposes: keep the copyright notice with copies and substantial portions.
+
+  Three things forced it. `legal/COMMERCIAL_LICENSE.md` counted internal enterprise use as commercial, so no employee could use this at work — which was the whole point of the project. GitHub reported the repository as `spdx_id: NOASSERTION`, `name: "Other"`, because PolyForm is not machine-readable: to a corporate scanner it read as *unlicensed*, a harder block than a declared restrictive license. And the noncommercial restriction violates OSI's field-of-endeavor clause, so no open-source project could incorporate a file. Relicensing cost one commit: 145 commits, one author, zero external contributors.
+
+  Versions already published under PolyForm stay under PolyForm; this applies from 2.0.0 forward. Recorded in [`bitacora/decisiones/2026-07-21-relicencia-mit.md`](bitacora/decisiones/2026-07-21-relicencia-mit.md), which supersedes the 2026-03-12 record.
+- **The three published packages now actually contain a license.** All three 1.7.0 tarballs shipped with no `LICENSE` at all. `LICENSE`, `NOTICE` and `TEMPLATE-OUTPUT.md` are now on disk in each package directory *and* listed in each `files` array — npm silently ignores `files` entries naming a path that does not exist, so both halves are required.
+- **`TEMPLATE-OUTPUT.md`** — a covenant not to assert: the specs, plans, tasks, decision records and logbooks you write by filling in the templates are yours, with no attribution owed. Deliberately not a second license, so scanners see exactly one SPDX identifier in the tarball.
+- **`legal/COMMERCIAL_LICENSE.md` removed**, replaced by `legal/COMMERCIAL_SUPPORT.md`: there is nothing to buy, and paid support is a service rather than a permission.
+- **`legal/TRADEMARK_POLICY.md` rewritten.** It used to claim the phrase "Spec-Driven Development Template" — a generic, unregistrable term — while forbidding use of the project name as a product brand and never granting fork-and-rename. It now disclaims the generic phrase, expressly permits forking, renaming, selling and hosting, and scopes what is claimed to the author's name, handle, the `@juanklagos` npm scope and the `io.github.juanklagos` MCP namespace.
+- **`legal/CLA.md` rewritten** on the Apache ICLA shape: contributor retains copyright, the grant is non-exclusive, an express patent license (there was none before, and MIT has none), outbound MIT, plus DCO sign-off. The clause stating the project "is not open source under OSI terms" is gone.
+- **Scaffolders no longer copy `legal/` into the user's project.** `init-project.sh --profile=full` used to `cp -R legal/`, handing the user this project's CLA, trademark policy and enforcement policy as if they were their own; the npm framework payload shipped the same folder. Both now emit `THIRD-PARTY-NOTICES.md` through `scripts/lib/sdd-attribution.sh`, which records what the project received and under what terms. It never writes a file named `LICENSE` into the target — that slot belongs to the user.
+
+### Added
+- **`scripts/check-license-surface.sh`, wired into `.github/workflows/validate.yml` as its own job.** Checks that exactly one `LICENSE*` sits at the root (two is what makes GitHub report `NOASSERTION`), that the package copies are byte-identical to it, that every tracked manifest declares `MIT`, that `LICENSE`/`NOTICE`/`TEMPLATE-OUTPUT.md` are both listed in `files` and present on disk, that no stale license term survives on a declaration surface, and that `server.json` has not fallen behind the packages — which would make the MCP Registry advertise the wrong version. The manifest list is derived at runtime from `git ls-files`, so a new package cannot silently escape it. Advisory for one release, `--strict` to fail. Verified against five injected regressions, and it caught a real one during development.
+
+### Changed
+- Version surface swept to `2.0.0` across the root, the three packages, `server.json`, both plugin manifests, the README badges and Action snippets in both languages, and guides 35 and 37.
+- Guide 31 (legal framework) inverted in both languages: the two ❌ tables became one ✅ table where companies, consultancies, paid SaaS and open-source projects are all permitted.
+- `AUTHORS.md` no longer lists employers, at the copyright holder's request. The copyright line reads `Juan Carlos Alvarez Lagos` everywhere.
+
 ### Fixed
 - **`npx @juanklagos/sdd-mcp` crashed instead of starting (C1).** `dist/index.js` was published without an interpreter line, so the shell reinterpreted the JavaScript (`import: command not found`). Both entrypoints (`src/index.ts`, `src/http.ts`) now begin with `#!/usr/bin/env node`, which `tsc` preserves into `dist/`. CI never caught it because every smoke test ran `node dist/index.js` explicitly, never the package as a package.
 - **An npm-installed server resolved its framework root to `<project>/node_modules` (C2).** `getFrameworkRoot()` walked `../../../` up from `dist/`, which is correct in the monorepo and wrong in `node_modules`: the five `sdd://` framework resources returned raw ENOENT and `sdd_create_workspace` failed with `bash <project>/node_modules/scripts/create-www-project.sh: No such file or directory`. `@juanklagos/sdd-core` now ships a `framework/` payload (policy, entry documents, guides, spec/bitácora templates and the scaffolding scripts, built at pack time by `scripts/build-framework-payload.mjs`) and `resolveFrameworkRoot()` reports which layout is live — `repo` (checkout, always preferred), `package` (bundled payload) or `missing`. A broken install now fails with one bilingual, actionable message (`frameworkAssetError`, defined once in sdd-core and used by both the scaffolder and the MCP resources) instead of leaking ENOENT.

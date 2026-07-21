@@ -50,3 +50,17 @@ jobs:
 
       - name: Run check-sdd-gate.sh
         run: ./scripts/check-sdd-gate.sh .
+
+  license-surface:
+    # Separate job: a drifting license surface is not an SDD-discipline problem,
+    # and it must stay visible even when the validation job is red.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Run check-license-surface.sh
+        # Advisory for one release. Flip to --strict once it has proven quiet.
+        run: |
+          chmod +x ./scripts/check-license-surface.sh
+          ./scripts/check-license-surface.sh .

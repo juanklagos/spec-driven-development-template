@@ -26,6 +26,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPT_DIR/lib/sdd-attribution.sh"
 
 TARGET_PARENT="$(dirname "$TARGET")"
 mkdir -p "$TARGET_PARENT"
@@ -123,6 +124,7 @@ copy_if_absent "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copi
 # check-sdd-gate.sh and validate-sdd.sh).
 mkdir -p "$TARGET/scripts/lib"
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$TARGET/scripts/lib/sdd-root.sh"
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-attribution.sh" "$TARGET/scripts/lib/sdd-attribution.sh"
 copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
@@ -154,8 +156,12 @@ fi
 
 if [ "$PROFILE" = "full" ]; then
   cp -R "$ROOT_DIR/docs/." "$TARGET/docs/"
-  cp -R "$ROOT_DIR/legal" "$TARGET/legal"
 fi
+
+# The full profile used to copy legal/ wholesale, which handed the user this
+# project's CLA and trademark policy as if they were their own. What a scaffolded
+# project needs is a record of what it received and under what terms.
+sdd_write_attribution "$TARGET" "$ROOT_DIR"
 
 cat <<MSG
 🎉 Project initialized at / Proyecto inicializado en: $TARGET
