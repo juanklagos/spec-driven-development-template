@@ -1,12 +1,13 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-17 16:42 UTC
+Generated at / Generado en: 2026-07-21 01:04 UTC
 
 ## Active specs / Specs activas
 
 | Number | Name | Status | Priority | Owner | Updated |
 |---|---|---|---|---|---|
-| - | - | - | - | - | - |
+| 006 | visual-spec-builder | In Progress / En progreso (F1-F2 hechas; F3 pospuesta) | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 007 | builder-v2-easy | In Progress / En progreso | High / Alta | Juan Klagos / Claude | 2026-07-20 |
 
 ## All specs snapshot / Resumen de todas las specs
 
@@ -17,11 +18,15 @@ Generated at / Generado en: 2026-07-17 16:42 UTC
 | 003 | distribution-and-tutor | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 004 | site-dashboard-community | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 005 | learning-for-everyone | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
+| 006 | visual-spec-builder | In Progress / En progreso (F1-F2 hechas; F3 pospuesta) | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 007 | builder-v2-easy | In Progress / En progreso | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 008 | builder-v3-ai | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 009 | builder-v4-teams | Draft / Borrador | Medium / Media | Juan Klagos / Claude | 2026-07-20 |
 
 ## Task progress / Progreso de tareas
 
-- Pending / Pendientes: 3
-- Completed / Completadas: 45
+- Pending / Pendientes: 21
+- Completed / Completadas: 52
 
 ## Recent log excerpt / Extracto reciente de bitácora
 
