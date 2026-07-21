@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { validateEarsCriterion } from "../packages/sdd-core/dist/index.js";
 import packageJson from "../package.json" with { type: "json" };
 
 const transport = new StdioClientTransport({
@@ -361,6 +362,40 @@ async function main() {
     );
     assert.equal(postSummary.approvedSpecs, 1, "002 should now count as approved");
     assert.equal(postSummary.ok, true, "gate should stay open after the surgical edits");
+
+    // --- Builder v3 (spec 008, R3): shared EARS lint exported by sdd-core ---
+    // The builder frontend duplicates these rules in builder/src/ears.ts
+    // ("keep in sync" contract); this block keeps the core copy honest.
+    assert.equal(
+      validateEarsCriterion("CUANDO el usuario pulse pagar, EL SISTEMA DEBERÁ crear el pedido.").level,
+      "ok"
+    );
+    assert.equal(
+      validateEarsCriterion("WHEN the user clicks pay, THE SYSTEM SHALL create the order.").level,
+      "ok"
+    );
+    assert.equal(
+      validateEarsCriterion("while offline, the system shall queue writes").level,
+      "ok",
+      "the EARS pattern must be case-insensitive"
+    );
+    assert.equal(
+      validateEarsCriterion("- SI el pago falla, EL SISTEMA DEBERA reintentar 3 veces.").level,
+      "ok",
+      "leading bullets and unaccented DEBERA are tolerated"
+    );
+    const missingShall = validateEarsCriterion("El checkout debe funcionar bien");
+    assert.equal(missingShall.level, "warning");
+    assert.equal(missingShall.matchesPattern, false);
+    const vague = validateEarsCriterion("CUANDO cargue el panel, EL SISTEMA DEBERÁ ser rápido.");
+    assert.equal(vague.level, "warning");
+    assert.deepEqual(vague.vagueWords, ["rápido"]);
+    assert.equal(
+      validateEarsCriterion("CUANDO cargue el panel, EL SISTEMA DEBERÁ responder en menos de 2 segundos.").level,
+      "ok",
+      "a measurable number silences the vague-word warning"
+    );
+    assert.equal(validateEarsCriterion("   ").level, "ok", "empty criteria lint clean");
 
     const indexResource = await client.readResource({
       uri: `sdd://project/${projectName}/index`

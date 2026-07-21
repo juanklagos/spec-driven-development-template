@@ -1124,6 +1124,161 @@ code {
   align-self: flex-start;
 }
 
+/* ---------- ✨ Assistant wizard + agent prompts (spec 008, R1/R2) ---------- */
+
+.assistant-input {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.55rem 0.65rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.assistant-input:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.draft-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.draft-idea {
+  margin: 0;
+  font-size: 0.84rem;
+  background: var(--amber-soft);
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+.draft-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.draft-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.draft-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.draft-row input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.55rem;
+}
+
+.draft-row input:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.draft-epic-tag {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  white-space: nowrap;
+}
+
+.agent-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+}
+
+.agent-section > .btn {
+  align-self: flex-start;
+}
+
+.prompt-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.prompt-box textarea {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  padding: 0.55rem 0.65rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.prompt-box .btn {
+  align-self: flex-start;
+}
+
+.implement-wrap {
+  display: block;
+}
+
+.implement-btn {
+  width: 100%;
+}
+
+.implement-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* ---------- EARS live lint (spec 008, R3) ---------- */
+
+.editor-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.editor-row input.lint-ok {
+  border-color: var(--accent);
+}
+
+.editor-row input.lint-warn {
+  border-color: var(--amber);
+}
+
+.editor-row input.lint-warn:focus {
+  outline-color: var(--amber-soft);
+}
+
+.lint-hint {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--amber);
+}
+
 /* ---------- React Flow chrome tweaks ---------- */
 
 .react-flow__attribution {

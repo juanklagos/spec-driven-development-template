@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
 import { useBuilderStore } from "../store";
+import { ImplementModal } from "./ImplementModal";
 import { SectionEditor } from "./SectionEditor";
 import type { SpecDetail, TaskItem } from "../types";
 
 const EXCERPT_LINES = 25;
+
+/** The SDD hard stop, shown on the disabled implement button (spec 008, R2). */
+const HARD_STOP =
+  "No hay código sin spec aprobada y plan consistente — aprueba la spec primero. / " +
+  "No code before approved spec and consistent plan — approve the spec first.";
 
 type DrawerTab = "view" | "edit";
 
@@ -72,6 +78,7 @@ export function SpecDrawer() {
   const specId = useBuilderStore((s) => s.selectedSpecId);
   const summary = useBuilderStore((s) => (s.selectedSpecId ? s.specs[s.selectedSpecId] : undefined));
   const specsVersion = useBuilderStore((s) => s.specsVersion);
+  const projectRoot = useBuilderStore((s) => s.projectRoot);
   const selectSpec = useBuilderStore((s) => s.selectSpec);
   const applyTasks = useBuilderStore((s) => s.applyTasks);
   const refreshSpecs = useBuilderStore((s) => s.refreshSpecs);
@@ -81,12 +88,14 @@ export function SpecDrawer() {
   const [detail, setDetail] = useState<SpecDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [implementOpen, setImplementOpen] = useState(false);
   const [pendingLine, setPendingLine] = useState<number | null>(null);
   const pendingRef = useRef<number | null>(null);
   pendingRef.current = pendingLine;
 
   useEffect(() => {
     setTab("view");
+    setImplementOpen(false);
     if (!specId) {
       setDetail(null);
       return;
@@ -200,6 +209,21 @@ export function SpecDrawer() {
       {detail && tab === "view" ? (
         <div className="drawer-body nowheel">
           {!isApproved ? <ApprovePanel specId={specId} onDone={handleApproved} /> : null}
+          {/* Copy-first implement kickoff (spec 008, R2): hard stop while not approved. */}
+          <span className="implement-wrap" title={isApproved ? undefined : HARD_STOP}>
+            <button
+              className={`btn implement-btn${isApproved ? " primary" : ""}`}
+              disabled={!isApproved}
+              title={
+                isApproved
+                  ? "Prepara el prompt exacto para tu agente / Prepares the exact prompt for your agent"
+                  : HARD_STOP
+              }
+              onClick={() => setImplementOpen(true)}
+            >
+              🤖 Implementar con agente / Implement with agent
+            </button>
+          </span>
           <h3>Tareas / Tasks</h3>
           <ul className="task-list">
             {detail.tasks.length === 0 ? (
@@ -233,6 +257,14 @@ export function SpecDrawer() {
         <div className="drawer-body nowheel">
           <SectionEditor specId={specId} specMarkdown={detail.docs.spec} onSaved={handleSectionsSaved} />
         </div>
+      ) : null}
+      {implementOpen && isApproved ? (
+        <ImplementModal
+          specId={specId}
+          specDir={summary?.dir ?? `specs/${specId}`}
+          projectRoot={projectRoot}
+          onClose={() => setImplementOpen(false)}
+        />
       ) : null}
     </section>
   );

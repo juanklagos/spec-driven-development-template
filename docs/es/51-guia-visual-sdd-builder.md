@@ -48,6 +48,27 @@ El servidor vigila tu directorio `specs/`. Edita cualquier `tasks.md` en tu edit
 
 Los agentes tienen los mismos tres poderes por MCP: `sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`.
 
+## Novedades de la v3 (spec 008) — IA sin API keys
+
+El builder nunca llama a un LLM por su cuenta (no hay keys que configurar). Las heurísticas locales cubren lo rápido; lo que necesita inteligencia real se delega a **tu** agente con prompts copiables y las tools MCP.
+
+- **✨ Asistente — «Descríbeme tu proyecto»**: un wizard en la barra superior toma una frase (p. ej. *«una tienda online de plantas con pagos y panel de administración»*) y propone un borrador de board — una nota de idea, 2-4 épicas y 3-6 specs agrupadas por dominios detectados (auth, pagos, catálogo, admin, API, notificaciones, perfil, búsqueda; fallback MVP genérico). El borrador se previsualiza y edita (renombrar/quitar specs, «Regenerar» para nombres alternativos) y **nada toca el disco** hasta pulsar «Crear en el board» — entonces ejecuta las mismas llamadas reales que la galería de plantillas (un `POST /api/spec` por spec + el lienzo pre-ordenado). Solo en workspaces vacíos.
+- **🤖 Implementar con agente**: en el drawer de una spec **aprobada**, un botón precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) con un botón «Copiar prompt». Copy-first por diseño — sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop: *no hay código sin spec aprobada y plan consistente*.
+- **Lint EARS en vivo**: al escribir criterios de aceptación en el editor guiado, cada fila recibe un borde verde (con forma EARS) o ámbar (sugerencia) con una pista corta bilingüe — el esqueleto `CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …` y las palabras vagas sin número medible (*rápido, fácil, intuitivo…*). Solo consultivo: nunca bloquea el guardado. La misma regla está exportada para agentes como `validateEarsCriterion` en `sdd-core`.
+
+### El prompt orquestador (IA real vía MCP)
+
+La sección «¿Tienes un agente IA?» del asistente ofrece este prompt (cópialo también desde aquí). Pégalo en cualquier agente conectado a `sdd-mcp` y construirá el board con inteligencia real — incluidas las secciones borrador dentro de cada spec:
+
+```text
+Eres mi agente SDD conectado al MCP `sdd-mcp`. Mi proyecto: "<describe tu proyecto>".
+Objetivo: puebla el SDD Builder board como el asistente ✨, pero con inteligencia real.
+1. Lee el estado actual con `sdd_board_read` (projectRoot: <ruta del workspace>).
+2. Propón 2-4 épicas y 3-6 specs con nombres claros, en minúsculas y sin acentos; enséñame la propuesta y espera mi OK antes de escribir nada.
+3. Con mi OK: crea cada spec real con `sdd_create_spec`; rellena su borrador con `sdd_update_spec_sections` (historia de usuario, escenarios, criterios EARS «CUANDO … EL SISTEMA DEBERÁ …», fuera de alcance); dibuja el board con `sdd_board_write` + `sdd_board_connect` (nota de idea → épicas → specs, edges etiquetados).
+4. No implementes código: el gate SDD sigue cerrado hasta que yo apruebe las specs.
+```
+
 ## Limitaciones (honestas)
 
 - El contenido largo de `spec.md` más allá de las secciones guiadas se edita en tu editor, no en el lienzo (por diseño: el lienzo compone, tu editor escribe).

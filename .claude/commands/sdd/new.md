@@ -16,7 +16,7 @@ Guide the user from zero to a first spec ready for approval. Respond in the user
    - Existing/external project → compact sidecar: `./scripts/install-spec-sidecar.sh <path> --profile=recommended` (SDD artifacts in `./spec/`, code stays in the project root).
    - Project living inside this template repo → `./scripts/create-www-project.sh <name> <agent>`.
 3. Fill `idea/IDEA_GENERAL.md` (or `./spec/idea/IDEA_GENERAL.md`) with name, problem, goal, MVP scope.
-4. Create the first spec bundle: `./scripts/new-spec.sh "<feature>" "<owner>"` (sidecar: `./spec/scripts/new-spec.sh`). Visual alternative: the SDD Builder can create and connect spec cards on a canvas (guide 51). / Alternativa visual: el SDD Builder crea y conecta tarjetas de spec en un lienzo (guía 51).
+4. Create the first spec bundle: `./scripts/new-spec.sh "<feature>" "<owner>"` (sidecar: `./spec/scripts/new-spec.sh`). Visual alternative: the SDD Builder can create and connect spec cards on a canvas (guide 51). / Alternativa visual: el SDD Builder crea y conecta tarjetas de spec en un lienzo (guía 51). Its ✨ assistant drafts the whole board (idea → epics → specs) from one sentence. / Su asistente ✨ genera el board completo (idea → épicas → specs) desde una frase.
 5. Draft `spec.md` with the user: user story, Given/When/Then scenarios, EARS acceptance criteria (`WHEN [trigger], THE SYSTEM SHALL [behavior]`), out of scope.
 6. Ask the user to approve the spec; record status/date/approver/evidence in its approval section.
 7. Close by pointing to `/sdd:gate` as the next step.

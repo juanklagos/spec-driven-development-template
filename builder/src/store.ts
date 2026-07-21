@@ -10,7 +10,7 @@ import {
 import { create } from "zustand";
 import { api, errorMessage } from "./api";
 import { ARROW, EPIC_COLOR, IDEA_COLOR, NOTE_CARD, SPEC_CARD, boardToFlow, flowToBoard } from "./convert";
-import { EPIC_NOTE, type BoardTemplate } from "./templates";
+import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates";
 import type {
   AppEdge,
   AppNode,
@@ -75,9 +75,10 @@ interface BuilderStore {
   /** Canvas history for undo/redo (bounded snapshots of nodes+edges). */
   past: Snapshot[];
   future: Snapshot[];
-  /** UI: welcome tour + template gallery visibility. */
+  /** UI: welcome tour + template gallery + ✨ assistant visibility. */
   tourOpen: boolean;
   galleryOpen: boolean;
+  assistantOpen: boolean;
 
   load: () => Promise<void>;
   onNodesChange: (changes: NodeChange<AppNode>[]) => void;
@@ -95,11 +96,13 @@ interface BuilderStore {
   pushHistory: () => void;
   undo: () => void;
   redo: () => void;
+  applyBoardPlan: (plan: BoardPlan) => Promise<void>;
   applyTemplate: (template: BoardTemplate) => Promise<void>;
   openTour: () => void;
   closeTour: (dontShowAgain: boolean) => void;
   maybeStartTour: () => void;
   setGalleryOpen: (open: boolean) => void;
+  setAssistantOpen: (open: boolean) => void;
   scheduleSave: () => void;
   flushSave: () => Promise<void>;
   setLiveStatus: (status: LiveStatus) => void;
@@ -128,6 +131,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   future: [],
   tourOpen: false,
   galleryOpen: false,
+  assistantOpen: false,
 
   load: async () => {
     set({ loading: true, loadError: null });
@@ -316,10 +320,11 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     get().scheduleSave();
   },
 
-  // Apply a gallery template: create every spec for real (POST /api/spec),
-  // then persist a pre-laid-out canvas (PUT /api/board) and reload. Guarded
-  // against non-empty workspaces using the server's spec list as the truth.
-  applyTemplate: async (template) => {
+  // Apply a board plan (template gallery or ✨ assistant draft): create every
+  // spec for real (POST /api/spec, in order), then persist a pre-laid-out
+  // canvas (PUT /api/board) and reload. Guarded against non-empty workspaces
+  // using the server's spec list as the truth.
+  applyBoardPlan: async (plan) => {
     const board = await api.getBoard();
     if (board.specs.length > 0) {
       throw new Error(
@@ -329,27 +334,27 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     }
 
     const idByKey = new Map<string, string>();
-    for (const spec of template.specs) {
+    for (const spec of plan.specs) {
       const created = await api.createSpec(spec.name);
       idByKey.set(spec.key, created.specId);
     }
-    const epicIdByKey = new Map(template.epics.map((epic) => [epic.key, `note-${template.id}-${epic.key}`]));
-    const resolve = (key: string): string | undefined => idByKey.get(key) ?? epicIdByKey.get(key);
+    const noteIdByKey = new Map(plan.notes.map((note) => [note.key, `note-${plan.id}-${note.key}`]));
+    const resolve = (key: string): string | undefined => idByKey.get(key) ?? noteIdByKey.get(key);
 
     const nodes: CanvasNode[] = [
-      ...template.epics.map(
-        (epic): CanvasNode => ({
-          id: epicIdByKey.get(epic.key) as string,
+      ...plan.notes.map(
+        (note): CanvasNode => ({
+          id: noteIdByKey.get(note.key) as string,
           type: "text",
-          text: epic.text,
-          color: EPIC_NOTE.color,
-          x: epic.x,
-          y: epic.y,
-          width: EPIC_NOTE.width,
-          height: EPIC_NOTE.height
+          text: note.text,
+          color: note.color,
+          x: note.x,
+          y: note.y,
+          width: note.width,
+          height: note.height
         })
       ),
-      ...template.specs.map(
+      ...plan.specs.map(
         (spec): CanvasNode => ({
           id: idByKey.get(spec.key) as string,
           type: "file",
@@ -361,13 +366,13 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         })
       )
     ];
-    const edges: CanvasEdge[] = template.edges.flatMap((edge): CanvasEdge[] => {
+    const edges: CanvasEdge[] = plan.edges.flatMap((edge): CanvasEdge[] => {
       const fromNode = resolve(edge.from);
       const toNode = resolve(edge.to);
       if (!fromNode || !toNode) return [];
       return [
         {
-          id: `edge-${template.id}-${edge.from}-${edge.to}`,
+          id: `edge-${plan.id}-${edge.from}-${edge.to}`,
           fromNode,
           toNode,
           fromSide: "right",
@@ -382,6 +387,8 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     lastBoardPutAt = Date.now();
     await get().load();
   },
+
+  applyTemplate: async (template) => get().applyBoardPlan(templateToPlan(template)),
 
   openTour: () => set({ tourOpen: true }),
 
@@ -408,6 +415,8 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   setGalleryOpen: (open) => set({ galleryOpen: open }),
+
+  setAssistantOpen: (open) => set({ assistantOpen: open }),
 
   scheduleSave: () => {
     set({ saveState: "dirty" });

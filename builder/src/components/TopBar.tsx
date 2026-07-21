@@ -124,6 +124,7 @@ export function TopBar() {
   const flushSave = useBuilderStore((s) => s.flushSave);
   const openTour = useBuilderStore((s) => s.openTour);
   const setGalleryOpen = useBuilderStore((s) => s.setGalleryOpen);
+  const setAssistantOpen = useBuilderStore((s) => s.setAssistantOpen);
 
   return (
     <header className="topbar">
@@ -139,6 +140,13 @@ export function TopBar() {
         <span className="topbar-sep" aria-hidden />
         <HistoryButtons />
         <ExportPngButton />
+        <button
+          className="btn"
+          onClick={() => setAssistantOpen(true)}
+          title="Describe tu proyecto y genera un borrador de board / Describe your project and generate a draft board"
+        >
+          ✨ Asistente / Assistant
+        </button>
         <button className="btn" onClick={() => setGalleryOpen(true)}>
           🧩 Plantillas / Templates
         </button>

@@ -6,6 +6,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api, errorMessage } from "../api";
+import { lintEarsCriterion } from "../ears";
 import { parseSpecSections } from "../sections";
 import type { SpecSectionsInput } from "../types";
 
@@ -27,37 +28,51 @@ interface ListEditorProps {
   addLabel: string;
   /** Autocomplete the EARS prefix when focusing an empty row. */
   earsAutocomplete?: boolean;
+  /** Live EARS lint per row (spec 008, R3): advisory only, never blocks saving. */
+  earsLint?: boolean;
 }
 
-function ListEditor({ label, items, onChange, placeholder, addLabel, earsAutocomplete }: ListEditorProps) {
+function ListEditor({ label, items, onChange, placeholder, addLabel, earsAutocomplete, earsLint }: ListEditorProps) {
   const setItem = (index: number, value: string) => {
     onChange(items.map((item, i) => (i === index ? value : item)));
   };
   return (
     <div className="editor-field">
       <span className="editor-label">{label}</span>
-      {items.map((item, index) => (
-        // Index keys are fine here: rows are only appended/removed in place.
-        <div className="editor-row" key={index}>
-          <input
-            value={item}
-            placeholder={placeholder}
-            onChange={(e) => setItem(index, e.target.value)}
-            onFocus={(e) => {
-              if (earsAutocomplete && e.currentTarget.value === "") setItem(index, EARS_PREFIX);
-            }}
-          />
-          <button
-            type="button"
-            className="icon-btn"
-            aria-label="Quitar / Remove"
-            title="Quitar / Remove"
-            onClick={() => onChange(items.filter((_, i) => i !== index))}
-          >
-            ✕
-          </button>
-        </div>
-      ))}
+      {items.map((item, index) => {
+        // Skip the lint on untouched rows (empty or the freshly autocompleted prefix).
+        const value = item.trim();
+        const lint =
+          earsLint && value !== "" && value !== EARS_PREFIX.trim() ? lintEarsCriterion(item) : null;
+        return (
+          // Index keys are fine here: rows are only appended/removed in place.
+          <div className="editor-item" key={index}>
+            <div className="editor-row">
+              <input
+                value={item}
+                className={lint ? (lint.level === "ok" ? "lint-ok" : "lint-warn") : undefined}
+                placeholder={placeholder}
+                onChange={(e) => setItem(index, e.target.value)}
+                onFocus={(e) => {
+                  if (earsAutocomplete && e.currentTarget.value === "") setItem(index, EARS_PREFIX);
+                }}
+              />
+              <button
+                type="button"
+                className="icon-btn"
+                aria-label="Quitar / Remove"
+                title="Quitar / Remove"
+                onClick={() => onChange(items.filter((_, i) => i !== index))}
+              >
+                ✕
+              </button>
+            </div>
+            {lint && lint.hints.length > 0 ? (
+              <p className="lint-hint">💡 {lint.hints.join(" · ")}</p>
+            ) : null}
+          </div>
+        );
+      })}
       <button type="button" className="btn small" onClick={() => onChange([...items, ""])}>
         + {addLabel}
       </button>
@@ -153,6 +168,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
         placeholder={EARS_PLACEHOLDER}
         addLabel="Añadir criterio / Add criterion"
         earsAutocomplete
+        earsLint
       />
       <label className="editor-field">
         <span className="editor-label">Fuera de alcance / Out of scope</span>

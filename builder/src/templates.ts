@@ -41,6 +41,53 @@ export interface BoardTemplate {
 
 export const EPIC_NOTE = { width: 260, height: 110, color: EPIC_COLOR };
 
+// --- Board plans -----------------------------------------------------------
+// Neutral "board plan" shape applied by the store (applyBoardPlan): the
+// template gallery converts its templates into plans, and the ✨ assistant
+// (spec 008, assistant.ts) builds plans from its heuristic drafts. Specs are
+// created in array order (POST /api/spec), so numbering stays deterministic.
+
+export interface BoardPlanNote {
+  key: string;
+  text: string;
+  color: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface BoardPlanEdge {
+  from: string;
+  to: string;
+  label?: string;
+}
+
+export interface BoardPlan {
+  id: string;
+  notes: BoardPlanNote[];
+  specs: TemplateSpec[];
+  /** `from`/`to` reference a spec `key` or a note `key`. */
+  edges: BoardPlanEdge[];
+}
+
+export function templateToPlan(template: BoardTemplate): BoardPlan {
+  return {
+    id: template.id,
+    notes: template.epics.map((epic) => ({
+      key: epic.key,
+      text: epic.text,
+      color: EPIC_NOTE.color,
+      x: epic.x,
+      y: epic.y,
+      width: EPIC_NOTE.width,
+      height: EPIC_NOTE.height
+    })),
+    specs: template.specs,
+    edges: template.edges
+  };
+}
+
 const THEN = "luego / then";
 const CONTAINS = "contiene / contains";
 

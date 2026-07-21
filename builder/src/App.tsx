@@ -20,6 +20,7 @@ import {
 } from "@xyflow/react";
 import { api } from "./api";
 import { startLive } from "./live";
+import { AssistantWizard } from "./components/AssistantWizard";
 import { LabeledEdge } from "./components/LabeledEdge";
 import { NewSpecModal } from "./components/NewSpecModal";
 import { NoteNode } from "./components/NoteNode";
@@ -96,6 +97,7 @@ function Shell() {
   const flushSave = useBuilderStore((s) => s.flushSave);
   const tourOpen = useBuilderStore((s) => s.tourOpen);
   const galleryOpen = useBuilderStore((s) => s.galleryOpen);
+  const assistantOpen = useBuilderStore((s) => s.assistantOpen);
   const maybeStartTour = useBuilderStore((s) => s.maybeStartTour);
 
   const { screenToFlowPosition, fitView } = useReactFlow();
@@ -279,6 +281,7 @@ function Shell() {
         <NewSpecModal onClose={() => setSpecModalPos(null)} onCreate={handleCreateSpec} />
       ) : null}
       {galleryOpen ? <TemplateGallery /> : null}
+      {assistantOpen ? <AssistantWizard /> : null}
       {tourOpen ? <Tour /> : null}
     </div>
   );

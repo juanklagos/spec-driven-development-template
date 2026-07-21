@@ -48,6 +48,27 @@ The server watches your `specs/` directory. Edit any `tasks.md` in your editor a
 
 Agents get the same three powers over MCP: `sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`.
 
+## What's new in v3 (spec 008) — AI without API keys
+
+The builder never calls an LLM itself (no keys to configure). Local heuristics cover the quick wins; anything needing real intelligence is delegated to **your** agent through copyable prompts and the MCP tools.
+
+- **✨ Assistant — "Describe your project"**: a top-bar wizard takes one sentence (e.g. *"an online plant store with payments and an admin panel"*) and proposes a draft board — one idea note, 2-4 epics and 3-6 specs grouped by detected domains (auth, payments, catalog, admin, API, notifications, profile, search; generic MVP fallback). The draft is previewed and editable (rename/remove specs, "Regenerate" for alternative names) and **nothing touches the disk** until you press "Create on the board" — then it runs the same real calls as the template gallery (one `POST /api/spec` per spec + the pre-laid-out canvas). Empty workspaces only.
+- **🤖 Implement with agent**: in the drawer of an **approved** spec, a button preloads the exact implementation kickoff prompt (workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract) with one "Copy prompt" button. Copy-first by design — no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop: *no code before approved spec and consistent plan*.
+- **Live EARS lint**: while typing acceptance criteria in the guided editor, each row gets a green (EARS-shaped) or amber (suggestion) border with a short bilingual hint — the `WHEN/IF/WHILE … THE SYSTEM SHALL …` skeleton and vague words without a measurable number (*fast, easy, user-friendly…*). Advisory only: it never blocks saving. The same rule is exported for agents as `validateEarsCriterion` in `sdd-core`.
+
+### The orchestrator prompt (real AI via MCP)
+
+The assistant's "Have an AI agent?" section offers this prompt (also copy it from here). Paste it into any agent connected to `sdd-mcp` and it will build the board with real intelligence — including drafted sections inside each spec:
+
+```text
+You are my SDD agent connected to the `sdd-mcp` MCP. My project: "<describe your project>".
+Goal: populate the SDD Builder board like the ✨ assistant, but with real intelligence.
+1. Read the current state with `sdd_board_read` (projectRoot: <workspace path>).
+2. Propose 2-4 epics and 3-6 specs with clear lowercase accent-free names; show me the proposal and wait for my OK before writing anything.
+3. On my OK: create each real spec with `sdd_create_spec`; fill its draft with `sdd_update_spec_sections` (user story, scenarios, EARS criteria "WHEN … THE SYSTEM SHALL …", out of scope); draw the board with `sdd_board_write` + `sdd_board_connect` (idea note → epics → specs, labeled edges).
+4. Do not implement code: the SDD gate stays closed until I approve the specs.
+```
+
 ## Limitations (honest)
 
 - Long-form `spec.md` content beyond the guided sections is edited in your editor, not the canvas (by design: the canvas composes, your editor writes).
