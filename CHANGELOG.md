@@ -16,8 +16,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Dependencies (modelcontextprotocol org only): `@modelcontextprotocol/ext-apps ^1.7.4` (new), `@modelcontextprotocol/sdk ^1.27.1 → ^1.29.0` (peer requirement of the Apps SDK).
   - Integration test extended over real stdio: tool `_meta` (both keys), resource listing/read with the standard MIME type, well-formed self-contained HTML with the rewritten bridge, and `sdd_board_app` returning the fixture specs plus the same `dependencyWarnings` as `sdd_gate_summary`. Guide 51 (EN/ES) documents the feature and the standard's status; what to re-check after 2026-07-28 is noted in `specs/006-visual-spec-builder/history.md`.
 
+### Changed
+- **Guide 51 (SDD Builder) rewritten as a single visual manual with real screenshots**: `docs/en/51-sdd-builder-visual-guide.md` and `docs/es/51-guia-visual-sdd-builder.md` no longer read as stacked release notes ("what's new in v2/v3/v4") — they now flow as one product walkthrough: what it is → quick start → first project with the ✨ assistant → the canvas day to day (typed edges, gate, drawer) → editing/approving (EARS editor, implement-with-agent) → team view (kanban, issues, presence) → templates → from an AI agent (MCP tools + MCP App, orchestrator prompt kept verbatim) → honest limitations → canvas→disk quick reference. All honest-limitation bullets preserved; the pending website demo moved from "Roadmap" into limitations.
+  - **Five real captures** added under `docs/assets/builder/` (canvas, drawer, assistant, kanban, templates; 1280×800 @2x, light theme, 57-154 KB each), taken with Playwright against a live builder on a fresh sidecar workspace ("Tienda de plantas": 4 specs, 2 approved, typed `bloquea`/`depende de` edges producing a real `⚠ 1 dep` gate warning, populated kanban columns).
+  - **`site/scripts/sync-docs.mjs`**: image links (`![](../assets/…)`) are now rewritten to `raw.githubusercontent.com` URLs so the pictures actually render on the docs site (the generic GitHub *blob* rewrite serves HTML, which breaks `<img>`).
+
 ### Verified
 - Root builds + typecheck green on SDK 1.29.0 · extended `mcp:test` green · 3 SDD scripts at 0 errors · transformed bridge validated with `node --check` and executed (exposes `App`) · browser render check in light and dark (fixture data, no console errors)
+- Guide rewrite: `node site/scripts/sync-docs.mjs` emits raw image URLs for guide 51 (EN and ES) · `cd site && npm run build` green (158 pages) · 3 SDD scripts at 0 errors
 
 ## [v1.7.0] — 2026-07-21
 

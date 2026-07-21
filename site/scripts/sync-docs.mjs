@@ -5,6 +5,7 @@
 // - rewrite links so nothing 404s on the site:
 //     same-folder guide links  -> ../<slug>/
 //     cross-locale guide links -> ../../../<locale>/guides/<slug>/
+//     image links (![](../…))  -> raw.githubusercontent URL (blob pages break <img>)
 //     anything else in-repo    -> GitHub blob URL
 
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -14,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = normalize(join(here, '..', '..'));
 const GITHUB = 'https://github.com/juanklagos/spec-driven-development-template/blob/main';
+const RAW = 'https://raw.githubusercontent.com/juanklagos/spec-driven-development-template/main';
 
 const slugOf = (file) => file.replace(/\.md$/, '').toLowerCase();
 
@@ -52,6 +54,14 @@ function transform(src, locale, file) {
 
 	// Cross-locale guide links: ](../es/NN-xxx.md) / ](../en/NN-xxx.md)
 	text = text.replace(/\]\(\.\.\/(en|es)\/([^)#\s]+\.md)(#[^)]*)?\)/g, (_, loc, f, hash = '') => `](../../../${loc}/guides/${slugOf(f)}/${hash})`);
+
+	// Image links -> raw.githubusercontent (blob HTML pages would break <img>),
+	// resolved from docs/<locale>/ (e.g. ../assets/builder/canvas.png -> docs/assets/…)
+	text = text.replace(/!\[([^\]]*)\]\((\.\.?\/[^)\s]+)\)/g, (m, alt, rel) => {
+		const resolved = normalize(join('docs', locale, rel)).replace(/\\/g, '/');
+		if (resolved.startsWith('..')) return m; // outside repo? leave untouched
+		return `![${alt}](${RAW}/${resolved})`;
+	});
 
 	// Any other relative link -> GitHub, resolved from docs/<locale>/
 	text = text.replace(/\]\((\.\.?\/[^)\s]+)\)/g, (m, rel) => {

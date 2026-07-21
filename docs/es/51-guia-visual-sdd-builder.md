@@ -1,6 +1,10 @@
 # 🎨 SDD Builder: construye tus specs visualmente
 
-El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas — y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad; el lienzo solo guarda posiciones en `specs/board.canvas` (formato abierto JSON Canvas).
+El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas — y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad: aprobar, editar y marcar tareas ocurre quirúrgicamente dentro de tus archivos `.md`, mientras el lienzo solo guarda posiciones y uniones en `specs/board.canvas` (el formato abierto JSON Canvas). Esta guía recorre el producto completo, desde el primer comando `npm` hasta usarlo desde un agente IA, con capturas reales de un proyecto demo pequeño — una tienda online de plantas.
+
+![El lienzo del SDD Builder: notas de idea y épicas a la izquierda, tarjetas de spec con badges de estado y barras de progreso, una unión roja «bloquea» y una ámbar «depende de», y el semáforo del gate con un aviso de dependencia en la barra superior](../assets/builder/canvas.png)
+
+*Un board, toda la verdad: gate abierto (🟢), un aviso ámbar `⚠ 1 dep`, uniones tipadas entre specs reales y el progreso de cada tarjeta leído en vivo de `tasks.md`.*
 
 ## Inicio rápido
 
@@ -13,58 +17,83 @@ npm run builder:build
 
 # arranca el servidor apuntando a tu workspace
 SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
-# abre http://127.0.0.1:3334/builder
+# abre http://127.0.0.1:3334/builder   (usa SDD_MCP_HTTP_PORT para cambiar el puerto)
 ```
 
-Nota: dentro de este repositorio template el builder está bloqueado por diseño (no se ejecuta trabajo de proyecto destino en la raíz del template). Apunta siempre `SDD_PROJECT_ROOT` a un workspace real.
+Dos notas antes de empezar:
 
-## Qué puedes hacer
+- Dentro de este repositorio template el builder está bloqueado por diseño (no se ejecuta trabajo de proyecto destino en la raíz del template). Apunta siempre `SDD_PROJECT_ROOT` a un workspace real.
+- La primera vez que abras `/builder`, un **tour de bienvenida** ofrece cinco pasos anclados (paleta → crear → conectar → tareas → gate). Descártalo con «No mostrar de nuevo» y relánzalo cuando quieras desde el botón «?» de la barra superior.
 
-| En el lienzo | Qué pasa en disco |
-| :--- | :--- |
-| Arrastra una tarjeta **Spec** de la paleta y ponle nombre | Se crea un bundle real `specs/NNN-slug/` (spec, plan, tasks, history) |
-| Clic en una tarjeta de spec | Drawer con sus tareas como checkboxes; extracto de spec.md en solo lectura |
-| Marca un checkbox de tarea | La línea `- [ ]` de `tasks.md` pasa a `- [x]` quirúrgicamente |
-| Conecta dos tarjetas, doble clic en la línea | Dependencia con etiqueta guardada en `board.canvas` |
-| Añade tarjetas 💡 Idea / 📦 Épica | Notas libres (con color) en `board.canvas` |
-| Mueve tarjetas | Posiciones guardadas (con debounce) — nunca toca tus .md |
+## Tu primer proyecto con el asistente ✨
+
+La forma más rápida de pasar de nada a un board conectado es el botón **✨ Asistente** de la barra superior. Describe tu proyecto en una frase — *«una tienda online de plantas con catálogo, pagos y panel de administración»* — y el builder propone un borrador de board: una nota de idea, 2-4 épicas y 3-6 specs agrupadas por los dominios que detecta (auth, pagos, catálogo, admin, API, notificaciones, perfil, búsqueda; con un fallback MVP genérico cuando nada encaja).
+
+![El asistente ✨ con un borrador generado: tres specs agrupadas bajo las épicas Experiencia, Negocio y Operaciones, cada una editable antes de crear nada](../assets/builder/assistant.png)
+
+*El borrador es una vista previa: renombra o quita specs, pulsa «↺ Regenerar» para nombres alternativos — nada toca el disco hasta que confirmes.*
+
+Lo importante es lo que el asistente **no** hace: nunca llama a un LLM (no hay API keys que configurar — solo heurísticas locales) y no escribe nada hasta que pulsas **«Crear en el board»**. En ese momento ejecuta las mismas llamadas reales que la galería de plantillas — un `POST /api/spec` por spec más el lienzo pre-ordenado — así que terminas con bundles `specs/NNN-slug/` auténticos, no maquetas. El asistente solo se aplica en un workspace vacío.
+
+Si *sí* tienes un agente IA, la sección plegable «🤖 ¿Tienes un agente IA?» precarga un prompt orquestador copiable que delega el mismo trabajo a inteligencia real vía MCP — ver [Desde un agente IA](#desde-un-agente-ia-mcp) más abajo.
+
+## El lienzo, día a día
+
+Todo lo que hay en el lienzo corresponde a algo real:
+
+- **Las tarjetas de spec** muestran el número y nombre del bundle, un badge de aprobación (Pendiente / Aprobado / Hecho) y una barra de progreso calculada con los checkboxes reales de `tasks.md`. Arrastra una tarjeta **Spec** desde la paleta y ponle nombre: se crea al momento un bundle real `specs/NNN-slug/` (spec, plan, tasks, history).
+- **Las notas 💡 Idea y 📦 Épica** son nodos de texto libres, con color, para dar forma a la historia alrededor de tus specs. Viven solo en `board.canvas`.
+- **Las uniones** se dibujan arrastrando entre tarjetas. Haz doble clic en una unión para etiquetarla — y ahí es donde las uniones se vuelven *tipadas*: elige **relacionada** (por defecto), **depende de** (ámbar), **bloquea** (rojo) o cualquier etiqueta libre. El tipo viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas.
+- **Mover tarjetas** guarda posiciones (con debounce) en `board.canvas` — nunca toca tus `.md`. El lienzo tiene deshacer/rehacer (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para exportar el tablero como imagen.
+
+Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero bloqueada por `001-catalogo-de-plantas`, que no lo está — de ahí el aviso.
+
+El **semáforo del gate** de la barra superior es el hard stop de SDD hecho visible: un chip vivo (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real del proyecto. Los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
+
+Al hacer clic en cualquier tarjeta de spec se abre el **panel (drawer)** — el puente entre lienzo y markdown:
+
+![El panel de una spec aprobada: botón verde «Implementar con agente», tareas como checkboxes (tres hechas, tres pendientes), botón de issues de GitHub y las pestañas Ver/Editar](../assets/builder/drawer.png)
+
+*El panel de una spec aprobada: las tareas son los checkboxes reales de `tasks.md`, y el botón «Implementar con agente» está habilitado porque la spec está aprobada.*
+
+En el panel, las tareas son checkboxes vivos: marcar uno cambia la línea `- [ ]` de `tasks.md` a `- [x]` quirúrgicamente, y la barra de progreso de la tarjeta lo refleja. Debajo de las tareas tienes un extracto de `spec.md` en solo lectura — el contenido largo se edita en tu editor, por diseño: el lienzo compone, tu editor escribe.
+
+La **sincronización en vivo** mantiene todo esto honesto. El servidor vigila tu directorio `specs/`: edita cualquier `tasks.md` en tu editor y la tarjeta se actualiza sola — sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es «último escritor gana».
+
+## Editar y aprobar specs
+
+La pestaña **«✏️ Editar»** del panel es un editor guiado de spec. Escribe cuatro secciones de `spec.md` de forma quirúrgica — historia de usuario, escenarios de aceptación, criterios EARS y fuera de alcance — y no toca nada más (bloque de aprobación y requisitos incluidos). El campo EARS autocompleta el prefijo `CUANDO … EL SISTEMA DEBERÁ …` al enfocar, y un **lint EARS en vivo** marca cada criterio con un borde verde (con forma EARS) o ámbar (sugerencia) más una pista corta bilingüe — el esqueleto a seguir y las palabras vagas sin número medible (*rápido, fácil, intuitivo…*). Solo consultivo: nunca bloquea el guardado. La misma regla está exportada para agentes como `validateEarsCriterion` en `sdd-core`.
+
+Cuando la spec está lista, **«✅ Aprobar spec»** pregunta quién aprueba y, al confirmar, escribe el bloque de aprobación real en `spec.md`: estado `Aprobado`, la fecha de hoy, quien aprueba y la evidencia. Si la spec no tiene bloque de aprobación, recibes un error claro en lugar de un arreglo silencioso.
+
+La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga el prompt exacto de arranque de implementación — ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión — con un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
+
+## La vista de equipo
+
+El toggle **«🗺️ Lienzo ↔ 📋 Tablero»** de la barra superior muestra las mismas specs como un kanban — tres columnas según el estado real de tus `.md`: **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel.
+
+![La vista kanban: columna Borrador con dos specs, Aprobada con la spec de checkout y su aviso de dependencia, Hecha con el panel de administración terminado](../assets/builder/kanban.png)
+
+*Los mismos datos, otra proyección: las columnas salen de `spec.md` y `tasks.md`, no de un estado aparte del tablero.*
+
+v1 honesta: arrastrar una tarjeta a otra columna *no cambia nada* en disco — aprobar es un acto real sobre la spec, así que al soltar aparece un toast («La aprobación se hace en la spec») con un botón «Abrir spec» directo al flujo de aprobación del panel.
+
+Aquí viven dos funciones de equipo más:
+
+- **Tareas → issues de GitHub**: en el panel, «🐙 Crear issues» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
+- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra superior muestra **👥 N** («N personas viendo este workspace») — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
+
+## Plantillas
+
+Si prefieres partir de una forma probada en lugar de una frase, el botón **🧩 Plantillas** abre una galería con cuatro playbooks — App web, API/Backend, E-commerce y SaaS. Cada uno crea specs reales más un tablero conectado y ordenado. Como el asistente, las plantillas solo se aplican en un workspace con cero specs.
+
+![La galería de plantillas: tarjetas App web, API/Backend, E-commerce y SaaS, cada una indicando cuántas specs y épicas crea](../assets/builder/templates.png)
+
+*Cada tarjeta de plantilla te dice exactamente qué va a crear: bundles reales `specs/NNN-…` y un tablero conectado — sin placeholders.*
 
 ## Desde un agente IA (MCP)
 
-Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board mediante cinco tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Ver guía 41 (referencia completa de MCP).
-
-## El board dentro de tu cliente IA (MCP App)
-
-El servidor también entrega el board como **MCP App** (SEP-1865, la primera extensión oficial de MCP — parte de la release del protocolo 2026-07-28, construida con el SDK oficial `@modelcontextprotocol/ext-apps`). En un cliente con soporte de MCP Apps, pide a tu agente que muestre el board — invoca la tool `sdd_board_app` y la vista se renderiza **dentro del chat**: tarjetas de specs con estado de aprobación y progreso de tareas, el lienzo con sus uniones tipadas, el semáforo del gate y los avisos de dependencias, más un botón «↻ Actualizar / Refresh» que relee el workspace. Solo lectura en v1, bilingüe, con modo claro/oscuro.
-
-Estado del estándar (honesto): la spec MCP 2026-07-28 es una **release candidate congelada desde el 2026-05-21** con publicación final el 2026-07-28; la extensión Apps tiene una revisión estable (2026-01-26) y un SDK publicado, así que esta vista está construida sobre la superficie estable. Notas:
-
-- Funciona en hosts que implementan MCP Apps; el soporte se está desplegando en los clientes durante la ventana de finalización.
-- Los hosts **sin** MCP Apps degradan con gracia: `sdd_board_app` devuelve los mismos datos de board + gate como texto JSON.
-- La vista es totalmente autocontenida (sin CDNs): el bridge oficial de ext-apps va inline dentro del recurso `ui://sdd/board.html`.
-
-## Sincronización en vivo
-
-El servidor vigila tu directorio `specs/`. Edita cualquier `tasks.md` en tu editor y la barra de progreso de la tarjeta se actualiza sola — sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es "último escritor gana" (una fase futura añade merge más fino).
-
-## Novedades de la v2 (spec 007)
-
-- **Semáforo del gate**: chip vivo en la barra superior (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real; los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
-- **Aprobar desde el panel**: un clic confirmado escribe el bloque de aprobación real (estado, fecha de hoy, aprobador, evidencia) en `spec.md` — con error claro si el bloque no existe.
-- **Tour de bienvenida**: cinco pasos anclados (paleta → crear → conectar → tareas → gate), descartable con «No mostrar de nuevo» y relanzable desde el botón «?».
-- **Galería de plantillas**: los playbooks App web, API/Backend, E-commerce y SaaS crean specs reales más un tablero conectado y ordenado. Solo en un workspace con cero specs.
-- **Editor guiado de spec**: la pestaña «Editar» del panel escribe la historia de usuario, los escenarios, los criterios EARS (prefijo autocompletado al enfocar) y el fuera de alcance de forma quirúrgica — la aprobación y los requisitos nunca se tocan.
-- **Deshacer/rehacer + export PNG**: historial del lienzo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para compartir el tablero como imagen.
-
-Los agentes tienen los mismos tres poderes por MCP: `sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`.
-
-## Novedades de la v3 (spec 008) — IA sin API keys
-
-El builder nunca llama a un LLM por su cuenta (no hay keys que configurar). Las heurísticas locales cubren lo rápido; lo que necesita inteligencia real se delega a **tu** agente con prompts copiables y las tools MCP.
-
-- **✨ Asistente — «Descríbeme tu proyecto»**: un wizard en la barra superior toma una frase (p. ej. *«una tienda online de plantas con pagos y panel de administración»*) y propone un borrador de board — una nota de idea, 2-4 épicas y 3-6 specs agrupadas por dominios detectados (auth, pagos, catálogo, admin, API, notificaciones, perfil, búsqueda; fallback MVP genérico). El borrador se previsualiza y edita (renombrar/quitar specs, «Regenerar» para nombres alternativos) y **nada toca el disco** hasta pulsar «Crear en el board» — entonces ejecuta las mismas llamadas reales que la galería de plantillas (un `POST /api/spec` por spec + el lienzo pre-ordenado). Solo en workspaces vacíos.
-- **🤖 Implementar con agente**: en el drawer de una spec **aprobada**, un botón precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) con un botón «Copiar prompt». Copy-first por diseño — sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop: *no hay código sin spec aprobada y plan consistente*.
-- **Lint EARS en vivo**: al escribir criterios de aceptación en el editor guiado, cada fila recibe un borde verde (con forma EARS) o ámbar (sugerencia) con una pista corta bilingüe — el esqueleto `CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …` y las palabras vagas sin número medible (*rápido, fácil, intuitivo…*). Solo consultivo: nunca bloquea el guardado. La misma regla está exportada para agentes como `validateEarsCriterion` en `sdd-core`.
+Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board. Las tools del board — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — están respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Los agentes también tienen los poderes del panel (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), y los avisos de dependencias aparecen en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`. Ver guía 41 (referencia completa de MCP).
 
 ### El prompt orquestador (IA real vía MCP)
 
@@ -79,23 +108,34 @@ Objetivo: puebla el SDD Builder board como el asistente ✨, pero con inteligenc
 4. No implementes código: el gate SDD sigue cerrado hasta que yo apruebe las specs.
 ```
 
-## Novedades de la v4 (spec 009) — equipos
+### El board dentro de tu cliente IA (MCP App)
 
-Cuatro funciones para que un equipo pequeño coordine trabajo real sobre las mismas specs:
+El servidor también entrega el board como **MCP App** (SEP-1865, la primera extensión oficial de MCP — parte de la release del protocolo 2026-07-28, construida con el SDK oficial `@modelcontextprotocol/ext-apps`). En un cliente con soporte de MCP Apps, pide a tu agente que muestre el board — invoca la tool `sdd_board_app` y la vista se renderiza **dentro del chat**: tarjetas de specs con estado de aprobación y progreso de tareas, el lienzo con sus uniones tipadas, el semáforo del gate y los avisos de dependencias, más un botón «↻ Actualizar / Refresh» que relee el workspace. Solo lectura en v1, bilingüe, con modo claro/oscuro.
 
-- **Vista Kanban**: el toggle «🗺️ Lienzo ↔ 📋 Tablero» de la barra superior muestra las mismas specs en tres columnas según el estado real de tus .md — **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel. v1 honesta: arrastrar una tarjeta a otra columna *no cambia nada* en disco — aprobar es un acto real sobre la spec, así que al soltar aparece un toast («La aprobación se hace en la spec») con un botón «Abrir spec» hacia el flujo de aprobación del panel.
-- **Uniones tipadas + avisos de dependencias**: haz doble clic en una unión y elige su tipo — *relacionada* (por defecto), *depende de* (ámbar), *bloquea* (rojo) o cualquier etiqueta libre como antes. El tipo viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas. Cuando una unión tipada conecta dos specs reales y la **spec dependiente está aprobada pero su dependencia no**, el builder avisa: chip ámbar `⚠ N dep` junto al semáforo del gate (con la lista completa en el tooltip) y badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo — el gate nunca se cierra por esto. Los agentes ven la misma lista en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`.
-- **Tareas → issues de GitHub**: en el panel, «🐙 Crear issues» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
-- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra superior muestra **👥 N** («N personas viendo este workspace») — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
+Estado del estándar (honesto): la spec MCP 2026-07-28 es una release candidate congelada desde el 2026-05-21 con publicación final el 2026-07-28; la extensión Apps tiene una revisión estable (2026-01-26) y un SDK publicado, así que esta vista está construida sobre la superficie estable. En la práctica:
+
+- Funciona en hosts que implementan MCP Apps; el soporte se está desplegando en los clientes durante la ventana de finalización.
+- Los hosts **sin** MCP Apps degradan con gracia: `sdd_board_app` devuelve los mismos datos de board + gate como texto JSON.
+- La vista es totalmente autocontenida (sin CDNs): el bridge oficial de ext-apps va inline dentro del recurso `ui://sdd/board.html`.
+- A revisar tras el 2026-07-28: confirmar que el texto final de la spec mantiene `_meta.ui.resourceUri` + `text/html;profile=mcp-app` tal cual y subir `@modelcontextprotocol/ext-apps` si sale una versión final.
 
 ## Limitaciones (honestas)
 
 - El contenido largo de `spec.md` más allá de las secciones guiadas se edita en tu editor, no en el lienzo (por diseño: el lienzo compone, tu editor escribe).
 - Borrar una carpeta de spec en disco no retira su tarjeta automáticamente (conservador; borra la tarjeta a mano).
 - Un workspace por instancia del servidor (`SDD_PROJECT_ROOT`).
-- La Kanban v1 es una proyección de solo lectura del estado: mover tarjetas entre columnas nunca aprueba ni desaprueba nada (usa el panel). La idempotencia de issues es por título (renombrar una tarea crea un issue nuevo).
+- La kanban es una proyección de solo lectura del estado: mover tarjetas entre columnas nunca aprueba ni desaprueba nada (usa el panel). La idempotencia de issues es por título (renombrar una tarea crea un issue nuevo).
+- La demo interactiva en el sitio web sigue pendiente (requiere la FS Access API solo-Chrome); ver `specs/006-visual-spec-builder/`.
 
-## Roadmap
+## Referencia rápida: lienzo → disco
 
-- ✅ Vista MCP App (el board dentro de tu cliente IA) — entregada; ver la sección de arriba. A revisar tras el 2026-07-28: confirmar que el texto final de la spec mantiene `_meta.ui.resourceUri` + `text/html;profile=mcp-app` tal cual y subir `@modelcontextprotocol/ext-apps` si sale una versión final.
-- Demo interactiva en el sitio (Pages) — pendiente (requiere la FS Access API solo-Chrome); ver `specs/006-visual-spec-builder/`.
+| En el lienzo | Qué pasa en disco |
+| :--- | :--- |
+| Arrastra una tarjeta **Spec** de la paleta y ponle nombre | Se crea un bundle real `specs/NNN-slug/` (spec, plan, tasks, history) |
+| Clic en una tarjeta de spec | Panel con sus tareas como checkboxes; extracto de spec.md en solo lectura |
+| Marca un checkbox de tarea | La línea `- [ ]` de `tasks.md` pasa a `- [x]` quirúrgicamente |
+| Conecta dos tarjetas, doble clic en la línea | Dependencia etiquetada (y opcionalmente tipada) guardada en `board.canvas` |
+| Añade tarjetas 💡 Idea / 📦 Épica | Notas libres (con color) en `board.canvas` |
+| Mueve tarjetas | Posiciones guardadas (con debounce) — nunca toca tus .md |
+| Aprueba desde el panel | El bloque de aprobación real (estado, fecha, aprobador, evidencia) escrito en `spec.md` |
+| Guarda en la pestaña Editar del panel | Solo se reescriben las secciones guiadas de `spec.md` — aprobación y requisitos intactos |
