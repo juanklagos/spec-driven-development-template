@@ -261,8 +261,9 @@ function RelationsPanel({ specId }: { specId: string }) {
 }
 
 // Tasks -> GitHub issues (spec 009, R3): one gh-CLI issue per pending task,
-// idempotent by title. The server's bilingual precondition errors (no git
-// repo/remote, gh missing or unauthenticated) are shown as-is with a hint.
+// idempotent by title. Precondition failures (no git repo/remote, gh missing
+// or unauthenticated) arrive as machine codes and are localized by the api
+// client, so what lands here is already single-language (spec 010, R1).
 function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: number }) {
   const { t } = useT();
   const [busy, setBusy] = useState(false);

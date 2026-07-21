@@ -491,6 +491,80 @@ Salida estructurada:
 - `specId`
 - `tasks`
 
+### `sdd_gate_summary`
+
+Propósito:
+- semáforo del gate en una sola llamada: el chequeo de compuerta más la validación estructural, con cada mensaje agrupado por la spec a la que pertenece
+
+Cuándo usarlo:
+- cuando quieres el estado completo del workspace en una sola llamada (es el dato detrás del chip de gate del SDD Builder y de los badges por tarjeta)
+
+Reglas:
+- misma capa `sdd-core` que la ruta REST `/api/gate` — no hay una segunda copia de la regla
+- `dependencyWarnings` son solo avisos (una spec aprobada que depende de una no aprobada), nunca errores de compuerta
+
+Entrada:
+- `projectRoot`
+
+Salida estructurada:
+- `ok`
+- `errors`, `warnings` (conteos)
+- `messages` agrupados por spec
+- `dependencyWarnings`
+
+### `sdd_approve_spec`
+
+Propósito:
+- rellenar quirúrgicamente el bloque de aprobación existente de un `spec.md`
+
+Cuándo usarlo:
+- cuando la persona que decide aprobó la spec y hay que dejar la evidencia en disco antes de implementar
+
+Reglas:
+- escribe `Estado` -> `Aprobado`, fecha de aprobación -> hoy, aprobador -> el nombre indicado
+- `evidence` siempre gana cuando se entrega; sin él, una línea de evidencia existente nunca se sobrescribe
+- falla con un error bilingüe claro cuando falta el bloque `## Estado de aprobación / Approval status` — copia primero el bloque desde `specs/_template/spec.md`
+- la tool registra la decisión, no la toma: aprobar es siempre un acto humano
+
+Entrada:
+- `projectRoot`
+- `specId`
+- `approver`
+- `evidence` (opcional)
+
+Salida estructurada:
+- `specId`
+- `status`
+- `approvalDate`
+- `approver`
+- `evidenceUpdated`
+- `fieldsUpdated`
+
+### `sdd_update_spec_sections`
+
+Propósito:
+- reemplazar **solo** el contenido bajo los encabezados del editor guiado de un `spec.md`, preservando todo lo demás
+
+Cuándo usarlo:
+- cuando llenas o refinas una spec desde un editor guiado o desde la conversación, sin reescribir el archivo completo
+
+Reglas:
+- lectura-modificación-escritura quirúrgica, atómica y serializada: dos guardados concurrentes hacen cola en vez de pisarse
+- el bloque de aprobación siempre se preserva
+- tolerante a los encabezados EN/ES de la plantilla del repo; un encabezado que el archivo no tiene se agrega al final con su título bilingüe canónico y se reporta en `created`
+
+Entrada:
+- `projectRoot`
+- `specId`
+- `story` (opcional, texto libre)
+- `scenarios`, `criteria`, `requirements`, `properties`, `successCriteria` (opcionales, listas)
+- `outOfScope` (opcional, texto libre)
+
+Salida estructurada:
+- `specId`
+- `updated` (secciones reemplazadas en su lugar)
+- `created` (secciones agregadas porque el archivo no las tenía)
+
 ### `sdd_board_app`
 
 Propósito:

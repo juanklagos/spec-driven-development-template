@@ -32,6 +32,12 @@ async function main() {
   const templateNames = templates.resourceTemplates.map((item) => item.name);
   const promptNames = prompts.prompts.map((item) => item.name);
 
+  // The COMPLETE registered tool surface (server.ts + app.ts). This list used
+  // to name only the first 12 tools, so deleting any of the board / tasks /
+  // gate / approval registrations broke no test at all. It is asserted in both
+  // directions on purpose: a removed tool fails the first loop, and a tool
+  // added without declaring it here fails the second — the list is the
+  // published contract, not a sample of it.
   const expectedTools = [
     "sdd_create_workspace",
     "sdd_create_spec",
@@ -44,12 +50,28 @@ async function main() {
     "sdd_append_project_log",
     "sdd_write_daily_log",
     "sdd_write_handoff",
-    "sdd_write_decision"
+    "sdd_write_decision",
+    "sdd_board_read",
+    "sdd_board_write",
+    "sdd_board_connect",
+    "sdd_read_tasks",
+    "sdd_set_task_done",
+    "sdd_gate_summary",
+    "sdd_approve_spec",
+    "sdd_update_spec_sections",
+    "sdd_board_app"
   ];
 
   for (const toolName of expectedTools) {
     if (!toolNames.includes(toolName)) {
       throw new Error(`Missing MCP tool: ${toolName}`);
+    }
+  }
+  for (const toolName of toolNames) {
+    if (!expectedTools.includes(toolName)) {
+      throw new Error(
+        `Undeclared MCP tool: ${toolName} — add it to expectedTools in scripts/smoke-test-mcp.mjs (the tool surface is a contract)`
+      );
     }
   }
 

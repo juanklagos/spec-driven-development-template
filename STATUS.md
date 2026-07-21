@@ -1,13 +1,12 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-21 01:04 UTC
+Generated at / Generado en: 2026-07-21 19:09 UTC
 
 ## Active specs / Specs activas
 
 | Number | Name | Status | Priority | Owner | Updated |
 |---|---|---|---|---|---|
-| 006 | visual-spec-builder | In Progress / En progreso (F1-F2 hechas; F3 pospuesta) | High / Alta | Juan Klagos / Claude | 2026-07-20 |
-| 007 | builder-v2-easy | In Progress / En progreso | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 006 | visual-spec-builder | In Progress / En progreso (F1-F3 hechas; queda T7b demo Pages + revisión spec MCP final 2026-07-28) | High / Alta | Juan Klagos / Claude | 2026-07-21 |
 
 ## All specs snapshot / Resumen de todas las specs
 
@@ -18,15 +17,17 @@ Generated at / Generado en: 2026-07-21 01:04 UTC
 | 003 | distribution-and-tutor | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 004 | site-dashboard-community | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 005 | learning-for-everyone | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
-| 006 | visual-spec-builder | In Progress / En progreso (F1-F2 hechas; F3 pospuesta) | High / Alta | Juan Klagos / Claude | 2026-07-20 |
-| 007 | builder-v2-easy | In Progress / En progreso | High / Alta | Juan Klagos / Claude | 2026-07-20 |
-| 008 | builder-v3-ai | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-20 |
-| 009 | builder-v4-teams | Draft / Borrador | Medium / Media | Juan Klagos / Claude | 2026-07-20 |
+| 006 | visual-spec-builder | In Progress / En progreso (F1-F3 hechas; queda T7b demo Pages + revisión spec MCP final 2026-07-28) | High / Alta | Juan Klagos / Claude | 2026-07-21 |
+| 007 | builder-v2-easy | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 008 | builder-v3-ai | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 009 | builder-v4-teams | Done / Completada | Medium / Media | Juan Klagos / Claude | 2026-07-21 |
+| 010 | builder-v5-pro-ux | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-21 |
+| 011 | one-command-launcher | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-21 |
 
 ## Task progress / Progreso de tareas
 
-- Pending / Pendientes: 21
-- Completed / Completadas: 52
+- Pending / Pendientes: 12
+- Completed / Completadas: 75
 
 ## Recent log excerpt / Extracto reciente de bitácora
 

@@ -94,6 +94,7 @@ fi
 
 spec_count=0
 approved_count=0
+approved_names=""
 while IFS= read -r spec_path; do
   spec_count=$((spec_count + 1))
   spec_dir="$(dirname "$spec_path")"
@@ -122,6 +123,7 @@ while IFS= read -r spec_path; do
     :
   elif printf "%s" "$status_value" | grep -E -i -q -- "$SDD_APPROVED_STATUS_ERE"; then
     approved_count=$((approved_count + 1))
+    approved_names="${approved_names}${spec_name}"$'\n'
     if match_q "YYYY-MM-DD" "$spec_path"; then
       fail "$spec_name approved but approval date still placeholder"
     fi
@@ -169,12 +171,46 @@ if [ "$spec_count" -eq 0 ]; then
   warn "No numbered specs found; gate check skipped."
 else
   if [ "$approved_count" -gt 0 ]; then
-    # Non-blank content, not just an existing file. KEEP IN SYNC with
-    # hasRecordedConsent in packages/sdd-core/src/index.ts: a zero-byte log
-    # (a bare `touch`, or an interrupted confirm-user-consent.sh) is not consent.
+    # Consent is PER SPEC. KEEP IN SYNC with checkGate/hasRecordedConsent in
+    # packages/sdd-core/src/index.ts — all three rules below:
+    #
+    #   1. Non-blank content, not just an existing file: a zero-byte log (a bare
+    #      `touch`, or an interrupted confirm-user-consent.sh) is not consent.
+    #   2. A `[spec:<id>]` entry is consent for THAT spec. Verified 2026-07-21:
+    #      with only the global non-empty test, consenting once to 001 opened
+    #      the gate for an unrelated, later-approved 002 the user never saw.
+    #   3. Migration, never a hard break: a log written before per-spec entries
+    #      existed (any non-blank line with no `[spec:` marker) still covers the
+    #      whole workspace, but downgrades to a WARNING naming the exact command
+    #      to migrate. Only a log that already speaks the new format, yet says
+    #      nothing about this spec, is an error.
     consent_log="$ROOT/.sdd/user-consent.log"
     if [ -s "$consent_log" ] && grep -q '[^[:space:]]' "$consent_log"; then
       ok "User consent log present for execution stage: .sdd/user-consent.log"
+
+      has_legacy_consent=0
+      if grep -v -E '\[spec:[^]]+\]' "$consent_log" | grep -q '[^[:space:]]'; then
+        has_legacy_consent=1
+      fi
+
+      consent_cmd="./scripts/confirm-user-consent.sh"
+      [ "$(basename "$ROOT")" = "spec" ] && consent_cmd="./spec/scripts/confirm-user-consent.sh"
+
+      legacy_covered=""
+      while IFS= read -r approved_name; do
+        [ -n "$approved_name" ] || continue
+        if grep -qF "[spec:$approved_name]" "$consent_log"; then
+          ok "$approved_name has recorded user consent"
+        elif [ "$has_legacy_consent" -eq 1 ]; then
+          legacy_covered="${legacy_covered}${legacy_covered:+, }${approved_name}"
+        else
+          fail "$approved_name approved but no user consent recorded for it. Run: $consent_cmd --spec $approved_name \"User approved implementation for spec $approved_name\""
+        fi
+      done <<< "$approved_names"
+
+      if [ -n "$legacy_covered" ]; then
+        warn "Legacy consent log covers these approved specs without a per-spec entry: $legacy_covered. Migrate each one with: $consent_cmd --spec <NNN-slug> \"User approved implementation for spec <NNN-slug>\""
+      fi
     else
       fail "Missing or empty user consent log (.sdd/user-consent.log) for approved spec execution"
     fi

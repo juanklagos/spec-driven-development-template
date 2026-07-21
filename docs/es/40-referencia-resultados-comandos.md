@@ -71,6 +71,24 @@ Resultado exitoso:
 - imprime la ruta inicializada
 - imprime el flujo sugerido de Spec Kit
 
+### `./scripts/install-spec-sidecar.sh /ruta/absoluta/proyecto --profile=recommended`
+
+Úsalo cuando:
+- es el punto de entrada recomendado para un **proyecto real ya existente**: el código de la app se queda en la raíz y todo el sistema operativo SDD vive dentro de `./spec/`
+
+Crea:
+- `./spec/` con `idea/`, `specs/`, `bitacora/`, `scripts/`, `templates/`, `template-context/`, `.sdd/`, `sdd.policy.yaml` y los archivos de reglas para agentes
+- archivos de entrada para agentes en la raíz del proyecto (`AGENTS.md`, `CLAUDE.md`, `AI_START_HERE.md`, `INSTRUCTIONS.md`, `GEMINI.md`, `AIDER.md`, `ROO.md`, `WINDSURF.md`, `.cursorrules`, `.clauderules`, `.github/copilot-instructions.md`) para que cualquier asistente encuentre las reglas
+
+Reglas:
+- el repositorio del framework **no** se copia dentro del proyecto — solo el sidecar compacto
+- rechaza la raíz del template
+
+Resultado exitoso:
+- imprime `✅ Compact SDD sidecar installed at: <ruta>/spec` con la versión del template y el perfil
+- imprime los siguientes comandos, que en un sidecar viven bajo `./spec/scripts/` (`new-spec.sh`, `validate-sdd.sh`, `check-sdd-policy.sh`, `check-sdd-gate.sh`)
+- imprime el comando opcional de inicialización de GitHub Spec Kit
+
 ## Scripts de specs y trazabilidad
 
 ### `./scripts/new-spec.sh "feature-name" "Owner"`
@@ -123,6 +141,78 @@ Lee:
 
 Resultado exitoso:
 - imprime las rutas generadas del roadmap
+
+### `./scripts/score-spec.sh specs/NNN-nombre` (o `--all`)
+
+Úsalo cuando:
+- quieres una lectura rápida de calidad de un bundle de spec antes de pedir aprobación
+
+Lee:
+- los archivos del bundle (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `history.md`)
+
+Escribe:
+- nada — es de solo lectura
+
+Resultado exitoso:
+- imprime `Spec:`, `Score: NN/100 (Grade X)` y una lista `Notes:` con lo débil
+- con `--all`, imprime un bloque por cada spec numerada
+- el argumento es la **carpeta** del bundle, no `spec.md`; apuntarlo a un solo archivo reporta `missing required files`
+
+Efecto en la compuerta:
+- ninguno — el score es orientativo, nunca bloquea
+
+## Scripts de documentación y mantenimiento
+
+### `./scripts/generate-llms-txt.sh`
+
+Crea o reemplaza:
+- `llms.txt` en la raíz del repositorio
+
+Lee:
+- `docs/en/` y `docs/es/`, tomando el primer H1 de cada archivo como título
+
+Resultado exitoso:
+- imprime `Generated <ruta>/llms.txt (N lines)`
+
+Cuándo ejecutarlo:
+- después de agregar, renombrar o retitular cualquier guía, para que los agentes de código indexen la documentación real
+
+### `./scripts/legacy-discovery.sh [objetivo] [carpeta-salida]`
+
+Úsalo cuando:
+- estás adoptando SDD sobre un código existente y necesitas un punto de partida para ingeniería inversa
+
+Crea (por defecto `analysis/legacy-discovery/`):
+- `routes-signals.txt` — coincidencias de rutas/endpoints
+- `flow-signals.txt` — coincidencias de flujos de usuario (login, checkout, perfil…)
+- `legacy-discovery-report.md` — conteo de señales, specs iniciales sugeridas y un prompt sugerido
+
+Requiere:
+- `rg` (ripgrep) en el PATH
+
+Resultado exitoso:
+- imprime `Generated <carpeta-salida>/legacy-discovery-report.md` y el siguiente paso
+
+Efecto en la compuerta:
+- ninguno — el reporte es insumo para escribir specs, no una spec
+
+### `./scripts/reset-template.sh [--confirm]`
+
+Úsalo cuando:
+- clonaste este template y quieres empezar limpio con tu propio proyecto
+
+Sin `--confirm`:
+- imprime exactamente qué borraría y sale sin tocar nada
+
+Con `--confirm` limpia:
+- `idea/IDEA_GENERAL.md`, `bitacora/global/PROJECT_LOG.md`, `specs/INDEX.md`, `STATUS.md` (mantiene la estructura, quita el contenido)
+- todas las carpetas de spec numeradas en `specs/` y la salida de `analysis/`
+
+Nunca toca:
+- `examples/`, `docs/`, `scripts/`
+
+> [!WARNING]
+> `--confirm` es destructivo y no tiene deshacer. Haz commit o respaldo primero.
 
 ## Scripts de validación
 

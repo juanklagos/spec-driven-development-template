@@ -71,6 +71,24 @@ Success result:
 - prints the initialized path
 - prints the suggested Spec Kit flow
 
+### `./scripts/install-spec-sidecar.sh /absolute/path/to/project --profile=recommended`
+
+Use when:
+- this is the recommended entry point for a **real existing project**: the app code stays in the project root and the whole SDD operating system lives inside `./spec/`
+
+Creates:
+- `./spec/` with `idea/`, `specs/`, `bitacora/`, `scripts/`, `templates/`, `template-context/`, `.sdd/`, `sdd.policy.yaml`, and the agent rule files
+- agent entry files at the project root (`AGENTS.md`, `CLAUDE.md`, `AI_START_HERE.md`, `INSTRUCTIONS.md`, `GEMINI.md`, `AIDER.md`, `ROO.md`, `WINDSURF.md`, `.cursorrules`, `.clauderules`, `.github/copilot-instructions.md`) so every assistant finds the rules
+
+Rules:
+- the framework repository is **not** copied into the project — only the compact sidecar
+- rejects the template root itself
+
+Success result:
+- prints `✅ Compact SDD sidecar installed at: <path>/spec` with the template version and profile
+- prints the next commands, which in a sidecar live under `./spec/scripts/` (`new-spec.sh`, `validate-sdd.sh`, `check-sdd-policy.sh`, `check-sdd-gate.sh`)
+- prints the optional GitHub Spec Kit init command
+
 ## Spec and traceability scripts
 
 ### `./scripts/new-spec.sh "feature-name" "Owner"`
@@ -123,6 +141,78 @@ Reads:
 
 Success result:
 - prints the generated roadmap file paths
+
+### `./scripts/score-spec.sh specs/NNN-name` (or `--all`)
+
+Use when:
+- you want a quick quality read on a spec bundle before asking for approval
+
+Reads:
+- the bundle files (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `history.md`)
+
+Writes:
+- nothing — it is read-only
+
+Success result:
+- prints `Spec:`, `Score: NN/100 (Grade X)` and a `Notes:` list of what is weak
+- with `--all`, prints one block per numbered spec
+- the argument is the bundle **folder**, not `spec.md`; pointing it at a single file reports `missing required files`
+
+Affects gate:
+- no — the score is advisory, never a blocker
+
+## Documentation and maintenance scripts
+
+### `./scripts/generate-llms-txt.sh`
+
+Creates or replaces:
+- `llms.txt` at the repository root
+
+Reads:
+- `docs/en/` and `docs/es/`, taking each file's first H1 as its title
+
+Success result:
+- prints `Generated <path>/llms.txt (N lines)`
+
+When to run:
+- after adding, renaming or retitling any guide, so coding agents index the real docs
+
+### `./scripts/legacy-discovery.sh [target] [out-dir]`
+
+Use when:
+- you are adopting SDD on an existing codebase and need a starting point for reverse engineering
+
+Creates (default `analysis/legacy-discovery/`):
+- `routes-signals.txt` — route/endpoint matches
+- `flow-signals.txt` — user-flow matches (login, checkout, profile…)
+- `legacy-discovery-report.md` — signal counts, suggested first specs, and a suggested prompt
+
+Requires:
+- `rg` (ripgrep) on the PATH
+
+Success result:
+- prints `Generated <out-dir>/legacy-discovery-report.md` and the next step
+
+Affects gate:
+- no — the report is input for writing specs, not a spec
+
+### `./scripts/reset-template.sh [--confirm]`
+
+Use when:
+- you cloned this template and want a clean slate for your own project
+
+Without `--confirm`:
+- prints exactly what it would erase and exits without touching anything
+
+With `--confirm` it clears:
+- `idea/IDEA_GENERAL.md`, `bitacora/global/PROJECT_LOG.md`, `specs/INDEX.md`, `STATUS.md` (structure kept, content removed)
+- every numbered spec folder in `specs/` and the `analysis/` output
+
+Never touches:
+- `examples/`, `docs/`, `scripts/`
+
+> [!WARNING]
+> `--confirm` is destructive and has no undo. Commit or back up first.
 
 ## Validation scripts
 

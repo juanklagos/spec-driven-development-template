@@ -39,3 +39,14 @@ jobs:
 
       - name: npm package smoke test (packed tarballs)
         run: npm run mcp:pack:smoke
+
+      # builder/ is a standalone Vite app with its own lockfile: the root
+      # workspaces glob is packages/* only, so `npm run typecheck` / `npm run
+      # build` above never reach it. Without this step CI asserts things about
+      # builder/src (the mirror asserts in scripts/test-mcp-integration.mjs read
+      # those files as text) while never compiling them.
+      # `npm run build` in builder/ is `tsc --noEmit && vite build`, so one
+      # command covers both typecheck and build.
+      - name: Builder typecheck + build
+        working-directory: builder
+        run: npm ci && npm run build

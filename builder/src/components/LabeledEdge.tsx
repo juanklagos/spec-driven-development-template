@@ -52,7 +52,11 @@ function EdgePurposePicker({ id, label }: { id: string; label: string }) {
   return (
     <div
       className="edge-picker nodrag nopan"
-      role="menu"
+      // role="group", not "menu": ARIA menus may only contain menuitem children,
+      // and this widget mixes buttons with a text input and a teaching hint.
+      // "menu" would also owe roving arrow-key focus, which this picker does not
+      // implement (it only handles Escape).
+      role="group"
       aria-label={t("edge.pickerAria")}
       onKeyDown={(e) => {
         if (e.key === "Escape") setEditingEdge(null);

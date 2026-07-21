@@ -2,8 +2,9 @@
 // more simultaneous "Guardar / Save" labels anywhere in the UI. Lightweight
 // on purpose: a flat ES/EN dictionary + a zustand store (detection from
 // navigator.language, persisted switcher in the TopBar) and a `useT()` hook.
-// Server-produced texts (API errors) may still arrive bilingual — documented
-// limitation until the API itself is localized.
+// Server failures arrive as machine codes (see packages/sdd-mcp/src/github.ts)
+// and are rendered from the `error.code.*` entries below, so no API error
+// reaches the UI as a bilingual "es / en" string either.
 
 import { create } from "zustand";
 
@@ -58,7 +59,6 @@ const es = {
   "common.back": "← Volver",
   "common.retry": "Reintentar",
   "common.remove": "Quitar",
-  "common.add": "Añadir",
   "common.moveUp": "Subir",
   "common.moveDown": "Bajar",
 
@@ -199,7 +199,6 @@ const es = {
 
   // Spec sheet (drawer)
   "sheet.aria": "Detalle de la spec {id}",
-  "sheet.tabs": "Pestañas",
   "sheet.tab.summary": "Resumen",
   "sheet.tab.edit": "Editar spec",
   "sheet.tab.approval": "Aprobación",
@@ -264,7 +263,6 @@ const es = {
   "ears.vague": "Palabra vaga sin número medible: {words}",
 
   // Approval tab
-  "approval.title": "Estado de aprobación",
   "approval.note":
     "Aprobar escribe el bloque real en spec.md: estado, fecha de hoy, aprobador y evidencia.",
   "approval.status": "Estado",
@@ -310,13 +308,27 @@ const es = {
   "note.epic.new": "📦 Épica nueva",
   "note.empty": "(vacío)",
   "note.editTitle": "Doble clic para editar",
-  "note.file": "(archivo)",
 
   // Client-side errors
   "error.apiUnreachable":
     "No se pudo conectar con la API — arranca el servidor: SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start",
   "error.templatesNonEmpty":
     "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío.",
+
+  // Server errors with a machine code (packages/sdd-mcp/src/github.ts).
+  // The server sends the code, the UI picks the language — spec 010, R1: no
+  // double labels anywhere, including errors.
+  "error.code.GH_NO_REPO":
+    "Este workspace no es un repositorio git — ejecuta: git init && git remote add origin <url>",
+  "error.code.GH_NO_REMOTE": "El repositorio git no tiene remote — ejecuta: git remote add origin <url>",
+  "error.code.GH_NOT_INSTALLED":
+    "gh CLI no está instalado — instálalo desde https://cli.github.com y luego ejecuta: gh auth login",
+  "error.code.GH_CLI_FAILED": "gh CLI falló al ejecutarse.",
+  "error.code.GH_NOT_AUTHED": "gh no está autenticado — ejecuta: gh auth login",
+  "error.code.GH_REPO_VIEW_FAILED": "No se pudo resolver el repositorio GitHub desde el remote.",
+  "error.code.GH_BAD_OUTPUT":
+    "Respuesta inesperada de gh repo view — actualiza gh: https://cli.github.com",
+  "error.code.GH_ISSUE_LIST_FAILED": "No se pudieron listar los issues existentes en GitHub.",
 
   // ── Capa educativa (help.*) ────────────────────────────────────────────────
   // Cada concepto SDD que la interfaz muestra se explica donde aparece, y cada
@@ -380,7 +392,6 @@ const en: Record<keyof typeof es, string> = {
   "common.back": "← Back",
   "common.retry": "Retry",
   "common.remove": "Remove",
-  "common.add": "Add",
   "common.moveUp": "Move up",
   "common.moveDown": "Move down",
 
@@ -521,7 +532,6 @@ const en: Record<keyof typeof es, string> = {
 
   // Spec sheet (drawer)
   "sheet.aria": "Spec {id} detail",
-  "sheet.tabs": "Tabs",
   "sheet.tab.summary": "Summary",
   "sheet.tab.edit": "Edit spec",
   "sheet.tab.approval": "Approval",
@@ -584,7 +594,6 @@ const en: Record<keyof typeof es, string> = {
   "ears.vague": "Vague word without a measurable number: {words}",
 
   // Approval tab
-  "approval.title": "Approval status",
   "approval.note":
     "Approving writes the real block into spec.md: status, today's date, approver and evidence.",
   "approval.status": "Status",
@@ -630,13 +639,24 @@ const en: Record<keyof typeof es, string> = {
   "note.epic.new": "📦 New epic",
   "note.empty": "(empty)",
   "note.editTitle": "Double-click to edit",
-  "note.file": "(file)",
 
   // Client-side errors
   "error.apiUnreachable":
     "Could not reach the API — start the server: SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start",
   "error.templatesNonEmpty":
     "This workspace already has specs; templates only apply to an empty workspace.",
+
+  // Server errors with a machine code (packages/sdd-mcp/src/github.ts).
+  "error.code.GH_NO_REPO":
+    "This workspace is not a git repository — run: git init && git remote add origin <url>",
+  "error.code.GH_NO_REMOTE": "The git repository has no remote — run: git remote add origin <url>",
+  "error.code.GH_NOT_INSTALLED":
+    "gh CLI is not installed — install it from https://cli.github.com, then run: gh auth login",
+  "error.code.GH_CLI_FAILED": "The gh CLI failed to run.",
+  "error.code.GH_NOT_AUTHED": "gh is not authenticated — run: gh auth login",
+  "error.code.GH_REPO_VIEW_FAILED": "Could not resolve the GitHub repository from the remote.",
+  "error.code.GH_BAD_OUTPUT": "Unexpected gh repo view response — update gh: https://cli.github.com",
+  "error.code.GH_ISSUE_LIST_FAILED": "Could not list the existing GitHub issues.",
 
   // ── Teaching layer (help.*) ───────────────────────────────────────────────
   "help.aria": "Help: {topic}",
@@ -700,6 +720,15 @@ function format(template: string, vars?: Record<string, string | number>): strin
   return template.replace(/\{(\w+)\}/g, (match, name: string) =>
     name in vars ? String(vars[name]) : match
   );
+}
+
+/**
+ * True when the dictionaries define `key`. `translate` falls back to the key
+ * itself, so callers that build a key from server data (e.g. an error code)
+ * must ask first or the UI would print "error.code.GH_SOMETHING_NEW".
+ */
+export function hasTranslation(key: string): boolean {
+  return key in DICTS.en || key in DICTS.es;
 }
 
 /** Translate outside React (store, api client). Reads the current language. */

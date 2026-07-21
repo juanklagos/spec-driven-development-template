@@ -491,6 +491,80 @@ Structured output:
 - `specId`
 - `tasks`
 
+### `sdd_gate_summary`
+
+Purpose:
+- one-call gate semaphore: the gate check plus the structural validation, with every message grouped by the spec it belongs to
+
+When to use:
+- when you want the whole workspace status in a single call (this is the data behind the SDD Builder gate chip and the per-card badges)
+
+Rules:
+- same `sdd-core` layer as the `/api/gate` REST route — no second copy of the rule
+- `dependencyWarnings` are advisory only (an approved spec depending on a not-approved one), never gate errors
+
+Input:
+- `projectRoot`
+
+Structured output:
+- `ok`
+- `errors`, `warnings` (counts)
+- `messages` grouped by spec
+- `dependencyWarnings`
+
+### `sdd_approve_spec`
+
+Purpose:
+- surgically fill the existing approval block of a `spec.md`
+
+When to use:
+- when the human decision maker has approved the spec and you must leave the evidence on disk before implementation
+
+Rules:
+- writes `Estado` -> `Aprobado`, approval date -> today, approver -> the given name
+- `evidence` always wins when provided; without it, an existing evidence line is never overwritten
+- fails with a clear bilingual error when the `## Estado de aprobación / Approval status` block is missing — copy the block from `specs/_template/spec.md` first
+- the tool records the decision, it does not make it: approval is always a human act
+
+Input:
+- `projectRoot`
+- `specId`
+- `approver`
+- `evidence` (optional)
+
+Structured output:
+- `specId`
+- `status`
+- `approvalDate`
+- `approver`
+- `evidenceUpdated`
+- `fieldsUpdated`
+
+### `sdd_update_spec_sections`
+
+Purpose:
+- replace **only** the content under the guided-editor headings of a `spec.md`, preserving everything else
+
+When to use:
+- when filling or refining a spec from a guided editor or from the conversation, without rewriting the whole file
+
+Rules:
+- surgical, atomic, serialized read-modify-write: two concurrent saves queue instead of clobbering each other
+- the approval block is always preserved
+- tolerant to the EN/ES headings of the repo template; a heading the file does not have is appended at the end with its canonical bilingual title and reported in `created`
+
+Input:
+- `projectRoot`
+- `specId`
+- `story` (optional, free text)
+- `scenarios`, `criteria`, `requirements`, `properties`, `successCriteria` (optional, lists)
+- `outOfScope` (optional, free text)
+
+Structured output:
+- `specId`
+- `updated` (sections replaced in place)
+- `created` (sections appended because the file lacked them)
+
 ### `sdd_board_app`
 
 Purpose:

@@ -216,10 +216,12 @@ What belongs here:
 Subfolders:
 - `packages/sdd-core/`
 - `packages/sdd-mcp/`
+- `packages/create-sdd-project/`
 
 Meaning:
 - `sdd-core` contains reusable logic
 - `sdd-mcp` exposes that logic to AI clients through MCP
+- `create-sdd-project` is the `npx @juanklagos/create-sdd-project` scaffolder that installs the SDD structure into a new or existing project
 
 When to update:
 - when framework behavior changes in code

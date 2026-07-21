@@ -215,7 +215,7 @@ npm run mcp:start
 ```
 
 - **No clone?** Point your MCP client straight at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
-- **🎨 SDD Builder (visual, drag-and-drop):** build once with `npm run builder:build`, then `npm run mcp:http:start` and open `http://127.0.0.1:3334/builder` — compose your specs as connected cards; every card is a real `specs/NNN/` bundle on disk.
+- **🎨 SDD Builder (visual, drag-and-drop):** build once with `npm run builder:build`, then `SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start` and open `http://127.0.0.1:3334/builder` — compose your specs as connected cards; every card is a real `specs/NNN/` bundle on disk. Inside this template repository the builder is blocked by design (no target-project work in the template root), so always point `SDD_PROJECT_ROOT` at a real workspace — see the [visual guide](./docs/en/51-sdd-builder-visual-guide.md).
 - **Visual dashboard:** run `npm run mcp:http:start` and open `http://127.0.0.1:3334/dashboard` — a read-only executive view of the workspace (gate status, KPI tiles, per-spec progress and dependency warnings) in your language, no build step required.
 - Easiest explanation first: [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 - Client configs: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
@@ -235,7 +235,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 2. [Structure](./docs/en/01-structure.md) — what each folder is for
 3. [SDD in 2026: state of the art](./docs/en/50-sdd-state-of-the-art-2026.md) — the industry map and where this template stands
 
-**Everything else:** the [full documentation index](./docs/README.md) organizes all 51 guides (EN/ES) by topic.
+**Everything else:** the [full documentation index](./docs/README.md) organizes all 52 guides (EN/ES) by topic.
 
 ## 💬 Community
 
@@ -248,7 +248,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 ## ⚖️ Legal & authorship
 
 - License: PolyForm Noncommercial 1.0.0 — [legal guide](./docs/en/31-legal-framework-and-commercial-use.md)
-- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
+- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v1.7.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
 - Author: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
 
 ---

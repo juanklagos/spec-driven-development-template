@@ -61,16 +61,36 @@ mkdir -p "$TARGET_ABS" \
          "$SPEC_ROOT/scripts/lib" \
          "$TARGET_ABS/.github"
 
-cp -n "$ROOT_DIR/templates/sidecar/README.md" "$SPEC_ROOT/README.md"
-cp -n "$ROOT_DIR/templates/sidecar/AGENTS.md" "$SPEC_ROOT/AGENTS.md"
-cp -n "$ROOT_DIR/templates/sidecar/AI_START_HERE.md" "$SPEC_ROOT/AI_START_HERE.md"
-cp -n "$ROOT_DIR/templates/sidecar/INSTRUCTIONS.md" "$SPEC_ROOT/INSTRUCTIONS.md"
-cp -n "$ROOT_DIR/templates/sidecar/sdd.policy.yaml" "$SPEC_ROOT/sdd.policy.yaml"
-cp -n "$ROOT_DIR/templates/sidecar/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" \
+# Never clobber content the user may have edited — but never abort either.
+#
+# This used to be `cp -n`, whose BSD implementation (macOS, verified
+# 2026-07-21) exits 1 when the destination already exists. Under `set -e` that
+# turned the FIRST already-installed file into a silent death: a second run of
+# the installer printed nothing at all and exited 1, so re-running it — which
+# QUICKSTART.md, both READMEs and docs/{en,es}/51-*.md all tell users to do —
+# repaired nothing.
+copy_if_absent() {
+  [ -e "$2" ] || cp "$1" "$2"
+}
+
+# Framework-owned files. These are OURS: the gate, the validators and the root
+# resolver they share. A stale copy from an older template — or a tampered one
+# (verified 2026-07-21: `exit 0  # TAMPERED` in check-sdd-gate.sh survived a
+# reinstall byte-for-byte) — is a broken gate, so reinstalling repairs them.
+copy_framework_file() {
+  cp -f "$1" "$2"
+}
+
+copy_if_absent "$ROOT_DIR/templates/sidecar/README.md" "$SPEC_ROOT/README.md"
+copy_if_absent "$ROOT_DIR/templates/sidecar/AGENTS.md" "$SPEC_ROOT/AGENTS.md"
+copy_if_absent "$ROOT_DIR/templates/sidecar/AI_START_HERE.md" "$SPEC_ROOT/AI_START_HERE.md"
+copy_if_absent "$ROOT_DIR/templates/sidecar/INSTRUCTIONS.md" "$SPEC_ROOT/INSTRUCTIONS.md"
+copy_if_absent "$ROOT_DIR/templates/sidecar/sdd.policy.yaml" "$SPEC_ROOT/sdd.policy.yaml"
+copy_if_absent "$ROOT_DIR/templates/sidecar/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" \
   "$SPEC_ROOT/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md"
 
-cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$SPEC_ROOT/idea/IDEA_GENERAL.md"
-cp -n "$ROOT_DIR/specs/README.md" "$SPEC_ROOT/specs/README.md"
+copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$SPEC_ROOT/idea/IDEA_GENERAL.md"
+copy_if_absent "$ROOT_DIR/specs/README.md" "$SPEC_ROOT/specs/README.md"
 # Write a clean spec index for the new workspace instead of copying the
 # framework repo index (which carries this template's own spec rows).
 if [ ! -f "$SPEC_ROOT/specs/INDEX.md" ]; then
@@ -81,17 +101,17 @@ if [ ! -f "$SPEC_ROOT/specs/INDEX.md" ]; then
 |---|---|---|---|---|---|
 INDEXEOF
 fi
-cp -n "$ROOT_DIR/specs/_template/spec.md" "$SPEC_ROOT/specs/_template/spec.md"
-cp -n "$ROOT_DIR/specs/_template/plan.md" "$SPEC_ROOT/specs/_template/plan.md"
-cp -n "$ROOT_DIR/specs/_template/tasks.md" "$SPEC_ROOT/specs/_template/tasks.md"
-cp -n "$ROOT_DIR/specs/_template/research.md" "$SPEC_ROOT/specs/_template/research.md"
-cp -n "$ROOT_DIR/specs/_template/history.md" "$SPEC_ROOT/specs/_template/history.md"
-cp -n "$ROOT_DIR/specs/_template/contracts/README.md" "$SPEC_ROOT/specs/_template/contracts/README.md"
-cp -n "$ROOT_DIR/bitacora/README.md" "$SPEC_ROOT/bitacora/README.md"
-cp -n "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$SPEC_ROOT/bitacora/global/PROJECT_LOG.md"
-cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DAILY_TEMPLATE.md"
-cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/HANDOFF_TEMPLATE.md"
-cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DECISION_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/specs/_template/spec.md" "$SPEC_ROOT/specs/_template/spec.md"
+copy_if_absent "$ROOT_DIR/specs/_template/plan.md" "$SPEC_ROOT/specs/_template/plan.md"
+copy_if_absent "$ROOT_DIR/specs/_template/tasks.md" "$SPEC_ROOT/specs/_template/tasks.md"
+copy_if_absent "$ROOT_DIR/specs/_template/research.md" "$SPEC_ROOT/specs/_template/research.md"
+copy_if_absent "$ROOT_DIR/specs/_template/history.md" "$SPEC_ROOT/specs/_template/history.md"
+copy_if_absent "$ROOT_DIR/specs/_template/contracts/README.md" "$SPEC_ROOT/specs/_template/contracts/README.md"
+copy_if_absent "$ROOT_DIR/bitacora/README.md" "$SPEC_ROOT/bitacora/README.md"
+copy_if_absent "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$SPEC_ROOT/bitacora/global/PROJECT_LOG.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DAILY_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/HANDOFF_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DECISION_TEMPLATE.md"
 
 # Keep the empty logbook folders alive through git clones: validate-sdd.sh
 # requires them, and git does not track empty directories.
@@ -125,14 +145,16 @@ Use `/sdd:decision` to capture one interactively. / Usa `/sdd:decision` para cap
 |---|---|---|
 DECIDXEOF
 fi
-cp -n "$ROOT_DIR/.sdd.README.template.md" "$SPEC_ROOT/.sdd/README.md"
+copy_if_absent "$ROOT_DIR/.sdd.README.template.md" "$SPEC_ROOT/.sdd/README.md"
 
-cp -n "$ROOT_DIR/scripts/lib/sdd-root.sh" "$SPEC_ROOT/scripts/lib/sdd-root.sh"
-cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$SPEC_ROOT/scripts/validate-sdd.sh"
-cp -n "$ROOT_DIR/scripts/check-sdd-policy.sh" "$SPEC_ROOT/scripts/check-sdd-policy.sh"
-cp -n "$ROOT_DIR/scripts/check-sdd-gate.sh" "$SPEC_ROOT/scripts/check-sdd-gate.sh"
-cp -n "$ROOT_DIR/scripts/confirm-user-consent.sh" "$SPEC_ROOT/scripts/confirm-user-consent.sh"
-cp -n "$ROOT_DIR/scripts/new-spec.sh" "$SPEC_ROOT/scripts/new-spec.sh"
+# The gate and its dependencies are refreshed on every install, not preserved:
+# they are the enforcement machinery, not user content.
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$SPEC_ROOT/scripts/lib/sdd-root.sh"
+copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$SPEC_ROOT/scripts/validate-sdd.sh"
+copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$SPEC_ROOT/scripts/check-sdd-policy.sh"
+copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$SPEC_ROOT/scripts/check-sdd-gate.sh"
+copy_framework_file "$ROOT_DIR/scripts/confirm-user-consent.sh" "$SPEC_ROOT/scripts/confirm-user-consent.sh"
+copy_framework_file "$ROOT_DIR/scripts/new-spec.sh" "$SPEC_ROOT/scripts/new-spec.sh"
 chmod +x "$SPEC_ROOT/scripts/validate-sdd.sh" \
          "$SPEC_ROOT/scripts/check-sdd-policy.sh" \
          "$SPEC_ROOT/scripts/check-sdd-gate.sh" \
@@ -141,11 +163,39 @@ chmod +x "$SPEC_ROOT/scripts/validate-sdd.sh" \
 
 if [ "$PROFILE" = "recommended" ]; then
   mkdir -p "$SPEC_ROOT/template-context/prompts"
-  cp -n "$ROOT_DIR/template-context/README.md" "$SPEC_ROOT/template-context/README.md"
-  cp -n "$ROOT_DIR/template-context/05-SDD-EXECUTION-GATE.md" "$SPEC_ROOT/template-context/05-SDD-EXECUTION-GATE.md"
-  cp -n "$ROOT_DIR/template-context/06-AI-RULES-MATRIX.md" "$SPEC_ROOT/template-context/06-AI-RULES-MATRIX.md"
+  copy_if_absent "$ROOT_DIR/template-context/README.md" "$SPEC_ROOT/template-context/README.md"
+  copy_if_absent "$ROOT_DIR/template-context/05-SDD-EXECUTION-GATE.md" "$SPEC_ROOT/template-context/05-SDD-EXECUTION-GATE.md"
+  copy_if_absent "$ROOT_DIR/template-context/06-AI-RULES-MATRIX.md" "$SPEC_ROOT/template-context/06-AI-RULES-MATRIX.md"
   cp -R "$ROOT_DIR/templates/." "$SPEC_ROOT/templates"
 fi
+
+# Version stamp, written unconditionally so a sidecar can always say what
+# template it was installed from and when it was last refreshed. Nothing
+# recorded this before: `grep -rn "TEMPLATE_VERSION"` across the repo returned
+# nothing, so a sidecar carrying a two-releases-old gate looked identical to a
+# current one.
+#
+# Two homes for the version: a checkout has package.json at ROOT_DIR, while an
+# npm install runs from packages/sdd-core/framework/, whose package.json is one
+# level up. Reading only the first made this script die under `set -e` inside
+# the published tarball.
+read_template_version() {
+  local candidate
+  for candidate in "$ROOT_DIR/package.json" "$ROOT_DIR/../package.json"; do
+    if [ -f "$candidate" ]; then
+      sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$candidate" | head -n 1
+      return 0
+    fi
+  done
+  printf "unknown\n"
+}
+TEMPLATE_VERSION="$(read_template_version)"
+cat > "$SPEC_ROOT/.sdd/TEMPLATE_VERSION" <<EOF
+template_version=${TEMPLATE_VERSION:-unknown}
+profile=$PROFILE
+installed_at=$(date '+%Y-%m-%d %H:%M:%S %z')
+source=https://github.com/juanklagos/spec-driven-development-template
+EOF
 
 write_sidecar_md_rule() {
   local dest="$1"
@@ -252,6 +302,7 @@ fi
 cat <<EOF
 ✅ Compact SDD sidecar installed at:
    $SPEC_ROOT
+   template $(sed -n 's/^template_version=//p' "$SPEC_ROOT/.sdd/TEMPLATE_VERSION"), profile $PROFILE
 
 What this means:
 - Your app code stays in the project root.
@@ -270,3 +321,29 @@ If you want GitHub Spec Kit in the project root:
   # or
   uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 EOF
+
+# The conflicts have to be SAID, not filed. This is the failure mode the whole
+# template exists to prevent: an agent reads the project's own CLAUDE.md, never
+# learns ./spec/ exists, and writes code with no gate. Verified 2026-07-21: with
+# a pre-existing root CLAUDE.md the installer exited 0 printing the normal
+# success banner, and the only record was spec/ROOT_AI_STUB_CONFLICTS.md, a file
+# nothing in the repo reads or mentions.
+if [ -n "$STUB_CONFLICTS" ]; then
+  cat >&2 <<EOF
+
+⚠️  WARNING: these root AI rule files already existed and were NOT modified:
+
+$(printf "%s" "$STUB_CONFLICTS" | sed 's/^/   - /')
+   Agents read those files, so right now they do not know ./spec/ exists.
+   Los agentes leen esos archivos, así que hoy no saben que existe ./spec/.
+
+   Paste this into each of them / Pega esto en cada uno:
+
+   ## SDD
+   This project keeps its SDD operating system in \`./spec/\`.
+   No code before approved spec and consistent plan.
+   Read first: \`./spec/AGENTS.md\`, \`./spec/AI_START_HERE.md\`, \`./spec/INSTRUCTIONS.md\`.
+
+   Full list: $SPEC_ROOT/ROOT_AI_STUB_CONFLICTS.md
+EOF
+fi

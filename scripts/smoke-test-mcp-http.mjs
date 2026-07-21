@@ -12,8 +12,10 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { spawn } from "node:child_process";
+import { promises as fs } from "node:fs";
 import http from "node:http";
 import os from "node:os";
+import path from "node:path";
 import packageJson from "../package.json" with { type: "json" };
 
 const port = 3334;
@@ -21,6 +23,8 @@ const port = 3334;
 const sessionPort = 3335;
 /** Short-lived control server, proves the LAN probe below is not vacuous. */
 const exposedPort = 3336;
+/** Short-lived server pointed at a throwaway SDD workspace (REST routes). */
+const restPort = 3337;
 
 const children = new Set();
 
@@ -350,6 +354,213 @@ async function checkBodyCap(server) {
   assert(stillServing.status === 200, `server must keep serving after an oversized request, got ${stillServing.status}`);
 }
 
+// --- I14: the REST routes, functionally -------------------------------------
+//
+// Everything above only ever probed /api/* to see it REJECTED (403/415/413) or
+// to prove the port is unreachable. api.ts owns three kinds of logic and none
+// of it was covered: the route regexes, the status codes (201 for a created
+// spec vs 200 everywhere else) and the body-validation branches (400 before
+// any SDD call). The template root answers 422 by design, so this needs a real
+// throwaway workspace: resolveSddRoot (packages/sdd-core/src/workspace.ts)
+// requires all four of sdd.policy.yaml, specs/, idea/ and bitacora/.
+
+async function makeFixtureWorkspace() {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-http-rest-"));
+  for (const dir of ["specs", "idea", "bitacora"]) {
+    await fs.mkdir(path.join(root, dir), { recursive: true });
+  }
+  await fs.cp(path.join(process.cwd(), "specs", "_template"), path.join(root, "specs", "_template"), {
+    recursive: true
+  });
+  await fs.cp(path.join(process.cwd(), "specs", "INDEX.md"), path.join(root, "specs", "INDEX.md"));
+  await fs.cp(path.join(process.cwd(), "sdd.policy.yaml"), path.join(root, "sdd.policy.yaml"));
+  return root;
+}
+
+/** rawRequest + JSON body parsing, aimed at the REST fixture server. */
+async function restRequest(path, { method = "GET", body, headers } = {}) {
+  const res = await rawRequest({
+    port: restPort,
+    path,
+    method,
+    headers: { "content-type": "application/json", ...headers },
+    ...(body === undefined ? {} : { body })
+  });
+  let parsed;
+  try {
+    parsed = JSON.parse(res.body);
+  } catch {
+    parsed = undefined;
+  }
+  return { ...res, json: parsed };
+}
+
+/** SSE never ends: resolve on the response head and hang up. */
+function headOnlyRequest(targetPort, requestPath) {
+  return new Promise((resolve) => {
+    const req = http.request({ host: "127.0.0.1", port: targetPort, path: requestPath, timeout: 5000 }, (res) => {
+      resolve({ status: res.statusCode, headers: res.headers });
+      req.destroy();
+    });
+    req.on("error", (error) => resolve({ status: 0, error: error.code ?? error.message, headers: {} }));
+    req.on("timeout", () => {
+      req.destroy();
+      resolve({ status: 0, error: "ETIMEDOUT", headers: {} });
+    });
+    req.end();
+  });
+}
+
+async function checkRestRoutes() {
+  const root = await makeFixtureWorkspace();
+  const server = startServer(restPort, { SDD_PROJECT_ROOT: root });
+  try {
+    await server.ready;
+
+    const board = await restRequest("/api/board");
+    assert(board.status === 200, `GET /api/board must be 200, got ${board.status}`);
+    assert(board.json?.projectRoot === root, "GET /api/board must report the workspace it was pointed at");
+    assert(Array.isArray(board.json?.specs) && board.json.specs.length === 0, "a fresh workspace has no specs");
+
+    const gate = await restRequest("/api/gate");
+    assert(gate.status === 200, `GET /api/gate must be 200, got ${gate.status}`);
+    assert(typeof gate.json?.ok === "boolean", "GET /api/gate must return a gate summary");
+
+    // Body validation runs BEFORE any SDD call: 400, not 422 and not a crash.
+    const noName = await restRequest("/api/spec", { method: "POST", body: "{}" });
+    assert(noName.status === 400, `POST /api/spec without a name must be 400, got ${noName.status}`);
+    assert(/name/.test(noName.json?.error ?? ""), "the 400 must say which field is missing");
+
+    // 201 is the only "created" status in the API and the builder relies on it.
+    const created = await restRequest("/api/spec", {
+      method: "POST",
+      body: JSON.stringify({ name: "probe feature", owner: "Probe" })
+    });
+    assert(created.status === 201, `POST /api/spec must be 201 Created, got ${created.status}`);
+    const specId = created.json?.specId;
+    assert(specId === "001-probe-feature", `unexpected spec id: ${specId}`);
+
+    const detail = await restRequest(`/api/spec/${specId}`);
+    assert(detail.status === 200, `GET /api/spec/:id must be 200, got ${detail.status}`);
+    assert(detail.json?.id === specId, "GET /api/spec/:id must echo the id");
+    assert(/Estado \/ Status/.test(detail.json?.docs?.spec ?? ""), "the spec document must come back whole");
+    assert(Array.isArray(detail.json?.tasks) && detail.json.tasks.length > 0, "the scaffolded tasks must parse");
+
+    const badSections = await restRequest(`/api/spec/${specId}/sections`, { method: "PUT", body: '"nope"' });
+    assert(badSections.status === 400, `PUT sections with a non-object body must be 400, got ${badSections.status}`);
+
+    const sections = await restRequest(`/api/spec/${specId}/sections`, {
+      method: "PUT",
+      body: JSON.stringify({ story: "Como probe quiero rutas REST verificadas" })
+    });
+    assert(sections.status === 200, `PUT sections must be 200, got ${sections.status}`);
+    assert(sections.json?.updated?.includes("story"), "PUT sections must report what it wrote");
+
+    const badTask = await restRequest(`/api/spec/${specId}/tasks`, { method: "PUT", body: JSON.stringify({ line: 1 }) });
+    assert(badTask.status === 400, `PUT tasks without { line, done } must be 400, got ${badTask.status}`);
+
+    // A well-formed request that breaks an SDD rule is 422, not 400.
+    const notATask = await restRequest(`/api/spec/${specId}/tasks`, {
+      method: "PUT",
+      body: JSON.stringify({ line: 0, done: true })
+    });
+    assert(notATask.status === 422, `PUT tasks on a non-task line must be 422, got ${notATask.status}`);
+    assert(/task checkbox/i.test(notATask.json?.error ?? ""), "the 422 must explain the line is not a task");
+
+    const taskLine = detail.json.tasks[0].line;
+    const ticked = await restRequest(`/api/spec/${specId}/tasks`, {
+      method: "PUT",
+      body: JSON.stringify({ line: taskLine, done: true })
+    });
+    assert(ticked.status === 200, `PUT tasks on a real task must be 200, got ${ticked.status}`);
+    assert(
+      ticked.json?.tasks?.find((task) => task.line === taskLine)?.done === true,
+      "PUT tasks must return the updated task list"
+    );
+
+    const noApprover = await restRequest(`/api/spec/${specId}/approve`, { method: "POST", body: "{}" });
+    assert(noApprover.status === 400, `POST approve without an approver must be 400, got ${noApprover.status}`);
+
+    const approved = await restRequest(`/api/spec/${specId}/approve`, {
+      method: "POST",
+      body: JSON.stringify({ approver: "Probe", evidence: "http smoke test" })
+    });
+    assert(approved.status === 200, `POST approve must be 200, got ${approved.status}`);
+    assert(approved.json?.specId === specId && approved.json?.approver === "Probe", "approve must echo what it wrote");
+
+    // I16: precondition failures carry a machine CODE. The temp workspace is
+    // not a git repo, so this is the GH_NO_REPO branch. Before the fix the
+    // body was only { error } with a bilingual "es / en" message that the
+    // builder printed verbatim — spec 010, R1 forbids double labels in errors.
+    const issues = await restRequest(`/api/spec/${specId}/issues`, { method: "POST", body: "{}" });
+    assert(issues.status === 422, `POST issues outside a git repo must be 422, got ${issues.status}`);
+    assert(
+      issues.json?.code === "GH_NO_REPO",
+      `POST issues must return a machine error code, got ${JSON.stringify(issues.json)}`
+    );
+
+    const savedBoard = await restRequest("/api/board", {
+      method: "PUT",
+      body: JSON.stringify({ nodes: [], edges: [] })
+    });
+    assert(savedBoard.status === 200, `PUT /api/board must be 200, got ${savedBoard.status}`);
+    assert(savedBoard.json?.ok === true, "PUT /api/board must acknowledge the write");
+
+    const events = await headOnlyRequest(restPort, "/api/events");
+    assert(events.status === 200, `GET /api/events must be 200, got ${events.status}`);
+    assert(
+      String(events.headers["content-type"] ?? "").includes("text/event-stream"),
+      `GET /api/events must be an SSE stream, got ${events.headers["content-type"]}`
+    );
+
+    const unknown = await restRequest("/api/definitely-not-a-route");
+    assert(unknown.status === 404, `an unknown /api/* route must be 404, got ${unknown.status}`);
+  } finally {
+    server.stop();
+    await fs.rm(root, { recursive: true, force: true });
+  }
+}
+
+// --- m13: static.ts (the /builder mount + its traversal guard) --------------
+//
+// serveBuilder had no test at all. Its guard rests entirely on URL
+// normalisation plus one `startsWith(BUILDER_DIST)` check, and it serves from
+// disk — exactly the shape that turns into a file-read primitive when it
+// breaks. builder/dist may or may not exist (it is checkout-only and not built
+// by `npm run build`), so both outcomes are accepted for the happy path; the
+// traversal asserts hold either way.
+
+async function checkBuilderStatic() {
+  const index = await rawRequest({ port, path: "/builder" });
+  if (index.status === 503) {
+    assert(
+      /npm run build/.test(index.body),
+      "a missing builder/dist must answer 503 with the build/checkout hint, not an empty error"
+    );
+  } else {
+    assert(index.status === 200, `GET /builder must be 200 or 503, got ${index.status}`);
+    assert(/<div id="root"|<!doctype html/i.test(index.body), "GET /builder must serve the built index.html");
+  }
+
+  // Neither traversal form may ever serve a file from outside builder/dist.
+  // "mcp:pack:smoke" only exists in the repo's package.json.
+  for (const traversal of [
+    "/builder/../../package.json",
+    "/builder/%2e%2e/%2e%2e/package.json",
+    "/builder/..%2f..%2fpackage.json"
+  ]) {
+    const escaped = await rawRequest({ port, path: traversal });
+    assert(
+      !escaped.body.includes("mcp:pack:smoke"),
+      `${traversal} escaped builder/dist and served the repo package.json`
+    );
+    assert(
+      escaped.status !== 200 || !String(escaped.headers?.["content-type"] ?? "").includes("application/json"),
+      `${traversal} served a JSON file from outside builder/dist`
+    );
+  }
+}
+
 // --- I15: session reclamation ----------------------------------------------
 
 async function checkSessionReclamation() {
@@ -398,6 +609,12 @@ async function main() {
 
   await checkBodyCap(server);
   console.log("MCP HTTP smoke test: request body cap OK (C4)");
+
+  await checkBuilderStatic();
+  console.log("MCP HTTP smoke test: /builder mount + traversal guard OK (m13)");
+
+  await checkRestRoutes();
+  console.log("MCP HTTP smoke test: REST routes OK (I14, I16)");
 
   await checkSessionReclamation();
   console.log("MCP HTTP smoke test: session reclamation OK (I15)");

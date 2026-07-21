@@ -8,14 +8,14 @@ This roadmap makes the next product steps explicit so users know where the frame
 
 ```mermaid
 flowchart LR
-  A["v1.6.0"] --> B["v1.8.0"]
+  A["v1.7.0"] --> B["v1.8.0"]
   B --> C["v1.9.0"]
 ```
 
 ## Current state
 
 Released:
-- `v1.6.0`
+- `v1.7.0`
 
 Now available:
 - SDD framework with multi-agent policy

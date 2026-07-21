@@ -15,7 +15,7 @@ import {
   writeBoard,
   type SpecSectionsInput
 } from "@juanklagos/sdd-core";
-import { createIssuesForSpec } from "./github.js";
+import { createIssuesForSpec, isGithubPreconditionError } from "./github.js";
 import { isPayloadTooLarge, json, payloadTooLargeResponse, readBody } from "./http-utils.js";
 
 export interface ApiDeps {
@@ -77,8 +77,8 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       const issuesMatch = route.match(/^\/api\/spec\/([^/]+)\/issues$/);
       if (req.method === "POST" && issuesMatch) {
         // Tasks -> GitHub issues (spec 009, R3). Preconditions (git repo with
-        // remote, gh installed + authenticated) fail with bilingual errors
-        // that the catch below returns as-is for the UI to show.
+        // remote, gh installed + authenticated) fail with a machine code that
+        // the catch below forwards; the UI renders it in ONE language.
         json(res, 200, await createIssuesForSpec(projectRoot, issuesMatch[1]));
         return true;
       }
@@ -121,7 +121,15 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
         json(res, status, body);
         return true;
       }
-      json(res, 422, { error: error instanceof Error ? error.message : String(error) });
+      // A coded precondition failure also ships its `code` (and raw CLI
+      // `detail` when there is one) so the client can localize it instead of
+      // printing the bilingual fallback message verbatim (spec 010, R1).
+      json(res, 422, {
+        error: error instanceof Error ? error.message : String(error),
+        ...(isGithubPreconditionError(error)
+          ? { code: error.code, ...(error.detail ? { detail: error.detail } : {}) }
+          : {})
+      });
       return true;
     }
     return false;

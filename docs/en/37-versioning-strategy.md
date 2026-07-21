@@ -51,6 +51,6 @@ Use major releases for:
 
 ## Package rule
 
-- internal packages remain `private` until there is a deliberate package publishing workflow
-- while private, keep versions aligned with the framework release to avoid confusion
-- if packages become public later, keep semver but publish changelogs per package
+- the packages are published on npm: `@juanklagos/sdd-core`, `@juanklagos/sdd-mcp` and `@juanklagos/create-sdd-project`
+- their versions track the framework release (one number for the whole repository), so `npx @juanklagos/create-sdd-project` always matches the documented workflow
+- keep semver and record every package-visible change in the repository `CHANGELOG.md`

@@ -33,7 +33,7 @@ Transports:
 - `stdio`
 - `Streamable HTTP`
 
-Tools:
+Tools (21 in total — full details in [guide 41](./41-complete-mcp-reference.md)):
 - `sdd_create_workspace`
 - `sdd_create_spec`
 - `sdd_validate`
@@ -46,6 +46,15 @@ Tools:
 - `sdd_write_daily_log`
 - `sdd_write_handoff`
 - `sdd_write_decision`
+- `sdd_board_read`
+- `sdd_board_write`
+- `sdd_board_connect`
+- `sdd_read_tasks`
+- `sdd_set_task_done`
+- `sdd_gate_summary`
+- `sdd_approve_spec`
+- `sdd_update_spec_sections`
+- `sdd_board_app`
 
 Structured tool output:
 - each tool exposes `outputSchema`

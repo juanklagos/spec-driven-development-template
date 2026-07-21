@@ -10,11 +10,7 @@ if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
   exit 1
 fi
 
-SDD_ROOT="$(sdd_resolve_root "$PWD" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
-if [ -z "$SDD_ROOT" ]; then
-  echo "Error: could not resolve SDD root."
-  exit 1
-fi
+SDD_ROOT="$(sdd_require_local_root "$SCRIPT_DIR/..")" || exit 1
 
 PROJECT_ROOT="$(sdd_project_root "$SDD_ROOT")"
 
@@ -38,19 +34,26 @@ if [ -z "$NAME_SLUG" ]; then
   exit 1
 fi
 
+# Everything from here to the INDEX.md append is one allocation: scan, claim
+# the directory, write the row. Two processes must not interleave inside it.
+#
+# The scan alone cannot be made safe: two simultaneous runs with different
+# feature names both read the same max and both create `NNN-<their-slug>` —
+# different directory names, so neither `mkdir` nor the existence check below
+# catches it (verified 2026-07-21: 5/5 trials produced two `001-` bundles).
+# The on-disk lock directory is the fix, and packages/sdd-core's reserveSpecDir
+# contends for the very same one, so the script and the server also serialize
+# against each other.
+SPECS_DIR="$SDD_ROOT/specs"
+SPECS_LOCK="$SPECS_DIR/.lock"
+mkdir -p "$SPECS_DIR"
+sdd_acquire_lock "$SPECS_LOCK" || exit 1
+trap 'sdd_release_lock "$SPECS_LOCK"' EXIT INT TERM
+
 # Next number = highest three-digit prefix on disk + 1.
 # KEEP IN SYNC with nextSpecNumber() in packages/sdd-core/src/index.ts: this
 # script and sdd_create_spec / POST /api/spec are the two supported ways to
 # create a spec, so they must allocate the same id.
-#
-# KNOWN LIMITATION (verified 2026-07-21): this scan is NOT safe against another
-# process allocating at the same instant. Two simultaneous runs with different
-# feature names both read the same max and both create `NNN-<their-slug>` —
-# different directory names, so neither `mkdir` nor the existence check below
-# can catch it. The TypeScript side serializes its own callers with an
-# in-process lock; nothing coordinates across processes. In practice a human
-# runs this script one at a time; if that ever stops being true, the fix is a
-# lock directory (`mkdir "$SDD_ROOT/specs/.lock"` as the atomic primitive).
 NEXT_NUM="$(find "$SDD_ROOT/specs" -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9][0-9]-*' 2>/dev/null \
   | sed -E 's#.*/([0-9]{3})-.*#\1#' \
   | sort -n \

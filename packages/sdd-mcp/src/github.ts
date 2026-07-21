@@ -2,8 +2,14 @@
 // This is a TRANSPORT module by design: it shells out to the local `gh` CLI
 // (execFile with an argument array — nothing is interpolated into a shell),
 // so it lives in sdd-mcp, not in sdd-core. Task data comes from the shared
-// sdd-core layer; every precondition failure is a clear bilingual error the
-// UI can show as-is.
+// sdd-core layer.
+//
+// Every precondition failure carries a stable machine CODE plus a bilingual
+// message. The code is the contract; the message is only the fallback for
+// clients with no dictionary (MCP tools, curl). The server owns the taxonomy
+// and the builder only renders it in the reader's language — spec 010, R1
+// forbids double labels anywhere in the UI, and these errors used to reach
+// the drawer as raw "es / en" strings.
 //
 // Idempotency is title-based: before creating anything we list existing
 // issues whose title carries the "[<specId>]" prefix and skip those tasks.
@@ -19,6 +25,45 @@ const SPEC_ID_RE = /^\d{3}-[a-z0-9][a-z0-9-]*$/;
 const MAX_TITLE_LENGTH = 240;
 const ISSUE_LIST_LIMIT = 200;
 const GH_TIMEOUT_MS = 30_000;
+
+/**
+ * Machine-readable reasons `createIssuesForSpec` can refuse. Exported so the
+ * builder dictionary can be checked against the full set (the parity assert in
+ * scripts/test-mcp-integration.mjs fails when a code has no es/en entry).
+ */
+export const GITHUB_ERROR_CODES = [
+  "GH_NO_REPO",
+  "GH_NO_REMOTE",
+  "GH_NOT_INSTALLED",
+  "GH_CLI_FAILED",
+  "GH_NOT_AUTHED",
+  "GH_REPO_VIEW_FAILED",
+  "GH_BAD_OUTPUT",
+  "GH_ISSUE_LIST_FAILED"
+] as const;
+
+export type GithubErrorCode = (typeof GITHUB_ERROR_CODES)[number];
+
+/**
+ * A precondition failure with a stable code. `message` stays bilingual on
+ * purpose: it is what non-UI callers see. `detail` carries raw `gh` stderr,
+ * which no dictionary can translate and which the UI appends verbatim.
+ */
+export class GithubPreconditionError extends Error {
+  readonly code: GithubErrorCode;
+  readonly detail?: string;
+
+  constructor(code: GithubErrorCode, message: string, detail?: string) {
+    super(message);
+    this.name = "GithubPreconditionError";
+    this.code = code;
+    if (detail) this.detail = detail;
+  }
+}
+
+export function isGithubPreconditionError(error: unknown): error is GithubPreconditionError {
+  return error instanceof GithubPreconditionError;
+}
 
 export type IssueTaskStatus = "created" | "skipped" | "failed";
 
@@ -89,14 +134,15 @@ export function buildIssueBody(specId: string, taskText: string, bundleUrl: stri
 }
 
 /**
- * Preconditions in order, each with a clear bilingual error: git repo with a
- * remote, `gh` installed, `gh` authenticated, remote resolvable as a GitHub
- * repository. Returns the repo slug and its web URL.
+ * Preconditions in order, each with a stable code + bilingual fallback: git
+ * repo with a remote, `gh` installed, `gh` authenticated, remote resolvable as
+ * a GitHub repository. Returns the repo slug and its web URL.
  */
 async function resolveGithubRepo(projectRoot: string): Promise<{ repo: string; url: string }> {
   const inRepo = await run("git", ["rev-parse", "--is-inside-work-tree"], projectRoot);
   if (!inRepo.ok) {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_NO_REPO",
       "Este workspace no es un repositorio git / This workspace is not a git repository — " +
         "ejecuta / run: git init && git remote add origin <url>"
     );
@@ -104,7 +150,8 @@ async function resolveGithubRepo(projectRoot: string): Promise<{ repo: string; u
 
   const remotes = await run("git", ["remote"], projectRoot);
   if (!remotes.ok || remotes.stdout === "") {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_NO_REMOTE",
       "El repositorio git no tiene remote / The git repository has no remote — " +
         "ejecuta / run: git remote add origin <url>"
     );
@@ -112,26 +159,36 @@ async function resolveGithubRepo(projectRoot: string): Promise<{ repo: string; u
 
   const ghVersion = await run("gh", ["--version"], projectRoot);
   if (ghVersion.missing) {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_NOT_INSTALLED",
       "gh CLI no está instalado / gh CLI is not installed — " +
         "instálalo desde / install it from https://cli.github.com y luego / then: gh auth login"
     );
   }
   if (!ghVersion.ok) {
-    throw new Error(`gh CLI falló / gh CLI failed: ${ghVersion.stderr}`);
+    throw new GithubPreconditionError(
+      "GH_CLI_FAILED",
+      `gh CLI falló / gh CLI failed: ${ghVersion.stderr}`,
+      ghVersion.stderr
+    );
   }
 
   const auth = await run("gh", ["auth", "status"], projectRoot);
   if (!auth.ok) {
-    throw new Error("gh no está autenticado / gh is not authenticated — ejecuta / run: gh auth login");
+    throw new GithubPreconditionError(
+      "GH_NOT_AUTHED",
+      "gh no está autenticado / gh is not authenticated — ejecuta / run: gh auth login"
+    );
   }
 
   const view = await run("gh", ["repo", "view", "--json", "nameWithOwner,url"], projectRoot);
   if (!view.ok) {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_REPO_VIEW_FAILED",
       "No se pudo resolver el repositorio GitHub desde el remote / " +
         "Could not resolve the GitHub repository from the remote" +
-        (view.stderr ? ` — ${view.stderr}` : "")
+        (view.stderr ? ` — ${view.stderr}` : ""),
+      view.stderr
     );
   }
 
@@ -142,7 +199,8 @@ async function resolveGithubRepo(projectRoot: string): Promise<{ repo: string; u
     parsed = {};
   }
   if (!parsed.nameWithOwner || !parsed.url) {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_BAD_OUTPUT",
       "Respuesta inesperada de gh repo view / Unexpected gh repo view response — " +
         "actualiza gh / update gh: https://cli.github.com"
     );
@@ -174,9 +232,11 @@ async function listExistingTitles(projectRoot: string, specId: string): Promise<
     projectRoot
   );
   if (!list.ok) {
-    throw new Error(
+    throw new GithubPreconditionError(
+      "GH_ISSUE_LIST_FAILED",
       "No se pudieron listar los issues existentes / Could not list existing issues" +
-        (list.stderr ? ` — ${list.stderr}` : "")
+        (list.stderr ? ` — ${list.stderr}` : ""),
+      list.stderr
     );
   }
   let rows: { title?: string }[];

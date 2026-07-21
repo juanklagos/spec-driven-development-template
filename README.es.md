@@ -215,7 +215,7 @@ npm run mcp:start
 ```
 
 - **¿Sin clonar?** Apunta tu cliente MCP directo a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
-- **🎨 SDD Builder (visual, arrastrar y soltar):** compila una vez con `npm run builder:build`, luego `npm run mcp:http:start` y abre `http://127.0.0.1:3334/builder` — construye tus specs como tarjetas conectadas; cada tarjeta es un bundle real `specs/NNN/` en disco.
+- **🎨 SDD Builder (visual, arrastrar y soltar):** compila una vez con `npm run builder:build`, luego `SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start` y abre `http://127.0.0.1:3334/builder` — construye tus specs como tarjetas conectadas; cada tarjeta es un bundle real `specs/NNN/` en disco. Dentro de este repositorio template el builder está bloqueado por diseño (no se ejecuta trabajo de proyecto destino en la raíz del template), así que apunta siempre `SDD_PROJECT_ROOT` a un workspace real — ver la [guía visual](./docs/es/51-guia-visual-sdd-builder.md).
 - **Dashboard visual:** corre `npm run mcp:http:start` y abre `http://127.0.0.1:3334/dashboard` — una vista ejecutiva de solo lectura del workspace (estado de la compuerta, tarjetas KPI, progreso por spec y avisos de dependencias) en tu idioma, sin compilar nada.
 - La explicación más simple primero: [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
 - Configuraciones por cliente: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
@@ -235,7 +235,7 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 2. [Estructura](./docs/es/01-estructura.md) — para qué sirve cada carpeta
 3. [SDD en 2026: estado del arte](./docs/es/50-estado-del-arte-sdd-2026.md) — el mapa de la industria y dónde está este template
 
-**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 51 guías (EN/ES) por tema.
+**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 52 guías (EN/ES) por tema.
 
 ## 💬 Comunidad
 
@@ -248,7 +248,7 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 ## ⚖️ Legal y autoría
 
 - Licencia: PolyForm Noncommercial 1.0.0 — [marco legal](./docs/es/31-marco-legal-y-uso-comercial.md)
-- Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.5.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
+- Historial: [CHANGELOG.md](./CHANGELOG.md) · Último release: [v1.7.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v1.7.0)
 - Autor: Juan Klagos ([AUTHORS.md](./AUTHORS.md))
 
 ---

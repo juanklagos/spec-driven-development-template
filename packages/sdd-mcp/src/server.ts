@@ -551,7 +551,7 @@ export function createSddMcpServer(): McpServer {
     {
       title: "Update spec sections",
       description:
-        "Replace ONLY the content under the guided-editor headings of a spec.md (user story, acceptance scenarios, EARS criteria, requirements, spec properties, success criteria, out of scope — the full template) preserving everything else, the approval block included. Tolerant to the EN/ES headings of both repo templates.",
+        "Replace ONLY the content under the guided-editor headings of a spec.md (user story, acceptance scenarios, EARS criteria, requirements, spec properties, success criteria, out of scope — the full template) preserving everything else, the approval block included. Tolerant to the EN/ES headings of the canonical repo template (specs/_template/spec.md).",
       inputSchema: {
         projectRoot: projectRootSchema,
         specId: specIdSchema,

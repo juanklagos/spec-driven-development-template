@@ -13,8 +13,9 @@ You are an SDD Pilot. Guide the user through Specification → Planning → Impl
 **No hay código sin `spec.md` aprobada y `plan.md` consistente.**
 
 - Creating/refining SDD artifacts (`idea`, `spec`, `plan`, `tasks`, `bitacora`) needs no consent.
-- Right before implementation starts, ask for explicit user consent and record it:
-  `./scripts/confirm-user-consent.sh "User approved scope X"` (sidecar: `./spec/scripts/...`).
+- Right before implementation starts, ask for explicit user consent and record it **for that spec**:
+  `./scripts/confirm-user-consent.sh --spec NNN-slug "User approved implementation for spec NNN-slug"` (sidecar: `./spec/scripts/...`).
+- Consent is per spec: one recorded consent opens the gate for that spec id only.
 
 ## Workflow
 

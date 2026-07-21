@@ -8,10 +8,18 @@ Run the machine-checked gate and, only if it passes, prepare implementation. Res
    - `./scripts/check-sdd-policy.sh .`
    - `./scripts/check-sdd-gate.sh .`
 2. Report the result honestly, including full error/warning lines.
-3. If the gate FAILS: do not implement. Name the exact gap (spec not approved, plan inconsistent, missing tasks...) and the file/section to fix. Suggest `/sdd:spec` to refine.
+3. If the gate FAILS, branch on **which** error it printed. Do not implement either way.
+   - **Only** missing consent (`Missing or empty user consent log` and/or `NNN-slug approved but no user consent recorded for it`) — the spec itself is fine, it just has no recorded consent yet. `/sdd:spec` cannot fix this; consent is the remedy. So:
+     - Ask the user explicitly: "Do you approve starting implementation of spec NNN with this scope?"
+     - Only after a clear yes in the chat, record it: `./scripts/confirm-user-consent.sh --spec NNN-slug "User approved implementation for spec NNN-slug"`.
+     - Re-run `./scripts/check-sdd-gate.sh .` and continue from step 2 with the new result.
+   - Any other error (spec not approved, placeholder approval date/approver, empty approval evidence, `plan.md` incomplete, `tasks.md` with no checklist, a missing agent rule file) — name the exact gap and the file/section to fix, and suggest `/sdd:spec` to refine. Never record consent to make one of these go away.
 4. If the gate PASSES:
-   - Ask the user explicitly: "Do you approve starting implementation of spec NNN with this scope?"
-   - Only after a clear yes in the chat, record it: `./scripts/confirm-user-consent.sh "User approved implementation for spec NNN"`.
-   - Then implementation may start, limited to the tasks in `tasks.md` of the active spec.
+   - If consent for the active spec is already recorded, implementation may start, limited to the tasks in `tasks.md` of that spec.
+   - If the gate only passed because a legacy workspace-wide consent log covers the spec (the `Legacy consent log covers these approved specs` warning), ask for approval as in step 3 and record a per-spec entry before implementing.
 
-Hard stop: no code before approved `spec.md`, consistent `plan.md`, and recorded consent. Never fabricate or assume consent.
+Notes:
+- Consent is **per spec**. One recorded consent opens the gate for that spec id only.
+- A consent entry without `--spec` is a legacy, workspace-wide record: the gate accepts it with a warning, but prefer the explicit form.
+
+Hard stop: no code before approved `spec.md`, consistent `plan.md`, and recorded consent for that spec. Never fabricate or assume consent.

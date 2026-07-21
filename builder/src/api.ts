@@ -11,11 +11,16 @@ import type {
   UpdateSpecSectionsResult
 } from "./types";
 
-import { translate } from "./i18n";
+import { hasTranslation, translate } from "./i18n";
 
 // Same-origin API served by packages/sdd-mcp (http://127.0.0.1:3334/builder).
-// Client-side errors are localized; errors coming FROM the server may still
-// be bilingual (documented limitation of spec 010, R1).
+//
+// Errors are localized on BOTH sides. Server failures that carry a machine
+// `code` (packages/sdd-mcp/src/github.ts owns the taxonomy) are rendered from
+// the local dictionary, so the drawer no longer shows the bilingual
+// "es / en" fallback message — spec 010, R1 forbids double labels in errors
+// too. Any code the dictionary does not know falls back to the server text,
+// which is never worse than the previous behaviour.
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
@@ -29,8 +34,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!res.ok) {
     let message = `HTTP ${res.status}`;
     try {
-      const body = (await res.json()) as { error?: string };
+      const body = (await res.json()) as { error?: string; code?: string; detail?: string };
       if (body?.error) message = body.error;
+      const key = body?.code ? `error.code.${body.code}` : "";
+      if (key && hasTranslation(key)) {
+        // `detail` is raw CLI output: no dictionary can translate it, so it is
+        // appended verbatim after the localized sentence.
+        message = translate(key) + (body.detail ? ` — ${body.detail}` : "");
+      }
     } catch {
       // keep the HTTP status message
     }

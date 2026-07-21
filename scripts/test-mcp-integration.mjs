@@ -1,5 +1,14 @@
 import assert from "node:assert/strict";
-import { APPROVED_STATUS_ERE, DOC_GUIDES, NEGATED_STATUS_ERE, docsUrl, isApprovedStatus, specTone } from "../packages/sdd-core/dist/index.js";
+import {
+  APPROVED_STATUS_ERE,
+  DOC_GUIDES,
+  NEGATED_STATUS_ERE,
+  canvasEdgeColorForLabel,
+  classifyEdgeLabel,
+  docsUrl,
+  isApprovedStatus,
+  specTone
+} from "../packages/sdd-core/dist/index.js";
 import { renderDashboard } from "../packages/sdd-mcp/dist/dashboard.js";
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
@@ -9,7 +18,7 @@ import { promisify } from "node:util";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { validateEarsCriterion } from "../packages/sdd-core/dist/index.js";
-import { buildIssueBody, buildIssueTitle } from "../packages/sdd-mcp/dist/github.js";
+import { GITHUB_ERROR_CODES, buildIssueBody, buildIssueTitle } from "../packages/sdd-mcp/dist/github.js";
 import packageJson from "../package.json" with { type: "json" };
 
 const execFileAsync = promisify(execFile);
@@ -190,6 +199,12 @@ async function writeGateGuardSpec(sddRoot, specId, status, { healthy = true, con
 
   const consentLog = path.join(sddRoot, ".sdd", "user-consent.log");
   await fs.mkdir(path.dirname(consentLog), { recursive: true });
+  if (consent === "keep") {
+    // Leave whatever the workspace already recorded — used by the per-spec
+    // consent cases, where the point is that an EXISTING log does not cover
+    // this spec.
+    return;
+  }
   if (consent === "recorded") {
     await fs.writeFile(consentLog, "[2026-03-18] gate guard consent\n", "utf8");
   } else if (consent === "empty") {
@@ -206,6 +221,7 @@ async function main() {
   let gateRoot = "";
   let emptyRoot = "";
   let nonWorkspaceRoot = "";
+  let installRoot = "";
 
   try {
     await client.connect(transport);
@@ -240,6 +256,16 @@ async function main() {
     const specId = String(specData.specId);
     assert.equal(specId, "001-fixture-landing");
     assert.equal(String(specData.specDir), path.join(sddRoot, "specs", specId));
+
+    // sdd_list_specs was a published tool with ZERO behavioural coverage: the
+    // smoke test only checked that the NAME appears in tools/list, so its
+    // handler could return anything. A freshly scaffolded spec must be listed
+    // with the status the template actually writes (`Pendiente`).
+    assert.deepEqual(
+      asObject(await client.callTool({ name: "sdd_list_specs", arguments: { projectRoot } })).specs,
+      [{ id: specId, dir: path.join(sddRoot, "specs", specId), status: "Pendiente" }],
+      "sdd_list_specs must report the freshly created spec as pending"
+    );
 
     await writeApprovedSpecBundle(projectRoot, specId);
 
@@ -819,6 +845,60 @@ async function main() {
       "every concurrently created spec must keep its own row in specs/INDEX.md"
     );
 
+    // (c2) CROSS-PROCESS allocation. (c) only covers callers inside this Node
+    //      process, which `withFileLock` alone already serialized. Two
+    //      `scripts/new-spec.sh` runs are a different race and the observed
+    //      one: before scripts/lib/sdd-root.sh took an on-disk lock, two
+    //      concurrent runs with different feature names both allocated 001 in
+    //      5/5 trials, because `find | sort | tail -1` cannot see an
+    //      in-flight allocation and `mkdir -p` never fails on EEXIST.
+    const newSpecScript = path.join(REPO_ROOT, "scripts", "new-spec.sh");
+    const runNewSpec = (cwd, featureName) =>
+      execFileAsync("bash", [newSpecScript, featureName, "Race"], { cwd }).then(
+        () => ({ code: 0 }),
+        (error) => ({ code: error.code ?? 1, output: `${error.stdout ?? ""}${error.stderr ?? ""}` })
+      );
+    const raceSpecNumbers = async () =>
+      (await fs.readdir(guardSpecsDir)).filter((name) => /^\d{3}-.*-race-\d+$/.test(name)).sort();
+
+    const scriptRace = await Promise.all([
+      runNewSpec(guardRoot, "script one race 1"),
+      runNewSpec(guardRoot, "script two race 2")
+    ]);
+    for (const [index, result] of scriptRace.entries()) {
+      assert.equal(result.code, 0, `concurrent new-spec.sh run ${index} failed: ${result.output ?? ""}`);
+    }
+    const scriptRaceIds = await raceSpecNumbers();
+    assert.equal(scriptRaceIds.length, 2, `expected two script-created specs, got ${scriptRaceIds.join(", ")}`);
+    assert.equal(
+      new Set(scriptRaceIds.map((id) => id.slice(0, 3))).size,
+      2,
+      `two concurrent new-spec.sh runs must allocate DISTINCT numbers, got ${scriptRaceIds.join(", ")}`
+    );
+
+    // ...and the script racing the server, which is the path every UI surface
+    // creates specs through. Both sides take <sdd-root>/specs/.lock.
+    const [mixedScript, mixedServer] = await Promise.all([
+      runNewSpec(guardRoot, "script three race 3"),
+      client.callTool({
+        name: "sdd_create_spec",
+        arguments: { projectRoot: guardRoot, featureName: "Server race 4", owner: "Race" }
+      })
+    ]);
+    assert.equal(mixedScript.code, 0, `new-spec.sh racing the server failed: ${mixedScript.output ?? ""}`);
+    const serverRaceId = String(asObject(mixedServer).specId);
+    const mixedScriptId = (await raceSpecNumbers()).find((id) => id.endsWith("-race-3"));
+    assert.ok(mixedScriptId, "the racing new-spec.sh run must have created its bundle");
+    assert.notEqual(
+      mixedScriptId.slice(0, 3),
+      serverRaceId.slice(0, 3),
+      `new-spec.sh and sdd_create_spec must not share a number, got ${mixedScriptId} and ${serverRaceId}`
+    );
+    assert.ok(
+      !(await fs.stat(path.join(guardSpecsDir, ".lock")).catch(() => null)),
+      "the allocation lock must always be released, or the workspace is wedged for every later run"
+    );
+
     // --- Gate integrity guards: the gate must fail CLOSED -------------------
     // The gate is this product's core promise, and every case below used to
     // open it by mistake. Each assertion fails on the pre-fix code:
@@ -898,6 +978,20 @@ async function main() {
         `the bash gate must run the approval checks for "${status}"`
       );
 
+      // Same statuses through sdd_list_specs, which is where every listing
+      // surface reads them from. This pins the trim in extractApprovalStatus
+      // (packages/sdd-core/src/workspace.ts): `Approved ` must reach callers
+      // as `Approved`, or a spec renders green while comparisons against the
+      // untrimmed value miss.
+      const listedGate = asObject(
+        await client.callTool({ name: "sdd_list_specs", arguments: { projectRoot: gateRoot } })
+      ).specs;
+      assert.deepEqual(
+        listedGate.find((item) => item.id === gateSpecId),
+        { id: gateSpecId, dir: path.join(gateSddRoot, "specs", gateSpecId), status: status.trim() },
+        `sdd_list_specs must report "${status}" trimmed`
+      );
+
       // Same spec, gutted: both gates must now refuse.
       await writeGateGuardSpec(gateSddRoot, gateSpecId, status, { healthy: false, consent: "missing" });
       const gutted = await tsGate();
@@ -941,6 +1035,90 @@ async function main() {
       (await runSddScript("check-sdd-gate.sh", gateRoot)).code,
       0,
       "the bash gate must close on an empty consent log"
+    );
+
+    // (e2) Consent is PER SPEC. Both gates used to test only "the log is not
+    //      empty", so consenting once to 001 opened the gate for an unrelated
+    //      002 approved later — verified 2026-07-21 on a sidecar fixture:
+    //      "[OK] User consent log present", "0 error(s)", exit 0, for a spec
+    //      nobody had ever been asked about.
+    const gateConsentLog = path.join(gateSddRoot, ".sdd", "user-consent.log");
+    await writeGateGuardSpec(gateSddRoot, gateSpecId, "Aprobada", { consent: "missing" });
+    await fs.writeFile(
+      gateConsentLog,
+      `[2026-07-21 00:00:00 +0000] [spec:${gateSpecId}] User approved implementation for spec ${gateSpecId}\n`,
+      "utf8"
+    );
+    assert.equal((await tsGate()).ok, true, "a per-spec consent entry must open the gate for that spec");
+    assert.equal(
+      (await runSddScript("check-sdd-gate.sh", gateRoot)).code,
+      0,
+      "the bash gate must agree that a per-spec consent entry opens the gate"
+    );
+
+    // A second spec, approved but never consented to, must CLOSE both gates
+    // even though the log is non-empty and already covers the first one.
+    const unrelatedSpecId = String(
+      asObject(
+        await client.callTool({
+          name: "sdd_create_spec",
+          arguments: { projectRoot: gateRoot, featureName: "Unrelated consent probe", owner: "Gate Guard" }
+        })
+      ).specId
+    );
+    await writeGateGuardSpec(gateSddRoot, unrelatedSpecId, "Aprobada", { consent: "keep" });
+    const unconsented = await tsGate();
+    assert.equal(unconsented.ok, false, "an approved spec with no consent of its own must close the gate");
+    assert.ok(
+      unconsented.messages.some(
+        (message) => message.code === "missing-spec-consent" && message.message.includes(unrelatedSpecId)
+      ),
+      "the TS gate must name the spec that is missing consent"
+    );
+    const unconsentedBash = await runSddScript("check-sdd-gate.sh", gateRoot);
+    assert.notEqual(unconsentedBash.code, 0, "the bash gate must close for a spec with no consent of its own");
+    assert.ok(
+      unconsentedBash.output.includes(`${unrelatedSpecId} approved but no user consent recorded for it`),
+      `the bash gate must name the spec missing consent: ${unconsentedBash.output}`
+    );
+
+    // ...and recording it through the MCP tool (which passes no spec id, so the
+    // id is recovered from the summary) reopens the gate. Both sides must
+    // produce the same `[spec:<id>]` marker or bash and TS drift apart.
+    await client.callTool({
+      name: "sdd_record_user_consent",
+      arguments: {
+        projectRoot: gateRoot,
+        summary: `User approved implementation for spec ${unrelatedSpecId}`
+      }
+    });
+    assert.match(
+      await fs.readFile(gateConsentLog, "utf8"),
+      new RegExp(`\\[spec:${unrelatedSpecId}\\]`),
+      "recordUserConsent must write a machine-parseable per-spec marker"
+    );
+    assert.equal((await tsGate()).ok, true, "recording the missing consent must reopen the TS gate");
+    assert.equal(
+      (await runSddScript("check-sdd-gate.sh", gateRoot)).code,
+      0,
+      "recording the missing consent must reopen the bash gate too"
+    );
+
+    // Migration, never a hard break: a log written before per-spec entries
+    // existed still covers the workspace, as a WARNING with the exact command.
+    await fs.writeFile(gateConsentLog, "[2026-01-01] Usuario aprobó implementar\n", "utf8");
+    const legacyConsent = await tsGate();
+    assert.equal(legacyConsent.ok, true, "a pre-existing free-text consent log must not suddenly fail hard");
+    assert.ok(
+      legacyConsent.messages.some((message) => message.code === "legacy-consent-log"),
+      "a legacy consent log must warn and name the migration command"
+    );
+    const legacyBash = await runSddScript("check-sdd-gate.sh", gateRoot);
+    assert.equal(legacyBash.code, 0, "the bash gate must also accept a legacy consent log");
+    assert.match(
+      legacyBash.output,
+      /Legacy consent log covers these approved specs/,
+      "the bash gate must print the same migration warning as the TS gate"
     );
 
     // (f) The TS gate runs the policy check the bash gate runs first.
@@ -989,6 +1167,130 @@ async function main() {
     );
     assert.match(realWorkspacePolicy.output, /Checking SDD policy in:/);
 
+    // (g2) Same fail-open, other half: NO argument at all, from a cwd that has
+    //      nothing to do with the framework. Verified 2026-07-21, `cd
+    //      /tmp/empty && bash <template>/scripts/validate-sdd.sh` printed
+    //      "Validating SDD structure in: <template>", walked all 11 framework
+    //      specs and exited 0 — a green report about a workspace the caller is
+    //      not in. The fallback is now taken only when $PWD is inside the tree
+    //      that workspace governs.
+    const runFrom = (cwd, script, ...args) =>
+      execFileAsync("bash", [path.join(REPO_ROOT, "scripts", script), ...args], { cwd }).then(
+        ({ stdout, stderr }) => ({ code: 0, output: `${stdout}${stderr}` }),
+        (error) => ({ code: error.code ?? 1, output: `${error.stdout ?? ""}${error.stderr ?? ""}` })
+      );
+    for (const script of [
+      "check-sdd-gate.sh",
+      "check-sdd-policy.sh",
+      "validate-sdd.sh",
+      "confirm-user-consent.sh"
+    ]) {
+      const args = script === "confirm-user-consent.sh" ? ["should never be recorded"] : [];
+      const strayRun = await runFrom(nonWorkspaceRoot, script, ...args);
+      assert.notEqual(
+        strayRun.code,
+        0,
+        `${script} with no argument, from an unrelated cwd, must fail instead of silently using the framework repo`
+      );
+      assert.match(strayRun.output, /not an SDD workspace/, `${script} must say why it refused`);
+    }
+    // ...while the two documented convenience forms keep working: no argument
+    // from the framework root, and no argument from a sidecar PROJECT root
+    // (where $PWD is the parent of the SDD root, not the SDD root itself).
+    assert.equal(
+      (await runFrom(REPO_ROOT, "check-sdd-gate.sh")).code,
+      0,
+      "./scripts/check-sdd-gate.sh from the framework root must still work"
+    );
+    assert.equal(
+      (await runFrom(guardRoot, "check-sdd-policy.sh")).code,
+      0,
+      "./spec/scripts/check-sdd-policy.sh from a sidecar project root must still work"
+    );
+
+    // --- Installers must be re-runnable and must repair the gate -----------
+    // QUICKSTART.md, both READMEs and docs/{en,es}/51-* all tell users to run
+    // the sidecar installer; re-running it silently did nothing and exited 1,
+    // because BSD `cp -n` (macOS) returns 1 when the destination exists and
+    // `set -euo pipefail` killed the script at the FIRST already-present file.
+    // Nothing after that line ran — including, on the standalone initializer,
+    // the copy of scripts/lib/sdd-root.sh that every gate script sources.
+    installRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-installer-"));
+    const sidecarProject = path.join(installRoot, "sidecar-project");
+    await fs.mkdir(sidecarProject, { recursive: true });
+    // A project that already has its own AI rules: the installer must not
+    // overwrite them, and must SAY SO instead of only filing a note nothing reads.
+    await fs.writeFile(path.join(sidecarProject, "CLAUDE.md"), "# My existing project rules\n", "utf8");
+
+    const runInstaller = (script, target) =>
+      execFileAsync("bash", [path.join(REPO_ROOT, "scripts", script), target]).then(
+        ({ stdout, stderr }) => ({ code: 0, output: `${stdout}${stderr}` }),
+        (error) => ({ code: error.code ?? 1, output: `${error.stdout ?? ""}${error.stderr ?? ""}` })
+      );
+
+    for (const [script, target] of [
+      ["install-spec-sidecar.sh", sidecarProject],
+      ["init-project.sh", path.join(installRoot, "standalone-project")]
+    ]) {
+      const first = await runInstaller(script, target);
+      assert.equal(first.code, 0, `${script} must succeed on a fresh target: ${first.output}`);
+
+      const sddRootOfTarget =
+        script === "install-spec-sidecar.sh" ? path.join(target, "spec") : target;
+      const installedGate = path.join(sddRootOfTarget, "scripts", "check-sdd-gate.sh");
+
+      // A tampered gate is exactly what reinstalling has to repair: these files
+      // are framework-owned, not user content.
+      await fs.writeFile(installedGate, "exit 0  # TAMPERED\n", "utf8");
+      const second = await runInstaller(script, target);
+      assert.equal(second.code, 0, `${script} must be re-runnable, it exited ${second.code}: ${second.output}`);
+      assert.ok(
+        !(await fs.readFile(installedGate, "utf8")).includes("TAMPERED"),
+        `${script} must restore a tampered ${path.basename(installedGate)} on reinstall`
+      );
+      assert.ok(
+        await fs.stat(path.join(sddRootOfTarget, "scripts", "lib", "sdd-root.sh")).catch(() => null),
+        `${script} must install scripts/lib/sdd-root.sh — every gate script sources it on line 5`
+      );
+      // The installed gate has to actually run in the project it was installed into.
+      const installedGateRun = await runFrom(target, "check-sdd-gate.sh", target);
+      assert.equal(
+        installedGateRun.code,
+        0,
+        `the gate installed by ${script} must run in its own project: ${installedGateRun.output}`
+      );
+    }
+
+    // The sidecar stamps what it was installed from, so a stale workspace can
+    // say so. Nothing recorded this before.
+    assert.match(
+      await fs.readFile(path.join(sidecarProject, "spec", ".sdd", "TEMPLATE_VERSION"), "utf8"),
+      new RegExp(`template_version=${packageJson.version.replace(/\./g, "\\.")}`),
+      "the sidecar must stamp the template version it was installed from"
+    );
+
+    // The root AI-rule conflict must be PRINTED. Filing it in
+    // spec/ROOT_AI_STUB_CONFLICTS.md and printing the normal success banner
+    // meant an agent reading the project's own CLAUDE.md never learned ./spec/
+    // exists — the exact failure this template exists to prevent.
+    const conflictInstall = await runInstaller("install-spec-sidecar.sh", sidecarProject);
+    assert.match(
+      conflictInstall.output,
+      /WARNING: these root AI rule files already existed and were NOT modified/,
+      "the installer must warn out loud about untouched root AI rule files"
+    );
+    assert.match(conflictInstall.output, /CLAUDE\.md/, "the warning must name the files it skipped");
+    assert.match(
+      conflictInstall.output,
+      /\.\/spec\/AGENTS\.md/,
+      "the warning must carry the snippet the user has to paste"
+    );
+    assert.equal(
+      await fs.readFile(path.join(sidecarProject, "CLAUDE.md"), "utf8"),
+      "# My existing project rules\n",
+      "the installer must still never overwrite the user's own root AI rules"
+    );
+
     // The MCP App view renders the server-computed tone instead of re-deriving
     // it: its local copy checked task completion BEFORE approval, so a spec at
     // {Pendiente, 3/3} rendered a green "Hecha / Done" badge.
@@ -997,6 +1299,109 @@ async function main() {
       appHtml,
       /function (isApproved|specKind)\b/,
       "the MCP App must not carry its own approval predicate"
+    );
+
+    // --- Duplicated rules: the "KEEP IN SYNC" contracts, verified -----------
+    // The builder is a standalone Vite app and cannot import sdd-core, so
+    // three rules exist twice, each with a comment asking the next editor to
+    // keep both copies aligned. Comments are not tests: until this block,
+    // nothing read builder/src/{ears,convert,sections}.ts, so any of the three
+    // could drift silently. Same pattern as the check-sdd-gate.sh drift assert
+    // above (the bash gate cannot import TypeScript either).
+    //   - a diverged EARS regex => the builder warns on criteria the server
+    //     accepts (or stays silent on ones it rejects);
+    //   - a diverged edge-label set / canvas color => the same board renders
+    //     one purpose in the UI and persists another to board.canvas;
+    //   - a diverged status regex => "No aprobado" paints green in the builder
+    //     while the gate correctly refuses to open.
+    const readSrc = (relative) => fs.readFile(path.join(REPO_ROOT, relative), "utf8");
+    const declaredLiterals = (source, names) =>
+      Object.fromEntries(
+        names.map((name) => [name, source.match(new RegExp(`^const ${name} = (.+);$`, "m"))?.[1]])
+      );
+
+    // (1) EARS lint regexes: builder/src/ears.ts vs the core copy.
+    const earsNames = ["EARS_PATTERN_RE", "VAGUE_WORDS_RE", "HAS_NUMBER_RE"];
+    const coreEars = declaredLiterals(await readSrc("packages/sdd-core/src/spec-actions.ts"), earsNames);
+    const builderEars = declaredLiterals(await readSrc("builder/src/ears.ts"), earsNames);
+    for (const name of earsNames) {
+      assert.ok(coreEars[name], `packages/sdd-core/src/spec-actions.ts no longer declares ${name}`);
+      assert.ok(builderEars[name], `builder/src/ears.ts no longer declares ${name}`);
+    }
+    assert.deepEqual(
+      builderEars,
+      coreEars,
+      "builder/src/ears.ts must mirror the EARS regexes of packages/sdd-core/src/spec-actions.ts exactly"
+    );
+    // ...and the mirrored pattern must really behave like the core lint.
+    const builderEarsPattern = new RegExp(builderEars.EARS_PATTERN_RE.replace(/^\/|\/i$/g, ""), "i");
+    for (const criterion of [
+      "CUANDO el usuario pulse pagar, EL SISTEMA DEBERÁ crear el pedido.",
+      "WHEN the user clicks pay, THE SYSTEM SHALL create the order.",
+      "El checkout debe funcionar bien"
+    ]) {
+      assert.equal(
+        builderEarsPattern.test(criterion),
+        validateEarsCriterion(criterion).matchesPattern,
+        `the builder EARS pattern disagrees with sdd-core on: ${criterion}`
+      );
+    }
+
+    // (2) Typed edges: builder/src/convert.ts vs packages/sdd-core/src/board.ts.
+    const setItems = (source, name) => {
+      const match = source.match(new RegExp(`^const ${name} = new Set\\(\\[([^\\]]*)\\]\\)`, "m"));
+      assert.ok(match, `${name} not found as a Set literal`);
+      return [...match[1].matchAll(/"([^"]*)"/g)].map((item) => item[1]).sort();
+    };
+    const colorMap = (source) => {
+      const start = source.indexOf("const EDGE_KIND_CANVAS_COLOR");
+      assert.notEqual(start, -1, "EDGE_KIND_CANVAS_COLOR not found");
+      const block = source.slice(start, source.indexOf("\n};", start));
+      return Object.fromEntries([...block.matchAll(/^\s{2}(\w+):\s*"([^"]+)"/gm)].map(([, k, v]) => [k, v]));
+    };
+    const coreBoardSrc = await readSrc("packages/sdd-core/src/board.ts");
+    const builderConvertSrc = await readSrc("builder/src/convert.ts");
+    for (const name of ["DEPENDS_EDGE_LABELS", "BLOCKS_EDGE_LABELS", "CONTAINS_EDGE_LABELS"]) {
+      assert.deepEqual(
+        setItems(builderConvertSrc, name),
+        setItems(coreBoardSrc, name),
+        `builder/src/convert.ts must mirror ${name} from packages/sdd-core/src/board.ts`
+      );
+    }
+    assert.deepEqual(
+      colorMap(builderConvertSrc),
+      colorMap(coreBoardSrc),
+      "builder/src/convert.ts must persist the same JSON Canvas colors as canvasEdgeColorForLabel"
+    );
+    // ...and each mirrored label must classify the same way in the core.
+    for (const [name, kind] of [
+      ["DEPENDS_EDGE_LABELS", "depends"],
+      ["BLOCKS_EDGE_LABELS", "blocks"],
+      ["CONTAINS_EDGE_LABELS", "contains"]
+    ]) {
+      for (const label of setItems(builderConvertSrc, name)) {
+        assert.equal(classifyEdgeLabel(label), kind, `sdd-core does not classify "${label}" as ${kind}`);
+        assert.equal(
+          canvasEdgeColorForLabel(label),
+          colorMap(builderConvertSrc)[kind],
+          `the builder canvas color for "${label}" differs from sdd-core`
+        );
+      }
+    }
+    assert.equal(classifyEdgeLabel("cualquier otra cosa"), "related", "unknown labels stay related");
+
+    // (3) Approval status: builder/src/sections.ts vs the exported EREs.
+    const builderSectionsSrc = await readSrc("builder/src/sections.ts");
+    const sectionsStart = builderSectionsSrc.indexOf("export const isApprovedStatusText");
+    assert.notEqual(sectionsStart, -1, "builder/src/sections.ts no longer exports isApprovedStatusText");
+    const sectionsBlock = builderSectionsSrc.slice(
+      sectionsStart,
+      builderSectionsSrc.indexOf("\n};", sectionsStart)
+    );
+    assert.deepEqual(
+      [...sectionsBlock.matchAll(/\/((?:[^/\\\n]|\\.)+)\/i\.test\(value\)/g)].map((match) => match[1]),
+      [new RegExp(NEGATED_STATUS_ERE).source, new RegExp(APPROVED_STATUS_ERE).source],
+      "builder/src/sections.ts must mirror NEGATED_STATUS_ERE then APPROVED_STATUS_ERE (negation wins)"
     );
 
     // --- Teaching layer: the in-product help must stay true -----------------
@@ -1056,6 +1461,22 @@ async function main() {
     );
     const esKeySet = new Set(esKeys);
     assert.ok(esKeySet.has("help.learnMore"), "the teaching layer needs its deep-link label");
+
+    // (b2) Server error codes are a contract between github.ts and the builder
+    //      dictionary. Spec 010, R1 forbids double labels "incl. tour, toasts,
+    //      errores", but POST /api/spec/:id/issues used to answer with the raw
+    //      bilingual message ("Este workspace no es un repositorio git / This
+    //      workspace is not a git repository — ejecuta / run: git init …") and
+    //      SpecDrawer printed it verbatim. Now the server sends a code and the
+    //      UI renders one language — which only works while EVERY code the
+    //      server can emit has an entry (the es/en parity assert above then
+    //      guarantees both languages).
+    for (const code of GITHUB_ERROR_CODES) {
+      assert.ok(
+        esKeySet.has(`error.code.${code}`),
+        `github.ts can emit ${code} but builder/src/i18n.ts has no error.code.${code} entry — the UI would print the raw bilingual fallback`
+      );
+    }
 
     const builderSrcDir = path.join(REPO_ROOT, "builder/src");
     const walk = async (dir) => {
@@ -1159,11 +1580,66 @@ async function main() {
       "the empty state must teach and link the workflow guide in English too"
     );
 
+    // --- Regression guard (audit I7): one spec template, and it must work ----
+    // A second, divergent spec body template used to ship at
+    // templates/spec/spec.template.md. Copying it as specs/NNN/spec.md broke
+    // three things at once: approveSpec threw ("has no Estado de aprobación /
+    // Approval status section"), checkGate reported missing-status-section, and
+    // updateSpecSections appended a duplicate "## Requisitos" at the end instead
+    // of filling the existing heading (its "## Functional requirements" title
+    // matched no alias). It was deleted rather than maintained as a second copy
+    // of the spec schema. This assert keeps it deleted and keeps the surviving
+    // template honest.
+    const specBodyTemplates = [];
+    const templateScanDirs = [path.join(REPO_ROOT, "specs/_template"), path.join(REPO_ROOT, "templates/spec")];
+    for (const dir of templateScanDirs) {
+      const entries = await fs.readdir(dir).catch(() => []);
+      for (const name of entries) {
+        if (/^spec(\.template)?\.md$/.test(name)) specBodyTemplates.push(path.join(dir, name));
+      }
+    }
+    assert.deepEqual(
+      specBodyTemplates.map((file) => path.relative(REPO_ROOT, file)),
+      ["specs/_template/spec.md"],
+      "there must be exactly ONE spec body template in the repo — a second copy is a second spec schema, and the divergent templates/spec/spec.template.md broke approveSpec, checkGate and updateSpecSections"
+    );
+
+    // The surviving template must satisfy every rule the server enforces on a
+    // real spec.md, so `cp` from it can never produce an unapprovable spec.
+    const canonicalTemplate = await fs.readFile(specBodyTemplates[0], "utf8");
+    assert.match(
+      canonicalTemplate,
+      /^##\s+Estado de aprobaci[óo]n\s*\/\s*Approval status/mi,
+      "specs/_template/spec.md must carry the approval block, or approveSpec throws and checkGate reports missing-status-section"
+    );
+    for (const alias of [
+      /^##\s+(historia de usuario|user stor)/mi,
+      /^##\s+(escenarios de aceptaci|acceptance scenarios)/mi,
+      /^##\s+(criterios de aceptaci|acceptance criteria)/mi,
+      /^##\s+(requisitos|requirements)/mi,
+      /^##\s+(propiedades de la spec|spec propert)/mi,
+      /^##\s+(criterios de [ée]xito|success criteria)/mi
+    ]) {
+      assert.match(
+        canonicalTemplate,
+        alias,
+        `specs/_template/spec.md is missing a heading updateSpecSections knows (${alias}) — the tool would append a duplicate section instead of filling it`
+      );
+    }
+    // "Fuera de alcance / Out of scope" is deliberately NOT in the template:
+    // updateSpecSections appends it with its canonical bilingual heading and
+    // reports it in `created`. Asserted here so the omission stays a decision.
+    assert.doesNotMatch(
+      canonicalTemplate,
+      /^##\s+(fuera de alcance|out of scope)/mi,
+      "if specs/_template/spec.md gains an out-of-scope heading, update this guard and docs/*/41 (the section would move from `created` to `updated`)"
+    );
+
     console.log("MCP integration test passed");
     console.log(`Project: ${projectName}`);
     console.log(`Spec: ${specId}`);
   } finally {
-    for (const root of [projectRoot, guardRoot, gateRoot, emptyRoot, nonWorkspaceRoot]) {
+    for (const root of [projectRoot, guardRoot, gateRoot, emptyRoot, nonWorkspaceRoot, installRoot]) {
       if (root) {
         await fs.rm(root, { recursive: true, force: true });
       }

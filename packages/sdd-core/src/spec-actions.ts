@@ -6,9 +6,10 @@
 //     properties, success criteria, out of scope — the full template since
 //     spec 010, R2) and preserve the rest of the document (approval block,
 //     any custom sections, ...).
-// Both operations are tolerant to the EN/ES headings of the two spec
-// templates shipped in this repo (specs/_template/spec.md and
-// templates/spec/spec.template.md) and reuse the atomic read/write layer
+// Both operations are tolerant to the EN/ES headings of the canonical spec
+// template shipped in this repo (specs/_template/spec.md — the only one; the
+// divergent templates/spec/spec.template.md was deleted because it lacked the
+// approval block and broke the gate) and reuse the atomic read/write layer
 // from board.ts, so REST and MCP transports share the exact same behavior.
 // Spec 008 adds validateEarsCriterion: the EARS lint shared (by contract,
 // not by import) with the builder frontend — see builder/src/ears.ts.

@@ -51,6 +51,6 @@ Usa releases major para:
 
 ## Regla para paquetes
 
-- los paquetes internos permanecen `private` hasta que exista un flujo deliberado de publicación
-- mientras sean privados, mantén sus versiones alineadas con la release del framework para evitar confusión
-- si luego se publican, conserva semver y maneja changelogs por paquete
+- los paquetes están publicados en npm: `@juanklagos/sdd-core`, `@juanklagos/sdd-mcp` y `@juanklagos/create-sdd-project`
+- sus versiones siguen la release del framework (un solo número para todo el repositorio), así `npx @juanklagos/create-sdd-project` siempre coincide con el flujo documentado
+- conserva semver y registra cada cambio visible en los paquetes en el `CHANGELOG.md` del repositorio

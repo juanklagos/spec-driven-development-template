@@ -216,10 +216,12 @@ Qué va aquí:
 Subcarpetas:
 - `packages/sdd-core/`
 - `packages/sdd-mcp/`
+- `packages/create-sdd-project/`
 
 Significado:
 - `sdd-core` contiene la lógica reusable
 - `sdd-mcp` expone esa lógica a clientes IA por medio de MCP
+- `create-sdd-project` es el instalador `npx @juanklagos/create-sdd-project` que coloca la estructura SDD en un proyecto nuevo o existente
 
 Cuándo se actualiza:
 - cuando cambia el comportamiento del framework en código

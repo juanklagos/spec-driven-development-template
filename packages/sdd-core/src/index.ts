@@ -3,7 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
 import { getDependencyWarnings, isApprovedStatus, type DependencyWarning } from "./board.js";
-import { withFileLock } from "./file-lock.js";
+import { withCrossProcessLock, withFileLock } from "./file-lock.js";
 import { checkPolicy } from "./policy.js";
 import { summarize, type ValidationMessage, type ValidationResult } from "./validation.js";
 import {
@@ -229,6 +229,7 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
   const root = await resolveSddRoot(projectRoot);
   const messages: ValidationMessage[] = [];
   let approvedSpecs = 0;
+  const approvedIds: string[] = [];
 
   // The bash gate runs the policy check first and refuses to open without it.
   // Skipping it here meant a workspace whose CLAUDE.md, .cursorrules and
@@ -269,6 +270,7 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
     // `Aprobado / Approved`, so those specs skipped the whole block below.
     if (isApprovedStatus(spec.status)) {
       approvedSpecs += 1;
+      approvedIds.push(spec.id);
 
       if (/YYYY-MM-DD/.test(specContent)) {
         messages.push({
@@ -333,7 +335,9 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
   }
 
   if (approvedSpecs > 0) {
-    if (!(await hasRecordedConsent(root))) {
+    const consentLog = await readConsentLog(root);
+
+    if (consentLog.trim().length === 0) {
       messages.push({
         level: "error",
         code: "missing-consent-log",
@@ -341,6 +345,36 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
           "Missing or empty user consent log (.sdd/user-consent.log) for approved spec execution",
         path: ".sdd/user-consent.log"
       });
+    } else {
+      // Consent is PER SPEC. KEEP IN SYNC with the consent block in
+      // scripts/check-sdd-gate.sh — all three rules.
+      const legacyLines = consentLog
+        .split("\n")
+        .filter((line) => line.trim().length > 0 && !SPEC_CONSENT_MARKER_RE.test(line));
+      const legacyCovered: string[] = [];
+
+      for (const specId of approvedIds) {
+        if (consentLog.includes(`[spec:${specId}]`)) continue;
+        if (legacyLines.length > 0) {
+          legacyCovered.push(specId);
+          continue;
+        }
+        messages.push({
+          level: "error",
+          code: "missing-spec-consent",
+          message: `${specId} approved but no user consent recorded for it. Run: confirm-user-consent.sh --spec ${specId} "User approved implementation for spec ${specId}"`,
+          path: path.join("specs", specId, "spec.md")
+        });
+      }
+
+      if (legacyCovered.length > 0) {
+        messages.push({
+          level: "warning",
+          code: "legacy-consent-log",
+          message: `Legacy consent log covers these approved specs without a per-spec entry: ${legacyCovered.join(", ")}. Migrate each one with: confirm-user-consent.sh --spec <NNN-slug> "User approved implementation for spec <NNN-slug>"`,
+          path: ".sdd/user-consent.log"
+        });
+      }
     }
   } else {
     messages.push({
@@ -355,15 +389,22 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
 }
 
 /**
- * True when the workspace carries a real consent record.
+ * Machine-parseable per-spec marker written by recordUserConsent and by
+ * scripts/confirm-user-consent.sh. A line without one is a legacy, free-text
+ * record from before consent was per-spec.
+ */
+const SPEC_CONSENT_MARKER_RE = /\[spec:[^\]]+\]/;
+
+/**
+ * Raw consent log, "" when absent.
  *
  * KEEP IN SYNC with scripts/check-sdd-gate.sh (`[ -s ... ]` plus the non-blank
  * grep). A bare `fs.access` accepted a zero-byte file, so `touch
  * .sdd/user-consent.log` — or an interrupted `confirm-user-consent.sh` — opened
  * the TS gate on a workspace where bash still, correctly, refused.
  */
-async function hasRecordedConsent(root: string): Promise<boolean> {
-  return (await safeReadFile(path.join(root, ".sdd/user-consent.log"))).trim().length > 0;
+async function readConsentLog(root: string): Promise<string> {
+  return safeReadFile(path.join(root, ".sdd/user-consent.log"));
 }
 
 export interface GateSummary {
@@ -426,14 +467,41 @@ export async function getGateSummary(projectRoot: string): Promise<GateSummary> 
   };
 }
 
-export async function recordUserConsent(projectRoot: string, summary: string): Promise<ConsentResult> {
+/** `001-auth` inside a free-text consent summary, not preceded by a word char. */
+const SPEC_ID_IN_TEXT_RE = /(?:^|[^a-zA-Z0-9-])(\d{3}-[a-z0-9][a-z0-9-]*)/;
+
+/**
+ * Append one consent record.
+ *
+ * `specId` (explicit, or recovered from the summary text so existing callers —
+ * the MCP tool, the builder — get per-spec records without a new parameter)
+ * becomes a `[spec:<id>]` marker, which is what makes the entry mean something
+ * to the gate. KEEP IN SYNC with scripts/confirm-user-consent.sh: an EXPLICIT
+ * id naming no real spec is an error, while an id merely guessed from prose is
+ * dropped, so a guess can never fabricate consent for a spec that does not
+ * exist and a typo in a deliberate call is never silently ignored.
+ */
+export async function recordUserConsent(
+  projectRoot: string,
+  summary: string,
+  specId?: string
+): Promise<ConsentResult> {
   const root = await resolveSddRoot(projectRoot);
   const consentDir = path.join(root, ".sdd");
   const logFile = path.join(consentDir, "user-consent.log");
   const timestamp = new Date().toISOString();
 
+  const candidate = specId ?? summary.match(SPEC_ID_IN_TEXT_RE)?.[1] ?? "";
+  const candidateExists = candidate.length > 0 && (await exists(path.join(root, "specs", candidate)));
+  if (specId && !candidateExists) {
+    throw new Error(
+      `No such spec in this workspace: specs/${specId} / No existe esa spec en este workspace: specs/${specId}`
+    );
+  }
+  const marker = candidateExists ? `[spec:${candidate}] ` : "";
+
   await fs.mkdir(consentDir, { recursive: true });
-  await fs.appendFile(logFile, `[${timestamp}] ${summary}\n`, "utf8");
+  await fs.appendFile(logFile, `[${timestamp}] ${marker}${summary}\n`, "utf8");
 
   return {
     logFile,
@@ -707,33 +775,45 @@ async function nextSpecNumber(specsRoot: string): Promise<string> {
 /**
  * Allocate the next spec number and claim it by creating its directory.
  *
- * What actually makes this safe inside this process is `withFileLock` on
- * specs/: it closes the scan→mkdir window, because `fs.mkdir` alone only
- * rejects a duplicate directory NAME — two concurrent calls holding the same
- * number with *different* slugs would both succeed.
+ * Two locks, two different races:
+ *
+ * - `withFileLock(specsRoot)` closes the scan→mkdir window for callers inside
+ *   THIS process, because `fs.mkdir` alone only rejects a duplicate directory
+ *   NAME — two concurrent calls holding the same number with *different* slugs
+ *   would both succeed.
+ * - `withCrossProcessLock(specs/.lock)` closes the same window against another
+ *   PROCESS, i.e. a `scripts/new-spec.sh` run started by a second agent. That
+ *   script takes the very same lock directory (sdd_acquire_lock in
+ *   scripts/lib/sdd-root.sh), so script-vs-script and script-vs-server are both
+ *   serialized. `.lock` is invisible to every spec scan in this repo: they all
+ *   require a leading `NNN-`.
  *
  * `fs.mkdir(..., { recursive: false })` is still the last line of defence: it
  * fails with EEXIST rather than silently sharing a bundle, so a lost race is
- * retried against the new state of the disk. It is NOT a cross-process
- * guarantee — see the scope note in file-lock.ts.
+ * retried against the new state of the disk.
  */
 async function reserveSpecDir(specsRoot: string, slug: string): Promise<{ number: string; specDir: string }> {
-  return withFileLock(specsRoot, async () => {
-    for (let attempt = 0; attempt < SPEC_NUMBER_ATTEMPTS; attempt += 1) {
-      const number = await nextSpecNumber(specsRoot);
-      const specDir = path.join(specsRoot, `${number}-${slug}`);
-      try {
-        await fs.mkdir(specDir, { recursive: false });
-        return { number, specDir };
-      } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+  // The lock directory lives inside specs/, so specs/ has to exist before the
+  // non-recursive mkdir that takes it.
+  await fs.mkdir(specsRoot, { recursive: true });
+  return withFileLock(specsRoot, async () =>
+    withCrossProcessLock(path.join(specsRoot, ".lock"), async () => {
+      for (let attempt = 0; attempt < SPEC_NUMBER_ATTEMPTS; attempt += 1) {
+        const number = await nextSpecNumber(specsRoot);
+        const specDir = path.join(specsRoot, `${number}-${slug}`);
+        try {
+          await fs.mkdir(specDir, { recursive: false });
+          return { number, specDir };
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+        }
       }
-    }
-    throw new Error(
-      `Could not allocate a spec number in ${specsRoot} after ${SPEC_NUMBER_ATTEMPTS} attempts / ` +
-        `No se pudo asignar un número de spec en ${specsRoot} tras ${SPEC_NUMBER_ATTEMPTS} intentos`
-    );
-  });
+      throw new Error(
+        `Could not allocate a spec number in ${specsRoot} after ${SPEC_NUMBER_ATTEMPTS} attempts / ` +
+          `No se pudo asignar un número de spec en ${specsRoot} tras ${SPEC_NUMBER_ATTEMPTS} intentos`
+      );
+    })
+  );
 }
 
 interface IndexRow {

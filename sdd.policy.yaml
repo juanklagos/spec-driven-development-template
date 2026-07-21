@@ -24,8 +24,18 @@ execution_root:
 user_consent:
   required_before_execution_after_spec_approval: true
   required_before_gate_execution_when_specs_exist: true
+  # Enforced per spec: an approved spec needs its own `[spec:<id>]` line in the
+  # consent log. Recording consent once no longer opens the gate for every spec
+  # approved afterwards. Implemented in scripts/check-sdd-gate.sh and in
+  # checkGate (packages/sdd-core/src/index.ts) — the two must stay in sync.
+  granularity: per_spec
+  entry_format: "[<timestamp>] [spec:<NNN-slug>] <summary>"
+  # Migration, never a hard break: a log written before per-spec entries
+  # existed (any non-blank line with no `[spec:` marker) still covers the whole
+  # workspace, but the gate downgrades it to a warning naming the exact command.
+  legacy_free_text_entries: warn
   log_file: .sdd/user-consent.log
-  command: ./scripts/confirm-user-consent.sh "User approved scope"
+  command: ./scripts/confirm-user-consent.sh --spec <NNN-slug> "User approved scope"
 
 hard_stop:
   no_code_before_spec_approved: true

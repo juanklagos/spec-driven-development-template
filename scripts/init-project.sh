@@ -66,45 +66,68 @@ mkdir -p "$TARGET/idea" \
          "$TARGET/.github/workflows" \
          "$TARGET/docs"
 
-cp -n "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
-cp -n "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
-cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
-cp -n "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
-cp -n "$ROOT_DIR/specs/INDEX.md" "$TARGET/specs/INDEX.md"
-cp -n "$ROOT_DIR/specs/_template/spec.md" "$TARGET/specs/_template/spec.md"
-cp -n "$ROOT_DIR/specs/_template/plan.md" "$TARGET/specs/_template/plan.md"
-cp -n "$ROOT_DIR/specs/_template/tasks.md" "$TARGET/specs/_template/tasks.md"
-cp -n "$ROOT_DIR/specs/_template/research.md" "$TARGET/specs/_template/research.md"
-cp -n "$ROOT_DIR/specs/_template/history.md" "$TARGET/specs/_template/history.md"
-cp -n "$ROOT_DIR/specs/_template/contracts/README.md" "$TARGET/specs/_template/contracts/README.md"
-cp -n "$ROOT_DIR/bitacora/README.md" "$TARGET/bitacora/README.md"
-cp -n "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$TARGET/bitacora/global/PROJECT_LOG.md"
-cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
-cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
-cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
-cp -n "$ROOT_DIR/.sdd.README.template.md" "$TARGET/.sdd/README.md"
+# Never clobber content the user may have edited — but never abort either.
+#
+# Same defect as scripts/install-spec-sidecar.sh carried: BSD `cp -n` (macOS)
+# exits 1 when the destination exists, and under `set -e` that killed the
+# script at the FIRST already-present file. Verified 2026-07-21: re-running
+# this initializer over an existing project printed nothing and exited 1.
+copy_if_absent() {
+  [ -e "$2" ] || cp "$1" "$2"
+}
+
+# Framework-owned enforcement machinery: the gate, the validators and the root
+# resolver they share are OURS, so re-running repairs a stale or tampered copy.
+copy_framework_file() {
+  cp -f "$1" "$2"
+}
+
+copy_if_absent "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
+copy_if_absent "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
+copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
+copy_if_absent "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
+copy_if_absent "$ROOT_DIR/specs/INDEX.md" "$TARGET/specs/INDEX.md"
+copy_if_absent "$ROOT_DIR/specs/_template/spec.md" "$TARGET/specs/_template/spec.md"
+copy_if_absent "$ROOT_DIR/specs/_template/plan.md" "$TARGET/specs/_template/plan.md"
+copy_if_absent "$ROOT_DIR/specs/_template/tasks.md" "$TARGET/specs/_template/tasks.md"
+copy_if_absent "$ROOT_DIR/specs/_template/research.md" "$TARGET/specs/_template/research.md"
+copy_if_absent "$ROOT_DIR/specs/_template/history.md" "$TARGET/specs/_template/history.md"
+copy_if_absent "$ROOT_DIR/specs/_template/contracts/README.md" "$TARGET/specs/_template/contracts/README.md"
+copy_if_absent "$ROOT_DIR/bitacora/README.md" "$TARGET/bitacora/README.md"
+copy_if_absent "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$TARGET/bitacora/global/PROJECT_LOG.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
+copy_if_absent "$ROOT_DIR/.sdd.README.template.md" "$TARGET/.sdd/README.md"
 mkdir -p "$TARGET/template-context"
-cp -n "$ROOT_DIR/template-context/README.md" "$TARGET/template-context/README.md"
-cp -n "$ROOT_DIR/template-context/05-SDD-EXECUTION-GATE.md" "$TARGET/template-context/05-SDD-EXECUTION-GATE.md"
-cp -n "$ROOT_DIR/template-context/06-AI-RULES-MATRIX.md" "$TARGET/template-context/06-AI-RULES-MATRIX.md"
-cp -n "$ROOT_DIR/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" "$TARGET/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md"
-cp -n "$ROOT_DIR/AGENTS.md" "$TARGET/AGENTS.md"
-cp -n "$ROOT_DIR/AI_START_HERE.md" "$TARGET/AI_START_HERE.md"
-cp -n "$ROOT_DIR/QUICKSTART.md" "$TARGET/QUICKSTART.md"
-cp -n "$ROOT_DIR/START_HERE_NON_TECH.md" "$TARGET/START_HERE_NON_TECH.md"
-cp -n "$ROOT_DIR/.cursorrules" "$TARGET/.cursorrules"
-cp -n "$ROOT_DIR/.clauderules" "$TARGET/.clauderules"
-cp -n "$ROOT_DIR/CLAUDE.md" "$TARGET/CLAUDE.md"
-cp -n "$ROOT_DIR/GEMINI.md" "$TARGET/GEMINI.md"
-cp -n "$ROOT_DIR/WINDSURF.md" "$TARGET/WINDSURF.md"
-cp -n "$ROOT_DIR/AIDER.md" "$TARGET/AIDER.md"
-cp -n "$ROOT_DIR/ROO.md" "$TARGET/ROO.md"
-cp -n "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copilot-instructions.md"
-cp -n "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
-cp -n "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
-cp -n "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
-cp -n "$ROOT_DIR/scripts/confirm-user-consent.sh" "$TARGET/scripts/confirm-user-consent.sh"
-cp -n "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
+copy_if_absent "$ROOT_DIR/template-context/README.md" "$TARGET/template-context/README.md"
+copy_if_absent "$ROOT_DIR/template-context/05-SDD-EXECUTION-GATE.md" "$TARGET/template-context/05-SDD-EXECUTION-GATE.md"
+copy_if_absent "$ROOT_DIR/template-context/06-AI-RULES-MATRIX.md" "$TARGET/template-context/06-AI-RULES-MATRIX.md"
+copy_if_absent "$ROOT_DIR/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" "$TARGET/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md"
+copy_if_absent "$ROOT_DIR/AGENTS.md" "$TARGET/AGENTS.md"
+copy_if_absent "$ROOT_DIR/AI_START_HERE.md" "$TARGET/AI_START_HERE.md"
+copy_if_absent "$ROOT_DIR/QUICKSTART.md" "$TARGET/QUICKSTART.md"
+copy_if_absent "$ROOT_DIR/START_HERE_NON_TECH.md" "$TARGET/START_HERE_NON_TECH.md"
+copy_if_absent "$ROOT_DIR/.cursorrules" "$TARGET/.cursorrules"
+copy_if_absent "$ROOT_DIR/.clauderules" "$TARGET/.clauderules"
+copy_if_absent "$ROOT_DIR/CLAUDE.md" "$TARGET/CLAUDE.md"
+copy_if_absent "$ROOT_DIR/GEMINI.md" "$TARGET/GEMINI.md"
+copy_if_absent "$ROOT_DIR/WINDSURF.md" "$TARGET/WINDSURF.md"
+copy_if_absent "$ROOT_DIR/AIDER.md" "$TARGET/AIDER.md"
+copy_if_absent "$ROOT_DIR/ROO.md" "$TARGET/ROO.md"
+copy_if_absent "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copilot-instructions.md"
+# Framework-owned enforcement machinery, refreshed on every run.
+# scripts/lib/sdd-root.sh was never copied at all: every script here sources it
+# on line 5, so a project created by this initializer could not run its own gate
+# (verified 2026-07-21 — "No such file or directory", exit 1 for both
+# check-sdd-gate.sh and validate-sdd.sh).
+mkdir -p "$TARGET/scripts/lib"
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$TARGET/scripts/lib/sdd-root.sh"
+copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
+copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
+copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
+copy_framework_file "$ROOT_DIR/scripts/confirm-user-consent.sh" "$TARGET/scripts/confirm-user-consent.sh"
+copy_framework_file "$ROOT_DIR/scripts/new-spec.sh" "$TARGET/scripts/new-spec.sh"
 chmod +x "$TARGET/scripts/validate-sdd.sh"
 chmod +x "$TARGET/scripts/check-sdd-policy.sh"
 chmod +x "$TARGET/scripts/check-sdd-gate.sh"
@@ -119,10 +142,10 @@ if [ "$PROFILE" = "recommended" ] || [ "$PROFILE" = "full" ]; then
   cp -R "$ROOT_DIR/template-context/." "$TARGET/template-context/"
   cp -R "$ROOT_DIR/playbooks/." "$TARGET/playbooks/"
   cp -R "$ROOT_DIR/quality/." "$TARGET/quality/"
-  cp -n "$ROOT_DIR/scripts/score-spec.sh" "$TARGET/scripts/score-spec.sh"
-  cp -n "$ROOT_DIR/scripts/generate-roadmap.sh" "$TARGET/scripts/generate-roadmap.sh"
-  cp -n "$ROOT_DIR/scripts/generate-status.sh" "$TARGET/scripts/generate-status.sh"
-  cp -n "$ROOT_DIR/scripts/legacy-discovery.sh" "$TARGET/scripts/legacy-discovery.sh"
+  copy_if_absent "$ROOT_DIR/scripts/score-spec.sh" "$TARGET/scripts/score-spec.sh"
+  copy_if_absent "$ROOT_DIR/scripts/generate-roadmap.sh" "$TARGET/scripts/generate-roadmap.sh"
+  copy_if_absent "$ROOT_DIR/scripts/generate-status.sh" "$TARGET/scripts/generate-status.sh"
+  copy_if_absent "$ROOT_DIR/scripts/legacy-discovery.sh" "$TARGET/scripts/legacy-discovery.sh"
   chmod +x "$TARGET/scripts/score-spec.sh" \
            "$TARGET/scripts/generate-roadmap.sh" \
            "$TARGET/scripts/generate-status.sh" \
