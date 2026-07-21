@@ -52,19 +52,28 @@ Workspace rule:
    - `history.md` (inside the spec folder)
    - `specs/INDEX.md` (if status/priority changed)
    - `bitacora/global/PROJECT_LOG.md` (at session end)
-7. **Validate:** Always run:
+7. **Record decisions:** A decision **MUST** be written to `bitacora/decisiones/YYYY-MM-DD-<slug>.md` (from `bitacora/templates/DECISION_TEMPLATE.md`, via `/sdd:decision`) when **any** of these holds:
+   - it chose between real alternatives (something else was genuinely on the table),
+   - it will be expensive to reverse (several specs, a migration, a contract, a license, a new dependency),
+   - a future reader would ask *"why is it like this?"* and the code alone would not answer.
+   Each record **MUST** include a **When to revisit** section naming the concrete signal that reopens it.
+   Every rationale **MUST** be traceable to a source (commit hash + `git log` date, `file:line`, spec `history.md`, `CHANGELOG.md`, a document in `idea/`, or the user's words in session). Where no written rationale exists, the record **MUST** say so; agents **MUST NOT** invent retrospective justification, dates, or alternatives.
+   Routine work (renames, typos, planned tasks) **MUST NOT** be recorded — the log loses value when padded.
+8. **Validate:** Always run:
    - `./scripts/validate-sdd.sh . --strict`
    - `./scripts/check-sdd-gate.sh .`
 
 ## 💬 4. Communication & Output Contract
 
-Every session closure or significant update must report:
+Every session closure or significant update **MUST** report:
 1. **Session Objective** — what are we doing?
 2. **Active Specification** — which spec are we working on?
 3. **Immediate Plan** — next 2-3 concrete actions.
 4. **Changes Performed** — what was modified.
 5. **Validation** — status of the `validate-sdd.sh` run.
-6. **Exact Next Step** — the single clearest action for the next pilot.
+6. **Risks** — anything that could bite later.
+7. **Decision Recorded** — the file written in `bitacora/decisiones/`, or an explicit "none this session" with the reason. This item **MUST NOT** be omitted; "none" is a valid answer, silence is not.
+8. **Exact Next Step** — the single clearest action for the next pilot.
 
 ---
 *Created by the Spec-Driven Development Template*

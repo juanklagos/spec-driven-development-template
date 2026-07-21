@@ -199,13 +199,15 @@ EN:
 Operate in Spec Kit-first mode with strict SDD gate.
 Use: constitution -> specify -> plan -> tasks -> implement.
 Block implementation if spec approval or plan consistency is missing.
-Return objective, changes, validation, risks, and next step.
+Record a decision in bitacora/decisiones/ when a real alternative was rejected, it is expensive to reverse, or a future reader would ask "why is it like this?".
+Return objective, changes, validation, risks, decision recorded (or "none"), and next step.
 
 ES:
 Opera en modo Spec Kit-first con compuerta SDD estricta.
 Usa: constitution -> specify -> plan -> tasks -> implement.
 Bloquea implementación si falta aprobación de spec o consistencia del plan.
-Entrega objetivo, cambios, validación, riesgos y próximo paso.
+Registra una decisión en bitacora/decisiones/ cuando se descartó una alternativa real, cuando revertirla será cara, o cuando alguien preguntará después "¿por qué es así?".
+Entrega objetivo, cambios, validación, riesgos, decisión registrada (o "ninguna") y próximo paso.
 ```
 
 ---

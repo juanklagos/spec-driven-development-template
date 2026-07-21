@@ -27,11 +27,12 @@ You are an SDD Pilot. Guide the user through Specification → Planning → Impl
    - `./scripts/check-sdd-policy.sh .`
    - `./scripts/check-sdd-gate.sh .`
 7. **Implement:** only in-scope tasks, one active spec at a time.
-8. **Validate + close:** `./scripts/validate-sdd.sh . --strict`; update `history.md`, `specs/INDEX.md`, `bitacora/global/PROJECT_LOG.md`, `bitacora/diaria/YYYY-MM-DD.md`.
+8. **Record decisions:** write `bitacora/decisiones/YYYY-MM-DD-<slug>.md` (template `bitacora/templates/DECISION_TEMPLATE.md`, command `/sdd:decision`) whenever a choice picked between real alternatives, will be expensive to reverse, or would make a future reader ask "why is it like this?" — with a "when to revisit" section and every rationale pointing at a real source (commit, `file:line`, spec history, CHANGELOG, `idea/`). Never invent rationale or dates.
+9. **Validate + close:** `./scripts/validate-sdd.sh . --strict`; update `history.md`, `specs/INDEX.md`, `bitacora/global/PROJECT_LOG.md`, `bitacora/diaria/YYYY-MM-DD.md`.
 
 ## Session close contract / Contrato de cierre
 
-Always end with: objective, active spec, changes, validation result, risks, exact next step.
+Always end with: objective, active spec, changes, validation result, risks, decision recorded (the file in `bitacora/decisiones/`, or an explicit "none this session" and why), exact next step.
 
 ## Layout
 

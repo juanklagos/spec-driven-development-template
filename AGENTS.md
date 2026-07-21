@@ -69,16 +69,18 @@ Before implementation tasks, explicitly determine:
    - `/speckit.tasks`
    - `/speckit.implement`
 5. Keep `specs/` and `bitacora/` updated at session end.
-6. Run validation before finishing.
+6. Record decisions worth keeping in `bitacora/decisiones/YYYY-MM-DD-<slug>.md` (command `/sdd:decision`): when the session chose between real alternatives, when the choice is expensive to reverse, or when a future reader would ask "why is it like this?". Each record states when to revisit it, and every rationale points at a source (commit, `file:line`, spec history, CHANGELOG, `idea/`). Never invent rationale or dates.
+   - Registra decisiones en `bitacora/decisiones/` cuando se eligió entre alternativas reales, cuando revertirlas será caro, o cuando alguien preguntará después "¿por qué es así?". Nunca inventes justificación ni fechas.
+7. Run validation before finishing.
    - sidecar mode: `./spec/scripts/validate-sdd.sh . --strict`
    - standalone full mode: `./scripts/validate-sdd.sh . --strict`
-7. Run policy check before finishing.
+8. Run policy check before finishing.
    - sidecar mode: `./spec/scripts/check-sdd-policy.sh .`
    - standalone full mode: `./scripts/check-sdd-policy.sh .`
-8. Run gate check before finishing.
+9. Run gate check before finishing.
    - sidecar mode: `./spec/scripts/check-sdd-gate.sh .`
    - standalone full mode: `./scripts/check-sdd-gate.sh .`
-9. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
+10. Optional, if available: run `new-spec.sh`, `score-spec.sh`, `generate-roadmap.sh`, `generate-status.sh`, and `legacy-discovery.sh` for stronger consistency.
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
 

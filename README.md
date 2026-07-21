@@ -93,6 +93,7 @@ If you use **Claude Code**, this repo ships slash commands out of the box — st
 | `/sdd:new` | Guided start: idea → first spec ready for approval |
 | `/sdd:spec` | Create or refine a spec bundle with EARS criteria |
 | `/sdd:gate` | Runs the machine-checked gate and records your consent |
+| `/sdd:decision` | Records one decision (what, why, what was rejected, when to revisit) in `bitacora/decisiones/` |
 | `/sdd:close` | Validates and closes the session with the output contract |
 | `/sdd:tutor` | Conversational SDD course by levels, graded by the real validation scripts |
 

@@ -66,10 +66,24 @@ agent_rule_markers:
   workspace_scope_phrase_en: Do not clone or copy the full framework repository into this project unless the user explicitly asks for a standalone workspace.
   workspace_scope_phrase_es: No clones ni copies el repositorio completo del framework dentro de este proyecto salvo que el usuario pida explícitamente un workspace standalone.
 
+decision_log:
+  path: bitacora/decisiones
+  template: bitacora/templates/DECISION_TEMPLATE.md
+  command: /sdd:decision
+  filename_pattern: YYYY-MM-DD-<slug>.md
+  record_when_any:
+    - chose_between_real_alternatives
+    - expensive_to_reverse
+    - future_reader_would_ask_why
+  require_when_to_revisit_section: true
+  require_sourced_rationale: true
+  never_invent_rationale_or_dates: true
+
 session_output_contract:
   - objective
   - active_spec
   - changes
   - validation
   - risks
+  - decision_recorded
   - next_step

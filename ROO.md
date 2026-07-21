@@ -16,4 +16,6 @@ Execution workspace:
 - For real external projects, install the compact `spec/` sidecar and keep code in the project root.
 - Para proyectos reales externos, instala el sidecar compacto `spec/` y mantén el código en la raíz del proyecto.
 
-Always close with validation status and exact next step.
+Record a decision in `bitacora/decisiones/YYYY-MM-DD-<slug>.md` when it chose between real alternatives, will be expensive to reverse, or a future reader would ask "why is it like this?". Include when to revisit; source every rationale; never invent one.
+
+Always close with validation status, the decision recorded (or an explicit "none"), and exact next step.

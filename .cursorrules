@@ -21,4 +21,5 @@ Always:
 2. Prefer `www/<project-name>/` unless the user chooses another target path.
 3. Use one active specification.
 4. Keep refinement trace (`history.md`, `specs/INDEX.md`, `bitacora/`).
-5. Run `./scripts/validate-sdd.sh . --strict`, `./scripts/check-sdd-policy.sh .`, and `./scripts/check-sdd-gate.sh .`.
+5. Record a decision in `bitacora/decisiones/YYYY-MM-DD-<slug>.md` when it chose between real alternatives, will be expensive to reverse, or a future reader would ask "why is it like this?". Include when to revisit; source every rationale; never invent one.
+6. Run `./scripts/validate-sdd.sh . --strict`, `./scripts/check-sdd-policy.sh .`, and `./scripts/check-sdd-gate.sh .`.

@@ -22,6 +22,7 @@ Required behavior:
 3. Work from one active specification.
 4. If gate is not met, refine docs (`spec`, `plan`, `tasks`, `history`, `bitacora`) only.
 5. Keep traceability in `history.md`, `specs/INDEX.md`, and `bitacora/`.
+6. Record a decision in `bitacora/decisiones/YYYY-MM-DD-<slug>.md` when it chose between real alternatives, will be expensive to reverse, or a future reader would ask "why is it like this?". Include a "when to revisit" section, source every rationale (commit, `file:line`, spec history, CHANGELOG, `idea/`), and never invent one.
 
 Validation commands:
 - `./scripts/validate-sdd.sh . --strict`
