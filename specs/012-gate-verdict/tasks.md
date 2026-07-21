@@ -4,13 +4,13 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 
 ## H1 — Cerrar el fallo abierto
 
-- [ ] **T1a** Prueba primero: extender la prueba de deriva de `scripts/test-mcp-integration.mjs`
+- [x] **T1a** Prueba primero: extender la prueba de deriva de `scripts/test-mcp-integration.mjs`
       para comparar la **extracción** de bash y de TypeScript sobre una tabla adversaria (varios
       pares de comillas invertidas, comentario final, negaciones, espacios raros). Debe fallar contra
       el código actual.
-- [ ] **T1b** Hacer perezoso el `sed` de `scripts/check-sdd-gate.sh:118` y de
+- [x] **T1b** Hacer perezoso el `sed` de `scripts/check-sdd-gate.sh:118` y de
       `scripts/validate-sdd.sh:151`. T1a pasa a verde.
-- [ ] **T1c** Replicar el arreglo en la copia del sidecar y comprobar que un sidecar recién instalado
+- [x] **T1c** Replicar el arreglo en la copia del sidecar y comprobar que un sidecar recién instalado
       lo lleva.
 
 ## H2 — Veredicto y postura en las cuatro superficies

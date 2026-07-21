@@ -247,7 +247,7 @@ async function isSddRoot(candidate: string): Promise<boolean> {
  * spec rendered green in the builder while the gate treated it as unapproved
  * and skipped every approval quality check.
  */
-function extractApprovalStatus(content: string): string {
+export function extractApprovalStatus(content: string): string {
   const match = content.match(/Estado \/ Status:\s*`([^`]+)`/i);
   return match?.[1].trim() ?? "Pendiente";
 }

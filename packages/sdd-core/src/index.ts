@@ -848,6 +848,10 @@ function formatIndexRow(row: IndexRow): string {
 
 export {
   ensureProjectRootAllowed,
+  // Exported so scripts/test-mcp-integration.mjs can run it against the bash
+  // implementation (sdd_extract_status_value) over an adversarial table. The two
+  // diverged silently once: bash read "approved" where this read "Pendiente".
+  extractApprovalStatus,
   frameworkAssetError,
   getFrameworkLayout,
   getFrameworkRoot,

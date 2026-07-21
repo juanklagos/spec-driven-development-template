@@ -113,11 +113,7 @@ while IFS= read -r spec_path; do
   # mentioning "approved" approved, while sdd-core (which requires the
   # backticks) read the same spec as pending.
   status_line="$(first_line_match "Estado / Status:" "$spec_path")"
-  status_value=""
-  if printf "%s" "$status_line" | grep -q '`'; then
-    status_value="$(printf "%s" "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/' \
-      | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
-  fi
+  status_value="$(sdd_extract_status_value "$status_line")"
   if printf "%s" "$status_value" | grep -E -i -q -- "$SDD_NEGATED_STATUS_ERE"; then
     # Negation wins: "No aprobado" contains an approval word but is not approval.
     :

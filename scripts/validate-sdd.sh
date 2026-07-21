@@ -144,11 +144,8 @@ if [ "$STRICT" = "--strict" ]; then
     for spec_path in "${spec_dirs[@]}"; do
       [ -f "$spec_path/spec.md" ] || continue
       status_line="$(grep -E -- "Estado / Status:" "$spec_path/spec.md" | head -n 1 || true)"
-      case "$status_line" in
-        *'`'*) ;;
-        *) continue ;;
-      esac
-      status_value="$(printf "%s" "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/')"
+      status_value="$(sdd_extract_status_value "$status_line")"
+      [ -n "$status_value" ] || continue
       if printf "%s" "$status_value" | grep -E -i -q -- 'aprobad[oa]|approved'; then
         approved_specs=$((approved_specs + 1))
       fi

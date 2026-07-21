@@ -2,11 +2,11 @@
 
 ## Estado de aprobación / Approval status
 
-- Estado / Status: `Pendiente`
+- Estado / Status: `Aprobado`
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
-- Fecha de aprobación / Approval date: `YYYY-MM-DD`
+- Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote):
+- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — el autor respondió: *«arregla el fallo real, QUE RESPONDA TODO LO POSIBLE PARA EVITAR ERRORES Y QUE EL USUARIO SUFRA. REVISA COMO SOLVENTARLO, NO IMPORTA SI HAY QUE CAMBIAR ALGO EN GENERAL»*. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 
@@ -95,7 +95,12 @@ comprobación ausente.
 
 ## Fuera de alcance / Out of scope
 
-- El detector de código (correlacionar archivos cambiados contra specs aprobadas). Va a la spec 013.
+- El detector de código (correlacionar archivos cambiados contra specs aprobadas). Va a la spec 013,
+  que **se está diseñando en paralelo a esta**, no aplazada indefinidamente: al aprobar la 012 el
+  autor levantó la restricción con *«REVISA COMO SOLVENTARLO, NO IMPORTA SI HAY QUE CAMBIAR ALGO EN
+  GENERAL»*, lo que autoriza expresamente cambios estructurales al framework (formatos, superficie de
+  tools MCP, andamiadores, convenciones de git, plantilla de spec). Sale de la 012 por secuencia, no
+  por descarte: el veredicto y el extractor son su cimiento.
 - Cualquier escalón de configuración tipo `off/advisory/strict/paranoid`. Convierte una regla en una
   matriz de severidades duplicada en dos lenguajes, en un repo que ya cerró dos fallos abiertos por
   divergencia entre bash y TypeScript.

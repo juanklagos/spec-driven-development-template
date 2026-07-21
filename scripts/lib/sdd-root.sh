@@ -230,3 +230,24 @@ sdd_release_lock() {
   [ -n "${1:-}" ] || return 0
   rm -rf "$1"
 }
+
+# Extract the approval status value from a "- Estado / Status: `X`" line.
+#
+# One implementation, sourced by check-sdd-gate.sh and validate-sdd.sh, which
+# each carried their own copy. It must agree with extractApprovalStatus() in
+# packages/sdd-core/src/workspace.ts on every input; scripts/test-mcp-integration.mjs
+# runs both over an adversarial table and fails if they diverge.
+#
+# The expression is anchored and non-greedy on purpose. A greedy `.*` captures the
+# LAST backtick pair, so `- Estado / Status: \`Pendiente\` (target: \`approved\`)`
+# extracted as "approved" and an unapproved spec read as approved.
+sdd_extract_status_value() {
+  status_line="${1:-}"
+  case "$status_line" in
+    *'`'*) ;;
+    *) printf "" ; return 0 ;;
+  esac
+  printf "%s" "$status_line" \
+    | sed -E 's/^[^`]*`([^`]*)`.*/\1/' \
+    | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//'
+}

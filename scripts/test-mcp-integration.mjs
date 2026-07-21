@@ -3,6 +3,7 @@ import {
   APPROVED_STATUS_ERE,
   DOC_GUIDES,
   NEGATED_STATUS_ERE,
+  extractApprovalStatus,
   canvasEdgeColorForLabel,
   classifyEdgeLabel,
   docsUrl,
@@ -937,6 +938,72 @@ async function main() {
         `the exported negation ERE must reject "${negated}"`
       );
     }
+
+    // Pinning the ERE constants byte-for-byte was not enough: the two
+    // implementations agreed on the *rule* and disagreed on the *extraction*.
+    // A greedy sed captured the LAST backtick pair, so a spec reading
+    // `Pendiente` with a trailing `(target: `approved`)` note was approved in
+    // bash and pending in TypeScript. Compare the extractions themselves.
+    const STATUS_LINES = [
+      "- Estado / Status: `Pendiente`",
+      "- Estado / Status: `Aprobado`",
+      "- Estado / Status: `Approved`",
+      "- Estado / Status: `No aprobado`",
+      "- Estado / Status: `Not approved`",
+      "- Estado / Status: `unapproved`",
+      // The line that broke it. Two backtick pairs, the second one a decoy.
+      "- Estado / Status: `Pendiente` (target: `approved`)",
+      "- Estado / Status: `Aprobado` (revisar `Pendiente` el 2026-08-01)",
+      "- Estado / Status: `Pendiente` — ver `history.md`",
+      // Whitespace and casing.
+      "-   Estado / Status:   `Aprobado`   ",
+      "- estado / status: `aprobado`",
+      // Degenerate inputs: neither implementation may report approval.
+      "- Estado / Status: Aprobado",
+      "- Estado / Status: ``",
+      "- Estado / Status:"
+    ];
+
+    for (const line of STATUS_LINES) {
+      const { stdout } = await execFileAsync("bash", [
+        "-c",
+        '. "$1"/scripts/lib/sdd-root.sh; printf "%s" "$(sdd_extract_status_value "$2")"',
+        "bash",
+        REPO_ROOT,
+        line
+      ]);
+      const fromBash = stdout;
+      const fromTypeScript = extractApprovalStatus(line);
+
+      if (fromBash === "") {
+        // No backticked value. TypeScript falls back to the safe default, and
+        // the safe default must never be an approving one.
+        assert.equal(
+          isApprovedStatus(fromTypeScript),
+          false,
+          `no status value in "${line}", so TypeScript must not fall back to an approving default (got "${fromTypeScript}")`
+        );
+        continue;
+      }
+
+      assert.equal(
+        fromBash,
+        fromTypeScript,
+        `extraction drift on "${line}": bash read "${fromBash}", TypeScript read "${fromTypeScript}"`
+      );
+      assert.equal(
+        isApprovedStatus(fromBash),
+        isApprovedStatus(fromTypeScript),
+        `approval verdict drift on "${line}"`
+      );
+    }
+
+    // The specific regression, asserted on its own so a failure names itself.
+    assert.equal(
+      extractApprovalStatus("- Estado / Status: `Pendiente` (target: `approved`)"),
+      "Pendiente",
+      "a pending spec with a trailing target note must read as pending"
+    );
 
     gateRoot = String(
       asObject(
