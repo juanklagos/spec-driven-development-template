@@ -8,7 +8,7 @@
 | 004 | site-dashboard-community | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 005 | learning-for-everyone | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-17 |
 | 006 | visual-spec-builder | In Progress / En progreso (F1-F2 hechas; F3 pospuesta) | High / Alta | Juan Klagos / Claude | 2026-07-20 |
-| 007 | builder-v2-easy | In Progress / En progreso | High / Alta | Juan Klagos / Claude | 2026-07-20 |
+| 007 | builder-v2-easy | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-20 |
 | 008 | builder-v3-ai | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-20 |
 | 009 | builder-v4-teams | Draft / Borrador | Medium / Media | Juan Klagos / Claude | 2026-07-20 |
 

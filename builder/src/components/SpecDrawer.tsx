@@ -1,9 +1,72 @@
 import { useEffect, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
 import { useBuilderStore } from "../store";
+import { SectionEditor } from "./SectionEditor";
 import type { SpecDetail, TaskItem } from "../types";
 
 const EXCERPT_LINES = 25;
+
+type DrawerTab = "view" | "edit";
+
+// Inline confirmation for "Approve spec": asks who approves and states what
+// will be written into spec.md before touching the disk (spec 007, R2).
+function ApprovePanel({ specId, onDone }: { specId: string; onDone: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [approver, setApprover] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const confirm = async () => {
+    if (!approver.trim() || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await api.approveSpec(specId, approver.trim());
+      setOpen(false);
+      onDone();
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button className="btn primary approve-btn" onClick={() => setOpen(true)}>
+        ✅ Aprobar spec / Approve spec
+      </button>
+    );
+  }
+
+  return (
+    <div className="approve-panel">
+      <p className="drawer-note">
+        Se escribirá la aprobación real en spec.md (estado, fecha de hoy y aprobador). / The real
+        approval will be written into spec.md (status, today's date and approver).
+      </p>
+      <input
+        autoFocus
+        value={approver}
+        placeholder="¿Quién aprueba? / Who approves?"
+        onChange={(e) => setApprover(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") void confirm();
+          if (e.key === "Escape") setOpen(false);
+        }}
+      />
+      {error ? <p className="drawer-error">⚠ {error}</p> : null}
+      <div className="approve-actions">
+        <button className="btn small" onClick={() => setOpen(false)} disabled={busy}>
+          Cancelar / Cancel
+        </button>
+        <button className="btn small primary" onClick={() => void confirm()} disabled={busy || !approver.trim()}>
+          {busy ? "Aprobando… / Approving…" : "Confirmar / Confirm"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export function SpecDrawer() {
   const specId = useBuilderStore((s) => s.selectedSpecId);
@@ -11,7 +74,10 @@ export function SpecDrawer() {
   const specsVersion = useBuilderStore((s) => s.specsVersion);
   const selectSpec = useBuilderStore((s) => s.selectSpec);
   const applyTasks = useBuilderStore((s) => s.applyTasks);
+  const refreshSpecs = useBuilderStore((s) => s.refreshSpecs);
+  const refreshGate = useBuilderStore((s) => s.refreshGate);
 
+  const [tab, setTab] = useState<DrawerTab>("view");
   const [detail, setDetail] = useState<SpecDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,6 +86,7 @@ export function SpecDrawer() {
   pendingRef.current = pendingLine;
 
   useEffect(() => {
+    setTab("view");
     if (!specId) {
       setDetail(null);
       return;
@@ -83,6 +150,26 @@ export function SpecDrawer() {
     }
   };
 
+  const refetchDetail = () => {
+    api
+      .getSpec(specId)
+      .then(setDetail)
+      .catch(() => {
+        // The SSE change event will retry shortly.
+      });
+  };
+
+  const handleApproved = () => {
+    refetchDetail();
+    void refreshSpecs();
+    void refreshGate();
+  };
+
+  const handleSectionsSaved = () => {
+    refetchDetail();
+    void refreshGate();
+  };
+
   const isApproved = summary ? /aprobado|approved/i.test(summary.status) : false;
   const excerpt = detail ? detail.docs.spec.split("\n").slice(0, EXCERPT_LINES).join("\n") : "";
 
@@ -100,10 +187,19 @@ export function SpecDrawer() {
           <code>{summary.dir}</code>
         </p>
       ) : null}
+      <nav className="drawer-tabs" aria-label="Pestañas / Tabs">
+        <button className={`drawer-tab${tab === "view" ? " active" : ""}`} onClick={() => setTab("view")}>
+          Ver / View
+        </button>
+        <button className={`drawer-tab${tab === "edit" ? " active" : ""}`} onClick={() => setTab("edit")}>
+          ✏️ Editar / Edit
+        </button>
+      </nav>
       {loading ? <p className="drawer-dim">Cargando… / Loading…</p> : null}
       {error ? <p className="drawer-error">⚠ {error}</p> : null}
-      {detail ? (
+      {detail && tab === "view" ? (
         <div className="drawer-body nowheel">
+          {!isApproved ? <ApprovePanel specId={specId} onDone={handleApproved} /> : null}
           <h3>Tareas / Tasks</h3>
           <ul className="task-list">
             {detail.tasks.length === 0 ? (
@@ -127,9 +223,15 @@ export function SpecDrawer() {
           <h3>spec.md (extracto / excerpt)</h3>
           <pre className="spec-excerpt">{excerpt}</pre>
           <p className="drawer-note">
-            Solo lectura — edita el contenido largo en tu editor. / Read-only — edit the long content in
-            your editor.
+            Usa la pestaña «Editar» para las secciones guiadas; el contenido largo se edita en tu
+            editor. / Use the “Edit” tab for the guided sections; long-form content is edited in your
+            editor.
           </p>
+        </div>
+      ) : null}
+      {detail && tab === "edit" ? (
+        <div className="drawer-body nowheel">
+          <SectionEditor specId={specId} specMarkdown={detail.docs.spec} onSaved={handleSectionsSaved} />
         </div>
       ) : null}
     </section>

@@ -32,6 +32,7 @@ function PaletteItem({
       {...attributes}
       type="button"
       className={`palette-item${isDragging ? " dragging" : ""}`}
+      data-tour={item.kind === "spec" ? "palette-spec" : undefined}
       onClick={() => onQuickAdd(item.kind)}
     >
       <span className="palette-emoji" aria-hidden>
@@ -47,7 +48,7 @@ function PaletteItem({
 
 export function Palette({ onQuickAdd }: { onQuickAdd: (kind: PaletteKind) => void }) {
   return (
-    <aside className="palette">
+    <aside className="palette" data-tour="palette">
       <h2>Paleta / Palette</h2>
       <p className="palette-help">Arrastra al lienzo (o clic) / Drag onto the canvas (or click)</p>
       {PALETTE_ITEMS.map((item) => (

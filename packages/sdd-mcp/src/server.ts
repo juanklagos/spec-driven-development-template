@@ -5,6 +5,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { z } from "zod";
 import {
   appendProjectLogEntry,
+  approveSpec,
   checkGate,
   connectBoardCards,
   createSpec,
@@ -13,11 +14,13 @@ import {
   generateStatus,
   getBoardView,
   getFrameworkRoot,
+  getGateSummary,
   listSpecs,
   readSpecTasks,
   recordUserConsent,
   resolveSddRoot,
   setSpecTaskDone,
+  updateSpecSections,
   validateProject,
   writeBoard,
   writeDailyLog,
@@ -514,6 +517,106 @@ export function createSddMcpServer(): McpServer {
     async ({ projectRoot, specId, line, done }) => {
       const tasks = await setSpecTaskDone(projectRoot, specId, line, done);
       const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  // --- SDD Builder v2 tools (spec 007) -----------------------------------
+  // Gate semaphore and surgical spec.md edits; same sdd-core layer as the
+  // /api/gate, /api/spec/:id/approve and /api/spec/:id/sections REST routes.
+
+  const validationResultSchema = z.object({
+    ok: z.boolean(),
+    errors: z.number(),
+    warnings: z.number(),
+    messages: z.array(validationMessageSchema)
+  });
+
+  server.registerTool(
+    "sdd_gate_summary",
+    {
+      title: "Gate semaphore summary",
+      description:
+        "One-call gate semaphore: runs the SDD gate check plus the structural validation and groups every message by the spec it belongs to (the same data the SDD Builder chip and per-card badges show).",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        ok: z.boolean(),
+        errors: z.number(),
+        warnings: z.number(),
+        approvedSpecs: z.number(),
+        totalSpecs: z.number(),
+        gate: validationResultSchema.extend({ approvedSpecs: z.number(), totalSpecs: z.number() }),
+        validation: validationResultSchema,
+        specIssues: z.record(z.array(validationMessageSchema)),
+        generalIssues: z.array(validationMessageSchema)
+      }
+    },
+    async ({ projectRoot }) => {
+      const result = await getGateSummary(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        isError: !result.ok
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_approve_spec",
+    {
+      title: "Approve spec",
+      description:
+        "Surgically fill the existing approval block of a spec.md: Estado -> Aprobado, approval date -> today, approver -> given name, evidence when empty. Fails clearly when the block is missing.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        approver: z.string().min(1).describe("Person or role approving the spec.")
+      },
+      outputSchema: {
+        specId: z.string(),
+        status: z.string(),
+        approvalDate: z.string(),
+        approver: z.string(),
+        evidenceUpdated: z.boolean(),
+        fieldsUpdated: z.array(z.string())
+      }
+    },
+    async ({ projectRoot, specId, approver }) => {
+      const result = await approveSpec(projectRoot, specId, approver);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_update_spec_sections",
+    {
+      title: "Update spec sections",
+      description:
+        "Replace ONLY the content under the guided-editor headings of a spec.md (user story, acceptance scenarios, EARS criteria, out of scope) preserving everything else. Tolerant to the EN/ES headings of both repo templates.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        story: z.string().optional().describe("Main user story (free text)."),
+        scenarios: z.array(z.string()).optional().describe("Acceptance scenarios (numbered list)."),
+        criteria: z.array(z.string()).optional().describe("EARS acceptance criteria (bullet list)."),
+        outOfScope: z.string().optional().describe("Out of scope (free text).")
+      },
+      outputSchema: {
+        specId: z.string(),
+        updated: z.array(z.string()),
+        created: z.array(z.string())
+      }
+    },
+    async ({ projectRoot, specId, story, scenarios, criteria, outOfScope }) => {
+      const result = await updateSpecSections(projectRoot, specId, { story, scenarios, criteria, outOfScope });
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

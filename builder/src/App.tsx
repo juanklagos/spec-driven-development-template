@@ -26,7 +26,9 @@ import { NoteNode } from "./components/NoteNode";
 import { Palette, PALETTE_ITEMS } from "./components/Palette";
 import { SpecDrawer } from "./components/SpecDrawer";
 import { SpecNode } from "./components/SpecNode";
+import { TemplateGallery } from "./components/TemplateGallery";
 import { TopBar } from "./components/TopBar";
+import { Tour } from "./components/Tour";
 import { useBuilderStore } from "./store";
 import type { AppEdge, AppNode, PaletteKind } from "./types";
 
@@ -92,6 +94,9 @@ function Shell() {
   const selectSpec = useBuilderStore((s) => s.selectSpec);
   const setEditingEdge = useBuilderStore((s) => s.setEditingEdge);
   const flushSave = useBuilderStore((s) => s.flushSave);
+  const tourOpen = useBuilderStore((s) => s.tourOpen);
+  const galleryOpen = useBuilderStore((s) => s.galleryOpen);
+  const maybeStartTour = useBuilderStore((s) => s.maybeStartTour);
 
   const { screenToFlowPosition, fitView } = useReactFlow();
   const { setNodeRef: setDropRef } = useDroppable({ id: "canvas" });
@@ -116,6 +121,29 @@ function Shell() {
       return () => clearTimeout(t);
     }
   }, [loading, loadError, fitView]);
+
+  // First visit: offer the welcome tour once the board is on screen.
+  useEffect(() => {
+    if (!loading && !loadError) maybeStartTour();
+  }, [loading, loadError, maybeStartTour]);
+
+  // Undo/redo keyboard shortcuts (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z), skipped
+  // while typing in inputs/textareas so text editing keeps its own undo.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "z") return;
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      e.preventDefault();
+      const store = useBuilderStore.getState();
+      if (e.shiftKey) store.redo();
+      else store.undo();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // Warn before closing the tab with unsaved changes.
   useEffect(() => {
@@ -204,6 +232,7 @@ function Shell() {
           <Palette onQuickAdd={handleQuickAdd} />
           <div
             className="canvas-area"
+            data-tour="canvas"
             ref={(el) => {
               setDropRef(el);
               canvasEl.current = el;
@@ -249,6 +278,8 @@ function Shell() {
       {specModalPos ? (
         <NewSpecModal onClose={() => setSpecModalPos(null)} onCreate={handleCreateSpec} />
       ) : null}
+      {galleryOpen ? <TemplateGallery /> : null}
+      {tourOpen ? <Tour /> : null}
     </div>
   );
 }

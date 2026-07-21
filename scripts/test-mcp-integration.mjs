@@ -287,6 +287,81 @@ async function main() {
     );
     assert.equal(boardAfter.canvas.edges.length, 1, "edge should persist in specs/board.canvas");
 
+    // --- Builder v2 tools (spec 007): gate summary + surgical spec edits ---
+
+    const secondSpec = asObject(
+      await client.callTool({
+        name: "sdd_create_spec",
+        arguments: { projectRoot, featureName: "Guided editor fixture", owner: "MCP Integration Test" }
+      })
+    );
+    const secondSpecId = String(secondSpec.specId);
+    assert.equal(secondSpecId, "002-guided-editor-fixture");
+    const secondSpecPath = path.join(projectRoot, "spec", "specs", secondSpecId, "spec.md");
+
+    // Before approving 002: the fixture 001 uses a free-form approval block
+    // (no backticked "Estado / Status:" line) so neither spec counts as
+    // approved yet; the fresh 002 must carry a grouped not-approved issue.
+    const preSummary = asObject(
+      await client.callTool({ name: "sdd_gate_summary", arguments: { projectRoot } })
+    );
+    assert.equal(preSummary.totalSpecs, 2);
+    assert.equal(preSummary.approvedSpecs, 0);
+    assert.ok(
+      (preSummary.specIssues[secondSpecId] ?? []).some((m) => m.code === "spec-not-approved"),
+      "gate summary should group the not-approved issue under the new spec id"
+    );
+    for (const messages of Object.values(preSummary.specIssues)) {
+      for (const message of messages) {
+        assert.match(String(message.path), /^specs[/\\]\d{3}-/, "spec issues must point into specs/NNN-...");
+      }
+    }
+
+    const approved = asObject(
+      await client.callTool({
+        name: "sdd_approve_spec",
+        arguments: { projectRoot, specId: secondSpecId, approver: "MCP Integration Test" }
+      })
+    );
+    assert.equal(approved.status, "Aprobado");
+    assert.equal(approved.approver, "MCP Integration Test");
+    const approvedOnDisk = await fs.readFile(secondSpecPath, "utf8");
+    assert.match(approvedOnDisk, /Estado \/ Status: `Aprobado`/);
+    assert.match(approvedOnDisk, /Aprobado por \/ Approved by: `MCP Integration Test`/);
+    assert.doesNotMatch(approvedOnDisk, /YYYY-MM-DD/);
+    assert.match(approvedOnDisk, /Aprobado desde SDD Builder/);
+
+    const sectionsResult = asObject(
+      await client.callTool({
+        name: "sdd_update_spec_sections",
+        arguments: {
+          projectRoot,
+          specId: secondSpecId,
+          story: "Como tester, quiero secciones quirúrgicas, para no romper el resto del spec.",
+          scenarios: ["Dado un spec de plantilla, cuando guardo secciones, entonces la aprobación no cambia."],
+          criteria: ["CUANDO se guarden secciones, EL SISTEMA DEBERÁ preservar el bloque de aprobación."],
+          outOfScope: "Editor de texto libre completo."
+        }
+      })
+    );
+    assert.ok(Array.isArray(sectionsResult.updated));
+    const editedOnDisk = await fs.readFile(secondSpecPath, "utf8");
+    assert.match(editedOnDisk, /Como tester, quiero secciones quirúrgicas/);
+    assert.match(editedOnDisk, /1\. Dado un spec de plantilla/);
+    assert.match(editedOnDisk, /- CUANDO se guarden secciones/);
+    assert.match(editedOnDisk, /## Fuera de alcance/);
+    // Surgical guarantee: the approval block written above is untouched.
+    assert.match(editedOnDisk, /Estado \/ Status: `Aprobado`/);
+    assert.match(editedOnDisk, /Aprobado por \/ Approved by: `MCP Integration Test`/);
+    // And unrelated sections (Requisitos) survive too.
+    assert.match(editedOnDisk, /## Requisitos/);
+
+    const postSummary = asObject(
+      await client.callTool({ name: "sdd_gate_summary", arguments: { projectRoot } })
+    );
+    assert.equal(postSummary.approvedSpecs, 1, "002 should now count as approved");
+    assert.equal(postSummary.ok, true, "gate should stay open after the surgical edits");
+
     const indexResource = await client.readResource({
       uri: `sdd://project/${projectName}/index`
     });

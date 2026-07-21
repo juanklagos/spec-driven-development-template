@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+- **SDD Builder v2 — easy mode (spec 007)**: six features that let a beginner run the whole SDD loop from the canvas.
+  - **Gate semaphore (R1)**: live chip in the top bar (🟢 open / 🔴 closed) with a "Validate now / Validar ahora" button running the real `checkGate` + `validateProject`; per-spec errors appear as a red `⚠ N` badge with tooltip on the affected card. Refreshes automatically on disk changes (SSE). New `getGateSummary` in `sdd-core`, `GET /api/gate`, MCP tool `sdd_gate_summary`.
+  - **Approve spec from the UI (R2)**: drawer button with inline confirmation that surgically fills the existing approval block of `spec.md` (status → `Aprobado`, today's date, approver, evidence when empty) and errors clearly when the block is missing. New `approveSpec` in `sdd-core`, `POST /api/spec/:id/approve`, MCP tool `sdd_approve_spec`.
+  - **Welcome tour (R3)**: five anchored steps (palette → create spec → connect → tasks/drawer → gate) with a dependency-free overlay, "Don't show again" persisted in localStorage, re-launchable from the "?" button. Bilingual.
+  - **Template gallery (R4)**: Web App, API/Backend, E-commerce and SaaS playbooks (data in `builder/src/templates.ts`) that create real specs plus a tidy pre-laid-out board with labeled edges; only allowed on a workspace with zero specs.
+  - **Guided spec.md editor (R5)**: "Edit" tab in the drawer with user story, acceptance scenarios, EARS criteria (prefix autocompleted on focus) and out-of-scope fields. New `updateSpecSections` in `sdd-core` replaces ONLY those headings (tolerant to the EN/ES headings of both repo templates, appends missing ones) and never touches approval or requirements. `PUT /api/spec/:id/sections`, MCP tool `sdd_update_spec_sections`.
+  - **Undo/redo + PNG export (R6)**: bounded canvas history (50 snapshots) with top-bar buttons and Cmd/Ctrl+Z / Shift+Cmd/Ctrl+Z, plus "📷 PNG" export via `html-to-image` (MIT) following the documented React Flow pattern.
+- Integration test (`npm run mcp:test`) extended with the three new MCP tools, asserting the surgical edits on disk (approval block filled, unrelated sections preserved) and the per-spec grouping of gate issues.
+
 ## [v1.6.1] — 2026-07-20
 
 ### Added

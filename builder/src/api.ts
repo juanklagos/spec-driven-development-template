@@ -1,4 +1,14 @@
-import type { BoardCanvas, BoardResponse, CreateSpecResult, SpecDetail, TaskItem } from "./types";
+import type {
+  ApproveSpecResult,
+  BoardCanvas,
+  BoardResponse,
+  CreateSpecResult,
+  GateSummary,
+  SpecDetail,
+  SpecSectionsInput,
+  TaskItem,
+  UpdateSpecSectionsResult
+} from "./types";
 
 // Same-origin API served by packages/sdd-mcp (http://127.0.0.1:3334/builder).
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -45,6 +55,20 @@ export const api = {
     request("/api/spec", {
       method: "POST",
       body: JSON.stringify(owner ? { name, owner } : { name })
+    }),
+
+  getGate: (): Promise<GateSummary> => request("/api/gate"),
+
+  approveSpec: (id: string, approver: string): Promise<ApproveSpecResult> =>
+    request(`/api/spec/${encodeURIComponent(id)}/approve`, {
+      method: "POST",
+      body: JSON.stringify({ approver })
+    }),
+
+  putSections: (id: string, sections: SpecSectionsInput): Promise<UpdateSpecSectionsResult> =>
+    request(`/api/spec/${encodeURIComponent(id)}/sections`, {
+      method: "PUT",
+      body: JSON.stringify(sections)
     })
 };
 

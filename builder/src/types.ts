@@ -60,6 +60,58 @@ export interface CreateSpecResult {
   specDir: string;
 }
 
+// --- Gate semaphore (GET /api/gate, mirrors sdd-core GateSummary) ----------
+
+export interface ValidationMessage {
+  level: "error" | "warning" | "info";
+  code: string;
+  message: string;
+  path?: string;
+}
+
+export interface ValidationCounts {
+  ok: boolean;
+  errors: number;
+  warnings: number;
+  messages: ValidationMessage[];
+}
+
+export interface GateSummary {
+  ok: boolean;
+  errors: number;
+  warnings: number;
+  approvedSpecs: number;
+  totalSpecs: number;
+  gate: ValidationCounts & { approvedSpecs: number; totalSpecs: number };
+  validation: ValidationCounts;
+  specIssues: Record<string, ValidationMessage[]>;
+  generalIssues: ValidationMessage[];
+}
+
+// --- Spec actions (approve + guided sections) ------------------------------
+
+export interface ApproveSpecResult {
+  specId: string;
+  status: string;
+  approvalDate: string;
+  approver: string;
+  evidenceUpdated: boolean;
+  fieldsUpdated: string[];
+}
+
+export interface SpecSectionsInput {
+  story?: string;
+  scenarios?: string[];
+  criteria?: string[];
+  outOfScope?: string;
+}
+
+export interface UpdateSpecSectionsResult {
+  specId: string;
+  updated: string[];
+  created: string[];
+}
+
 // ---------------------------------------------------------------------------
 // React Flow node/edge shapes (type aliases so they satisfy Record<string, unknown>)
 // ---------------------------------------------------------------------------

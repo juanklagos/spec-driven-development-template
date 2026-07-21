@@ -9,6 +9,8 @@ function splitSpecId(id: string): { num: string; name: string } {
 
 export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
   const spec = useBuilderStore((s) => s.specs[data.specId]);
+  const gateIssues = useBuilderStore((s) => s.gate?.specIssues[data.specId]);
+  const gateErrors = gateIssues?.filter((issue) => issue.level === "error") ?? [];
   const status = spec?.status ?? "Pendiente";
   const done = spec?.tasks.done ?? 0;
   const total = spec?.tasks.total ?? 0;
@@ -28,7 +30,17 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
       <Handle type="target" position={Position.Left} />
       <div className="spec-card-head">
         <span className="spec-num">📋 {num}</span>
-        <span className={`badge ${tone}`}>{badgeText}</span>
+        <span className="spec-card-badges">
+          {gateErrors.length > 0 ? (
+            <span
+              className="badge error"
+              title={`Errores del gate / Gate errors:\n${gateErrors.map((e) => `• ${e.message}`).join("\n")}`}
+            >
+              ⚠ {gateErrors.length}
+            </span>
+          ) : null}
+          <span className={`badge ${tone}`}>{badgeText}</span>
+        </span>
       </div>
       <h3 className="spec-name">{name}</h3>
       <div

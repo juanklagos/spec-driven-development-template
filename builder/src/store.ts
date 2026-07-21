@@ -10,7 +10,20 @@ import {
 import { create } from "zustand";
 import { api, errorMessage } from "./api";
 import { ARROW, EPIC_COLOR, IDEA_COLOR, NOTE_CARD, SPEC_CARD, boardToFlow, flowToBoard } from "./convert";
-import type { AppEdge, AppNode, ChangeKind, LiveStatus, SaveState, SpecSummary, TaskItem } from "./types";
+import { EPIC_NOTE, type BoardTemplate } from "./templates";
+import type {
+  AppEdge,
+  AppNode,
+  BoardCanvas,
+  CanvasEdge,
+  CanvasNode,
+  ChangeKind,
+  GateSummary,
+  LiveStatus,
+  SaveState,
+  SpecSummary,
+  TaskItem
+} from "./types";
 
 const SAVE_DEBOUNCE_MS = 500;
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -25,6 +38,18 @@ let dragActive = false;
  */
 const BOARD_ECHO_WINDOW_MS = 1000;
 let lastBoardPutAt = 0;
+
+// --- Undo/redo (spec 007, R6) ---------------------------------------------
+const HISTORY_LIMIT = 50;
+interface Snapshot {
+  nodes: AppNode[];
+  edges: AppEdge[];
+}
+
+/** localStorage key for "don't show the welcome tour again". */
+export const TOUR_DISMISSED_KEY = "sdd-builder-tour-dismissed";
+/** The tour auto-offers only once per page load (reloads re-trigger `load`). */
+let tourOffered = false;
 
 const uid = (): string => crypto.randomUUID().slice(0, 8);
 
@@ -43,6 +68,16 @@ interface BuilderStore {
   workspaceChanged: boolean;
   /** Bumped when spec documents change on disk so open views (drawer) re-sync. */
   specsVersion: number;
+  /** Gate semaphore (GET /api/gate); null until the first fetch resolves. */
+  gate: GateSummary | null;
+  gateBusy: boolean;
+  gateError: string | null;
+  /** Canvas history for undo/redo (bounded snapshots of nodes+edges). */
+  past: Snapshot[];
+  future: Snapshot[];
+  /** UI: welcome tour + template gallery visibility. */
+  tourOpen: boolean;
+  galleryOpen: boolean;
 
   load: () => Promise<void>;
   onNodesChange: (changes: NodeChange<AppNode>[]) => void;
@@ -56,6 +91,15 @@ interface BuilderStore {
   selectSpec: (id: string | null) => void;
   applyTasks: (id: string, tasks: TaskItem[]) => void;
   refreshSpecs: () => Promise<void>;
+  refreshGate: () => Promise<void>;
+  pushHistory: () => void;
+  undo: () => void;
+  redo: () => void;
+  applyTemplate: (template: BoardTemplate) => Promise<void>;
+  openTour: () => void;
+  closeTour: (dontShowAgain: boolean) => void;
+  maybeStartTour: () => void;
+  setGalleryOpen: (open: boolean) => void;
   scheduleSave: () => void;
   flushSave: () => Promise<void>;
   setLiveStatus: (status: LiveStatus) => void;
@@ -77,6 +121,13 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   liveStatus: "off",
   workspaceChanged: false,
   specsVersion: 0,
+  gate: null,
+  gateBusy: false,
+  gateError: null,
+  past: [],
+  future: [],
+  tourOpen: false,
+  galleryOpen: false,
 
   load: async () => {
     set({ loading: true, loadError: null });
@@ -90,14 +141,23 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         nodes,
         edges,
         saveState: "saved",
-        saveError: null
+        saveError: null,
+        past: [],
+        future: []
       });
+      void get().refreshGate();
     } catch (error) {
       set({ loading: false, loadError: errorMessage(error) });
     }
   },
 
   onNodesChange: (changes) => {
+    // Record history before a drag starts or a node is removed, so undo
+    // restores the pre-drag position / the removed card.
+    const dragStarting =
+      !dragActive && changes.some((c) => c.type === "position" && c.dragging === true);
+    const removing = changes.some((c) => c.type === "remove");
+    if (dragStarting || removing) get().pushHistory();
     for (const c of changes) {
       if (c.type === "position" && typeof c.dragging === "boolean") dragActive = c.dragging;
     }
@@ -109,6 +169,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   onEdgesChange: (changes) => {
+    if (changes.some((c) => c.type === "remove")) get().pushHistory();
     set({ edges: applyEdgeChanges(changes, get().edges) });
     if (changes.some((c) => c.type === "remove")) get().scheduleSave();
   },
@@ -116,6 +177,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   onConnect: (connection) => {
     if (!connection.source || !connection.target) return;
     if (connection.source === connection.target) return;
+    get().pushHistory();
     const edge: AppEdge = {
       id: `e-${uid()}`,
       source: connection.source,
@@ -129,6 +191,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   addNote: (kind, position) => {
+    get().pushHistory();
     const node: AppNode = {
       id: `note-${uid()}`,
       type: "note",
@@ -148,6 +211,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     const summary: SpecSummary =
       specs[specId] ?? { id: specId, dir: `specs/${specId}`, status: "Pendiente", tasks: { done: 0, total: 0 } };
     if (get().nodes.some((n) => n.id === specId)) return; // already on the canvas
+    get().pushHistory();
     set({
       specs: { ...specs, [specId]: summary },
       nodes: [
@@ -159,6 +223,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   updateNoteText: (id, text) => {
+    get().pushHistory();
     set({
       nodes: get().nodes.map((n) =>
         n.id === id && n.type === "note" ? { ...n, data: { ...n.data, text } } : n
@@ -168,6 +233,12 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   updateEdgeLabel: (id, label) => {
+    const current = get().edges.find((e) => e.id === id);
+    if (!current || (current.data?.label ?? "") === label) {
+      set({ editingEdgeId: null });
+      return;
+    }
+    get().pushHistory();
     set({
       edges: get().edges.map((e) => (e.id === id ? { ...e, data: { ...e.data, label } } : e)),
       editingEdgeId: null
@@ -201,6 +272,142 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
       // Non-fatal: card data will refresh on the next successful load.
     }
   },
+
+  refreshGate: async () => {
+    if (get().gateBusy) return;
+    set({ gateBusy: true, gateError: null });
+    try {
+      const gate = await api.getGate();
+      set({ gate, gateBusy: false });
+    } catch (error) {
+      // Keep the last known gate; surface the failure in the chip tooltip.
+      set({ gateBusy: false, gateError: errorMessage(error) });
+    }
+  },
+
+  pushHistory: () => {
+    const { nodes, edges, past } = get();
+    set({ past: [...past, { nodes, edges }].slice(-HISTORY_LIMIT), future: [] });
+  },
+
+  undo: () => {
+    const { past, future, nodes, edges } = get();
+    const previous = past[past.length - 1];
+    if (!previous) return;
+    set({
+      past: past.slice(0, -1),
+      future: [...future, { nodes, edges }].slice(-HISTORY_LIMIT),
+      nodes: previous.nodes,
+      edges: previous.edges
+    });
+    get().scheduleSave();
+  },
+
+  redo: () => {
+    const { past, future, nodes, edges } = get();
+    const next = future[future.length - 1];
+    if (!next) return;
+    set({
+      future: future.slice(0, -1),
+      past: [...past, { nodes, edges }].slice(-HISTORY_LIMIT),
+      nodes: next.nodes,
+      edges: next.edges
+    });
+    get().scheduleSave();
+  },
+
+  // Apply a gallery template: create every spec for real (POST /api/spec),
+  // then persist a pre-laid-out canvas (PUT /api/board) and reload. Guarded
+  // against non-empty workspaces using the server's spec list as the truth.
+  applyTemplate: async (template) => {
+    const board = await api.getBoard();
+    if (board.specs.length > 0) {
+      throw new Error(
+        "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío. / " +
+          "This workspace already has specs; templates only apply to an empty workspace."
+      );
+    }
+
+    const idByKey = new Map<string, string>();
+    for (const spec of template.specs) {
+      const created = await api.createSpec(spec.name);
+      idByKey.set(spec.key, created.specId);
+    }
+    const epicIdByKey = new Map(template.epics.map((epic) => [epic.key, `note-${template.id}-${epic.key}`]));
+    const resolve = (key: string): string | undefined => idByKey.get(key) ?? epicIdByKey.get(key);
+
+    const nodes: CanvasNode[] = [
+      ...template.epics.map(
+        (epic): CanvasNode => ({
+          id: epicIdByKey.get(epic.key) as string,
+          type: "text",
+          text: epic.text,
+          color: EPIC_NOTE.color,
+          x: epic.x,
+          y: epic.y,
+          width: EPIC_NOTE.width,
+          height: EPIC_NOTE.height
+        })
+      ),
+      ...template.specs.map(
+        (spec): CanvasNode => ({
+          id: idByKey.get(spec.key) as string,
+          type: "file",
+          file: `specs/${idByKey.get(spec.key)}/spec.md`,
+          x: spec.x,
+          y: spec.y,
+          width: SPEC_CARD.width,
+          height: SPEC_CARD.height
+        })
+      )
+    ];
+    const edges: CanvasEdge[] = template.edges.flatMap((edge): CanvasEdge[] => {
+      const fromNode = resolve(edge.from);
+      const toNode = resolve(edge.to);
+      if (!fromNode || !toNode) return [];
+      return [
+        {
+          id: `edge-${template.id}-${edge.from}-${edge.to}`,
+          fromNode,
+          toNode,
+          fromSide: "right",
+          toSide: "left",
+          ...(edge.label ? { label: edge.label } : {})
+        }
+      ];
+    });
+
+    const canvas: BoardCanvas = { nodes, edges };
+    await api.putBoard(canvas);
+    lastBoardPutAt = Date.now();
+    await get().load();
+  },
+
+  openTour: () => set({ tourOpen: true }),
+
+  closeTour: (dontShowAgain) => {
+    if (dontShowAgain) {
+      try {
+        localStorage.setItem(TOUR_DISMISSED_KEY, "1");
+      } catch {
+        // Private mode etc.: the tour will simply offer itself again.
+      }
+    }
+    set({ tourOpen: false });
+  },
+
+  maybeStartTour: () => {
+    if (tourOffered) return;
+    tourOffered = true;
+    try {
+      if (localStorage.getItem(TOUR_DISMISSED_KEY) === "1") return;
+    } catch {
+      return;
+    }
+    set({ tourOpen: true });
+  },
+
+  setGalleryOpen: (open) => set({ galleryOpen: open }),
 
   scheduleSave: () => {
     set({ saveState: "dirty" });
@@ -270,6 +477,8 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
           ...(appended.length > 0 ? { nodes: [...nodes, ...appended] } : {}),
           specsVersion: get().specsVersion + 1
         });
+        // The gate depends on the same documents: refresh the semaphore too.
+        void get().refreshGate();
       } catch {
         // Transient fetch failure: the next change event will retry.
       }
@@ -296,7 +505,9 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         nodes,
         edges,
         saveState: "saved",
-        saveError: null
+        saveError: null,
+        past: [],
+        future: []
       });
     } catch {
       // Transient fetch failure: the next change event will retry.

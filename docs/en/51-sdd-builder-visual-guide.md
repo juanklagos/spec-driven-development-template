@@ -37,9 +37,20 @@ Any MCP client connected to `sdd-mcp` can work with the same board through five 
 
 The server watches your `specs/` directory. Edit any `tasks.md` in your editor and the card's progress bar updates by itself — no reload. The top bar shows **🟢 Live**; if the server restarts on a different workspace, an amber banner asks you to reload. Concurrency rule: your markdown always wins; canvas layout is last-writer-wins (a future phase adds finer merging).
 
+## What's new in v2 (spec 007)
+
+- **Gate semaphore**: a live chip in the top bar (🟢 open / 🔴 closed) plus a "Validate now" button running the real validation; gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
+- **Approve from the drawer**: one confirmed click writes the real approval block (status, today's date, approver, evidence) into `spec.md` — with a clear error if the block is missing.
+- **Welcome tour**: five anchored steps (palette → create → connect → tasks → gate), dismissable with "Don't show again" and re-launchable from the "?" button.
+- **Template gallery**: Web App, API/Backend, E-commerce and SaaS playbooks create real specs plus a connected, tidy board. Only on a workspace with zero specs.
+- **Guided spec editor**: the drawer's "Edit" tab writes the user story, acceptance scenarios, EARS criteria (prefix autocompleted on focus) and out-of-scope sections surgically — approval and requirements are never touched.
+- **Undo/redo + PNG export**: canvas history (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) and a "📷 PNG" button to share the board as an image.
+
+Agents get the same three powers over MCP: `sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`.
+
 ## Limitations (honest)
 
-- Long-form `spec.md` content is edited in your editor, not the canvas (by design: the canvas composes, your editor writes).
+- Long-form `spec.md` content beyond the guided sections is edited in your editor, not the canvas (by design: the canvas composes, your editor writes).
 - Deleting a spec folder on disk does not remove its card automatically (conservative; delete the card manually).
 - One workspace per server instance (`SDD_PROJECT_ROOT`).
 

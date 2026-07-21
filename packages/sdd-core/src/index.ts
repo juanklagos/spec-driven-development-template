@@ -331,6 +331,55 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
   return { ...summarize(messages), approvedSpecs, totalSpecs: specs.length };
 }
 
+export interface GateSummary {
+  /** True only when both the gate check and the structural validation pass. */
+  ok: boolean;
+  errors: number;
+  warnings: number;
+  approvedSpecs: number;
+  totalSpecs: number;
+  gate: GateResult;
+  validation: ValidationResult;
+  /** Messages grouped by the spec id their path points into (specs/NNN-...). */
+  specIssues: Record<string, ValidationMessage[]>;
+  /** Messages that do not belong to a single spec (structure, consent, ...). */
+  generalIssues: ValidationMessage[];
+}
+
+const SPEC_PATH_RE = /^specs[/\\](\d{3}-[a-z0-9][a-z0-9-]*)(?:[/\\]|$)/;
+
+/**
+ * One-call gate semaphore for the SDD Builder: wraps checkGate and
+ * validateProject and groups every message by the spec it belongs to, so the
+ * UI can paint per-card badges and a single open/closed chip.
+ */
+export async function getGateSummary(projectRoot: string): Promise<GateSummary> {
+  const [gate, validation] = await Promise.all([checkGate(projectRoot), validateProject(projectRoot)]);
+  const specIssues: Record<string, ValidationMessage[]> = {};
+  const generalIssues: ValidationMessage[] = [];
+
+  for (const message of [...gate.messages, ...validation.messages]) {
+    const specId = message.path?.match(SPEC_PATH_RE)?.[1];
+    if (specId) {
+      (specIssues[specId] ??= []).push(message);
+    } else {
+      generalIssues.push(message);
+    }
+  }
+
+  return {
+    ok: gate.ok && validation.ok,
+    errors: gate.errors + validation.errors,
+    warnings: gate.warnings + validation.warnings,
+    approvedSpecs: gate.approvedSpecs,
+    totalSpecs: gate.totalSpecs,
+    gate,
+    validation,
+    specIssues,
+    generalIssues
+  };
+}
+
 export async function recordUserConsent(projectRoot: string, summary: string): Promise<ConsentResult> {
   const root = await resolveSddRoot(projectRoot);
   const consentDir = path.join(root, ".sdd");
@@ -602,3 +651,4 @@ function formatIndexRow(row: IndexRow): string {
 export { ensureProjectRootAllowed, getFrameworkRoot, listSpecs, resolveSddRoot } from "./workspace.js";
 export type { SpecSummary } from "./workspace.js";
 export * from "./board.js";
+export * from "./spec-actions.js";

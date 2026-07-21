@@ -4,12 +4,16 @@
 
 import http from "node:http";
 import {
+  approveSpec,
   createSpec,
   getBoardView,
+  getGateSummary,
   parseTasksMarkdown,
   readSpecDocument,
   setSpecTaskDone,
-  writeBoard
+  updateSpecSections,
+  writeBoard,
+  type SpecSectionsInput
 } from "@juanklagos/sdd-core";
 import { json, readBody } from "./http-utils.js";
 
@@ -38,6 +42,30 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       if (req.method === "PUT" && route === "/api/board") {
         await writeBoard(projectRoot, (await readBody(req)) as never);
         json(res, 200, { ok: true });
+        return true;
+      }
+      if (req.method === "GET" && route === "/api/gate") {
+        json(res, 200, await getGateSummary(projectRoot));
+        return true;
+      }
+      const approveMatch = route.match(/^\/api\/spec\/([^/]+)\/approve$/);
+      if (req.method === "POST" && approveMatch) {
+        const body = (await readBody(req)) as { approver?: string };
+        if (typeof body?.approver !== "string" || !body.approver.trim()) {
+          json(res, 400, { error: "Expected { approver: string }" });
+          return true;
+        }
+        json(res, 200, await approveSpec(projectRoot, approveMatch[1], body.approver));
+        return true;
+      }
+      const sectionsMatch = route.match(/^\/api\/spec\/([^/]+)\/sections$/);
+      if (req.method === "PUT" && sectionsMatch) {
+        const body = (await readBody(req)) as SpecSectionsInput | undefined;
+        if (typeof body !== "object" || body === null) {
+          json(res, 400, { error: "Expected { story?, scenarios?, criteria?, outOfScope? }" });
+          return true;
+        }
+        json(res, 200, await updateSpecSections(projectRoot, sectionsMatch[1], body));
         return true;
       }
       const specMatch = route.match(/^\/api\/spec\/([^/]+)$/);

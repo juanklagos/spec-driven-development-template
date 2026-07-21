@@ -37,9 +37,20 @@ Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board me
 
 El servidor vigila tu directorio `specs/`. Edita cualquier `tasks.md` en tu editor y la barra de progreso de la tarjeta se actualiza sola — sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es "último escritor gana" (una fase futura añade merge más fino).
 
+## Novedades de la v2 (spec 007)
+
+- **Semáforo del gate**: chip vivo en la barra superior (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real; los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
+- **Aprobar desde el panel**: un clic confirmado escribe el bloque de aprobación real (estado, fecha de hoy, aprobador, evidencia) en `spec.md` — con error claro si el bloque no existe.
+- **Tour de bienvenida**: cinco pasos anclados (paleta → crear → conectar → tareas → gate), descartable con «No mostrar de nuevo» y relanzable desde el botón «?».
+- **Galería de plantillas**: los playbooks App web, API/Backend, E-commerce y SaaS crean specs reales más un tablero conectado y ordenado. Solo en un workspace con cero specs.
+- **Editor guiado de spec**: la pestaña «Editar» del panel escribe la historia de usuario, los escenarios, los criterios EARS (prefijo autocompletado al enfocar) y el fuera de alcance de forma quirúrgica — la aprobación y los requisitos nunca se tocan.
+- **Deshacer/rehacer + export PNG**: historial del lienzo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para compartir el tablero como imagen.
+
+Los agentes tienen los mismos tres poderes por MCP: `sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`.
+
 ## Limitaciones (honestas)
 
-- El contenido largo de `spec.md` se edita en tu editor, no en el lienzo (por diseño: el lienzo compone, tu editor escribe).
+- El contenido largo de `spec.md` más allá de las secciones guiadas se edita en tu editor, no en el lienzo (por diseño: el lienzo compone, tu editor escribe).
 - Borrar una carpeta de spec en disco no retira su tarjeta automáticamente (conservador; borra la tarjeta a mano).
 - Un workspace por instancia del servidor (`SDD_PROJECT_ROOT`).
 
