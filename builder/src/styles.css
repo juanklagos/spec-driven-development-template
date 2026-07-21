@@ -394,6 +394,17 @@
   border-color: var(--primary);
 }
 
+/* Teaching layer: one quiet line explaining why the purpose matters. */
+.edge-picker .picker-why {
+  margin: 0.25rem 0 0.1rem;
+  padding: 0.35rem 0.5rem 0;
+  border-top: 1px dashed var(--border);
+  max-width: 15rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--muted-foreground);
+}
+
 /* ---------- Welcome tour (spec 007, R3) ---------- */
 
 .tour-layer {

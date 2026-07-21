@@ -1,5 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useT } from "../i18n";
+import { HelpHint } from "./HelpHint";
 import type { PaletteKind } from "../types";
 
 export interface PaletteEntry {
@@ -55,8 +56,10 @@ export function Palette({ onQuickAdd }: { onQuickAdd: (kind: PaletteKind) => voi
       className="z-10 flex w-[218px] shrink-0 flex-col gap-2.5 overflow-y-auto border-r bg-card px-3 py-3.5 max-[800px]:w-[170px]"
       data-tour="palette"
     >
-      <h2 className="m-0 text-xs font-bold tracking-wider text-muted-foreground uppercase">
+      <h2 className="m-0 flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase">
         {t("palette.title")}
+        {/* Idea vs Épica vs Spec: the first concept a beginner needs. */}
+        <HelpHint topic="palette" guide="builder" />
       </h2>
       <p className="m-0 mb-1 text-xs text-muted-foreground">{t("palette.help")}</p>
       {PALETTE_ITEMS.map((item) => (

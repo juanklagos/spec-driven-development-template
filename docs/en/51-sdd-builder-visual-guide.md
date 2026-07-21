@@ -25,6 +25,18 @@ Two notes before you start:
 - Inside this template repository itself the builder is blocked by design (no target-project work in the template root). Always point `SDD_PROJECT_ROOT` at a real workspace.
 - The first time you open `/builder`, a **welcome tour** offers five anchored steps (palette → create → connect → tasks → gate). Dismiss it with "Don't show again" and re-launch it anytime from the "?" button in the top bar.
 
+## Learning while you build: the in-product help
+
+This template is a school as much as a tool, so you should not have to read a guide before you can use the builder. Every SDD concept the interface shows can be explained **where it appears**, in your language (one language at a time — the ES/EN switch changes everything, including the help).
+
+- **A quiet `?` next to the concept.** Icon-only, next to section headings and status badges — never on every element. Click it and a small card explains the concept in two or three sentences. Where you will find one: the **Palette** heading (💡 Idea vs 📦 Epic vs 📋 Spec, and which of them actually writes to disk), the **gate chip** (the golden rule), the **`⚠ N dep` badge** (what a dependency warning is telling you), the spec sheet's **status badge and Approval tab** (what "approved" means and what approving writes into `spec.md`), **Tasks** (the checkboxes are `- [ ]` lines in `tasks.md`), **EARS criteria** (why each criterion maps to a test) and **Relations** (contains / depends on / blocks / related).
+- **Every hint links to the full guide.** Each card ends in a "Full guide →" link that opens the matching page on the docs site: this guide (51) for the builder, guide 12 for EARS, guide 02 for the flow and the gate. The slugs live once in `sdd-core` (`DOC_GUIDES`), so a link can never rot into a 404 — the integration test fails if a slug drifts or if the builder's mirror disagrees.
+- **The gate teaches when it is closed.** The gate `?` does not just define the rule: when the gate is red it says *this is the golden rule working* and lists what is missing right now (validation errors, specs still not approved) with the next action for each. Same block on the `/dashboard` gate band.
+- **Empty states explain themselves.** An empty canvas says what "no specs" means in SDD (there is no contract on disk yet — start with the spec, not the code) and links to the flow guide; a spec with no tasks explains that the plan has not been broken down yet and how to fix it.
+- **A one-line "why" on the decisions that matter.** Approving a spec, choosing a connection's purpose and creating GitHub issues each carry a single 💡 line explaining the consequence — the approval signature is what opens the gate, "depends on"/"blocks" are the purposes that raise warnings, and issues link back to the spec while `tasks.md` stays the source of truth.
+
+All of this text lives in the i18n dictionaries (`builder/src/i18n.ts` and the dashboard dicts in `packages/sdd-mcp/src/dashboard.ts`), never hardcoded in a component; the ES and EN key sets are checked at compile time. The contextual help is complementary to the **welcome tour** — the tour is a one-time walkthrough, the `?` is always there.
+
 ## Your first project with the ✨ assistant
 
 The fastest way to go from nothing to a connected board is the **✨ Assistant** button in the top bar. Describe your project in one sentence — *"an online plant store with catalog, payments and an admin panel"* — and the builder proposes a draft board: one idea note, 2-4 epics and 3-6 specs grouped by the domains it detects (auth, payments, catalog, admin, API, notifications, profile, search; with a generic MVP fallback when nothing matches).

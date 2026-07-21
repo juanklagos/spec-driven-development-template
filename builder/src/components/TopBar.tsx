@@ -4,6 +4,7 @@ import { errorMessage } from "../api";
 import { exportBoardPng } from "../exportPng";
 import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
+import { HelpHint } from "./HelpHint";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -42,6 +43,31 @@ function GateChip() {
         });
   const depWarnings = gate?.dependencyWarnings ?? [];
 
+  // Educational gate state (teaching layer): a red chip alone teaches nothing.
+  // When the gate is closed the hint says *why* the rule exists and what is
+  // missing right now, derived from the same summary the chip renders.
+  const missing: string[] = [];
+  if (gate && !gate.ok) {
+    if (gate.errors > 0) missing.push(t("help.gate.missing.errors", { n: gate.errors }));
+    const notApproved = gate.totalSpecs - gate.approvedSpecs;
+    if (notApproved > 0) missing.push(t("help.gate.missing.pending", { n: notApproved }));
+    if (missing.length === 0) missing.push(t("help.gate.missing.unknown"));
+  }
+  const gateExtra = gate ? (
+    <div className="mt-2 rounded-md border bg-muted/50 px-2.5 py-2">
+      <p className="m-0 text-xs leading-relaxed font-semibold">
+        {gate.ok ? `🟢 ${t("help.gate.openLead")}` : `🔴 ${t("help.gate.closedLead")}`}
+      </p>
+      {missing.length > 0 ? (
+        <ul className="m-0 mt-1.5 flex list-none flex-col gap-1 p-0 text-xs text-muted-foreground">
+          {missing.map((line) => (
+            <li key={line}>• {line}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  ) : undefined;
+
   return (
     <span className="inline-flex items-center gap-2" data-tour="gate">
       <span
@@ -50,6 +76,7 @@ function GateChip() {
       >
         {label}
       </span>
+      <HelpHint topic="gate" guide="flow" extra={gateExtra} />
       {depWarnings.length > 0 ? (
         // Advisory amber (spec 009, R2): typed edges where an approved spec
         // depends on a not-approved one. Never closes the gate.
@@ -60,6 +87,7 @@ function GateChip() {
           ⚠ {depWarnings.length} dep
         </span>
       ) : null}
+      {depWarnings.length > 0 ? <HelpHint topic="dep" guide="builder" /> : null}
       <Button
         size="sm"
         variant="outline"

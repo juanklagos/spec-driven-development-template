@@ -14,6 +14,7 @@ import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
 import { useT } from "../i18n";
 import { isApprovedStatusText, parseApproval } from "../sections";
 import { useBuilderStore } from "../store";
+import { HelpHint } from "./HelpHint";
 import { ImplementModal } from "./ImplementModal";
 import { EDGE_KIND_ICON } from "./LabeledEdge";
 import { SectionEditor } from "./SectionEditor";
@@ -88,8 +89,9 @@ function ApprovalPanel({
     <div className="flex flex-col gap-3 pt-2">
       <p className="m-0 text-xs text-muted-foreground">{t("approval.note")}</p>
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+        <span className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
           {t("approval.status")}
+          <HelpHint topic="approval" guide="flow" />
         </span>
         <span>
           <Badge
@@ -149,6 +151,8 @@ function ApprovalPanel({
           ✓ {t("approval.done")}
         </p>
       ) : null}
+      {/* Short "why" on an important, file-writing action (teaching layer). */}
+      <p className="m-0 text-xs text-muted-foreground">💡 {t("approval.why")}</p>
       <Button onClick={() => void submit()} disabled={busy || !approver.trim()}>
         {busy ? t("approval.busy") : isApproved ? t("approval.update") : t("approval.submit")}
       </Button>
@@ -222,7 +226,10 @@ function RelationsPanel({ specId }: { specId: string }) {
 
   return (
     <div className="flex flex-col gap-3 pt-2">
-      <p className="m-0 text-xs text-muted-foreground">{t("relations.note")}</p>
+      <p className="m-0 flex items-start gap-1.5 text-xs text-muted-foreground">
+        <span className="min-w-0 flex-1">{t("relations.note")}</span>
+        <HelpHint topic="relations" guide="builder" />
+      </p>
       {incoming.length === 0 && outgoing.length === 0 ? (
         <p className="m-0 text-sm text-muted-foreground">{t("relations.none")}</p>
       ) : (
@@ -288,9 +295,11 @@ function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: n
 
   return (
     <div className="mt-1">
-      <h3 className="mt-4 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+      <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
         {t("sheet.issues")}
+        <HelpHint topic="issues" guide="builder" />
       </h3>
+      <p className="mb-2 text-xs text-muted-foreground">💡 {t("sheet.issues.why")}</p>
       <Button
         variant="outline"
         className="w-full"
@@ -484,6 +493,7 @@ export function SpecDrawer() {
               >
                 {summary.status}
               </Badge>
+              <HelpHint topic="approval" guide="flow" />
               <code>{summary.dir}</code>
             </SheetDescription>
           ) : null}
@@ -518,12 +528,17 @@ export function SpecDrawer() {
                         {t("sheet.implement")}
                       </Button>
                     </span>
-                    <h3 className="mt-4 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                    <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
                       {t("sheet.tasks")}
+                      <HelpHint topic="tasks" guide="builder" />
                     </h3>
                     <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
                       {detail.tasks.length === 0 ? (
-                        <li className="text-sm text-muted-foreground">{t("sheet.noTasks")}</li>
+                        // Educational empty state: what it means + the next action.
+                        <li className="rounded-md border border-dashed px-3 py-2.5 text-sm text-muted-foreground">
+                          <p className="m-0 font-medium">{t("sheet.noTasks")}</p>
+                          <p className="m-0 mt-1 text-xs">{t("sheet.noTasks.hint")}</p>
+                        </li>
                       ) : (
                         detail.tasks.map((task) => (
                           <li key={task.line}>

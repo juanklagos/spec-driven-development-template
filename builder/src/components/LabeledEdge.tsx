@@ -92,6 +92,9 @@ function EdgePurposePicker({ id, label }: { id: string; label: string }) {
           {t("edge.kind.custom")}
         </button>
       )}
+      {/* Short "why" on the decision (teaching layer): the purpose has real
+          consequences, so say so where the choice is made. */}
+      <p className="picker-why">💡 {t("edge.why")}</p>
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { api, errorMessage } from "../api";
 import { lintEarsCriterion } from "../ears";
 import { useT, type TFunction } from "../i18n";
 import { parseSpecSections } from "../sections";
+import { HelpHint } from "./HelpHint";
 import type { SpecSectionsInput } from "../types";
 import {
   Accordion,
@@ -259,7 +260,12 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
             {t("editor.criteria")}
             {sectionCount(criteria)}
           </AccordionTrigger>
-          <AccordionContent className="pb-3">
+          <AccordionContent className="flex flex-col gap-2 pb-3">
+            {/* The pattern in one line + the "why it maps to a test" behind ?. */}
+            <p className="m-0 flex items-start gap-1.5 text-xs text-muted-foreground">
+              <span className="min-w-0 flex-1">{t("ears.pattern")}</span>
+              <HelpHint topic="ears" guide="ears" />
+            </p>
             <ListEditor
               items={criteria}
               onChange={setCriteria}

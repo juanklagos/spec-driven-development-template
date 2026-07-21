@@ -48,7 +48,10 @@ if (typeof document !== "undefined") {
 
 type Dict = Record<string, string>;
 
-const es: Dict = {
+// ES is the source of truth for the key set. `en` below is typed as
+// `Record<keyof typeof es, string>`, so a key added here without its English
+// twin (or a typo in either) is a `tsc` error, exactly like the dashboard dict.
+const es = {
   // Common
   "common.cancel": "Cancelar",
   "common.close": "Cerrar",
@@ -313,10 +316,64 @@ const es: Dict = {
   "error.apiUnreachable":
     "No se pudo conectar con la API — arranca el servidor: SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start",
   "error.templatesNonEmpty":
-    "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío."
+    "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío.",
+
+  // ── Capa educativa (help.*) ────────────────────────────────────────────────
+  // Cada concepto SDD que la interfaz muestra se explica donde aparece, y cada
+  // explicación termina en la guía que lo cubre entero.
+  "help.aria": "Ayuda: {topic}",
+  "help.learnMore": "Guía completa →",
+
+  "help.palette.title": "Idea, Épica y Spec",
+  "help.palette.body":
+    "💡 Idea es una nota libre y 📦 Épica agrupa specs: ambas viven solo en el lienzo y no tocan el disco. 📋 Spec sí crea una carpeta real specs/NNN-… con spec.md, plan.md y tasks.md: es la unidad que se aprueba y la única que puede abrir el gate.",
+
+  "help.gate.title": "El gate: la regla de oro",
+  "help.gate.body":
+    "No hay código sin spec aprobada y plan consistente. El gate lee tus archivos y responde una sola pregunta: ¿ya se puede implementar? 🟢 abierto = sí; 🔴 cerrado = falta algo. Falla cerrado a propósito: ante la duda, bloquea.",
+  "help.gate.openLead": "Está abierto: las specs aprobadas y sus planes son consistentes.",
+  "help.gate.closedLead": "Esto no es un fallo de la herramienta: es la regla de oro protegiendo tu proyecto. Ahora mismo falta:",
+  "help.gate.missing.errors": "{n} error(es) de validación — pulsa «Validar ahora» y míralos en el Dashboard.",
+  "help.gate.missing.pending": "{n} spec(s) sin aprobar — ábrela y usa la pestaña «Aprobación».",
+  "help.gate.missing.unknown": "Revisa los mensajes del validador en el Dashboard.",
+
+  "help.approval.title": "Qué significa «aprobada»",
+  "help.approval.body":
+    "Aprobar no es un botón decorativo: escribe en spec.md el bloque real de estado (Aprobado, la fecha de hoy, quién aprueba y la evidencia). Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código.",
+
+  "help.ears.title": "Criterios EARS",
+  "help.ears.body":
+    "EARS es una plantilla de frase: CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …. Te obliga a decir el disparador y una respuesta medible, así cada criterio se traduce en un test: el disparador es el arrange, la respuesta es el assert.",
+
+  "help.relations.title": "Tipos de unión",
+  "help.relations.body":
+    "«contiene» = una épica agrupa a la spec. «depende de» = esta spec necesita la otra antes. «bloquea» = al revés, esta frena a la otra. «relacionada» = solo contexto. Solo «depende de» y «bloquea» generan avisos de dependencia.",
+
+  "help.dep.title": "Aviso de dependencia",
+  "help.dep.body":
+    "Una spec aprobada depende de otra que aún no lo está: implementarla sería construir sobre un contrato sin firmar. Es un aviso, no un bloqueo — el gate sigue abierto. Aprueba la dependencia o corrige el tipo de unión.",
+
+  "help.tasks.title": "Las tareas viven en tasks.md",
+  "help.tasks.body":
+    "Cada casilla es una línea «- [ ]» del tasks.md de esta spec. Marcarla reescribe el archivo en disco al momento y quien tenga el board abierto lo ve. No hay base de datos: el repositorio es el estado.",
+
+  "help.issues.title": "Tareas → issues de GitHub",
+  "help.issues.body":
+    "Crea un issue por cada tarea pendiente, con enlace de vuelta a la spec. Es idempotente: los títulos que ya existen se saltan. La casilla en tasks.md sigue siendo la fuente de verdad.",
+
+  // Empty states + líneas de «por qué» en acciones importantes
+  "empty.learn":
+    "Un workspace vacío significa que aún no hay ningún contrato en disco. En SDD se empieza por la spec, no por el código: crea una, aunque sea pequeña.",
+  "sheet.noTasks.hint":
+    "El plan todavía no se ha bajado a tareas. Añade líneas «- [ ]» en tasks.md (o pídeselo a tu agente) para poder seguir el avance aquí.",
+  "approval.why":
+    "Por qué importa: esta firma queda escrita en spec.md y es lo que abre el gate para esta spec.",
+  "edge.why": "El propósito no es decorativo: «depende de» y «bloquea» son los que generan avisos.",
+  "sheet.issues.why":
+    "Por qué: reparte el trabajo fuera del repo sin perder el origen — cada issue enlaza a su spec."
 };
 
-const en: Dict = {
+const en: Record<keyof typeof es, string> = {
   // Common
   "common.cancel": "Cancel",
   "common.close": "Close",
@@ -579,7 +636,59 @@ const en: Dict = {
   "error.apiUnreachable":
     "Could not reach the API — start the server: SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start",
   "error.templatesNonEmpty":
-    "This workspace already has specs; templates only apply to an empty workspace."
+    "This workspace already has specs; templates only apply to an empty workspace.",
+
+  // ── Teaching layer (help.*) ───────────────────────────────────────────────
+  "help.aria": "Help: {topic}",
+  "help.learnMore": "Full guide →",
+
+  "help.palette.title": "Idea, Epic and Spec",
+  "help.palette.body":
+    "💡 Idea is a free note and 📦 Epic groups specs: both live on the canvas only and never touch disk. 📋 Spec does create a real specs/NNN-… folder with spec.md, plan.md and tasks.md: it is the unit you approve and the only one that can open the gate.",
+
+  "help.gate.title": "The gate: the golden rule",
+  "help.gate.body":
+    "No code before an approved spec and a consistent plan. The gate reads your files and answers one question: can we implement yet? 🟢 open = yes; 🔴 closed = something is missing. It fails closed on purpose: when in doubt, it blocks.",
+  "help.gate.openLead": "It is open: the approved specs and their plans are consistent.",
+  "help.gate.closedLead": "This is not a tool failure: it is the golden rule protecting your project. Right now this is missing:",
+  "help.gate.missing.errors": "{n} validation error(s) — press “Validate now” and read them on the Dashboard.",
+  "help.gate.missing.pending": "{n} spec(s) not approved — open one and use the “Approval” tab.",
+  "help.gate.missing.unknown": "Check the validator messages on the Dashboard.",
+
+  "help.approval.title": "What “approved” means",
+  "help.approval.body":
+    "Approving is not a decorative button: it writes the real status block into spec.md (Approved, today's date, who approved and the evidence). That block is what the gate, CI and your agent read before any code is allowed.",
+
+  "help.ears.title": "EARS criteria",
+  "help.ears.body":
+    "EARS is a sentence template: WHEN/IF/WHILE … THE SYSTEM SHALL …. It forces you to state the trigger and a measurable response, so every criterion maps to a test: the trigger is the arrange, the response is the assert.",
+
+  "help.relations.title": "Connection types",
+  "help.relations.body":
+    "“contains” = an epic groups the spec. “depends on” = this spec needs the other one first. “blocks” = the other way round, this one holds the other back. “related” = context only. Only “depends on” and “blocks” raise dependency warnings.",
+
+  "help.dep.title": "Dependency warning",
+  "help.dep.body":
+    "An approved spec depends on one that is not approved yet: implementing it would build on an unsigned contract. It is advisory, not a block — the gate stays open. Approve the dependency or fix the connection type.",
+
+  "help.tasks.title": "Tasks live in tasks.md",
+  "help.tasks.body":
+    "Every checkbox is a “- [ ]” line in this spec's tasks.md. Ticking it rewrites the file on disk right away and anyone with the board open sees it. There is no database: the repository is the state.",
+
+  "help.issues.title": "Tasks → GitHub issues",
+  "help.issues.body":
+    "Creates one issue per pending task, linking back to the spec. It is idempotent: titles that already exist are skipped. The checkbox in tasks.md stays the source of truth.",
+
+  // Empty states + the "why" line on important actions
+  "empty.learn":
+    "An empty workspace means there is no contract on disk yet. In SDD you start with the spec, not the code: create one, however small.",
+  "sheet.noTasks.hint":
+    "The plan has not been broken down into tasks yet. Add “- [ ]” lines to tasks.md (or ask your agent to) so progress shows up here.",
+  "approval.why":
+    "Why it matters: this signature is written into spec.md and it is what opens the gate for this spec.",
+  "edge.why": "The purpose is not decoration: “depends on” and “blocks” are the ones that raise warnings.",
+  "sheet.issues.why":
+    "Why: it spreads the work outside the repo without losing the origin — every issue links back to its spec."
 };
 
 const DICTS: Record<Lang, Dict> = { es, en };

@@ -19,6 +19,7 @@ import {
   type XYPosition
 } from "@xyflow/react";
 import { api } from "./api";
+import { docsUrl } from "./help";
 import { useT } from "./i18n";
 import { startLive } from "./live";
 import { AssistantWizard } from "./components/AssistantWizard";
@@ -42,7 +43,7 @@ const nodeTypes = { spec: SpecNode, note: NoteNode };
 const edgeTypes = { labeled: LabeledEdge };
 
 function EmptyOverlay({ onCreate }: { onCreate: () => void }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   return (
     <div className="pointer-events-none absolute inset-0 z-[5] grid place-items-center">
       <div className="pointer-events-auto max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
@@ -50,7 +51,19 @@ function EmptyOverlay({ onCreate }: { onCreate: () => void }) {
           🪴
         </p>
         <h2 className="mt-2 mb-2 text-lg font-semibold">{t("empty.title")}</h2>
-        <p className="mb-4 text-sm text-muted-foreground">{t("empty.body")}</p>
+        <p className="mb-2 text-sm text-muted-foreground">{t("empty.body")}</p>
+        {/* Educational empty state: what "no specs" means and where to learn. */}
+        <p className="mb-4 text-xs text-muted-foreground">
+          {t("empty.learn")}{" "}
+          <a
+            className="font-semibold text-[var(--blue)] hover:underline"
+            href={docsUrl("flow", lang)}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {t("help.learnMore")}
+          </a>
+        </p>
         <Button onClick={onCreate}>{t("empty.cta")}</Button>
       </div>
     </div>

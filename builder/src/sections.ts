@@ -142,7 +142,15 @@ export function parseApproval(specMarkdown: string): ParsedApproval {
 }
 
 /**
- * Mirror of sdd-core `isApprovedStatus` — keep in sync. Only for the approval
- * tab, which reads raw spec.md text; everywhere else render the server tone.
+ * Mirror of sdd-core `isApprovedStatus` (its `APPROVED_STATUS_ERE` is the same
+ * literal, `aprobad[oa]|approved`) — KEEP IN SYNC. The builder bundle does not
+ * import sdd-core, and this is the one place that needs the rule client-side:
+ * the approval tab reads raw, not-yet-saved spec.md text, so no server tone
+ * exists for it yet. Everywhere else renders `spec.tone` from the server.
  */
-export const isApprovedStatusText = (status: string): boolean => /aprobad[oa]|approved/i.test(status);
+export const isApprovedStatusText = (status: string): boolean => {
+  const value = status.trim();
+  // Negation wins — see NEGATED_STATUS_ERE in sdd-core board.ts. KEEP IN SYNC.
+  if (/\b(no|not|sin|un|non)[ -]?(aprobad[oa]|approved)/i.test(value)) return false;
+  return /aprobad[oa]|approved/i.test(value);
+};
