@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+### Added
+- **MCP App: the board inside your AI client (spec 006, phase 3 / R5)**: `sdd-mcp` now ships the SDD board as an MCP App (SEP-1865, the first official MCP extension — part of the 2026-07-28 protocol release, RC frozen since 2026-05-21), built with the official [`@modelcontextprotocol/ext-apps`](https://github.com/modelcontextprotocol/ext-apps) SDK (1.7.4).
+  - New tool **`sdd_board_app`** linked via `_meta.ui.resourceUri` to the new **`ui://sdd/board.html`** resource (`text/html;profile=mcp-app`; the legacy `ui/resourceUri` key is also populated for older hosts). Hosts with MCP Apps render the view inside the chat; hosts without it get the same board + gate data as JSON text (a closed gate is view data, never a tool error).
+  - The view is self-contained (no CDNs), bilingual EN/ES and light/dark aware (`prefers-color-scheme` + host theme): spec cards with approval status and task progress, an SVG mini-graph of the canvas with typed colored edges, the gate semaphore, dependency warnings, and a "↻ Actualizar / Refresh" button that re-invokes `sdd_board_app` through the official App bridge (JSON-RPC over postMessage).
+  - The dependency-free ext-apps browser bundle (`app-with-deps`) is inlined at resource-read time by rewriting its single trailing `export{...}` into a `globalThis` assignment (`inlineEsmExports` in `packages/sdd-mcp/src/app.ts`; fails loudly if the upstream bundle shape changes). New modules: `app.ts`, `app-ui.ts`, and `schemas.ts` (shared zod shapes extracted from `server.ts` — one source of truth for classic tools and the App tool).
+  - Dependencies (modelcontextprotocol org only): `@modelcontextprotocol/ext-apps ^1.7.4` (new), `@modelcontextprotocol/sdk ^1.27.1 → ^1.29.0` (peer requirement of the Apps SDK).
+  - Integration test extended over real stdio: tool `_meta` (both keys), resource listing/read with the standard MIME type, well-formed self-contained HTML with the rewritten bridge, and `sdd_board_app` returning the fixture specs plus the same `dependencyWarnings` as `sdd_gate_summary`. Guide 51 (EN/ES) documents the feature and the standard's status; what to re-check after 2026-07-28 is noted in `specs/006-visual-spec-builder/history.md`.
+
+### Verified
+- Root builds + typecheck green on SDK 1.29.0 · extended `mcp:test` green · 3 SDD scripts at 0 errors · transformed bridge validated with `node --check` and executed (exposes `App`) · browser render check in light and dark (fixture data, no console errors)
+
 ## [v1.7.0] — 2026-07-21
 
 ### Added

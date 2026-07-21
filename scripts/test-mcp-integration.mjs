@@ -473,6 +473,61 @@ async function main() {
     );
     assert.equal(validateEarsCriterion("   ").level, "ok", "empty criteria lint clean");
 
+    // --- MCP App (spec 006, R5): board view for MCP Apps hosts (SEP-1865) --
+    // Tool and ui:// resource registered through @modelcontextprotocol/ext-apps.
+
+    const toolList = await client.listTools();
+    const boardAppTool = toolList.tools.find((tool) => tool.name === "sdd_board_app");
+    assert.ok(boardAppTool, "sdd_board_app must be listed");
+    assert.equal(boardAppTool._meta?.ui?.resourceUri, "ui://sdd/board.html");
+    assert.equal(
+      boardAppTool._meta?.["ui/resourceUri"],
+      "ui://sdd/board.html",
+      "legacy meta key must be populated for older MCP Apps hosts"
+    );
+
+    const resourceList = await client.listResources();
+    const boardAppResource = resourceList.resources.find((entry) => entry.uri === "ui://sdd/board.html");
+    assert.ok(boardAppResource, "ui://sdd/board.html must be listed");
+    assert.equal(boardAppResource.mimeType, "text/html;profile=mcp-app");
+
+    const uiResource = await client.readResource({ uri: "ui://sdd/board.html" });
+    assert.equal(uiResource.contents[0].mimeType, "text/html;profile=mcp-app");
+    const appHtml = String(uiResource.contents[0].text);
+    assert.match(appHtml, /^<!doctype html>/i);
+    for (const id of ["board-app", "gate-chip", "dep-chip", "refresh-btn", "app-message", "dep-warnings", "board-svg", "spec-cards"]) {
+      assert.ok(appHtml.includes(`id="${id}"`), `app HTML must contain #${id}`);
+    }
+    // The official ext-apps App bridge is inlined (self-contained iframe, no
+    // CDNs) with its trailing export statement rewritten to a global.
+    assert.ok(appHtml.includes("globalThis.__MCP_EXT_APPS__={"), "bridge exports must be rewritten for inlining");
+    assert.ok(appHtml.includes("App:"), "the rewritten bridge must expose the App class");
+    assert.doesNotMatch(appHtml, /(?:src|href)="https?:/, "app HTML must not reference external resources");
+    // Well-formedness: with script bodies collapsed, structural tags balance.
+    const appMarkup = appHtml.replace(/<script type="module">[\s\S]*?<\/script>/g, '<script type="module"></script>');
+    assert.equal((appMarkup.match(/<script type="module"><\/script>/g) ?? []).length, 2, "bridge + view scripts expected");
+    for (const tag of ["html", "head", "body", "main", "header", "section", "svg", "button", "style"]) {
+      const opened = (appMarkup.match(new RegExp(`<${tag}[\\s>]`, "g")) ?? []).length;
+      const closed = (appMarkup.match(new RegExp(`</${tag}>`, "g")) ?? []).length;
+      assert.equal(opened, closed, `unbalanced <${tag}> in app HTML`);
+    }
+
+    const boardApp = asObject(await client.callTool({ name: "sdd_board_app", arguments: { projectRoot } }));
+    assert.equal(boardApp.projectRoot, projectRoot);
+    const boardAppSpecIds = boardApp.board.specs.map((spec) => spec.id);
+    assert.ok(boardAppSpecIds.includes(specId), "app payload must include the fixture spec");
+    assert.ok(boardAppSpecIds.includes(secondSpecId), "app payload must include the second fixture spec");
+    assert.ok(
+      boardApp.board.canvas.nodes.some((node) => node.id === specId),
+      "app payload canvas must include the fixture spec node"
+    );
+    assert.equal(boardApp.gate.totalSpecs, 2, "app payload gate must match the workspace");
+    assert.equal(
+      boardApp.gate.dependencyWarnings.length,
+      1,
+      "app payload must carry the same dependency warning as sdd_gate_summary"
+    );
+
     const indexResource = await client.readResource({
       uri: `sdd://project/${projectName}/index`
     });

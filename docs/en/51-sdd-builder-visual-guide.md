@@ -33,6 +33,16 @@ Note: inside this template repository itself the builder is blocked by design (n
 
 Any MCP client connected to `sdd-mcp` can work with the same board through five tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — backed by the exact same `sdd-core` layer as the canvas, so what your agent writes is what you see in `/builder` (and vice versa). See guide 41 (complete MCP reference).
 
+## The board inside your AI client (MCP App)
+
+The server also ships the board as an **MCP App** (SEP-1865, the first official MCP extension — part of the 2026-07-28 protocol release, built with the official `@modelcontextprotocol/ext-apps` SDK). In a client that supports MCP Apps, ask your agent to show the board — it calls the `sdd_board_app` tool and the view renders **inside the chat**: spec cards with approval status and task progress, the canvas with its typed connections, the gate semaphore and dependency warnings, plus a "↻ Actualizar / Refresh" button that re-reads the workspace. Read-only in v1, bilingual, dark/light aware.
+
+Standard status (honest): the MCP 2026-07-28 spec is a **release candidate frozen since 2026-05-21** with final publication on 2026-07-28; the Apps extension itself has a stable revision (2026-01-26) and a published SDK, so this view is built on the stable surface. Notes:
+
+- Works in hosts that implement MCP Apps; support is rolling out across clients during the finalization window.
+- Hosts **without** MCP Apps degrade gracefully: `sdd_board_app` returns the same board + gate data as JSON text.
+- The view is fully self-contained (no CDNs): the official ext-apps bridge is inlined into the `ui://sdd/board.html` resource.
+
 ## Live sync
 
 The server watches your `specs/` directory. Edit any `tasks.md` in your editor and the card's progress bar updates by itself — no reload. The top bar shows **🟢 Live**; if the server restarts on a different workspace, an amber banner asks you to reload. Concurrency rule: your markdown always wins; canvas layout is last-writer-wins (a future phase adds finer merging).
@@ -87,4 +97,5 @@ Four features so a small team can coordinate real work on the same specs:
 
 ## Roadmap
 
-MCP App view (the board inside Claude/ChatGPT/VS Code) is planned once the finalized MCP spec (2026-07-28) settles — see `specs/006-visual-spec-builder/`.
+- ✅ MCP App view (the board inside your AI client) — shipped; see the section above. To re-check after 2026-07-28: confirm the final spec text kept `_meta.ui.resourceUri` + `text/html;profile=mcp-app` as-is and bump `@modelcontextprotocol/ext-apps` if a final-release version lands.
+- Interactive demo on the website (Pages) — pending (needs the Chrome-only FS Access API); see `specs/006-visual-spec-builder/`.

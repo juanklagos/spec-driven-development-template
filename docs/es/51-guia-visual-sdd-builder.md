@@ -33,6 +33,16 @@ Nota: dentro de este repositorio template el builder está bloqueado por diseño
 
 Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board mediante cinco tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Ver guía 41 (referencia completa de MCP).
 
+## El board dentro de tu cliente IA (MCP App)
+
+El servidor también entrega el board como **MCP App** (SEP-1865, la primera extensión oficial de MCP — parte de la release del protocolo 2026-07-28, construida con el SDK oficial `@modelcontextprotocol/ext-apps`). En un cliente con soporte de MCP Apps, pide a tu agente que muestre el board — invoca la tool `sdd_board_app` y la vista se renderiza **dentro del chat**: tarjetas de specs con estado de aprobación y progreso de tareas, el lienzo con sus uniones tipadas, el semáforo del gate y los avisos de dependencias, más un botón «↻ Actualizar / Refresh» que relee el workspace. Solo lectura en v1, bilingüe, con modo claro/oscuro.
+
+Estado del estándar (honesto): la spec MCP 2026-07-28 es una **release candidate congelada desde el 2026-05-21** con publicación final el 2026-07-28; la extensión Apps tiene una revisión estable (2026-01-26) y un SDK publicado, así que esta vista está construida sobre la superficie estable. Notas:
+
+- Funciona en hosts que implementan MCP Apps; el soporte se está desplegando en los clientes durante la ventana de finalización.
+- Los hosts **sin** MCP Apps degradan con gracia: `sdd_board_app` devuelve los mismos datos de board + gate como texto JSON.
+- La vista es totalmente autocontenida (sin CDNs): el bridge oficial de ext-apps va inline dentro del recurso `ui://sdd/board.html`.
+
 ## Sincronización en vivo
 
 El servidor vigila tu directorio `specs/`. Edita cualquier `tasks.md` en tu editor y la barra de progreso de la tarjeta se actualiza sola — sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es "último escritor gana" (una fase futura añade merge más fino).
@@ -87,4 +97,5 @@ Cuatro funciones para que un equipo pequeño coordine trabajo real sobre las mis
 
 ## Roadmap
 
-La vista MCP App (el board dentro de Claude/ChatGPT/VS Code) está planeada para cuando la spec MCP final (2026-07-28) se asiente — ver `specs/006-visual-spec-builder/`.
+- ✅ Vista MCP App (el board dentro de tu cliente IA) — entregada; ver la sección de arriba. A revisar tras el 2026-07-28: confirmar que el texto final de la spec mantiene `_meta.ui.resourceUri` + `text/html;profile=mcp-app` tal cual y subir `@modelcontextprotocol/ext-apps` si sale una versión final.
+- Demo interactiva en el sitio (Pages) — pendiente (requiere la FS Access API solo-Chrome); ver `specs/006-visual-spec-builder/`.

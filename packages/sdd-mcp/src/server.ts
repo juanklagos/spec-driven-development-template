@@ -28,15 +28,18 @@ import {
   writeHandoff,
   type BoardCanvas
 } from "@juanklagos/sdd-core";
+import { registerSddBoardApp } from "./app.js";
+import {
+  boardSpecCardSchema,
+  canvasSchema,
+  gateSummaryShape,
+  projectRootSchema,
+  specIdSchema,
+  taskItemSchema,
+  validationMessageSchema
+} from "./schemas.js";
 
 const frameworkRoot = getFrameworkRoot();
-const projectRootSchema = z
-  .string()
-  .describe("Absolute target project path. Recommended default inside this template: ./www/<project-name>.");
-const specIdSchema = z
-  .string()
-  .regex(/^\d{3}-[a-z0-9][a-z0-9-]*$/, "Spec id must look like 001-my-feature")
-  .describe("Numbered spec folder id such as 001-my-feature.");
 
 function toStructuredContent<T>(value: T): Record<string, unknown> {
   return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
@@ -46,13 +49,6 @@ export function createSddMcpServer(): McpServer {
   const server = new McpServer({
     name: "sdd-mcp",
     version: packageJson.version
-  });
-
-  const validationMessageSchema = z.object({
-    level: z.enum(["error", "warning", "info"]),
-    code: z.string(),
-    message: z.string(),
-    path: z.string().optional()
   });
 
   server.registerTool(
@@ -358,46 +354,7 @@ export function createSddMcpServer(): McpServer {
   // --- SDD Builder board tools -------------------------------------------
   // Same shared layer as the builder's REST API (@juanklagos/sdd-core board
   // module): agents connected over MCP see exactly what /builder shows.
-
-  const canvasNodeSchema = z.object({
-    id: z.string(),
-    type: z.enum(["file", "text"]),
-    x: z.number(),
-    y: z.number(),
-    width: z.number(),
-    height: z.number(),
-    file: z.string().optional(),
-    text: z.string().optional(),
-    color: z.string().optional()
-  });
-
-  const canvasEdgeSchema = z.object({
-    id: z.string(),
-    fromNode: z.string(),
-    toNode: z.string(),
-    fromSide: z.string().optional(),
-    toSide: z.string().optional(),
-    label: z.string().optional(),
-    color: z.string().optional()
-  });
-
-  const canvasSchema = z.object({
-    nodes: z.array(canvasNodeSchema),
-    edges: z.array(canvasEdgeSchema)
-  });
-
-  const taskItemSchema = z.object({
-    text: z.string(),
-    done: z.boolean(),
-    line: z.number()
-  });
-
-  const boardSpecCardSchema = z.object({
-    id: z.string(),
-    dir: z.string(),
-    status: z.string(),
-    tasks: z.object({ done: z.number(), total: z.number() })
-  });
+  // Shapes live in schemas.ts, shared with the MCP App tool (app.ts).
 
   server.registerTool(
     "sdd_board_read",
@@ -529,23 +486,6 @@ export function createSddMcpServer(): McpServer {
   // Gate semaphore and surgical spec.md edits; same sdd-core layer as the
   // /api/gate, /api/spec/:id/approve and /api/spec/:id/sections REST routes.
 
-  const validationResultSchema = z.object({
-    ok: z.boolean(),
-    errors: z.number(),
-    warnings: z.number(),
-    messages: z.array(validationMessageSchema)
-  });
-
-  // Typed-edge dependency warning (spec 009, R2): approved spec leaning on an
-  // unapproved dependency, derived from the board's "depende de"/"bloquea" edges.
-  const dependencyWarningSchema = z.object({
-    edgeId: z.string(),
-    dependent: z.string(),
-    dependency: z.string(),
-    label: z.string(),
-    message: z.string()
-  });
-
   server.registerTool(
     "sdd_gate_summary",
     {
@@ -555,18 +495,7 @@ export function createSddMcpServer(): McpServer {
       inputSchema: {
         projectRoot: projectRootSchema
       },
-      outputSchema: {
-        ok: z.boolean(),
-        errors: z.number(),
-        warnings: z.number(),
-        approvedSpecs: z.number(),
-        totalSpecs: z.number(),
-        gate: validationResultSchema.extend({ approvedSpecs: z.number(), totalSpecs: z.number() }),
-        validation: validationResultSchema,
-        specIssues: z.record(z.array(validationMessageSchema)),
-        generalIssues: z.array(validationMessageSchema),
-        dependencyWarnings: z.array(dependencyWarningSchema)
-      }
+      outputSchema: gateSummaryShape
     },
     async ({ projectRoot }) => {
       const result = await getGateSummary(projectRoot);
@@ -635,6 +564,10 @@ export function createSddMcpServer(): McpServer {
       };
     }
   );
+
+  // --- MCP App (spec 006, R5): board view inside compatible clients -------
+  // ui://sdd/board.html resource + sdd_board_app tool (SEP-1865, ext-apps).
+  registerSddBoardApp(server);
 
   server.resource("sdd-policy", "sdd://policy/current", { mimeType: "text/plain" }, async (uri) => ({
     contents: [{ uri: uri.href, text: await readFrameworkFile("sdd.policy.yaml") }]

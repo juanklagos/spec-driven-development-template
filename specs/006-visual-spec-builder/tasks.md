@@ -8,7 +8,7 @@
 ## Fase 2
 - [x] T5 (R4): watcher + SSE + reconciliación en front.
 ## Fase 3
-- [ ] T6 (R5): MCP App del board (pospuesta hasta después del 2026-07-28, spec MCP final).
+- [x] T6 (R5): MCP App del board — `ui://sdd/board.html` + tool `sdd_board_app` con el SDK oficial `@modelcontextprotocol/ext-apps` (RC congelado desde 2026-05-21; revisión post-2026-07-28 anotada en history.md).
 ## Fase 4
 - [x] T7a (R6): guía 51 EN/ES + CHANGELOG/release v1.6.0.
 - [ ] T7b (R6): demo interactiva en Pages (pospuesta: requiere FS Access API solo-Chrome).

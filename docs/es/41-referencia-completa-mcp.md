@@ -491,6 +491,27 @@ Salida estructurada:
 - `specId`
 - `tasks`
 
+### `sdd_board_app`
+
+Propósito:
+- mostrar el board SDD visual **dentro del cliente** como MCP App (SEP-1865, extensión oficial `ext-apps`)
+
+Cuándo usarlo:
+- cuando el usuario quiere *ver* el board (tarjetas, uniones, semáforo del gate, avisos de dependencias) sin salir del chat
+
+Reglas:
+- vista de solo lectura; vinculada al recurso `ui://sdd/board.html` vía `_meta.ui.resourceUri` (`text/html;profile=mcp-app`)
+- los hosts sin soporte de MCP Apps reciben igualmente los datos completos de board + gate como texto JSON
+- un gate cerrado es dato de la vista, nunca un error de la tool
+
+Entrada:
+- `projectRoot`
+
+Salida estructurada:
+- `projectRoot`
+- `board` (canvas + specs, misma forma que `sdd_board_read`)
+- `gate` (misma forma que `sdd_gate_summary`)
+
 ## Referencia de resources
 
 ### Resources estáticos

@@ -491,6 +491,27 @@ Structured output:
 - `specId`
 - `tasks`
 
+### `sdd_board_app`
+
+Purpose:
+- show the visual SDD board **inside the client** as an MCP App (SEP-1865, official `ext-apps` extension)
+
+When to use:
+- when the user wants to *see* the board (cards, connections, gate semaphore, dependency warnings) without leaving the chat
+
+Rules:
+- read-only view; linked to the `ui://sdd/board.html` resource via `_meta.ui.resourceUri` (`text/html;profile=mcp-app`)
+- hosts without MCP Apps support still get the full board + gate data as JSON text
+- a closed gate is data for the view, never a tool error
+
+Input:
+- `projectRoot`
+
+Structured output:
+- `projectRoot`
+- `board` (canvas + specs, same shape as `sdd_board_read`)
+- `gate` (same shape as `sdd_gate_summary`)
+
 ## Resource reference
 
 ### Static resources
