@@ -28,7 +28,7 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
       el veredicto sea `closed`. Hoy `./scripts/check-sdd-gate.sh --require-open` falla con «not an
       SDD workspace» porque parsea por posición. Replicar en el sidecar.
 - [ ] **T2f** Actualizar `.claude/commands/sdd/gate.md:9` y `.github/prompts/sdd-gate.prompt.md:8`.
-- [ ] **T2g** Chip y tarjeta de tres estados con etiqueta de postura: cuatro claves de i18n en cada
+- [x] **T2g** Chip y tarjeta de tres estados con etiqueta de postura: cuatro claves de i18n en cada
       idioma en `builder/src/i18n.ts` y `packages/sdd-mcp/src/dashboard.ts`, que se reflejan entre sí.
       Estilos para el estado «cerrada pero no bloqueada».
 

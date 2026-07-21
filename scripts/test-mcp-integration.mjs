@@ -1654,10 +1654,46 @@ async function main() {
       );
     }
 
-    // A closed gate must teach: gateRoot lost its CLAUDE.md above, so it is red.
+    // gateRoot lost its CLAUDE.md above, so it has errors — that is BLOCKED, not
+    // merely closed. The two used to be the same red state, which is exactly the
+    // conflation spec 012 removes: "nothing approved yet" is not a failure, and
+    // painting it red taught users to ignore the colour.
     const closedEs = await renderDashboard(gateRoot, { lang: "es" });
     const closedEn = await renderDashboard(gateRoot, { lang: "en" });
-    assert.match(closedEs, /Gate cerrado/, "the gate guard workspace must render as closed");
+    assert.match(closedEs, /Gate bloqueado/, "a workspace with errors must render as blocked, not closed");
+    assert.doesNotMatch(
+      closedEs,
+      /Implementación permitida/,
+      "a blocked workspace must never say implementation is allowed"
+    );
+
+    // The state that used to lie: no errors at all, but nothing approved either.
+    // `ok` was true, so the dashboard said "Implementación permitida" to a user
+    // who had approved nothing.
+    const nothingApprovedEs = await renderDashboard(emptyRoot, { lang: "es" });
+    const nothingApprovedEn = await renderDashboard(emptyRoot, { lang: "en" });
+    assert.doesNotMatch(
+      nothingApprovedEs,
+      /Implementación permitida/,
+      "a workspace with zero approved specs must not claim implementation is allowed"
+    );
+    assert.doesNotMatch(
+      nothingApprovedEn,
+      /Implementation allowed/,
+      "the same, in English"
+    );
+
+    // The posture line prints on every dashboard, in both languages, and says
+    // what was NOT checked. A green chip must never mean "we did not look".
+    for (const [html, needle, lang] of [
+      [nothingApprovedEs, "NO comprobado", "es"],
+      [nothingApprovedEn, "NOT checked", "en"]
+    ]) {
+      assert.ok(
+        html.includes("gate-posture") && html.includes(needle),
+        `the ${lang} dashboard must state what the gate did not check`
+      );
+    }
     assert.ok(
       closedEs.includes("gate-missing") && closedEs.includes("regla de oro haciendo su trabajo"),
       "a closed gate must say it is the golden rule working and what is missing, not just glow red"

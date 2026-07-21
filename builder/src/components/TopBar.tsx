@@ -24,13 +24,23 @@ function GateChip() {
   const gateError = useBuilderStore((s) => s.gateError);
   const refreshGate = useBuilderStore((s) => s.refreshGate);
 
-  const tone =
-    gate == null
-      ? "border-border text-muted-foreground"
-      : gate.ok
-        ? "border-primary bg-[var(--primary-soft)] text-primary"
-        : "border-destructive bg-[var(--danger-soft)] text-destructive";
-  const label = gate == null ? `⚪ ${t("topbar.gate.loading")}` : gate.ok ? `🟢 ${t("topbar.gate.open")}` : `🔴 ${t("topbar.gate.closed")}`;
+  // Three states, not two. `ok` alone called a workspace with zero approved
+  // specs "open", and the chip told the user implementation was allowed.
+  const TONE: Record<string, string> = {
+    open: "border-primary bg-[var(--primary-soft)] text-primary",
+    closed: "border-border bg-[var(--muted)] text-muted-foreground",
+    blocked: "border-destructive bg-[var(--danger-soft)] text-destructive"
+  };
+  const ICON: Record<string, string> = { open: "🟢", closed: "🟡", blocked: "🔴" };
+  const KEY: Record<string, string> = {
+    open: "topbar.gate.open",
+    closed: "topbar.gate.closed",
+    blocked: "topbar.gate.blocked"
+  };
+  const verdict = gate?.verdict ?? (gate == null ? null : gate.ok ? "open" : "blocked");
+  const tone = verdict == null ? "border-border text-muted-foreground" : TONE[verdict];
+  const label =
+    verdict == null ? `⚪ ${t("topbar.gate.loading")}` : `${ICON[verdict]} ${t(KEY[verdict])}`;
   const title = gateError
     ? `⚠ ${gateError}`
     : gate == null

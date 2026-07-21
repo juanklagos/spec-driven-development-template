@@ -38,6 +38,10 @@ const ES = {
   "topbar.lang": "Idioma",
   "topbar.gate.open": "Gate abierto",
   "topbar.gate.closed": "Gate cerrado",
+  "topbar.gate.blocked": "Gate bloqueado",
+  "dash.reason.blocked": "Hay errores que arreglar antes de nada. Implementación bloqueada.",
+  "gate.posture.checked": "Comprobado: política, estructura de specs, estado de aprobación, consentimiento por spec y dependencias.",
+  "gate.posture.notChecked": "NO comprobado: si el código del proyecto corresponde a una spec aprobada.",
   "topbar.gate.stats": "{errors} errores · {warnings} avisos · {approved}/{total} specs aprobadas",
   "status.approved": "Aprobada",
   "status.pending": "Pendiente",
@@ -55,8 +59,8 @@ const ES = {
   "dash.title": "Panel SDD",
   "dash.subtitle": "Estado del workspace, solo lectura",
   "dash.openBuilder": "Abrir el builder",
-  "dash.reason.open": "Implementación permitida: las specs aprobadas y sus planes son consistentes.",
-  "dash.reason.closed": "Implementación bloqueada: refina la spec y el plan antes de escribir código.",
+  "dash.reason.open": "Puedes implementar: hay specs aprobadas con consentimiento registrado y planes consistentes.",
+  "dash.reason.closed": "Todavía no hay ninguna spec aprobada, así que no hay nada que implementar. Aprueba una spec para abrir la compuerta.",
   "dash.stats.section": "Resumen",
   "dash.stats.approved": "Specs aprobadas",
   "dash.stats.pending": "Specs pendientes",
@@ -119,6 +123,10 @@ const EN: Record<Key, string> = {
   "topbar.lang": "Language",
   "topbar.gate.open": "Gate open",
   "topbar.gate.closed": "Gate closed",
+  "topbar.gate.blocked": "Gate blocked",
+  "dash.reason.blocked": "There are errors to fix first. Implementation blocked.",
+  "gate.posture.checked": "Checked: policy, spec structure, approval status, per-spec consent and dependencies.",
+  "gate.posture.notChecked": "NOT checked: whether the project code corresponds to an approved spec.",
   "topbar.gate.stats": "{errors} errors · {warnings} warnings · {approved}/{total} specs approved",
   "status.approved": "Approved",
   "status.pending": "Pending",
@@ -136,8 +144,8 @@ const EN: Record<Key, string> = {
   "dash.title": "SDD Dashboard",
   "dash.subtitle": "Workspace status, read-only",
   "dash.openBuilder": "Open builder",
-  "dash.reason.open": "Implementation allowed: approved specs and their plans are consistent.",
-  "dash.reason.closed": "Implementation blocked: refine the spec and the plan before writing code.",
+  "dash.reason.open": "You can implement: there are approved specs with recorded consent and consistent plans.",
+  "dash.reason.closed": "Nothing is approved yet, so there is nothing to implement. Approve a spec to open the gate.",
   "dash.stats.section": "Summary",
   "dash.stats.approved": "Approved specs",
   "dash.stats.pending": "Pending specs",
@@ -506,13 +514,16 @@ code {
   padding: 1.15rem 1.25rem 1.15rem 1.5rem;
   background-image: linear-gradient(100deg, var(--primary-soft), transparent 62%);
 }
-.gate.closed { background-image: linear-gradient(100deg, var(--danger-soft), transparent 62%); }
+.gate.closed { background-image: linear-gradient(100deg, var(--warning-soft, var(--muted)), transparent 62%); }
+.gate.blocked { background-image: linear-gradient(100deg, var(--danger-soft), transparent 62%); }
+.gate-posture { margin-top:.5rem; font-size:.8125rem; line-height:1.5; color:var(--muted-foreground); }
 .gate::before {
   content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
   background: var(--primary);
   border-radius: var(--radius-xl) 0 0 var(--radius-xl);
 }
-.gate.closed::before { background: var(--destructive); }
+.gate.closed::before { background: var(--muted-foreground); }
+.gate.blocked::before { background: var(--destructive); }
 .gate-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.015em; }
 .gate-reason { margin-top: 0.4rem; color: var(--muted-foreground); max-width: 64ch; }
 .gate-stats {
@@ -815,11 +826,30 @@ const gateSection = (t: Translate, help: Help, gate: GateSummary): string => {
 
   return `
     <section class="section" style="margin-top:1.5rem">
-      <div class="card gate ${gate.ok ? "open" : "closed"}">
-        <h2 class="gate-title">${gate.ok ? "🟢" : "🔴"} ${escapeHtml(
-          t(gate.ok ? "topbar.gate.open" : "topbar.gate.closed")
+      <div class="card gate ${gate.verdict}">
+        <h2 class="gate-title">${
+          { open: "🟢", closed: "🟡", blocked: "🔴" }[gate.verdict]
+        } ${escapeHtml(
+          t(
+            ({
+              open: "topbar.gate.open",
+              closed: "topbar.gate.closed",
+              blocked: "topbar.gate.blocked"
+            } as const)[gate.verdict]
+          )
         )} ${help("help.gate.title", "help.gate.body", "flow")}</h2>
-        <p class="gate-reason">${escapeHtml(t(gate.ok ? "dash.reason.open" : "dash.reason.closed"))}</p>
+        <p class="gate-reason">${escapeHtml(
+          t(
+            ({
+              open: "dash.reason.open",
+              closed: "dash.reason.closed",
+              blocked: "dash.reason.blocked"
+            } as const)[gate.verdict]
+          )
+        )}</p>
+        <p class="gate-posture">${escapeHtml(t("gate.posture.checked"))}<br>${escapeHtml(
+          t("gate.posture.notChecked")
+        )}</p>
         <p class="gate-stats">${escapeHtml(
           t("topbar.gate.stats", {
             errors: gate.errors,

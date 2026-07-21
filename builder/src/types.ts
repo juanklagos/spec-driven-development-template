@@ -94,8 +94,12 @@ export interface DependencyWarning {
   message: string;
 }
 
+export type GateVerdict = "open" | "closed" | "blocked";
+
 export interface GateSummary {
   ok: boolean;
+  /** open = puedes implementar · closed = nada aprobado aún · blocked = hay errores. */
+  verdict: GateVerdict;
   errors: number;
   warnings: number;
   approvedSpecs: number;
