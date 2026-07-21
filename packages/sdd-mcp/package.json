@@ -23,7 +23,8 @@
   },
   "description": "Spec-Driven Development MCP server: specs, plans, gates, consent, status, logbook tools and a visual dashboard. Bilingual EN/ES.",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "repository": {
     "type": "git",

@@ -20,7 +20,8 @@
   "description": "Typed core operations for Spec-Driven Development: workspaces, specs, validation, gate, consent, status and logbook. Bilingual EN/ES.",
   "files": [
     "dist",
-    "framework"
+    "framework",
+    "LICENSE"
   ],
   "repository": {
     "type": "git",

@@ -54,11 +54,15 @@ const ENTRIES = [
   // Guides copied by the full profile; docs/en/43-easy-mcp-guide.md also backs
   // the sdd://docs/easy-mcp resource.
   "docs/README.md",
-  "docs/roadmap.md",
-  "docs/roadmap.mmd",
   "docs/en",
   "docs/es"
 ];
+
+// Generated artifacts: present in a working checkout, absent on a clean clone
+// because .gitignore excludes them. Treating them as required made `npm pack`
+// impossible in CI (three red runs before this was noticed), which in turn
+// blocked republishing the broken 1.7.0 packages. Ship them when they exist.
+const OPTIONAL_SOURCES = ["docs/roadmap.md", "docs/roadmap.mmd"];
 
 // Never ship build output, dependencies or OS noise inside the payload.
 const EXCLUDED_NAMES = new Set(["node_modules", "dist", ".DS_Store", "Thumbs.db", ".git"]);
@@ -96,6 +100,15 @@ async function main() {
   await fs.mkdir(payloadRoot, { recursive: true });
 
   for (const relative of ENTRIES) {
+    await copyEntry(relative);
+  }
+
+  for (const relative of OPTIONAL_SOURCES) {
+    try {
+      await fs.stat(path.join(repoRoot, relative));
+    } catch {
+      continue; // not generated in this checkout — see OPTIONAL_SOURCES
+    }
     await copyEntry(relative);
   }
 
