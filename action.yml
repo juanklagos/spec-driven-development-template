@@ -24,17 +24,35 @@ runs:
         set -euo pipefail
         TARGET="${{ inputs.path }}"
 
-        # Layout autodetection:
-        # 1) compact sidecar   -> <target>/spec/scripts/
-        # 2) standalone/root   -> <target>/scripts/validate-sdd.sh
-        # 3) fallback          -> scripts bundled with this action
-        if [ -f "$TARGET/spec/scripts/validate-sdd.sh" ]; then
-          SCRIPTS="$TARGET/spec/scripts"
-        elif [ -f "$TARGET/scripts/validate-sdd.sh" ]; then
-          SCRIPTS="$TARGET/scripts"
+        # Resolve the workspace FIRST and fail closed.
+        # An SDD workspace is sdd.policy.yaml + idea/ + specs/ + bitacora/,
+        # either at the target itself (standalone/full layout) or in its compact
+        # spec/ sidecar. Without this check the run fell through to the scripts
+        # bundled with the action, which then resolved *the action's own
+        # checkout* — a complete workspace with approved specs and a tracked
+        # .sdd/user-consent.log — so a consumer with no SDD workspace at all got
+        # three green groups and a passing gate.
+        is_sdd_root() {
+          [ -f "$1/sdd.policy.yaml" ] && [ -d "$1/idea" ] && [ -d "$1/specs" ] && [ -d "$1/bitacora" ]
+        }
+
+        if is_sdd_root "$TARGET/spec"; then
+          SDD_ROOT="$TARGET/spec"
+        elif is_sdd_root "$TARGET"; then
+          SDD_ROOT="$TARGET"
+        else
+          echo "::error::No SDD workspace found under $TARGET. Expected sdd.policy.yaml + idea/ + specs/ + bitacora/ there or in $TARGET/spec (compact sidecar). Run scripts/install-spec-sidecar.sh, or set the action's 'path' input to the folder that holds the workspace."
+          exit 1
+        fi
+        echo "SDD workspace: $SDD_ROOT"
+
+        # Prefer the scripts shipped with the workspace so a project pinned to
+        # an older template keeps validating against its own rules.
+        if [ -f "$SDD_ROOT/scripts/validate-sdd.sh" ]; then
+          SCRIPTS="$SDD_ROOT/scripts"
         else
           SCRIPTS="${{ github.action_path }}/scripts"
-          echo "No SDD scripts found in target; using scripts bundled with the action."
+          echo "No SDD scripts in the workspace; using the scripts bundled with the action."
         fi
 
         STRICT_FLAG=""
@@ -43,13 +61,13 @@ runs:
         fi
 
         echo "::group::validate-sdd"
-        bash "$SCRIPTS/validate-sdd.sh" "$TARGET" $STRICT_FLAG
+        bash "$SCRIPTS/validate-sdd.sh" "$SDD_ROOT" $STRICT_FLAG
         echo "::endgroup::"
 
         echo "::group::check-sdd-policy"
-        bash "$SCRIPTS/check-sdd-policy.sh" "$TARGET"
+        bash "$SCRIPTS/check-sdd-policy.sh" "$SDD_ROOT"
         echo "::endgroup::"
 
         echo "::group::check-sdd-gate"
-        bash "$SCRIPTS/check-sdd-gate.sh" "$TARGET"
+        bash "$SCRIPTS/check-sdd-gate.sh" "$SDD_ROOT"
         echo "::endgroup::"

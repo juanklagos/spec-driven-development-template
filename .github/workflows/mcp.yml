@@ -36,3 +36,6 @@ jobs:
 
       - name: MCP integration test
         run: npm run mcp:test
+
+      - name: npm package smoke test (packed tarballs)
+        run: npm run mcp:pack:smoke

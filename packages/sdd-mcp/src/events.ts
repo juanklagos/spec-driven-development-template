@@ -6,7 +6,7 @@
 import { watch, existsSync, type FSWatcher } from "node:fs";
 import http from "node:http";
 import path from "node:path";
-import { specsRoot } from "@juanklagos/sdd-core";
+import { isAtomicWriteTempName, specsRoot } from "@juanklagos/sdd-core";
 
 const SSE_KEEPALIVE_MS = 25_000;
 const WATCH_DEBOUNCE_MS = 300;
@@ -50,9 +50,11 @@ export function createEventHub(projectRoot: string): EventHub {
 
   function queueWatcherChange(relPath: string): void {
     const base = path.basename(relPath);
-    // Ignore atomic-write temp files (sdd-core writes "<file>.tmp-<pid>" then
-    // renames) and editor swap/hidden files; only real documents matter.
-    if (!base || base.startsWith(".") || /\.tmp-\d+$/.test(base)) return;
+    // Ignore atomic-write scratch files and editor swap/hidden files; only real
+    // documents matter. The scratch-name rule is owned by sdd-core (it writes
+    // them), never re-spelled here — a local copy would have kept matching the
+    // old "<file>.tmp-<pid>" shape and leaked every write as a phantom change.
+    if (!base || base.startsWith(".") || isAtomicWriteTempName(base)) return;
     const kind: ChangeKind = base === "board.canvas" ? "board" : "specs";
     pendingChanges.set(kind, relPath.split(path.sep).join("/"));
     if (changeFlushTimer) clearTimeout(changeFlushTimer);

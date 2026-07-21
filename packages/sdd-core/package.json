@@ -13,11 +13,14 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build:framework-payload": "node ../../scripts/build-framework-payload.mjs",
+    "prepack": "npm run build:framework-payload",
     "prepublishOnly": "npm run build"
   },
   "description": "Typed core operations for Spec-Driven Development: workspaces, specs, validation, gate, consent, status and logbook. Bilingual EN/ES.",
   "files": [
-    "dist"
+    "dist",
+    "framework"
   ],
   "repository": {
     "type": "git",

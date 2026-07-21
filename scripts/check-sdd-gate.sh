@@ -4,12 +4,18 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/sdd-root.sh"
 
-ROOT_INPUT="${1:-.}"
-ROOT="$(sdd_resolve_root "$ROOT_INPUT" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
-if [ -z "$ROOT" ]; then
-  echo "Error: could not resolve SDD root from: $ROOT_INPUT"
-  exit 1
-fi
+ROOT_INPUT="${1-}"
+ROOT="$(sdd_require_root "$ROOT_INPUT" "$SCRIPT_DIR/..")" || exit 1
+
+# KEEP IN SYNC with APPROVED_STATUS_ERE / isApprovedStatus in
+# packages/sdd-core/src/board.ts — the ONE approval rule of this project.
+# Bash cannot import TypeScript, so scripts/test-mcp-integration.mjs reads this
+# literal out of this file and asserts it equals the exported constant, and
+# runs both gates over the same fixtures.
+SDD_APPROVED_STATUS_ERE='aprobad[oa]|approved'
+# Negation wins: 'No aprobado' / 'Not approved' / 'unapproved' contain an
+# approval word but mean the opposite. KEEP IN SYNC with NEGATED_STATUS_ERE.
+SDD_NEGATED_STATUS_ERE='(^|[^a-z])(no|not|sin|un|non)[ -]?(aprobad[oa]|approved)'
 
 errors=0
 warnings=0
@@ -101,9 +107,20 @@ while IFS= read -r spec_path; do
     fail "$spec_name/spec.md missing approval status section"
   fi
 
+  # Only a backticked value is a status. Without this guard the substring rule
+  # below would read the whole "- Estado / Status: ..." line and call anything
+  # mentioning "approved" approved, while sdd-core (which requires the
+  # backticks) read the same spec as pending.
   status_line="$(first_line_match "Estado / Status:" "$spec_path")"
-  status_value="$(echo "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/' | tr -d '[:space:]')"
-  if echo "$status_value" | grep -E -i -q "^(Aprobado|Approved)$"; then
+  status_value=""
+  if printf "%s" "$status_line" | grep -q '`'; then
+    status_value="$(printf "%s" "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/' \
+      | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+  fi
+  if printf "%s" "$status_value" | grep -E -i -q -- "$SDD_NEGATED_STATUS_ERE"; then
+    # Negation wins: "No aprobado" contains an approval word but is not approval.
+    :
+  elif printf "%s" "$status_value" | grep -E -i -q -- "$SDD_APPROVED_STATUS_ERE"; then
     approved_count=$((approved_count + 1))
     if match_q "YYYY-MM-DD" "$spec_path"; then
       fail "$spec_name approved but approval date still placeholder"
@@ -152,10 +169,14 @@ if [ "$spec_count" -eq 0 ]; then
   warn "No numbered specs found; gate check skipped."
 else
   if [ "$approved_count" -gt 0 ]; then
-    if [ -s "$ROOT/.sdd/user-consent.log" ]; then
+    # Non-blank content, not just an existing file. KEEP IN SYNC with
+    # hasRecordedConsent in packages/sdd-core/src/index.ts: a zero-byte log
+    # (a bare `touch`, or an interrupted confirm-user-consent.sh) is not consent.
+    consent_log="$ROOT/.sdd/user-consent.log"
+    if [ -s "$consent_log" ] && grep -q '[^[:space:]]' "$consent_log"; then
       ok "User consent log present for execution stage: .sdd/user-consent.log"
     else
-      fail "Missing user consent log (.sdd/user-consent.log) for approved spec execution"
+      fail "Missing or empty user consent log (.sdd/user-consent.log) for approved spec execution"
     fi
   else
     warn "No approved specs yet; user consent log not required at base SDD stage"

@@ -116,14 +116,19 @@ const APP_SCRIPT = `
     show("status-panel", Boolean(text));
   }
 
-  function isApproved(status) { return /aprobad|approved/i.test(String(status || "")); }
-  function specKind(spec) {
-    if (spec.tasks && spec.tasks.total > 0 && spec.tasks.done === spec.tasks.total) { return "done"; }
-    return isApproved(spec.status) ? "ok" : "warn";
-  }
-  function kindLabel(kind, status) {
-    if (kind === "done") { return "Hecha / Done"; }
-    return status ? status : (kind === "ok" ? "Aprobada / Approved" : "Pendiente / Pending");
+  // The spec tone is computed ONCE by sdd-core (specTone) and travels in the
+  // payload as spec.tone. This view only paints it.
+  //
+  // It used to re-derive the tone locally and checked task completion BEFORE
+  // approval, inverting the golden rule: a spec at {Pendiente, 3/3} rendered a
+  // green "Hecha / Done" badge — the exact "we shipped it, we never approved
+  // it" anti-pattern this template exists to surface.
+  var TONE_CLASS = { done: "done", ok: "ok", pending: "warn" };
+  function specToneOf(spec) { return (spec && spec.tone) || "pending"; }
+  function toneClass(tone) { return TONE_CLASS[tone] || "warn"; }
+  function toneLabel(tone, status) {
+    if (tone === "done") { return "Hecha / Done"; }
+    return status ? status : (tone === "ok" ? "Aprobada / Approved" : "Pendiente / Pending");
   }
 
   var EDGE_COLORS = { "1": "var(--err)", "2": "#e8590c", "3": "var(--warn)", "4": "var(--ok)", "5": "#0ca678", "6": "#845ef7" };
@@ -135,14 +140,12 @@ const APP_SCRIPT = `
   function nodeFill(node, specsById) {
     var spec = specsById[node.id];
     if (!spec) { return "var(--node-note)"; }
-    var kind = specKind(spec);
-    return kind === "done" ? "var(--done-bg)" : (kind === "ok" ? "var(--ok-bg)" : "var(--warn-bg)");
+    return "var(--" + toneClass(specToneOf(spec)) + "-bg)";
   }
   function nodeStroke(node, specsById) {
     var spec = specsById[node.id];
     if (!spec) { return "var(--border)"; }
-    var kind = specKind(spec);
-    return kind === "done" ? "var(--done)" : (kind === "ok" ? "var(--ok)" : "var(--warn)");
+    return "var(--" + toneClass(specToneOf(spec)) + ")";
   }
   function nodeLabel(node) {
     if (node.type === "text" && node.text) {
@@ -196,7 +199,7 @@ const APP_SCRIPT = `
     var grid = $("spec-cards").querySelector(".grid");
     var issues = (gate && gate.specIssues) || {};
     var html = specs.map(function (spec) {
-      var kind = specKind(spec);
+      var tone = specToneOf(spec);
       var total = spec.tasks ? spec.tasks.total : 0;
       var done = spec.tasks ? spec.tasks.done : 0;
       var pct = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -206,7 +209,7 @@ const APP_SCRIPT = `
         : "";
       return '<div class="card">' +
         '<div class="row"><span class="id">' + esc(spec.id) + "</span>" + errBadge + "</div>" +
-        '<div class="row"><span class="badge ' + kind + '">' + esc(kindLabel(kind, spec.status)) + "</span>" +
+        '<div class="row"><span class="badge ' + toneClass(tone) + '">' + esc(toneLabel(tone, spec.status)) + "</span>" +
         '<span class="tasks-label">' + done + "/" + total + " tareas / tasks</span></div>" +
         '<div class="bar"><div style="width:' + pct + '%"></div></div>' +
         "</div>";

@@ -4,12 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/sdd-root.sh"
 
-ROOT_INPUT="${1:-.}"
-ROOT="$(sdd_resolve_root "$ROOT_INPUT" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
-if [ -z "$ROOT" ]; then
-  echo "Error: could not resolve SDD root from: $ROOT_INPUT"
-  exit 1
-fi
+ROOT_INPUT="${1-}"
+ROOT="$(sdd_require_root "$ROOT_INPUT" "$SCRIPT_DIR/..")" || exit 1
 POLICY_PATH="$ROOT/sdd.policy.yaml"
 
 errors=0

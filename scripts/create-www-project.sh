@@ -39,6 +39,13 @@ done
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Where ./www/<project-name> is created. Defaults to the framework root, which is
+# right in a checkout. When the framework is installed from npm its root lives
+# inside node_modules, so @juanklagos/sdd-core passes SDD_WORKSPACES_ROOT.
+WORKSPACES_ROOT="${SDD_WORKSPACES_ROOT:-$ROOT_DIR}"
+mkdir -p "$WORKSPACES_ROOT"
+WORKSPACES_ROOT="$(cd "$WORKSPACES_ROOT" && pwd)"
+
 slugify() {
   echo "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//; s/-+/-/g'
 }
@@ -49,13 +56,13 @@ if [ -z "$SLUG" ]; then
   exit 1
 fi
 
-TARGET="$ROOT_DIR/www/$SLUG"
+TARGET="$WORKSPACES_ROOT/www/$SLUG"
 if [ -e "$TARGET" ]; then
   echo "Error: target already exists: $TARGET"
   exit 1
 fi
 
-mkdir -p "$ROOT_DIR/www"
+mkdir -p "$WORKSPACES_ROOT/www"
 
 if [ "${PROFILE#--profile=}" = "full" ]; then
     if [ "$USE_SPEC_KIT" = "no" ]; then

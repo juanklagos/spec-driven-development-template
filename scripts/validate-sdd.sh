@@ -4,14 +4,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/sdd-root.sh"
 
-ROOT_INPUT="${1:-.}"
+ROOT_INPUT="${1-}"
 STRICT="${2:-}"
-ROOT="$(sdd_resolve_root "$ROOT_INPUT" || sdd_resolve_root "$SCRIPT_DIR/.." || true)"
-
-if [ -z "$ROOT" ]; then
-  echo "Error: could not resolve SDD root from: $ROOT_INPUT"
-  exit 1
-fi
+ROOT="$(sdd_require_root "$ROOT_INPUT" "$SCRIPT_DIR/..")" || exit 1
 
 errors=0
 warnings=0
@@ -136,6 +131,38 @@ if [ "$STRICT" = "--strict" ]; then
     done < <(git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/*" | grep -Ev "$SPEC_PREFIX/.*/history\.md$" || true)
   else
     warn "Strict mode requested, but git repository is not available in the project root."
+  fi
+
+  # Gentle nudge, never a gate: a project with approved specs and an empty
+  # decision log has already lost the "why" behind its own choices. This only
+  # ever emits a WARNING — it must never fail the run on its own.
+  # Approval rule KEPT IN SYNC with SDD_APPROVED_STATUS_ERE in
+  # scripts/check-sdd-gate.sh and isApprovedStatus in packages/sdd-core:
+  # only a backticked status value counts as a status.
+  approved_specs=0
+  if [ ${#spec_dirs[@]} -gt 0 ]; then
+    for spec_path in "${spec_dirs[@]}"; do
+      [ -f "$spec_path/spec.md" ] || continue
+      status_line="$(grep -E -- "Estado / Status:" "$spec_path/spec.md" | head -n 1 || true)"
+      case "$status_line" in
+        *'`'*) ;;
+        *) continue ;;
+      esac
+      status_value="$(printf "%s" "$status_line" | sed -E 's/.*`([^`]*)`.*/\1/')"
+      if printf "%s" "$status_value" | grep -E -i -q -- 'aprobad[oa]|approved'; then
+        approved_specs=$((approved_specs + 1))
+      fi
+    done
+  fi
+
+  if [ "$approved_specs" -gt 0 ] && [ -d "$ROOT/bitacora/decisiones" ]; then
+    decision_count="$(find "$ROOT/bitacora/decisiones" -maxdepth 1 -type f -name '*.md' \
+      ! -name 'README.md' 2>/dev/null | wc -l | tr -d ' ')"
+    if [ "${decision_count:-0}" -eq 0 ]; then
+      warn "Strict mode: $approved_specs approved spec(s) but bitacora/decisiones/ has no decision records. Run /sdd:decision to capture why the important choices were made. Suggestion only, never a gate."
+    else
+      ok "Decision log: $decision_count record(s) in bitacora/decisiones/."
+    fi
   fi
 fi
 

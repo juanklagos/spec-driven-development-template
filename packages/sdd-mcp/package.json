@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "sdd-mcp": "./dist/index.js"
+    "sdd-mcp": "./dist/index.js",
+    "sdd-mcp-http": "./dist/http.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

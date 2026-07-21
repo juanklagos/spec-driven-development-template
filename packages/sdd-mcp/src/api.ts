@@ -16,7 +16,7 @@ import {
   type SpecSectionsInput
 } from "@juanklagos/sdd-core";
 import { createIssuesForSpec } from "./github.js";
-import { json, readBody } from "./http-utils.js";
+import { isPayloadTooLarge, json, payloadTooLargeResponse, readBody } from "./http-utils.js";
 
 export interface ApiDeps {
   projectRoot: string;
@@ -115,6 +115,12 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
         return true;
       }
     } catch (error) {
+      // An over-cap body is a client error about size, not an SDD rule failure.
+      if (isPayloadTooLarge(error)) {
+        const { status, body } = payloadTooLargeResponse(error);
+        json(res, status, body);
+        return true;
+      }
       json(res, 422, { error: error instanceof Error ? error.message : String(error) });
       return true;
     }

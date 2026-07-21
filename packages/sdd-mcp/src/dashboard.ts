@@ -9,9 +9,11 @@
 // switch mirrors builder/src/i18n.ts and shares its localStorage key.
 
 import {
+  docsUrl,
   getBoardView,
   getGateSummary,
   isApprovedStatus,
+  type DocGuide,
   type SpecTone,
   type BoardSpecCard,
   type DependencyWarning,
@@ -80,7 +82,32 @@ const ES = {
   "dash.error.title": "No se pudo leer el workspace SDD",
   "dash.error.hint":
     "Apunta SDD_PROJECT_ROOT a un proyecto que contenga specs/ (o un sidecar spec/) y recarga esta página.",
-  "dash.error.diagnostics": "Detalle técnico"
+  "dash.error.diagnostics": "Detalle técnico",
+
+  // Capa educativa: verbatim del builder (mismo concepto, misma frase).
+  "help.aria": "Ayuda: {topic}",
+  "help.learnMore": "Guía completa →",
+  "help.gate.title": "El gate: la regla de oro",
+  "help.gate.body":
+    "No hay código sin spec aprobada y plan consistente. El gate lee tus archivos y responde una sola pregunta: ¿ya se puede implementar? 🟢 abierto = sí; 🔴 cerrado = falta algo. Falla cerrado a propósito: ante la duda, bloquea.",
+  "help.gate.closedLead":
+    "Esto no es un fallo de la herramienta: es la regla de oro protegiendo tu proyecto. Ahora mismo falta:",
+  "help.gate.missing.errors": "{n} error(es) de validación — están listados más abajo en esta página.",
+  "help.gate.missing.pending": "{n} spec(s) sin aprobar — ábrela en el builder y usa la pestaña «Aprobación».",
+  "help.gate.missing.unknown": "Revisa los mensajes del validador listados más abajo.",
+  "help.approval.title": "Qué significa «aprobada»",
+  "help.approval.body":
+    "Aprobar no es un botón decorativo: escribe en spec.md el bloque real de estado (Aprobado, la fecha de hoy, quién aprueba y la evidencia). Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código.",
+  "help.dep.title": "Aviso de dependencia",
+  "help.dep.body":
+    "Una spec aprobada depende de otra que aún no lo está: implementarla sería construir sobre un contrato sin firmar. Es un aviso, no un bloqueo — el gate sigue abierto. Aprueba la dependencia o corrige el tipo de unión.",
+  "empty.learn":
+    "Un workspace vacío significa que aún no hay ningún contrato en disco. En SDD se empieza por la spec, no por el código: crea una, aunque sea pequeña.",
+
+  // Solo del panel
+  "dash.help.stats.title": "Qué cuentan estas cifras",
+  "dash.help.stats.body":
+    "Specs aprobadas / pendientes / hechas se leen del bloque de estado de cada spec.md (hecha = aprobada y con todas sus tareas marcadas). Tareas completadas suma las casillas de todos los tasks.md. Errores y avisos vienen del gate más la validación estructural del proyecto."
 } as const;
 
 /** Every translatable string on the page; a typo here is a compile error. */
@@ -136,7 +163,32 @@ const EN: Record<Key, string> = {
   "dash.error.title": "Could not read the SDD workspace",
   "dash.error.hint":
     "Point SDD_PROJECT_ROOT at a project that contains specs/ (or a spec/ sidecar) and reload this page.",
-  "dash.error.diagnostics": "Technical detail"
+  "dash.error.diagnostics": "Technical detail",
+
+  // Teaching layer: verbatim from the builder (same concept, same sentence).
+  "help.aria": "Help: {topic}",
+  "help.learnMore": "Full guide →",
+  "help.gate.title": "The gate: the golden rule",
+  "help.gate.body":
+    "No code before an approved spec and a consistent plan. The gate reads your files and answers one question: can we implement yet? 🟢 open = yes; 🔴 closed = something is missing. It fails closed on purpose: when in doubt, it blocks.",
+  "help.gate.closedLead":
+    "This is not a tool failure: it is the golden rule protecting your project. Right now this is missing:",
+  "help.gate.missing.errors": "{n} validation error(s) — they are listed further down this page.",
+  "help.gate.missing.pending": "{n} spec(s) not approved — open one in the builder and use the “Approval” tab.",
+  "help.gate.missing.unknown": "Check the validator messages listed further down.",
+  "help.approval.title": "What “approved” means",
+  "help.approval.body":
+    "Approving is not a decorative button: it writes the real status block into spec.md (Approved, today's date, who approved and the evidence). That block is what the gate, CI and your agent read before any code is allowed.",
+  "help.dep.title": "Dependency warning",
+  "help.dep.body":
+    "An approved spec depends on one that is not approved yet: implementing it would build on an unsigned contract. It is advisory, not a block — the gate stays open. Approve the dependency or fix the connection type.",
+  "empty.learn":
+    "An empty workspace means there is no contract on disk yet. In SDD you start with the spec, not the code: create one, however small.",
+
+  // Dashboard-only
+  "dash.help.stats.title": "What these numbers count",
+  "dash.help.stats.body":
+    "Approved / pending / done specs are read from the status block of each spec.md (done = approved with every task ticked). Completed tasks adds up the checkboxes across every tasks.md. Errors and warnings come from the gate plus the structural project validation."
 };
 
 const DICT: Record<DashboardLang, Record<Key, string>> = { es: ES, en: EN };
@@ -195,6 +247,47 @@ const depVars = (warning: DependencyWarning): Record<string, string> => ({
 /** Tooltip body: localized heading + one bullet per line. */
 const tooltip = (heading: string, lines: string[]): string =>
   escapeHtml([heading, ...lines.map((line) => `• ${line}`)].join("\n"));
+
+/* ------------------------------------------------------- teaching layer -- */
+// Contextual "?" next to the concept it explains, mirroring the builder's
+// HelpHint: same wording, same deep links (sdd-core DOC_GUIDES). No script —
+// the popover opens on hover and on keyboard focus (:focus-within keeps it open
+// while the reader tabs to the guide link).
+
+type Help = (titleKey: Key, bodyKey: Key, guide: DocGuide, extraHtml?: string) => string;
+
+const makeHelp = (lang: DashboardLang, t: Translate): Help => {
+  // The popover is CSS-hidden until hover/focus; aria-describedby is what makes
+  // its text reach a screen reader, so each one needs a stable unique id.
+  let seq = 0;
+  return (titleKey, bodyKey, guide, extraHtml = "") => {
+    const id = `help-${++seq}`;
+    return `<span class="help"><button type="button" class="help-btn" aria-label="${escapeHtml(
+      t("help.aria", { topic: t(titleKey) })
+    )}" aria-describedby="${id}">?</button><span class="help-pop" id="${id}" role="note"><strong>${escapeHtml(
+      t(titleKey)
+    )}</strong><span class="help-body">${escapeHtml(
+      t(bodyKey)
+    )}</span>${extraHtml}<a class="help-link" href="${docsUrl(
+      guide,
+      lang
+    )}" target="_blank" rel="noreferrer noopener">${escapeHtml(t("help.learnMore"))}</a></span></span>`;
+  };
+};
+
+/**
+ * What the gate is missing right now, in the reader's language: the closed
+ * state must teach, not just glow red. Derived from the same summary the band
+ * renders — never a second rule.
+ */
+const gateMissing = (t: Translate, gate: GateSummary): string[] => {
+  if (gate.ok) return [];
+  const lines: string[] = [];
+  if (gate.errors > 0) lines.push(t("help.gate.missing.errors", { n: gate.errors }));
+  const notApproved = gate.totalSpecs - gate.approvedSpecs;
+  if (notApproved > 0) lines.push(t("help.gate.missing.pending", { n: notApproved }));
+  return lines.length > 0 ? lines : [t("help.gate.missing.unknown")];
+};
 
 /**
  * getGateSummary already partitions gate.messages + validation.messages into
@@ -406,14 +499,19 @@ code {
 }
 
 /* ---------- gate band ---------- */
+/* No overflow:hidden here — it would clip the teaching popover of the gate "?".
+   The accent bar rounds its own corners instead. */
 .gate {
   position: relative;
-  overflow: hidden;
   padding: 1.15rem 1.25rem 1.15rem 1.5rem;
   background-image: linear-gradient(100deg, var(--primary-soft), transparent 62%);
 }
 .gate.closed { background-image: linear-gradient(100deg, var(--danger-soft), transparent 62%); }
-.gate::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--primary); }
+.gate::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
+  background: var(--primary);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
 .gate.closed::before { background: var(--destructive); }
 .gate-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.015em; }
 .gate-reason { margin-top: 0.4rem; color: var(--muted-foreground); max-width: 64ch; }
@@ -460,6 +558,9 @@ code {
 }
 .speclist.empty { padding: 2.25rem 1.25rem; text-align: center; color: var(--muted-foreground); }
 .speclist.empty strong { display: block; color: var(--foreground); margin-bottom: 0.25rem; }
+.speclist.empty .empty-learn { margin: 0.9rem auto 0; max-width: 48ch; font-size: 0.78rem; line-height: 1.5; }
+.speclist.empty .empty-learn a { color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.speclist.empty .empty-learn a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .specrow {
   display: grid;
@@ -537,6 +638,43 @@ code {
   background: var(--muted); border-radius: 999px; padding: 0.1rem 0.55rem;
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- teaching layer: contextual "?" ---------- */
+.help { position: relative; display: inline-flex; vertical-align: middle; }
+.help-btn {
+  width: 1.05rem; height: 1.05rem; padding: 0; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--card); color: var(--muted-foreground);
+  font: inherit; font-size: 0.62rem; font-weight: 700; line-height: 1;
+  cursor: help;
+}
+.help-btn:hover, .help:focus-within .help-btn { color: var(--primary); border-color: var(--primary); }
+.help-pop {
+  position: absolute; top: calc(100% + 0.45rem); inset-inline-start: -0.35rem; z-index: 20;
+  display: flex; flex-direction: column; gap: 0.35rem;
+  width: 20rem; max-width: min(20rem, 78vw);
+  padding: 0.75rem 0.85rem;
+  background: var(--popover); color: var(--popover-foreground);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-strong);
+  /* The trigger lives inside uppercase/bold headings: reset the inherited type. */
+  text-transform: none; letter-spacing: normal; font-weight: 400; text-align: start;
+  opacity: 0; visibility: hidden; transition: opacity 0.12s ease;
+}
+.help:hover .help-pop, .help:focus-within .help-pop { opacity: 1; visibility: visible; }
+.help-pop strong { font-size: 0.82rem; font-weight: 700; color: var(--foreground); }
+.help-pop .help-body { font-size: 0.76rem; line-height: 1.45; color: var(--muted-foreground); }
+.help-pop .help-link { font-size: 0.74rem; font-weight: 700; color: var(--blue); text-decoration: none; }
+.help-pop .help-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* Gate band: the closed state teaches what is missing, inline. */
+.gate-missing {
+  margin-top: 0.85rem; padding: 0.7rem 0.85rem;
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  max-width: 64ch;
+}
+.gate-missing p { font-size: 0.78rem; font-weight: 700; }
+.gate-missing ul { margin-top: 0.4rem; display: grid; gap: 0.3rem; font-size: 0.78rem; color: var(--muted-foreground); }
 
 /* ---------- error state ---------- */
 .state { padding: 1.4rem 1.35rem; border-left: 4px solid var(--destructive); }
@@ -663,12 +801,24 @@ ${main}
 
 /* ------------------------------------------------------------- renderers -- */
 
-const gateSection = (t: Translate, gate: GateSummary): string => `
+const gateSection = (t: Translate, help: Help, gate: GateSummary): string => {
+  // Educational closed state: a red band teaches nothing on its own, so it
+  // spells out that the block IS the golden rule working, plus what is missing.
+  const missing = gateMissing(t, gate);
+  const missingBlock = missing.length
+    ? `
+        <div class="gate-missing">
+          <p>${escapeHtml(t("help.gate.closedLead"))}</p>
+          <ul>${missing.map((line) => `<li>• ${escapeHtml(line)}</li>`).join("")}</ul>
+        </div>`
+    : "";
+
+  return `
     <section class="section" style="margin-top:1.5rem">
       <div class="card gate ${gate.ok ? "open" : "closed"}">
         <h2 class="gate-title">${gate.ok ? "🟢" : "🔴"} ${escapeHtml(
           t(gate.ok ? "topbar.gate.open" : "topbar.gate.closed")
-        )}</h2>
+        )} ${help("help.gate.title", "help.gate.body", "flow")}</h2>
         <p class="gate-reason">${escapeHtml(t(gate.ok ? "dash.reason.open" : "dash.reason.closed"))}</p>
         <p class="gate-stats">${escapeHtml(
           t("topbar.gate.stats", {
@@ -677,11 +827,12 @@ const gateSection = (t: Translate, gate: GateSummary): string => `
             approved: gate.approvedSpecs,
             total: gate.totalSpecs
           })
-        )}</p>
+        )}</p>${missingBlock}
       </div>
     </section>`;
+};
 
-const statsSection = (t: Translate, gate: GateSummary, specs: BoardSpecCard[]): string => {
+const statsSection = (t: Translate, help: Help, gate: GateSummary, specs: BoardSpecCard[]): string => {
   // One approval rule for every locally-computed tile: core's isApprovedStatus,
   // the same regex the builder cards use. The gate banner above prints
   // gate.approvedSpecs, which checkGate derives from an exact string match — the
@@ -701,7 +852,11 @@ const statsSection = (t: Translate, gate: GateSummary, specs: BoardSpecCard[]): 
   return `
     <section class="section" aria-labelledby="stats-h">
       <div class="section-head">
-        <h2 class="section-title" id="stats-h">${escapeHtml(t("dash.stats.section"))}</h2>
+        <h2 class="section-title" id="stats-h">${escapeHtml(t("dash.stats.section"))} ${help(
+          "dash.help.stats.title",
+          "dash.help.stats.body",
+          "builder"
+        )}</h2>
         <p class="section-meta">${escapeHtml(
           t("status.tasks", { done: tasksDone, total: tasksTotal })
         )}</p>
@@ -784,7 +939,13 @@ const specRow = (t: Translate, spec: BoardSpecCard, gate: GateSummary): string =
         </li>`;
 };
 
-const specsSection = (t: Translate, specs: BoardSpecCard[], gate: GateSummary): string => {
+const specsSection = (
+  t: Translate,
+  help: Help,
+  lang: DashboardLang,
+  specs: BoardSpecCard[],
+  gate: GateSummary
+): string => {
   const body = specs.length
     ? `<ul class="speclist">
         <li class="specrow specrow-head">
@@ -793,14 +954,23 @@ const specsSection = (t: Translate, specs: BoardSpecCard[], gate: GateSummary): 
           <span class="visually-hidden">${escapeHtml(t("dash.table.actions"))}</span>
         </li>${specs.map((spec) => specRow(t, spec, gate)).join("")}
       </ul>`
-    : `<div class="speclist empty">
+    : // Educational empty state: what "no specs" means and the next action.
+      `<div class="speclist empty">
         <strong>${escapeHtml(t("dash.empty"))}</strong>${escapeHtml(t("dash.empty.hint"))}
+        <p class="empty-learn">${escapeHtml(t("empty.learn"))} <a href="${docsUrl(
+          "flow",
+          lang
+        )}" target="_blank" rel="noreferrer noopener">${escapeHtml(t("help.learnMore"))}</a></p>
       </div>`;
 
   return `
     <section class="section" aria-labelledby="specs-h">
       <div class="section-head">
-        <h2 class="section-title" id="specs-h">${escapeHtml(t("dash.table.title"))}</h2>
+        <h2 class="section-title" id="specs-h">${escapeHtml(t("dash.table.title"))} ${help(
+          "help.approval.title",
+          "help.approval.body",
+          "flow"
+        )}</h2>
         <span class="count-pill">${specs.length}</span>
       </div>
       ${body}
@@ -848,7 +1018,7 @@ const errorsSection = (t: Translate, gate: GateSummary): string => {
     </section>`;
 };
 
-const dependenciesSection = (t: Translate, warnings: DependencyWarning[]): string => {
+const dependenciesSection = (t: Translate, help: Help, warnings: DependencyWarning[]): string => {
   if (warnings.length === 0) return "";
   // core's DependencyWarning.message is bilingual by design; this page is
   // single-language, so the sentence is rebuilt from the structured fields.
@@ -867,7 +1037,11 @@ const dependenciesSection = (t: Translate, warnings: DependencyWarning[]): strin
   return `
     <section class="section" aria-labelledby="deps-h">
       <div class="section-head">
-        <h2 class="section-title" id="deps-h">${escapeHtml(t("status.depWarn"))}</h2>
+        <h2 class="section-title" id="deps-h">${escapeHtml(t("status.depWarn"))} ${help(
+          "help.dep.title",
+          "help.dep.body",
+          "builder"
+        )}</h2>
         <span class="count-pill">${warnings.length}</span>
       </div>
       <ul class="card panel amber-edge issue-list">${items}
@@ -900,6 +1074,7 @@ export async function renderDashboard(
 ): Promise<string> {
   const lang: DashboardLang = opts?.lang === "en" ? "en" : "es";
   const t = makeT(lang);
+  const help = makeHelp(lang, t);
 
   try {
     // getGateSummary already bundles checkGate + validateProject +
@@ -912,11 +1087,11 @@ export async function renderDashboard(
       t,
       projectRoot,
       [
-        gateSection(t, gate),
-        statsSection(t, gate, specs),
-        specsSection(t, specs, gate),
+        gateSection(t, help, gate),
+        statsSection(t, help, gate, specs),
+        specsSection(t, help, lang, specs, gate),
         errorsSection(t, gate),
-        dependenciesSection(t, gate.dependencyWarnings)
+        dependenciesSection(t, help, gate.dependencyWarnings)
       ]
         .filter(Boolean)
         .join("\n")

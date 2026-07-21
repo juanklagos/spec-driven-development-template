@@ -38,6 +38,19 @@ if [ -z "$NAME_SLUG" ]; then
   exit 1
 fi
 
+# Next number = highest three-digit prefix on disk + 1.
+# KEEP IN SYNC with nextSpecNumber() in packages/sdd-core/src/index.ts: this
+# script and sdd_create_spec / POST /api/spec are the two supported ways to
+# create a spec, so they must allocate the same id.
+#
+# KNOWN LIMITATION (verified 2026-07-21): this scan is NOT safe against another
+# process allocating at the same instant. Two simultaneous runs with different
+# feature names both read the same max and both create `NNN-<their-slug>` —
+# different directory names, so neither `mkdir` nor the existence check below
+# can catch it. The TypeScript side serializes its own callers with an
+# in-process lock; nothing coordinates across processes. In practice a human
+# runs this script one at a time; if that ever stops being true, the fix is a
+# lock directory (`mkdir "$SDD_ROOT/specs/.lock"` as the atomic primitive).
 NEXT_NUM="$(find "$SDD_ROOT/specs" -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9][0-9]-*' 2>/dev/null \
   | sed -E 's#.*/([0-9]{3})-.*#\1#' \
   | sort -n \

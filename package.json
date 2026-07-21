@@ -16,6 +16,7 @@
     "mcp:test": "npm run build && node scripts/test-mcp-integration.mjs",
     "mcp:smoke": "npm run build && node scripts/smoke-test-mcp.mjs",
     "mcp:http:smoke": "npm run build && node scripts/smoke-test-mcp-http.mjs",
+    "mcp:pack:smoke": "npm run build && node scripts/smoke-test-npm-package.mjs",
     "builder:build": "cd builder && npm install && npm run build"
   },
   "devDependencies": {

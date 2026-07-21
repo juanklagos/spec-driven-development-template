@@ -8,3 +8,5 @@ node_modules/
 .sdd/*
 !.sdd/user-consent.log
 packages/*/dist/
+# Generated at pack time by scripts/build-framework-payload.mjs.
+packages/sdd-core/framework/

@@ -5,6 +5,7 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { withFileLock } from "./file-lock.js";
 import { listSpecs, resolveSddRoot, type SpecSummary } from "./workspace.js";
 
 export interface TaskItem {
@@ -108,10 +109,38 @@ export async function readSpecDocument(projectRoot: string, specId: string, docN
   return fs.readFile(await specDocPath(projectRoot, specId, docName), "utf8");
 }
 
+/**
+ * Suffix of the scratch file `atomicWrite` writes before renaming it into place.
+ *
+ * It MUST be unique per write, not per process: `.tmp-<pid>` meant two writes
+ * racing inside the same server shared one scratch path, so the first rename
+ * moved the file away and every other writer died with
+ * `ENOENT ... rename <file>.tmp-<pid>` — losing the user's edit.
+ */
+function atomicWriteTempPath(filePath: string): string {
+  return `${filePath}.tmp-${randomUUID()}`;
+}
+
+/**
+ * True for the scratch files produced by `atomicWriteTempPath`, including the
+ * legacy `.tmp-<pid>` shape. Exported because file watchers (the builder's SSE
+ * hub in @juanklagos/sdd-mcp) must ignore exactly the names this module writes:
+ * the naming rule lives here only, so a watcher can never drift from the writer.
+ */
+export function isAtomicWriteTempName(name: string): boolean {
+  return /\.tmp-[0-9a-zA-Z-]+$/.test(name);
+}
+
 async function atomicWrite(filePath: string, content: string): Promise<void> {
-  const tmp = `${filePath}.tmp-${process.pid}`;
-  await fs.writeFile(tmp, content, "utf8");
-  await fs.rename(tmp, filePath);
+  const tmp = atomicWriteTempPath(filePath);
+  try {
+    await fs.writeFile(tmp, content, "utf8");
+    await fs.rename(tmp, filePath);
+  } finally {
+    // After a successful rename there is nothing left to remove; after a failed
+    // write/rename this is what keeps orphaned scratch files out of specs/.
+    await fs.rm(tmp, { force: true }).catch(() => {});
+  }
 }
 
 export async function writeSpecDocument(
@@ -121,8 +150,36 @@ export async function writeSpecDocument(
   content: string
 ): Promise<void> {
   const filePath = await specDocPath(projectRoot, specId, docName);
+  await withFileLock(filePath, () => writeSpecDocumentAt(filePath, content));
+}
+
+/** Unlocked write; callers already inside `withFileLock(filePath, ...)`. */
+async function writeSpecDocumentAt(filePath: string, content: string): Promise<void> {
   await fs.access(filePath); // only edit existing bundle documents
   await atomicWrite(filePath, content);
+}
+
+/**
+ * The one read-modify-write primitive for spec bundle documents.
+ *
+ * Reads the document, hands it to `transform`, and writes the result back —
+ * with the whole cycle serialized per file, so two concurrent editors queue
+ * instead of both reading the same pre-image and one edit vanishing. Every
+ * surgical edit in this package (task toggles, approvals, section rewrites)
+ * goes through here; nothing else may read-then-write a spec document.
+ */
+export async function mutateSpecDocument(
+  projectRoot: string,
+  specId: string,
+  docName: string,
+  transform: (content: string) => string | Promise<string>
+): Promise<string> {
+  const filePath = await specDocPath(projectRoot, specId, docName);
+  return withFileLock(filePath, async () => {
+    const next = await transform(await fs.readFile(filePath, "utf8"));
+    await writeSpecDocumentAt(filePath, next);
+    return next;
+  });
 }
 
 /** Absolute path to the specs/ directory of the resolved SDD root (workspace or spec/ sidecar). */
@@ -157,7 +214,10 @@ export async function defaultBoard(projectRoot: string): Promise<BoardCanvas> {
 }
 
 export async function readBoard(projectRoot: string): Promise<BoardCanvas> {
-  const filePath = await boardPath(projectRoot);
+  return readBoardAt(await boardPath(projectRoot), projectRoot);
+}
+
+async function readBoardAt(filePath: string, projectRoot: string): Promise<BoardCanvas> {
   try {
     const parsed: unknown = JSON.parse(await fs.readFile(filePath, "utf8"));
     if (!isCanvas(parsed)) throw new Error("invalid canvas");
@@ -171,7 +231,30 @@ export async function writeBoard(projectRoot: string, canvas: BoardCanvas): Prom
   if (!isCanvas(canvas)) {
     throw new Error("Invalid canvas payload: expected { nodes: [], edges: [] }");
   }
-  await atomicWrite(await boardPath(projectRoot), JSON.stringify(canvas, null, 2) + "\n");
+  const filePath = await boardPath(projectRoot);
+  await withFileLock(filePath, () => writeBoardAt(filePath, canvas));
+}
+
+/** Unlocked write; callers already inside `withFileLock(boardPath, ...)`. */
+async function writeBoardAt(filePath: string, canvas: BoardCanvas): Promise<void> {
+  await atomicWrite(filePath, JSON.stringify(canvas, null, 2) + "\n");
+}
+
+/**
+ * Read-modify-write primitive for specs/board.canvas — same contract as
+ * `mutateSpecDocument`: the read and the write are one serialized step, so a
+ * layout save can never overwrite an edge another client just drew.
+ */
+async function mutateBoard(
+  projectRoot: string,
+  transform: (canvas: BoardCanvas) => BoardCanvas | Promise<BoardCanvas>
+): Promise<BoardCanvas> {
+  const filePath = await boardPath(projectRoot);
+  return withFileLock(filePath, async () => {
+    const next = await transform(await readBoardAt(filePath, projectRoot));
+    await writeBoardAt(filePath, next);
+    return next;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -195,9 +278,13 @@ export async function setSpecTaskDone(
   line: number,
   done: boolean
 ): Promise<TaskItem[]> {
-  const current = await readSpecDocument(projectRoot, specId, "tasks.md");
-  await writeSpecDocument(projectRoot, specId, "tasks.md", setTaskDone(current, line, done));
-  return readSpecTasks(projectRoot, specId);
+  // One serialized read-modify-write: ticking box 3 can no longer discard the
+  // box 7 someone ticked a millisecond earlier. The returned tasks come from
+  // the content this call actually wrote, so the response never shows a state
+  // that was already superseded.
+  return parseTasksMarkdown(
+    await mutateSpecDocument(projectRoot, specId, "tasks.md", (current) => setTaskDone(current, line, done))
+  );
 }
 
 /** Canvas plus every spec with its approval status and task progress. */
@@ -228,18 +315,19 @@ export async function connectBoardCards(
   toNode: string,
   label?: string
 ): Promise<BoardCanvas> {
-  const canvas = await readBoard(projectRoot);
-  const knownIds = new Set(canvas.nodes.map((node) => node.id));
-  for (const nodeId of [fromNode, toNode]) {
-    if (!knownIds.has(nodeId)) {
-      throw new Error(`Unknown board node: ${nodeId}. Known nodes: ${[...knownIds].join(", ") || "(none)"}`);
+  return mutateBoard(projectRoot, (canvas) => {
+    const knownIds = new Set(canvas.nodes.map((node) => node.id));
+    for (const nodeId of [fromNode, toNode]) {
+      if (!knownIds.has(nodeId)) {
+        throw new Error(`Unknown board node: ${nodeId}. Known nodes: ${[...knownIds].join(", ") || "(none)"}`);
+      }
     }
-  }
 
-  const duplicate = canvas.edges.find(
-    (edge) => edge.fromNode === fromNode && edge.toNode === toNode && (edge.label ?? "") === (label ?? "")
-  );
-  if (!duplicate) {
+    const duplicate = canvas.edges.find(
+      (edge) => edge.fromNode === fromNode && edge.toNode === toNode && (edge.label ?? "") === (label ?? "")
+    );
+    if (duplicate) return canvas;
+
     const color = canvasEdgeColorForLabel(label);
     canvas.edges.push({
       id: `edge-${randomUUID().slice(0, 8)}`,
@@ -248,9 +336,8 @@ export async function connectBoardCards(
       ...(label ? { label } : {}),
       ...(color ? { color } : {})
     });
-    await writeBoard(projectRoot, canvas);
-  }
-  return canvas;
+    return canvas;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -289,9 +376,52 @@ export function canvasEdgeColorForLabel(label: string | undefined): string | und
   return EDGE_KIND_CANVAS_COLOR[classifyEdgeLabel(label)];
 }
 
-/** True when a spec status counts as approved (accepts aprobado/aprobada/approved). */
+/**
+ * The approval rule, written as a POSIX ERE so a shell can use the very same
+ * one.
+ *
+ * KEEP IN SYNC with `SDD_APPROVED_STATUS_ERE` in scripts/check-sdd-gate.sh.
+ * Bash cannot import TypeScript, so the pairing is enforced two ways in
+ * scripts/test-mcp-integration.mjs: a drift assert that reads the literal out
+ * of the script and compares it with this constant, and behavioural cases that
+ * run the TS gate and the bash gate over the same fixtures.
+ */
+export const APPROVED_STATUS_ERE = "aprobad[oa]|approved";
+
+/**
+ * Statuses that CONTAIN an approval word but mean the opposite. The approval
+ * rule is a substring match, so without this guard `No aprobado`, `unapproved`
+ * and `Not approved` all read as approved — the same silent fail-open the rule
+ * above exists to prevent, only in the other direction (found by the adversarial
+ * re-verification of 2026-07-21). Negation wins: a human who wrote "no" meant no.
+ *
+ * KEEP IN SYNC with `SDD_NEGATED_STATUS_ERE` in scripts/check-sdd-gate.sh and
+ * with the mirror in builder/src/sections.ts.
+ */
+export const NEGATED_STATUS_ERE = "\\b(no|not|sin|un|non)[ -]?(aprobad[oa]|approved)";
+
+const APPROVED_STATUS_RE = new RegExp(APPROVED_STATUS_ERE, "i");
+const NEGATED_STATUS_RE = new RegExp(NEGATED_STATUS_ERE, "i");
+
+/**
+ * True when a spec status counts as approved — the ONE predicate of this
+ * project. Every surface (canvas, kanban, dashboard, MCP App, MCP tools, the
+ * gate, the bash gate) resolves approval through this rule.
+ *
+ * Case-insensitive, trimmed and matched as a substring on purpose. The four
+ * private copies this replaced disagreed with each other, and the gate's copy
+ * was the strictest of them: a spec labelled `Aprobada` (the very word the UI
+ * prints), `Approved ` with a trailing space, or `Aprobado / Approved` was
+ * green and "Implement"-enabled in the builder while the gate counted zero
+ * approved specs and therefore SKIPPED every approval quality check — the
+ * placeholder date, the placeholder approver, the empty evidence, the
+ * inconsistent plan, the missing tasks and the user consent log. Failing that
+ * way round means the product's core promise silently failed open.
+ */
 export function isApprovedStatus(status: string | undefined): boolean {
-  return /aprobad[oa]|approved/i.test(status ?? "");
+  const value = (status ?? "").trim();
+  if (NEGATED_STATUS_RE.test(value)) return false;
+  return APPROVED_STATUS_RE.test(value);
 }
 
 /**

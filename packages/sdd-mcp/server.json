@@ -21,6 +21,12 @@
           "description": "Path to the SDD workspace (project with specs/ or a spec/ sidecar). Defaults to the current working directory.",
           "isRequired": false,
           "isSecret": false
+        },
+        {
+          "name": "SDD_WORKSPACES_ROOT",
+          "description": "Where sdd_create_workspace creates ./www/<project-name>. Defaults to the current working directory.",
+          "isRequired": false,
+          "isSecret": false
         }
       ]
     }

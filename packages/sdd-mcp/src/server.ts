@@ -15,7 +15,9 @@ import {
   getBoardView,
   getFrameworkRoot,
   getGateSummary,
+  getWorkspacesRoot,
   listSpecs,
+  readFrameworkFile,
   readSpecTasks,
   recordUserConsent,
   resolveSddRoot,
@@ -40,6 +42,9 @@ import {
 } from "./schemas.js";
 
 const frameworkRoot = getFrameworkRoot();
+// Where ./www/<project-name> workspaces live. Same as frameworkRoot in a
+// checkout; the current working directory when installed from npm.
+const workspacesRoot = getWorkspacesRoot();
 
 function toStructuredContent<T>(value: T): Record<string, unknown> {
   return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
@@ -74,6 +79,7 @@ export function createSddMcpServer(): McpServer {
     async ({ projectName, assistant, profile, useSpecKit }) => {
       const result = await createWorkspace({
         frameworkRoot,
+        workspacesRoot,
         projectName,
         assistant,
         profile,
@@ -933,10 +939,6 @@ export function createSddMcpServer(): McpServer {
   return server;
 }
 
-async function readFrameworkFile(relativePath: string): Promise<string> {
-  return fs.readFile(path.join(frameworkRoot, relativePath), "utf8");
-}
-
 function normalizeParam(value: string | string[]): string {
   return Array.isArray(value) ? value[0] : value;
 }
@@ -951,7 +953,7 @@ function normalizeDocument(value: string): string {
 
 function getManagedWorkspaceProjectRoot(projectNameInput: string | string[]): string {
   const projectName = normalizeWorkspaceProjectName(projectNameInput);
-  const wwwRoot = path.join(frameworkRoot, "www");
+  const wwwRoot = path.join(workspacesRoot, "www");
   const projectRoot = path.join(wwwRoot, projectName);
 
   if (projectRoot === wwwRoot || !projectRoot.startsWith(wwwRoot + path.sep)) {

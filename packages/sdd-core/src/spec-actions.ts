@@ -13,7 +13,7 @@
 // Spec 008 adds validateEarsCriterion: the EARS lint shared (by contract,
 // not by import) with the builder frontend — see builder/src/ears.ts.
 
-import { readSpecDocument, writeSpecDocument } from "./board.js";
+import { mutateSpecDocument } from "./board.js";
 
 // ---------------------------------------------------------------------------
 // approveSpec
@@ -56,47 +56,56 @@ export async function approveSpec(
     throw new Error("Approver name is required / Falta el nombre de quien aprueba");
   }
 
-  const content = await readSpecDocument(projectRoot, specId, "spec.md");
-  if (!STATUS_LINE_RE.test(content)) {
-    throw new Error(
-      `${specId}/spec.md has no "Estado de aprobación / Approval status" section — ` +
-        "copy the block from specs/_template/spec.md first / " +
-        `${specId}/spec.md no tiene la sección "Estado de aprobación" — copia el bloque de specs/_template/spec.md primero`
-    );
-  }
-
   const approvalDate = new Date().toISOString().slice(0, 10);
-  const fieldsUpdated: string[] = [];
-  let next = content.replace(STATUS_LINE_RE, (_line, prefix: string) => {
-    fieldsUpdated.push("status");
-    return `${prefix}\`Aprobado\``;
-  });
-  next = next.replace(DATE_LINE_RE, (_line, prefix: string) => {
-    fieldsUpdated.push("date");
-    return `${prefix}\`${approvalDate}\``;
-  });
-  next = next.replace(APPROVER_LINE_RE, (_line, prefix: string) => {
-    fieldsUpdated.push("approver");
-    return `${prefix}\`${approverName}\``;
-  });
-
   const providedEvidence = evidence?.trim();
+  let fieldsUpdated: string[] = [];
   let evidenceUpdated = false;
-  next = next.replace(EVIDENCE_LINE_RE, (_line, prefix: string, existing: string | undefined) => {
-    // Caller-provided evidence always wins (spec 010, R2); otherwise only
-    // fill the line when it is empty — never overwrite a real link/quote.
-    if (providedEvidence) {
+
+  // The read and the write are one serialized step (see mutateSpecDocument), so
+  // approving cannot silently drop a section edit saved a moment earlier.
+  await mutateSpecDocument(projectRoot, specId, "spec.md", (content) => {
+    if (!STATUS_LINE_RE.test(content)) {
+      throw new Error(
+        `${specId}/spec.md has no "Estado de aprobación / Approval status" section — ` +
+          "copy the block from specs/_template/spec.md first / " +
+          `${specId}/spec.md no tiene la sección "Estado de aprobación" — copia el bloque de specs/_template/spec.md primero`
+      );
+    }
+
+    // Reset per attempt: the transform must be safe to describe one write only.
+    fieldsUpdated = [];
+    evidenceUpdated = false;
+
+    let next = content.replace(STATUS_LINE_RE, (_line, prefix: string) => {
+      fieldsUpdated.push("status");
+      return `${prefix}\`Aprobado\``;
+    });
+    next = next.replace(DATE_LINE_RE, (_line, prefix: string) => {
+      fieldsUpdated.push("date");
+      return `${prefix}\`${approvalDate}\``;
+    });
+    next = next.replace(APPROVER_LINE_RE, (_line, prefix: string) => {
+      fieldsUpdated.push("approver");
+      return `${prefix}\`${approverName}\``;
+    });
+
+    next = next.replace(EVIDENCE_LINE_RE, (_line, prefix: string, existing: string | undefined) => {
+      // Caller-provided evidence always wins (spec 010, R2); otherwise only
+      // fill the line when it is empty — never overwrite a real link/quote.
+      if (providedEvidence) {
+        evidenceUpdated = true;
+        fieldsUpdated.push("evidence");
+        return `${prefix} ${providedEvidence}`;
+      }
+      if (existing && existing.trim()) return `${prefix} ${existing.trim()}`;
       evidenceUpdated = true;
       fieldsUpdated.push("evidence");
-      return `${prefix} ${providedEvidence}`;
-    }
-    if (existing && existing.trim()) return `${prefix} ${existing.trim()}`;
-    evidenceUpdated = true;
-    fieldsUpdated.push("evidence");
-    return `${prefix} ${BUILDER_EVIDENCE} (${approvalDate})`;
+      return `${prefix} ${BUILDER_EVIDENCE} (${approvalDate})`;
+    });
+
+    return next;
   });
 
-  await writeSpecDocument(projectRoot, specId, "spec.md", next);
   return { specId, status: "Aprobado", approvalDate, approver: approverName, evidenceUpdated, fieldsUpdated };
 }
 
@@ -255,34 +264,42 @@ export async function updateSpecSections(
   sections: SpecSectionsInput
 ): Promise<UpdateSpecSectionsResult> {
   const provided = normalizeSections(sections);
-  const content = await readSpecDocument(projectRoot, specId, "spec.md");
-  const lines = content.split("\n");
-  const updated: SpecSectionKey[] = [];
-  const created: SpecSectionKey[] = [];
+  let updated: SpecSectionKey[] = [];
+  let created: SpecSectionKey[] = [];
 
-  for (const key of SECTION_ORDER) {
-    const rendered = provided.get(key);
-    if (rendered === undefined) continue;
-    const spec = SECTION_SPECS[key];
-    const headingIndex = findHeading(lines, spec);
-    const body = rendered ? ["", ...rendered.split("\n")] : [""];
+  // Serialized read-modify-write (see mutateSpecDocument): two guided-editor
+  // saves queue instead of both rewriting the same pre-image, so the first
+  // author's sections survive the second author's save.
+  await mutateSpecDocument(projectRoot, specId, "spec.md", (content) => {
+    const lines = content.split("\n");
+    updated = [];
+    created = [];
 
-    if (headingIndex === -1) {
-      // Append the missing section at the end without touching anything else.
-      while (lines.length > 0 && lines[lines.length - 1].trim() === "") lines.pop();
-      lines.push("", spec.heading, ...body, "");
-      created.push(key);
-      continue;
+    for (const key of SECTION_ORDER) {
+      const rendered = provided.get(key);
+      if (rendered === undefined) continue;
+      const spec = SECTION_SPECS[key];
+      const headingIndex = findHeading(lines, spec);
+      const body = rendered ? ["", ...rendered.split("\n")] : [""];
+
+      if (headingIndex === -1) {
+        // Append the missing section at the end without touching anything else.
+        while (lines.length > 0 && lines[lines.length - 1].trim() === "") lines.pop();
+        lines.push("", spec.heading, ...body, "");
+        created.push(key);
+        continue;
+      }
+
+      const end = findSectionEnd(lines, headingIndex + 1);
+      lines.splice(headingIndex + 1, end - (headingIndex + 1), ...body, "");
+      updated.push(key);
     }
 
-    const end = findSectionEnd(lines, headingIndex + 1);
-    lines.splice(headingIndex + 1, end - (headingIndex + 1), ...body, "");
-    updated.push(key);
-  }
+    let next = lines.join("\n");
+    if (!next.endsWith("\n")) next += "\n";
+    return next;
+  });
 
-  let next = lines.join("\n");
-  if (!next.endsWith("\n")) next += "\n";
-  await writeSpecDocument(projectRoot, specId, "spec.md", next);
   return { specId, updated, created };
 }
 

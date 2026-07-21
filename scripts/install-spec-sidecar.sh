@@ -92,6 +92,39 @@ cp -n "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$SPEC_ROOT/bitacora/global/PRO
 cp -n "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DAILY_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/HANDOFF_TEMPLATE.md"
 cp -n "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DECISION_TEMPLATE.md"
+
+# Keep the empty logbook folders alive through git clones: validate-sdd.sh
+# requires them, and git does not track empty directories.
+for keep_dir in global diaria handoffs decisiones; do
+  [ -f "$SPEC_ROOT/bitacora/$keep_dir/.gitkeep" ] || : > "$SPEC_ROOT/bitacora/$keep_dir/.gitkeep"
+done
+
+# Seed a clean, empty decision index for the new workspace instead of copying
+# this framework's own records.
+if [ ! -f "$SPEC_ROOT/bitacora/decisiones/README.md" ]; then
+  cat > "$SPEC_ROOT/bitacora/decisiones/README.md" << 'DECIDXEOF'
+# Decision log / Bitácora de decisiones
+
+EN: One file per decision, `YYYY-MM-DD-<slug>.md`, from `../templates/DECISION_TEMPLATE.md`.
+ES: Un archivo por decisión, `YYYY-MM-DD-<slug>.md`, desde `../templates/DECISION_TEMPLATE.md`.
+
+Record a decision when **any** of these is true / Registra una decisión cuando se cumpla **alguna**:
+
+- it chose between real alternatives / eligió entre alternativas reales;
+- it will be expensive to reverse / revertirla será caro;
+- a future reader would ask *"why is it like this?"* / alguien preguntará después *"¿por qué es así?"*.
+
+Every rationale points at a source (commit, `file:line`, spec history, CHANGELOG, `idea/`). If none exists, say so — never invent one.
+Cada justificación apunta a una fuente. Si no existe, dilo — nunca la inventes.
+
+Use `/sdd:decision` to capture one interactively. / Usa `/sdd:decision` para capturarla conversando.
+
+## Records / Registros
+
+| Date / Fecha | Decision / Decisión | File / Archivo |
+|---|---|---|
+DECIDXEOF
+fi
 cp -n "$ROOT_DIR/.sdd.README.template.md" "$SPEC_ROOT/.sdd/README.md"
 
 cp -n "$ROOT_DIR/scripts/lib/sdd-root.sh" "$SPEC_ROOT/scripts/lib/sdd-root.sh"

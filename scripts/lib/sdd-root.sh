@@ -37,6 +37,46 @@ sdd_resolve_root() {
   return 1
 }
 
+# Resolve the SDD root for a script entry point, FAILING CLOSED.
+#
+# Usage: ROOT="$(sdd_require_root "$ROOT_INPUT" "$SCRIPT_DIR/..")" || exit 1
+#
+# An explicit argument that is not an SDD workspace is a hard error. The
+# previous `sdd_resolve_root "$1" || sdd_resolve_root "$SCRIPT_DIR/.."` chain
+# silently fell back to the checkout the script shipped with, so pointing the
+# gate at an empty directory — or at a real project with no SDD workspace —
+# validated THIS framework instead and printed "0 error(s)", exit 0. Through
+# action.yml (whose fallback is the action's own checkout, a complete workspace
+# with approved specs and a tracked .sdd/user-consent.log) every consumer
+# without an SDD workspace got three green groups in CI.
+#
+# With NO argument at all the script still resolves its own workspace, which is
+# the `./scripts/check-sdd-gate.sh` convenience form.
+sdd_require_root() {
+  local input="${1-}"
+  local fallback="${2-}"
+
+  if [ -n "$input" ]; then
+    if sdd_resolve_root "$input"; then
+      return 0
+    fi
+    {
+      printf "Error: not an SDD workspace: %s\n" "$input"
+      printf "EN: expected sdd.policy.yaml + idea/ + specs/ + bitacora/ in that path or in its spec/ sidecar.\n"
+      printf "ES: se esperaba sdd.policy.yaml + idea/ + specs/ + bitacora/ en esa ruta o en su sidecar spec/.\n"
+      printf "Install one with scripts/install-spec-sidecar.sh, or point at the right folder.\n"
+    } >&2
+    return 1
+  fi
+
+  if [ -n "$fallback" ] && sdd_resolve_root "$fallback"; then
+    return 0
+  fi
+
+  printf "Error: could not resolve an SDD root (no path given and %s is not an SDD workspace).\n" "${fallback:-.}" >&2
+  return 1
+}
+
 sdd_project_root() {
   local sdd_root="$1"
 
