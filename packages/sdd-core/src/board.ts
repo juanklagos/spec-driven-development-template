@@ -46,6 +46,8 @@ export interface CanvasEdge {
   fromSide?: string;
   toSide?: string;
   label?: string;
+  /** JSON Canvas color (preset "1".."6" or hex); typed edges use it (spec 009). */
+  color?: string;
 }
 
 export interface BoardCanvas {
@@ -231,8 +233,110 @@ export async function connectBoardCards(
     (edge) => edge.fromNode === fromNode && edge.toNode === toNode && (edge.label ?? "") === (label ?? "")
   );
   if (!duplicate) {
-    canvas.edges.push({ id: `edge-${randomUUID().slice(0, 8)}`, fromNode, toNode, ...(label ? { label } : {}) });
+    const color = canvasEdgeColorForLabel(label);
+    canvas.edges.push({
+      id: `edge-${randomUUID().slice(0, 8)}`,
+      fromNode,
+      toNode,
+      ...(label ? { label } : {}),
+      ...(color ? { color } : {})
+    });
     await writeBoard(projectRoot, canvas);
   }
   return canvas;
+}
+
+// ---------------------------------------------------------------------------
+// Typed edges + dependency warnings (spec 009, R2)
+// ---------------------------------------------------------------------------
+// An edge's `label` carries the canonical dependency type; the ES and EN
+// spellings are both canonical so agents and the builder UI can write either.
+// KEEP THE LABEL SETS IN SYNC with builder/src/convert.ts (the frontend does
+// not import sdd-core; same keep-in-sync contract as the EARS lint).
+
+export type CanvasEdgeKind = "related" | "depends" | "blocks";
+
+const DEPENDS_EDGE_LABELS = new Set(["depende de", "depends on"]);
+const BLOCKS_EDGE_LABELS = new Set(["bloquea", "blocks"]);
+
+/** JSON Canvas preset colors used for typed edges (amber/red). */
+const EDGE_KIND_CANVAS_COLOR: Partial<Record<CanvasEdgeKind, string>> = {
+  depends: "3", // amber preset
+  blocks: "1" // red preset
+};
+
+/** Classify an edge label into its dependency kind ("related" by default). */
+export function classifyEdgeLabel(label: string | undefined): CanvasEdgeKind {
+  const value = (label ?? "").trim().toLowerCase();
+  if (DEPENDS_EDGE_LABELS.has(value)) return "depends";
+  if (BLOCKS_EDGE_LABELS.has(value)) return "blocks";
+  return "related";
+}
+
+/** Distinctive JSON Canvas color for a typed edge label, or undefined. */
+export function canvasEdgeColorForLabel(label: string | undefined): string | undefined {
+  return EDGE_KIND_CANVAS_COLOR[classifyEdgeLabel(label)];
+}
+
+/** True when a spec status counts as approved (same rule as the builder UI). */
+export function isApprovedStatus(status: string | undefined): boolean {
+  return /aprobad[oa]|approved/i.test(status ?? "");
+}
+
+export interface DependencyWarning {
+  edgeId: string;
+  /** Spec that is approved while leaning on an unapproved dependency. */
+  dependent: string;
+  /** The unapproved spec the dependent relies on. */
+  dependency: string;
+  /** The edge label that produced the warning (as written on the canvas). */
+  label: string;
+  /** Bilingual, human-readable explanation. */
+  message: string;
+}
+
+const NODE_SPEC_FILE_RE = /^specs\/([^/]+)\/spec\.md$/;
+
+/**
+ * Cross-check typed edges against real approval state: for every
+ * "depende de"/"depends on" or "bloquea"/"blocks" edge between TWO real
+ * specs, warn when the dependent spec is approved but its dependency is not.
+ * Direction: A --depende de--> B means A depends on B; A --bloquea--> B
+ * means B depends on A. Edges touching notes or unknown nodes are ignored.
+ */
+export async function getDependencyWarnings(projectRoot: string): Promise<DependencyWarning[]> {
+  const [canvas, specs] = await Promise.all([readBoard(projectRoot), listSpecs(projectRoot)]);
+  const statusById = new Map(specs.map((spec) => [spec.id, spec.status]));
+
+  // Canvas node id -> spec id (a node is a spec when its id is a spec id or
+  // its file points at specs/<id>/spec.md — same resolution as the builder).
+  const nodeToSpec = new Map<string, string>();
+  for (const node of canvas.nodes) {
+    const fromFile = node.file?.match(NODE_SPEC_FILE_RE)?.[1];
+    const specId = statusById.has(node.id) ? node.id : fromFile && statusById.has(fromFile) ? fromFile : undefined;
+    if (specId) nodeToSpec.set(node.id, specId);
+  }
+
+  const warnings: DependencyWarning[] = [];
+  for (const edge of canvas.edges) {
+    const kind = classifyEdgeLabel(edge.label);
+    if (kind === "related") continue;
+    const from = nodeToSpec.get(edge.fromNode);
+    const to = nodeToSpec.get(edge.toNode);
+    if (!from || !to || from === to) continue;
+    const dependent = kind === "depends" ? from : to;
+    const dependency = kind === "depends" ? to : from;
+    if (isApprovedStatus(statusById.get(dependent)) && !isApprovedStatus(statusById.get(dependency))) {
+      warnings.push({
+        edgeId: edge.id,
+        dependent,
+        dependency,
+        label: edge.label ?? "",
+        message:
+          `${dependent} está aprobada pero depende de ${dependency}, que no está aprobada / ` +
+          `${dependent} is approved but depends on ${dependency}, which is not approved`
+      });
+    }
+  }
+  return warnings;
 }

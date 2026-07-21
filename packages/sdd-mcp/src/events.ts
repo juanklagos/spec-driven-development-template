@@ -43,6 +43,11 @@ export function createEventHub(projectRoot: string): EventHub {
     for (const client of sseClients) sseWrite(client, frame);
   }
 
+  /** Lightweight presence (spec 009, R4): everyone learns the client count. */
+  function broadcastPresence(): void {
+    sseBroadcast("presence", { count: sseClients.size });
+  }
+
   function queueWatcherChange(relPath: string): void {
     const base = path.basename(relPath);
     // Ignore atomic-write temp files (sdd-core writes "<file>.tmp-<pid>" then
@@ -96,6 +101,7 @@ export function createEventHub(projectRoot: string): EventHub {
     });
     res.write(`event: hello\ndata: ${JSON.stringify({ projectRoot })}\n\n`);
     sseClients.add(res);
+    broadcastPresence(); // includes the newcomer, so every tab shows the same count
     void ensureSpecsWatcher();
 
     if (!keepAliveTimer) {
@@ -110,6 +116,7 @@ export function createEventHub(projectRoot: string): EventHub {
 
     req.on("close", () => {
       sseClients.delete(res);
+      broadcastPresence();
       if (sseClients.size === 0 && keepAliveTimer) {
         clearInterval(keepAliveTimer);
         keepAliveTimer = null;

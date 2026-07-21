@@ -10,7 +10,9 @@ function splitSpecId(id: string): { num: string; name: string } {
 export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
   const spec = useBuilderStore((s) => s.specs[data.specId]);
   const gateIssues = useBuilderStore((s) => s.gate?.specIssues[data.specId]);
+  const depWarningsAll = useBuilderStore((s) => s.gate?.dependencyWarnings);
   const gateErrors = gateIssues?.filter((issue) => issue.level === "error") ?? [];
+  const depWarnings = (depWarningsAll ?? []).filter((w) => w.dependent === data.specId);
   const status = spec?.status ?? "Pendiente";
   const done = spec?.tasks.done ?? 0;
   const total = spec?.tasks.total ?? 0;
@@ -37,6 +39,17 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
               title={`Errores del gate / Gate errors:\n${gateErrors.map((e) => `• ${e.message}`).join("\n")}`}
             >
               ⚠ {gateErrors.length}
+            </span>
+          ) : null}
+          {depWarnings.length > 0 ? (
+            // Approved spec leaning on a not-approved dependency (spec 009, R2).
+            <span
+              className="badge warn"
+              title={`Dependencias sin aprobar / Unapproved dependencies:\n${depWarnings
+                .map((w) => `• ${w.message}`)
+                .join("\n")}`}
+            >
+              ⚠ dep
             </span>
           ) : null}
           <span className={`badge ${tone}`}>{badgeText}</span>

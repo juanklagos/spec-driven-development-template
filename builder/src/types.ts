@@ -23,6 +23,8 @@ export interface CanvasEdge {
   fromSide?: string;
   toSide?: string;
   label?: string;
+  /** JSON Canvas color (preset "1".."6" or hex); typed edges carry it (spec 009). */
+  color?: string;
 }
 
 export interface BoardCanvas {
@@ -76,6 +78,17 @@ export interface ValidationCounts {
   messages: ValidationMessage[];
 }
 
+/** Typed-edge dependency warning (spec 009, R2; mirrors sdd-core). */
+export interface DependencyWarning {
+  edgeId: string;
+  /** Approved spec that leans on an unapproved dependency. */
+  dependent: string;
+  /** The unapproved spec the dependent relies on. */
+  dependency: string;
+  label: string;
+  message: string;
+}
+
 export interface GateSummary {
   ok: boolean;
   errors: number;
@@ -86,6 +99,8 @@ export interface GateSummary {
   validation: ValidationCounts;
   specIssues: Record<string, ValidationMessage[]>;
   generalIssues: ValidationMessage[];
+  /** Optional so a gate payload from an older server never breaks the UI. */
+  dependencyWarnings?: DependencyWarning[];
 }
 
 // --- Spec actions (approve + guided sections) ------------------------------
@@ -141,6 +156,30 @@ export type AppEdge = Edge<EdgeData, "labeled">;
 
 export type SaveState = "saved" | "dirty" | "saving" | "error";
 export type PaletteKind = "idea" | "epic" | "spec";
+/** Canvas (React Flow) vs Kanban board view (spec 009, R1). */
+export type ViewMode = "canvas" | "board";
+
+// --- Tasks -> GitHub issues (POST /api/spec/:id/issues, spec 009, R3) -------
+
+export type IssueTaskStatus = "created" | "skipped" | "failed";
+
+export interface IssueTaskResult {
+  line: number;
+  task: string;
+  title: string;
+  status: IssueTaskStatus;
+  url?: string;
+  error?: string;
+}
+
+export interface CreateIssuesResult {
+  specId: string;
+  repo: string;
+  created: number;
+  skipped: number;
+  failed: number;
+  results: IssueTaskResult[];
+}
 
 // --- Live sync (SSE /api/events) -------------------------------------------
 

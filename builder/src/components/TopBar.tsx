@@ -40,12 +40,26 @@ function GateChip() {
       ? "Comprobando el gate… / Checking the gate…"
       : `${gate.errors} errores/errors · ${gate.warnings} avisos/warnings · ` +
         `${gate.approvedSpecs}/${gate.totalSpecs} specs aprobadas/approved`;
+  const depWarnings = gate?.dependencyWarnings ?? [];
 
   return (
     <span className="gate-group" data-tour="gate">
       <span className={`gate-chip ${tone}`} title={title}>
         {label}
       </span>
+      {depWarnings.length > 0 ? (
+        // Advisory amber (spec 009, R2): typed edges where an approved spec
+        // depends on a not-approved one. Never closes the gate.
+        <span
+          className="gate-chip warn"
+          title={
+            "Dependencias sin aprobar / Unapproved dependencies:\n" +
+            depWarnings.map((w) => `• ${w.message}`).join("\n")
+          }
+        >
+          ⚠ {depWarnings.length} dep
+        </span>
+      ) : null}
       <button
         className="btn small"
         onClick={() => void refreshGate()}
@@ -54,6 +68,45 @@ function GateChip() {
       >
         {gateBusy ? "Validando… / Validating…" : "Validar ahora / Validate now"}
       </button>
+    </span>
+  );
+}
+
+/** Canvas ↔ kanban toggle (spec 009, R1). Same data, two projections. */
+function ViewToggle() {
+  const viewMode = useBuilderStore((s) => s.viewMode);
+  const setViewMode = useBuilderStore((s) => s.setViewMode);
+  return (
+    <span className="view-toggle" role="group" aria-label="Vista / View">
+      <button
+        className={`view-btn${viewMode === "canvas" ? " active" : ""}`}
+        onClick={() => setViewMode("canvas")}
+        aria-pressed={viewMode === "canvas"}
+      >
+        🗺️ Lienzo / Canvas
+      </button>
+      <button
+        className={`view-btn${viewMode === "board" ? " active" : ""}`}
+        onClick={() => setViewMode("board")}
+        aria-pressed={viewMode === "board"}
+      >
+        📋 Tablero / Board
+      </button>
+    </span>
+  );
+}
+
+/** 👥 N when more than one SSE client is on this workspace (spec 009, R4). */
+function PresenceChip() {
+  const liveStatus = useBuilderStore((s) => s.liveStatus);
+  const count = useBuilderStore((s) => s.presenceCount);
+  if (liveStatus !== "on" || count < 2) return null;
+  return (
+    <span
+      className="presence-chip"
+      title={`${count} personas viendo este workspace / ${count} people viewing this workspace`}
+    >
+      👥 {count}
     </span>
   );
 }
@@ -136,6 +189,8 @@ export function TopBar() {
         </code>
       ) : null}
       <div className="topbar-right">
+        <ViewToggle />
+        <span className="topbar-sep" aria-hidden />
         <GateChip />
         <span className="topbar-sep" aria-hidden />
         <HistoryButtons />
@@ -159,6 +214,7 @@ export function TopBar() {
           ?
         </button>
         <span className="topbar-sep" aria-hidden />
+        <PresenceChip />
         <span className={`live-indicator ${liveStatus}`} title={LIVE_TITLES[liveStatus]}>
           {LIVE_LABELS[liveStatus]}
         </span>

@@ -3,7 +3,7 @@ import { api, errorMessage } from "../api";
 import { useBuilderStore } from "../store";
 import { ImplementModal } from "./ImplementModal";
 import { SectionEditor } from "./SectionEditor";
-import type { SpecDetail, TaskItem } from "../types";
+import type { CreateIssuesResult, SpecDetail, TaskItem } from "../types";
 
 const EXCERPT_LINES = 25;
 
@@ -70,6 +70,93 @@ function ApprovePanel({ specId, onDone }: { specId: string; onDone: () => void }
           {busy ? "Aprobando… / Approving…" : "Confirmar / Confirm"}
         </button>
       </div>
+    </div>
+  );
+}
+
+// Tasks -> GitHub issues (spec 009, R3): one gh-CLI issue per pending task,
+// idempotent by title. The server's bilingual precondition errors (no git
+// repo/remote, gh missing or unauthenticated) are shown as-is with a hint.
+function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: number }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<CreateIssuesResult | null>(null);
+
+  // Selecting another spec resets the panel (the parent remounts us via key,
+  // but be defensive against future refactors).
+  useEffect(() => {
+    setError(null);
+    setResult(null);
+  }, [specId]);
+
+  const create = async () => {
+    if (busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      setResult(await api.createIssues(specId));
+    } catch (err) {
+      setError(errorMessage(err));
+      setResult(null);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const STATUS_ICON = { created: "✅", skipped: "⏭", failed: "⚠" } as const;
+  const noPending = pendingCount === 0;
+
+  return (
+    <div className="issues-panel">
+      <h3>Issues de GitHub / GitHub issues</h3>
+      <button
+        className="btn issues-btn"
+        disabled={busy || noPending}
+        title={
+          noPending
+            ? "No hay tareas pendientes / No pending tasks"
+            : "Un issue por tarea pendiente vía gh CLI; los títulos existentes se saltan / One issue per pending task via the gh CLI; existing titles are skipped"
+        }
+        onClick={() => void create()}
+      >
+        🐙 {busy ? "Creando issues… / Creating issues…" : "Crear issues / Create issues"}
+      </button>
+      {error ? (
+        <div className="drawer-error">
+          <p className="issues-error-msg">⚠ {error}</p>
+          <p className="issues-error-hint">
+            Requiere un repo git con remote y gh CLI autenticado. / Requires a git repo with a remote
+            and an authenticated gh CLI.
+          </p>
+        </div>
+      ) : null}
+      {result ? (
+        <div className="issues-result">
+          <p className="issues-summary">
+            <code>{result.repo}</code> · {result.created} creadas/created · {result.skipped}{" "}
+            saltadas/skipped · {result.failed} fallidas/failed
+          </p>
+          {result.results.length === 0 ? (
+            <p className="drawer-dim">Sin tareas pendientes / No pending tasks</p>
+          ) : (
+            <ul className="issues-list">
+              {result.results.map((row) => (
+                <li key={row.line} className={`issue-row ${row.status}`}>
+                  <span aria-hidden>{STATUS_ICON[row.status]}</span>{" "}
+                  {row.url ? (
+                    <a href={row.url} target="_blank" rel="noreferrer">
+                      {row.title}
+                    </a>
+                  ) : (
+                    row.title
+                  )}
+                  {row.error ? <span className="issue-error"> — {row.error}</span> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -244,6 +331,11 @@ export function SpecDrawer() {
               ))
             )}
           </ul>
+          <IssuesPanel
+            key={specId}
+            specId={specId}
+            pendingCount={detail.tasks.filter((task) => !task.done).length}
+          />
           <h3>spec.md (extracto / excerpt)</h3>
           <pre className="spec-excerpt">{excerpt}</pre>
           <p className="drawer-note">

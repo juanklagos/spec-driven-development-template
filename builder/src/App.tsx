@@ -21,6 +21,7 @@ import {
 import { api } from "./api";
 import { startLive } from "./live";
 import { AssistantWizard } from "./components/AssistantWizard";
+import { KanbanBoard } from "./components/KanbanBoard";
 import { LabeledEdge } from "./components/LabeledEdge";
 import { NewSpecModal } from "./components/NewSpecModal";
 import { NoteNode } from "./components/NoteNode";
@@ -99,6 +100,7 @@ function Shell() {
   const galleryOpen = useBuilderStore((s) => s.galleryOpen);
   const assistantOpen = useBuilderStore((s) => s.assistantOpen);
   const maybeStartTour = useBuilderStore((s) => s.maybeStartTour);
+  const viewMode = useBuilderStore((s) => s.viewMode);
 
   const { screenToFlowPosition, fitView } = useReactFlow();
   const { setNodeRef: setDropRef } = useDroppable({ id: "canvas" });
@@ -106,7 +108,6 @@ function Shell() {
 
   const [dragKind, setDragKind] = useState<PaletteKind | null>(null);
   const [specModalPos, setSpecModalPos] = useState<XYPosition | null>(null);
-  const fitted = useRef(false);
   const canvasEl = useRef<HTMLDivElement | null>(null);
   const suppressClick = useRef(false);
 
@@ -115,14 +116,13 @@ function Shell() {
     startLive();
   }, [load]);
 
-  // Fit the view once the board has loaded (nodes arrive after mount).
+  // Fit the view once the board has loaded (nodes arrive after mount) and
+  // again when returning from the kanban view (the canvas remounts, spec 009).
   useEffect(() => {
-    if (!loading && !loadError && !fitted.current) {
-      fitted.current = true;
-      const t = setTimeout(() => void fitView({ padding: 0.15, maxZoom: 1 }), 80);
-      return () => clearTimeout(t);
-    }
-  }, [loading, loadError, fitView]);
+    if (loading || loadError || viewMode !== "canvas") return;
+    const t = setTimeout(() => void fitView({ padding: 0.15, maxZoom: 1 }), 80);
+    return () => clearTimeout(t);
+  }, [loading, loadError, viewMode, fitView]);
 
   // First visit: offer the welcome tour once the board is on screen.
   useEffect(() => {
@@ -229,6 +229,13 @@ function Shell() {
           </button>
         </div>
       ) : null}
+      {viewMode === "board" ? (
+        // Kanban projection (spec 009, R1): same specs, same drawer.
+        <main className="main">
+          <KanbanBoard />
+          <SpecDrawer />
+        </main>
+      ) : (
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <main className="main">
           <Palette onQuickAdd={handleQuickAdd} />
@@ -277,6 +284,7 @@ function Shell() {
           ) : null}
         </DragOverlay>
       </DndContext>
+      )}
       {specModalPos ? (
         <NewSpecModal onClose={() => setSpecModalPos(null)} onCreate={handleCreateSpec} />
       ) : null}

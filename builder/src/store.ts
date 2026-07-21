@@ -9,7 +9,16 @@ import {
 } from "@xyflow/react";
 import { create } from "zustand";
 import { api, errorMessage } from "./api";
-import { ARROW, EPIC_COLOR, IDEA_COLOR, NOTE_CARD, SPEC_CARD, boardToFlow, flowToBoard } from "./convert";
+import {
+  ARROW,
+  EPIC_COLOR,
+  IDEA_COLOR,
+  NOTE_CARD,
+  SPEC_CARD,
+  boardToFlow,
+  flowToBoard,
+  styleEdgeForLabel
+} from "./convert";
 import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates";
 import type {
   AppEdge,
@@ -22,7 +31,8 @@ import type {
   LiveStatus,
   SaveState,
   SpecSummary,
-  TaskItem
+  TaskItem,
+  ViewMode
 } from "./types";
 
 const SAVE_DEBOUNCE_MS = 500;
@@ -66,6 +76,10 @@ interface BuilderStore {
   editingEdgeId: string | null;
   liveStatus: LiveStatus;
   workspaceChanged: boolean;
+  /** Canvas vs kanban board view (spec 009, R1). Same data, two projections. */
+  viewMode: ViewMode;
+  /** Connected SSE clients on this workspace (spec 009, R4); 0 = unknown. */
+  presenceCount: number;
   /** Bumped when spec documents change on disk so open views (drawer) re-sync. */
   specsVersion: number;
   /** Gate semaphore (GET /api/gate); null until the first fetch resolves. */
@@ -89,6 +103,8 @@ interface BuilderStore {
   updateNoteText: (id: string, text: string) => void;
   updateEdgeLabel: (id: string, label: string) => void;
   setEditingEdge: (id: string | null) => void;
+  setViewMode: (mode: ViewMode) => void;
+  setPresenceCount: (count: number) => void;
   selectSpec: (id: string | null) => void;
   applyTasks: (id: string, tasks: TaskItem[]) => void;
   refreshSpecs: () => Promise<void>;
@@ -123,6 +139,8 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   editingEdgeId: null,
   liveStatus: "off",
   workspaceChanged: false,
+  viewMode: "canvas",
+  presenceCount: 0,
   specsVersion: 0,
   gate: null,
   gateBusy: false,
@@ -244,13 +262,20 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     }
     get().pushHistory();
     set({
-      edges: get().edges.map((e) => (e.id === id ? { ...e, data: { ...e.data, label } } : e)),
+      edges: get().edges.map((e) =>
+        // Typed labels re-derive the edge's stroke/arrow color (spec 009, R2).
+        e.id === id ? styleEdgeForLabel({ ...e, data: { ...e.data, label } }) : e
+      ),
       editingEdgeId: null
     });
     get().scheduleSave();
   },
 
   setEditingEdge: (id) => set({ editingEdgeId: id }),
+
+  setViewMode: (mode) => set({ viewMode: mode }),
+
+  setPresenceCount: (count) => set({ presenceCount: count }),
 
   selectSpec: (id) => set({ selectedSpecId: id }),
 

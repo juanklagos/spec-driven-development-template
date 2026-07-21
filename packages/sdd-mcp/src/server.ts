@@ -377,7 +377,8 @@ export function createSddMcpServer(): McpServer {
     toNode: z.string(),
     fromSide: z.string().optional(),
     toSide: z.string().optional(),
-    label: z.string().optional()
+    label: z.string().optional(),
+    color: z.string().optional()
   });
 
   const canvasSchema = z.object({
@@ -535,12 +536,22 @@ export function createSddMcpServer(): McpServer {
     messages: z.array(validationMessageSchema)
   });
 
+  // Typed-edge dependency warning (spec 009, R2): approved spec leaning on an
+  // unapproved dependency, derived from the board's "depende de"/"bloquea" edges.
+  const dependencyWarningSchema = z.object({
+    edgeId: z.string(),
+    dependent: z.string(),
+    dependency: z.string(),
+    label: z.string(),
+    message: z.string()
+  });
+
   server.registerTool(
     "sdd_gate_summary",
     {
       title: "Gate semaphore summary",
       description:
-        "One-call gate semaphore: runs the SDD gate check plus the structural validation and groups every message by the spec it belongs to (the same data the SDD Builder chip and per-card badges show).",
+        "One-call gate semaphore: runs the SDD gate check plus the structural validation and groups every message by the spec it belongs to (the same data the SDD Builder chip and per-card badges show). Includes advisory dependencyWarnings from the board's typed edges (approved spec depending on a not-approved one).",
       inputSchema: {
         projectRoot: projectRootSchema
       },
@@ -553,7 +564,8 @@ export function createSddMcpServer(): McpServer {
         gate: validationResultSchema.extend({ approvedSpecs: z.number(), totalSpecs: z.number() }),
         validation: validationResultSchema,
         specIssues: z.record(z.array(validationMessageSchema)),
-        generalIssues: z.array(validationMessageSchema)
+        generalIssues: z.array(validationMessageSchema),
+        dependencyWarnings: z.array(dependencyWarningSchema)
       }
     },
     async ({ projectRoot }) => {

@@ -148,6 +148,65 @@ code {
   color: var(--danger);
 }
 
+/* Advisory dependency warnings (spec 009, R2) */
+.gate-chip.warn {
+  background: var(--amber-soft);
+  border-color: var(--amber);
+  color: var(--amber);
+  cursor: help;
+}
+
+/* ---------- View toggle + presence (spec 009, R1/R4) ---------- */
+
+.view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-btn {
+  appearance: none;
+  border: none;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-btn + .view-btn {
+  border-left: 1px solid var(--border);
+}
+
+.view-btn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.view-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.presence-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  white-space: nowrap;
+  cursor: help;
+}
+
 .save-indicator {
   display: inline-flex;
   align-items: center;
@@ -475,6 +534,13 @@ code {
   cursor: help;
 }
 
+.badge.warn {
+  background: var(--amber-soft);
+  color: var(--amber);
+  outline: 1px solid var(--amber);
+  cursor: help;
+}
+
 .spec-card-badges {
   display: inline-flex;
   align-items: center;
@@ -605,6 +671,35 @@ code {
   font: inherit;
   width: 12ch;
   outline: none;
+}
+
+/* Typed edges (spec 009, R2): amber depends, red blocks */
+
+.edge-label.kind-depends {
+  border-color: #d97706;
+  color: #d97706;
+}
+
+.edge-label.kind-blocks {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.edge-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.edge-editor select {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.74rem;
+  outline: none;
+  cursor: pointer;
+  max-width: 22ch;
 }
 
 /* ---------- Overlays ---------- */
@@ -1277,6 +1372,183 @@ code {
   margin: 0;
   font-size: 0.72rem;
   color: var(--amber);
+}
+
+/* ---------- Kanban board view (spec 009, R1) ---------- */
+
+.kanban-area {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.kanban-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(15rem, 1fr));
+  gap: 0.9rem;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+}
+
+.kanban-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.12s ease;
+}
+
+.kanban-col.over {
+  border-color: var(--accent);
+}
+
+.kanban-col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.kanban-count {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+  font-size: 0.72rem;
+}
+
+.kanban-col-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.kanban-empty {
+  margin: 0.6rem 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.kanban-card {
+  cursor: grab;
+  touch-action: none;
+}
+
+.kanban-card.dragging {
+  opacity: 0.35;
+}
+
+.kanban-card.ghost {
+  cursor: grabbing;
+  box-shadow: var(--shadow-strong);
+  width: 17rem;
+}
+
+.kanban-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 1.2rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: calc(100% - 2rem);
+  background: var(--surface);
+  border: 1px solid var(--amber);
+  border-radius: 12px;
+  box-shadow: var(--shadow-strong);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  z-index: 30;
+  animation: drawer-in 0.16s ease;
+}
+
+/* ---------- Tasks -> GitHub issues (spec 009, R3) ---------- */
+
+.issues-panel {
+  margin-top: 0.4rem;
+}
+
+.issues-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.issues-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.issues-error-msg,
+.issues-error-hint {
+  margin: 0;
+}
+
+.issues-error-hint {
+  margin-top: 0.3rem;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.issues-result {
+  margin-top: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  padding: 0.55rem 0.7rem;
+}
+
+.issues-summary {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.issues-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+}
+
+.issue-row.failed {
+  color: var(--danger);
+}
+
+.issue-row.skipped {
+  color: var(--muted);
+}
+
+.issue-row a {
+  color: var(--blue);
+}
+
+.issue-error {
+  font-size: 0.72rem;
 }
 
 /* ---------- React Flow chrome tweaks ---------- */

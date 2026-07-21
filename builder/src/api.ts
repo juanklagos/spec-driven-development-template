@@ -2,6 +2,7 @@ import type {
   ApproveSpecResult,
   BoardCanvas,
   BoardResponse,
+  CreateIssuesResult,
   CreateSpecResult,
   GateSummary,
   SpecDetail,
@@ -69,7 +70,10 @@ export const api = {
     request(`/api/spec/${encodeURIComponent(id)}/sections`, {
       method: "PUT",
       body: JSON.stringify(sections)
-    })
+    }),
+
+  createIssues: (id: string): Promise<CreateIssuesResult> =>
+    request(`/api/spec/${encodeURIComponent(id)}/issues`, { method: "POST" })
 };
 
 export function errorMessage(error: unknown): string {

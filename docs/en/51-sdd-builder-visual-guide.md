@@ -69,11 +69,21 @@ Goal: populate the SDD Builder board like the ✨ assistant, but with real intel
 4. Do not implement code: the SDD gate stays closed until I approve the specs.
 ```
 
+## What's new in v4 (spec 009) — teams
+
+Four features so a small team can coordinate real work on the same specs:
+
+- **Kanban view**: the "🗺️ Canvas ↔ 📋 Board" toggle in the top bar shows the same specs as three columns driven by the real state of your .md files — **Draft · Pending**, **Approved** (the `Estado / Status` line in `spec.md`), and **Done** (every task ticked). Cards keep their progress bar and open the same drawer. Honest v1: dragging a card to another column changes *nothing* on disk — approval is a real act on the spec, so the drop shows a toast ("Approval happens on the spec") with an "Open spec" button to the drawer's Approve flow.
+- **Typed connections + dependency warnings**: double-click a connection and pick its type — *related* (default), *depends on* (amber), *blocks* (red), or any free-text label as before. The type travels in the `label` field of `board.canvas` (both EN and ES spellings are canonical) plus a standard JSON Canvas `color`. When a typed edge links two real specs and the **dependent spec is approved but its dependency is not**, the builder warns: an amber `⚠ N dep` chip next to the gate semaphore (with the full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. Advisory only — the gate itself never closes because of it. Agents see the same list in the `dependencyWarnings` field of `sdd_gate_summary` and of `GET /api/gate`.
+- **Tasks → GitHub issues**: in the drawer, "🐙 Create issues" creates one GitHub issue per **pending** task via your local `gh` CLI — title `[<specId>] <task>` for traceability, body linking the bundle's `tasks.md`. Idempotent by title: tasks whose exact title already exists are skipped, and the result is reported per task (created / skipped / failed) with links. It degrades honestly: without a git repo, a remote, or an authenticated `gh`, you get a clear bilingual error telling you exactly what to run.
+- **Presence**: when more than one person (or agent) has the builder open on the same workspace, the top bar shows **👥 N** ("N people viewing this workspace") — powered by the same SSE hub as live sync, join/leave updates included.
+
 ## Limitations (honest)
 
 - Long-form `spec.md` content beyond the guided sections is edited in your editor, not the canvas (by design: the canvas composes, your editor writes).
 - Deleting a spec folder on disk does not remove its card automatically (conservative; delete the card manually).
 - One workspace per server instance (`SDD_PROJECT_ROOT`).
+- Kanban v1 is a read-only projection of state: moving cards between columns never approves or un-approves anything (use the drawer). Issue idempotency is title-based (renaming a task creates a new issue).
 
 ## Roadmap
 

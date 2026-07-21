@@ -69,11 +69,21 @@ Objetivo: puebla el SDD Builder board como el asistente ✨, pero con inteligenc
 4. No implementes código: el gate SDD sigue cerrado hasta que yo apruebe las specs.
 ```
 
+## Novedades de la v4 (spec 009) — equipos
+
+Cuatro funciones para que un equipo pequeño coordine trabajo real sobre las mismas specs:
+
+- **Vista Kanban**: el toggle «🗺️ Lienzo ↔ 📋 Tablero» de la barra superior muestra las mismas specs en tres columnas según el estado real de tus .md — **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel. v1 honesta: arrastrar una tarjeta a otra columna *no cambia nada* en disco — aprobar es un acto real sobre la spec, así que al soltar aparece un toast («La aprobación se hace en la spec») con un botón «Abrir spec» hacia el flujo de aprobación del panel.
+- **Uniones tipadas + avisos de dependencias**: haz doble clic en una unión y elige su tipo — *relacionada* (por defecto), *depende de* (ámbar), *bloquea* (rojo) o cualquier etiqueta libre como antes. El tipo viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas. Cuando una unión tipada conecta dos specs reales y la **spec dependiente está aprobada pero su dependencia no**, el builder avisa: chip ámbar `⚠ N dep` junto al semáforo del gate (con la lista completa en el tooltip) y badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo — el gate nunca se cierra por esto. Los agentes ven la misma lista en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`.
+- **Tareas → issues de GitHub**: en el panel, «🐙 Crear issues» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
+- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra superior muestra **👥 N** («N personas viendo este workspace») — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
+
 ## Limitaciones (honestas)
 
 - El contenido largo de `spec.md` más allá de las secciones guiadas se edita en tu editor, no en el lienzo (por diseño: el lienzo compone, tu editor escribe).
 - Borrar una carpeta de spec en disco no retira su tarjeta automáticamente (conservador; borra la tarjeta a mano).
 - Un workspace por instancia del servidor (`SDD_PROJECT_ROOT`).
+- La Kanban v1 es una proyección de solo lectura del estado: mover tarjetas entre columnas nunca aprueba ni desaprueba nada (usa el panel). La idempotencia de issues es por título (renombrar una tarea crea un issue nuevo).
 
 ## Roadmap
 

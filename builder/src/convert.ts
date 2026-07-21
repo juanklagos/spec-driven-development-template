@@ -33,15 +33,59 @@ const SPEC_FILE_RE = /^specs\/([^/]+)\/spec\.md$/;
 
 export const ARROW = { type: MarkerType.ArrowClosed, width: 18, height: 18 } as const;
 
-function toFlowEdge(edge: CanvasEdge): AppEdge {
+// --- Typed edges (spec 009, R2) --------------------------------------------
+// The edge label carries the canonical dependency type (ES and EN spellings
+// are both canonical). KEEP THE LABEL SETS IN SYNC with the core copy in
+// packages/sdd-core/src/board.ts (`classifyEdgeLabel`) — same keep-in-sync
+// contract as the EARS lint in ears.ts.
+
+export type EdgeKind = "related" | "depends" | "blocks";
+
+const DEPENDS_EDGE_LABELS = new Set(["depende de", "depends on"]);
+const BLOCKS_EDGE_LABELS = new Set(["bloquea", "blocks"]);
+
+/** Stroke/marker colors readable in both themes (amber depends, red blocks). */
+const EDGE_KIND_STROKE: Partial<Record<EdgeKind, string>> = {
+  depends: "#d97706",
+  blocks: "#dc2626"
+};
+
+/** JSON Canvas preset color persisted for typed edges (mirrors sdd-core). */
+const EDGE_KIND_CANVAS_COLOR: Partial<Record<EdgeKind, string>> = {
+  depends: "3",
+  blocks: "1"
+};
+
+export function edgeKind(label: string | undefined): EdgeKind {
+  const value = (label ?? "").trim().toLowerCase();
+  if (DEPENDS_EDGE_LABELS.has(value)) return "depends";
+  if (BLOCKS_EDGE_LABELS.has(value)) return "blocks";
+  return "related";
+}
+
+/**
+ * Derive the visual style (stroke + arrow color) of an edge from its label.
+ * The label is the single source of truth: re-styling after a label change
+ * self-heals any stale color coming from board.canvas.
+ */
+export function styleEdgeForLabel(edge: AppEdge): AppEdge {
+  const stroke = EDGE_KIND_STROKE[edgeKind(edge.data?.label)];
   return {
+    ...edge,
+    style: stroke ? { stroke, strokeWidth: 1.8 } : undefined,
+    markerEnd: { ...ARROW, ...(stroke ? { color: stroke } : {}) }
+  };
+}
+
+function toFlowEdge(edge: CanvasEdge): AppEdge {
+  return styleEdgeForLabel({
     id: edge.id,
     source: edge.fromNode,
     target: edge.toNode,
     type: "labeled",
     data: { label: edge.label ?? "" },
     markerEnd: ARROW
-  };
+  });
 }
 
 /**
@@ -136,14 +180,18 @@ export function flowToBoard(nodes: AppNode[], edges: AppEdge[]): BoardCanvas {
     return { ...base, type: "text", text: n.data.text, ...(n.data.color ? { color: n.data.color } : {}) };
   });
 
-  const canvasEdges: CanvasEdge[] = edges.map((e) => ({
-    id: e.id,
-    fromNode: e.source,
-    toNode: e.target,
-    fromSide: "right",
-    toSide: "left",
-    ...(e.data?.label ? { label: e.data.label } : {})
-  }));
+  const canvasEdges: CanvasEdge[] = edges.map((e) => {
+    const color = EDGE_KIND_CANVAS_COLOR[edgeKind(e.data?.label)];
+    return {
+      id: e.id,
+      fromNode: e.source,
+      toNode: e.target,
+      fromSide: "right",
+      toSide: "left",
+      ...(e.data?.label ? { label: e.data.label } : {}),
+      ...(color ? { color } : {})
+    };
+  });
 
   return { nodes: canvasNodes, edges: canvasEdges };
 }

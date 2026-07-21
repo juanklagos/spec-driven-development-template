@@ -1,7 +1,8 @@
 // Live sync client: subscribes to GET /api/events (SSE) and feeds the store.
 // The server emits:
-//   - `hello`  -> { projectRoot }            on connect
-//   - `change` -> { path, kind: board|specs } debounced workspace changes
+//   - `hello`    -> { projectRoot }            on connect
+//   - `change`   -> { path, kind: board|specs } debounced workspace changes
+//   - `presence` -> { count }                  connected clients (spec 009, R4)
 // EventSource has built-in retry, but we manage reconnection ourselves to get
 // a simple exponential backoff and an accurate on/off indicator in the TopBar.
 
@@ -52,6 +53,8 @@ function connect(): void {
     source?.close();
     source = null;
     useBuilderStore.getState().setLiveStatus("off");
+    // Presence is unknown while offline; the server re-broadcasts on reconnect.
+    useBuilderStore.getState().setPresenceCount(0);
     scheduleReconnect();
   };
 
@@ -65,6 +68,14 @@ function connect(): void {
 
   source.addEventListener("ping", () => {
     lastActivityAt = Date.now();
+  });
+
+  source.addEventListener("presence", (event) => {
+    lastActivityAt = Date.now();
+    const data = parse<{ count?: number }>(event.data);
+    if (typeof data?.count === "number" && data.count >= 0) {
+      useBuilderStore.getState().setPresenceCount(data.count);
+    }
   });
 
   source.addEventListener("change", (event) => {

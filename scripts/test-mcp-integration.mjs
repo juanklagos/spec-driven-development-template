@@ -4,6 +4,7 @@ import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { validateEarsCriterion } from "../packages/sdd-core/dist/index.js";
+import { buildIssueBody, buildIssueTitle } from "../packages/sdd-mcp/dist/github.js";
 import packageJson from "../package.json" with { type: "json" };
 
 const transport = new StdioClientTransport({
@@ -282,6 +283,8 @@ async function main() {
     assert.equal(connected.canvas.edges.length, 1);
     assert.equal(connected.canvas.edges[0].fromNode, specId);
     assert.equal(connected.canvas.edges[0].toNode, "note-1");
+    // Typed edges (spec 009, R2): canonical labels get a JSON Canvas color.
+    assert.equal(connected.canvas.edges[0].color, "3", "'depends on' edges carry the amber preset color");
 
     const boardAfter = asObject(
       await client.callTool({ name: "sdd_board_read", arguments: { projectRoot } })
@@ -362,6 +365,79 @@ async function main() {
     );
     assert.equal(postSummary.approvedSpecs, 1, "002 should now count as approved");
     assert.equal(postSummary.ok, true, "gate should stay open after the surgical edits");
+    assert.deepEqual(
+      postSummary.dependencyWarnings,
+      [],
+      "the spec->note 'depends on' edge must NOT warn (notes are not specs)"
+    );
+
+    // --- Builder v4 (spec 009, R2): typed edges + dependency warnings ------
+    // Put 002 on the canvas and draw 002 --"depende de"--> 001. 002 is
+    // approved (block above) while the fixture 001 reads as `Pendiente`
+    // (its free-form approval block has no backticked "Estado / Status"
+    // line), so the summary must carry exactly one dependency warning.
+    const boardBeforeDep = asObject(
+      await client.callTool({ name: "sdd_board_read", arguments: { projectRoot } })
+    );
+    await client.callTool({
+      name: "sdd_board_write",
+      arguments: {
+        projectRoot,
+        canvas: {
+          nodes: [
+            ...boardBeforeDep.canvas.nodes.filter((node) => node.id !== secondSpecId),
+            {
+              id: secondSpecId,
+              type: "file",
+              file: `specs/${secondSpecId}/spec.md`,
+              x: 0,
+              y: 320,
+              width: 300,
+              height: 180
+            }
+          ],
+          edges: boardBeforeDep.canvas.edges
+        }
+      }
+    });
+
+    const depConnect = asObject(
+      await client.callTool({
+        name: "sdd_board_connect",
+        arguments: { projectRoot, fromNode: secondSpecId, toNode: specId, label: "depende de" }
+      })
+    );
+    const depEdge = depConnect.canvas.edges.find(
+      (edge) => edge.fromNode === secondSpecId && edge.toNode === specId
+    );
+    assert.ok(depEdge, "the typed edge should be persisted");
+    assert.equal(depEdge.color, "3", "'depende de' edges carry the amber preset color");
+
+    const depSummary = asObject(
+      await client.callTool({ name: "sdd_gate_summary", arguments: { projectRoot } })
+    );
+    assert.equal(depSummary.ok, true, "dependency warnings are advisory and must not close the gate");
+    assert.equal(depSummary.dependencyWarnings.length, 1);
+    assert.equal(depSummary.dependencyWarnings[0].dependent, secondSpecId);
+    assert.equal(depSummary.dependencyWarnings[0].dependency, specId);
+    assert.equal(depSummary.dependencyWarnings[0].edgeId, depEdge.id);
+    assert.match(depSummary.dependencyWarnings[0].message, /aprobada .* is approved/s);
+
+    // --- Builder v4 (spec 009, R3): gh issue argument construction ---------
+    // The gh CLI itself is never invoked here (no network, no real repos);
+    // these pure helpers are what POST /api/spec/:id/issues feeds to
+    // `gh issue create --title ... --body ...`.
+    assert.equal(
+      buildIssueTitle("009-builder-v4-teams", "  T1  (R1):   vista Kanban.  "),
+      "[009-builder-v4-teams] T1 (R1): vista Kanban."
+    );
+    const longTitle = buildIssueTitle("009-builder-v4-teams", "x".repeat(500));
+    assert.ok(longTitle.length <= 240, "issue titles are length-capped");
+    assert.ok(longTitle.endsWith("…"));
+    const issueBody = buildIssueBody("009-builder-v4-teams", "T1: vista Kanban", "https://example.test/blob/HEAD/spec/specs/009-builder-v4-teams/tasks.md");
+    assert.match(issueBody, /Tarea \/ Task: T1: vista Kanban/);
+    assert.match(issueBody, /Bundle: https:\/\/example\.test\/blob\/HEAD\/spec\/specs\/009-builder-v4-teams\/tasks\.md/);
+    assert.match(issueBody, /Pending task from spec/);
 
     // --- Builder v3 (spec 008, R3): shared EARS lint exported by sdd-core ---
     // The builder frontend duplicates these rules in builder/src/ears.ts

@@ -15,6 +15,7 @@ import {
   writeBoard,
   type SpecSectionsInput
 } from "@juanklagos/sdd-core";
+import { createIssuesForSpec } from "./github.js";
 import { json, readBody } from "./http-utils.js";
 
 export interface ApiDeps {
@@ -66,6 +67,14 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
           return true;
         }
         json(res, 200, await updateSpecSections(projectRoot, sectionsMatch[1], body));
+        return true;
+      }
+      const issuesMatch = route.match(/^\/api\/spec\/([^/]+)\/issues$/);
+      if (req.method === "POST" && issuesMatch) {
+        // Tasks -> GitHub issues (spec 009, R3). Preconditions (git repo with
+        // remote, gh installed + authenticated) fail with bilingual errors
+        // that the catch below returns as-is for the UI to show.
+        json(res, 200, await createIssuesForSpec(projectRoot, issuesMatch[1]));
         return true;
       }
       const specMatch = route.match(/^\/api\/spec\/([^/]+)$/);

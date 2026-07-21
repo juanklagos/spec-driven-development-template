@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
+import { getDependencyWarnings, type DependencyWarning } from "./board.js";
 import { exists, getFrameworkRoot, listSpecs, resolveSddRoot, safeReadFile } from "./workspace.js";
 
 const execFileAsync = promisify(execFile);
@@ -344,6 +345,12 @@ export interface GateSummary {
   specIssues: Record<string, ValidationMessage[]>;
   /** Messages that do not belong to a single spec (structure, consent, ...). */
   generalIssues: ValidationMessage[];
+  /**
+   * Typed-edge dependency warnings (spec 009, R2): approved specs whose
+   * "depende de"/"bloquea" dependency is not approved yet. Advisory only —
+   * they never close the gate.
+   */
+  dependencyWarnings: DependencyWarning[];
 }
 
 const SPEC_PATH_RE = /^specs[/\\](\d{3}-[a-z0-9][a-z0-9-]*)(?:[/\\]|$)/;
@@ -354,7 +361,11 @@ const SPEC_PATH_RE = /^specs[/\\](\d{3}-[a-z0-9][a-z0-9-]*)(?:[/\\]|$)/;
  * UI can paint per-card badges and a single open/closed chip.
  */
 export async function getGateSummary(projectRoot: string): Promise<GateSummary> {
-  const [gate, validation] = await Promise.all([checkGate(projectRoot), validateProject(projectRoot)]);
+  const [gate, validation, dependencyWarnings] = await Promise.all([
+    checkGate(projectRoot),
+    validateProject(projectRoot),
+    getDependencyWarnings(projectRoot)
+  ]);
   const specIssues: Record<string, ValidationMessage[]> = {};
   const generalIssues: ValidationMessage[] = [];
 
@@ -376,7 +387,8 @@ export async function getGateSummary(projectRoot: string): Promise<GateSummary> 
     gate,
     validation,
     specIssues,
-    generalIssues
+    generalIssues,
+    dependencyWarnings
   };
 }
 
