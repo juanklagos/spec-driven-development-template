@@ -91,13 +91,20 @@ export const boardViewSchema = z.object({
  * Used as-is for the sdd_gate_summary outputSchema and wrapped with
  * z.object(...) inside the MCP App tool payload.
  */
+export const verdictSchema = z.enum(["open", "closed", "blocked"]);
+
 export const gateSummaryShape = {
   ok: z.boolean(),
+  verdict: verdictSchema,
   errors: z.number(),
   warnings: z.number(),
   approvedSpecs: z.number(),
   totalSpecs: z.number(),
-  gate: validationResultSchema.extend({ approvedSpecs: z.number(), totalSpecs: z.number() }),
+  gate: validationResultSchema.extend({
+    approvedSpecs: z.number(),
+    totalSpecs: z.number(),
+    verdict: verdictSchema
+  }),
   validation: validationResultSchema,
   specIssues: z.record(z.array(validationMessageSchema)),
   generalIssues: z.array(validationMessageSchema),

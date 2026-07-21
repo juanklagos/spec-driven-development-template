@@ -4,7 +4,26 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/sdd-root.sh"
 
-ROOT_INPUT="${1-}"
+ROOT_INPUT=""
+REQUIRE_OPEN=0
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --require-open) REQUIRE_OPEN=1 ;;
+    -h|--help)
+      echo "Usage: $0 [project_root] [--require-open]"
+      echo "  --require-open   exit 2 when the gate is closed (nothing approved yet)."
+      echo "                   Default behaviour is unchanged: 0 on success, 1 on errors."
+      exit 0
+      ;;
+    -*)
+      echo "Error: unknown option: $1" >&2
+      echo "Usage: $0 [project_root] [--require-open]" >&2
+      exit 2
+      ;;
+    *) [ -n "$ROOT_INPUT" ] || ROOT_INPUT="$1" ;;
+  esac
+  shift
+done
 ROOT="$(sdd_require_root "$ROOT_INPUT" "$SCRIPT_DIR/..")" || exit 1
 
 # KEEP IN SYNC with APPROVED_STATUS_ERE / isApprovedStatus in
@@ -215,8 +234,35 @@ else
   fi
 fi
 
+# KEEP IN SYNC with computeVerdict in packages/sdd-core/src/index.ts.
+# Errors always win: a broken workspace says nothing about approval.
+if [ "$errors" -gt 0 ]; then
+  verdict="blocked"
+  verdict_es="BLOQUEADA"
+  verdict_why="hay errores que arreglar antes de nada / errors must be fixed first"
+elif [ "$approved_count" -gt 0 ]; then
+  verdict="open"
+  verdict_es="ABIERTA"
+  verdict_why="$approved_count spec(s) aprobada(s) y consentida(s) / approved and consented"
+else
+  verdict="closed"
+  verdict_es="CERRADA"
+  verdict_why="todavia no hay ninguna spec aprobada / nothing approved yet"
+fi
+
+# The posture line prints on every run, including green ones, and cannot be
+# suppressed. A green chip must never be able to mean "we did not check".
+printf "\nCompuerta / Gate: %s / %s — %s\n" "$verdict_es" "$verdict" "$verdict_why"
+printf "Comprobado / Checked: politica, estructura de specs, estado de aprobacion, consentimiento por spec, dependencias.\n"
+printf "NO comprobado / NOT checked: si el codigo del proyecto corresponde a una spec aprobada (spec 014).\n"
+
 printf "\nSDD Gate summary: %d error(s), %d warning(s).\n" "$errors" "$warnings"
 
 if [ "$errors" -gt 0 ]; then
   exit 1
+fi
+
+if [ "$REQUIRE_OPEN" -eq 1 ] && [ "$verdict" = "closed" ]; then
+  printf "\n--require-open: la compuerta esta cerrada / the gate is closed. Exit 2.\n" >&2
+  exit 2
 fi

@@ -50,9 +50,33 @@ export interface CreateSpecResult {
   indexUpdated: boolean;
 }
 
+/**
+ * What the gate actually answers, in three states instead of a boolean.
+ *
+ * `ok` alone could not distinguish "you may implement" from "nothing has been
+ * approved, so there is nothing to implement". Both were green, and the
+ * dashboard told a user with zero approved specs that implementation was
+ * allowed. That is the failure this type exists to make impossible.
+ */
+export type GateVerdict = "open" | "closed" | "blocked";
+
+/**
+ * The single rule. Every surface derives its verdict from here so bash, the MCP
+ * tools, the dashboard and the builder cannot drift apart again.
+ *
+ * `blocked` always wins: an error means the workspace is broken, which says
+ * nothing about approval and everything about not proceeding.
+ */
+export function computeVerdict(errors: number, approvedSpecs: number): GateVerdict {
+  if (errors > 0) return "blocked";
+  return approvedSpecs > 0 ? "open" : "closed";
+}
+
 export interface GateResult extends ValidationResult {
   approvedSpecs: number;
   totalSpecs: number;
+  /** See {@link computeVerdict}. Never undefined, on any return path. */
+  verdict: GateVerdict;
 }
 
 export interface ConsentResult {
@@ -246,7 +270,15 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
       message: "No numbered specs found; gate check skipped.",
       path: "specs"
     });
-    return { ...summarize(messages), approvedSpecs, totalSpecs: 0 };
+    // Sin este verdict el literal servia `verdict: undefined` a todo
+    // workspace recien creado, que es justo el caso mas comun.
+    const early = summarize(messages);
+    return {
+      ...early,
+      approvedSpecs,
+      totalSpecs: 0,
+      verdict: computeVerdict(early.errors, approvedSpecs)
+    };
   }
 
   for (const spec of specs) {
@@ -385,7 +417,13 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
     });
   }
 
-  return { ...summarize(messages), approvedSpecs, totalSpecs: specs.length };
+  const summary = summarize(messages);
+  return {
+    ...summary,
+    approvedSpecs,
+    totalSpecs: specs.length,
+    verdict: computeVerdict(summary.errors, approvedSpecs)
+  };
 }
 
 /**
@@ -410,6 +448,13 @@ async function readConsentLog(root: string): Promise<string> {
 export interface GateSummary {
   /** True only when both the gate check and the structural validation pass. */
   ok: boolean;
+  /**
+   * Derived from BOTH halves. Computing it from `gate` alone would discard
+   * validateProject and paint a broken workspace green: eleven UI call sites
+   * branch on the flattened `ok`, so the verdict must be flattened the same way.
+   * Invariant, asserted in the test suite: `ok === false` implies `"blocked"`.
+   */
+  verdict: GateVerdict;
   errors: number;
   warnings: number;
   approvedSpecs: number;
@@ -453,9 +498,11 @@ export async function getGateSummary(projectRoot: string): Promise<GateSummary> 
     }
   }
 
+  const errors = gate.errors + validation.errors;
   return {
     ok: gate.ok && validation.ok,
-    errors: gate.errors + validation.errors,
+    verdict: computeVerdict(errors, gate.approvedSpecs),
+    errors,
     warnings: gate.warnings + validation.warnings,
     approvedSpecs: gate.approvedSpecs,
     totalSpecs: gate.totalSpecs,

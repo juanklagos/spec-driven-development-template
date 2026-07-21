@@ -5,6 +5,7 @@ import {
   NEGATED_STATUS_ERE,
   extractApprovalStatus,
   canvasEdgeColorForLabel,
+  computeVerdict,
   classifyEdgeLabel,
   docsUrl,
   isApprovedStatus,
@@ -1005,6 +1006,37 @@ async function main() {
       "a pending spec with a trailing target note must read as pending"
     );
 
+    // The verdict's invariants. `ok` alone could not tell "you may implement"
+    // apart from "nothing is approved, so there is nothing to implement", and
+    // both painted green.
+    for (const errors of [0, 1, 7]) {
+      for (const approved of [0, 1, 12]) {
+        const verdict = computeVerdict(errors, approved);
+        assert.ok(
+          ["open", "closed", "blocked"].includes(verdict),
+          `computeVerdict(${errors}, ${approved}) must be one of the three states`
+        );
+        if (errors > 0) {
+          assert.equal(
+            verdict,
+            "blocked",
+            `errors must always win: computeVerdict(${errors}, ${approved}) returned "${verdict}"`
+          );
+        } else {
+          assert.equal(
+            verdict,
+            approved > 0 ? "open" : "closed",
+            `computeVerdict(0, ${approved}) must be "${approved > 0 ? "open" : "closed"}"`
+          );
+        }
+      }
+    }
+    assert.equal(
+      computeVerdict(0, 0),
+      "closed",
+      "a workspace with nothing approved must be closed, never open — this is the state the dashboard used to call 'implementation allowed'"
+    );
+
     gateRoot = String(
       asObject(
         await client.callTool({
@@ -1038,6 +1070,11 @@ async function main() {
       const healthyBash = await runSddScript("check-sdd-gate.sh", gateRoot);
       assert.equal(healthy.approvedSpecs, 1, `checkGate must count "${status}" as approved`);
       assert.equal(healthy.ok, true, `a healthy "${status}" bundle must open the gate`);
+      assert.equal(
+        healthy.verdict,
+        "open",
+        `an approved, consented "${status}" bundle must report verdict "open" (got "${healthy.verdict}")`
+      );
       assert.equal(healthyBash.code, 0, `the bash gate must open for a healthy "${status}" bundle`);
       assert.match(
         healthyBash.output,

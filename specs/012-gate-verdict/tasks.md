@@ -15,16 +15,16 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 
 ## H2 — Veredicto y postura en las cuatro superficies
 
-- [ ] **T2a** `verdict: "open" | "closed" | "blocked"` en `GateResult` y en `GateSummary`
+- [x] **T2a** `verdict: "open" | "closed" | "blocked"` en `GateResult` y en `GateSummary`
       (`packages/sdd-core/src/index.ts`), incluido el literal del retorno temprano de workspaces sin
       specs.
-- [ ] **T2b** Aserción en pruebas: `ok === false` implica `verdict === "blocked"`, y exactamente uno
+- [x] **T2b** Aserción en pruebas: `ok === false` implica `verdict === "blocked"`, y exactamente uno
       de los tres valores aplica siempre.
-- [ ] **T2c** Añadir `verdict` al esquema de salida de las tools MCP afectadas. Recordatorio: el
+- [x] **T2c** Añadir `verdict` al esquema de salida de las tools MCP afectadas. Recordatorio: el
       esquema rechaza propiedades no declaradas, y esto ya rompió una vez con `tone`.
-- [ ] **T2d** Línea de veredicto y línea de postura en `check-sdd-gate.sh`, antes del resumen,
+- [x] **T2d** Línea de veredicto y línea de postura en `check-sdd-gate.sh`, antes del resumen,
       insuprimibles. La línea de resumen no cambia de formato.
-- [ ] **T2e** Bucle de argumentos real en `check-sdd-gate.sh` y `--require-open` con salida 2 cuando
+- [x] **T2e** Bucle de argumentos real en `check-sdd-gate.sh` y `--require-open` con salida 2 cuando
       el veredicto sea `closed`. Hoy `./scripts/check-sdd-gate.sh --require-open` falla con «not an
       SDD workspace» porque parsea por posición. Replicar en el sidecar.
 - [ ] **T2f** Actualizar `.claude/commands/sdd/gate.md:9` y `.github/prompts/sdd-gate.prompt.md:8`.

@@ -38,7 +38,8 @@ import {
   projectRootSchema,
   specIdSchema,
   taskItemSchema,
-  validationMessageSchema
+  validationMessageSchema,
+  verdictSchema
 } from "./schemas.js";
 
 const frameworkRoot = getFrameworkRoot();
@@ -152,6 +153,7 @@ export function createSddMcpServer(): McpServer {
       },
       outputSchema: {
         ok: z.boolean(),
+        verdict: verdictSchema,
         errors: z.number(),
         warnings: z.number(),
         approvedSpecs: z.number(),
