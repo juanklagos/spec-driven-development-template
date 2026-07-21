@@ -175,10 +175,16 @@ export function createSddMcpServer(): McpServer {
     "sdd_record_user_consent",
     {
       title: "Record user consent",
-      description: "Record explicit user consent before implementation starts.",
+      description:
+        "Record explicit user consent before implementation starts. Pass specId so the consent is bound to that spec; without it the entry is a legacy, markerless line that only covers specs approved before it.",
       inputSchema: {
         projectRoot: projectRootSchema,
-        summary: z.string().min(1)
+        summary: z.string().min(1),
+        // recordUserConsent has always accepted this third argument. Not
+        // declaring it here meant every consent recorded through this server —
+        // the project's own primary agent interface — landed as a markerless
+        // legacy line, silently downgrading per-spec enforcement to a warning.
+        specId: specIdSchema.optional()
       },
       outputSchema: {
         logFile: z.string(),
@@ -186,8 +192,8 @@ export function createSddMcpServer(): McpServer {
         timestamp: z.string()
       }
     },
-    async ({ projectRoot, summary }) => {
-      const result = await recordUserConsent(projectRoot, summary);
+    async ({ projectRoot, summary, specId }) => {
+      const result = await recordUserConsent(projectRoot, summary, specId);
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

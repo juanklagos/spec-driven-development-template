@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          # Full history: validate-sdd.sh --strict compares against the pull
+          # request's base ref. With the default shallow clone that ref is not
+          # in the checkout, so the spec/history check silently never ran.
+          fetch-depth: 0
 
       - name: Verify multi-agent SDD rule files
         run: |

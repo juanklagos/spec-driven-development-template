@@ -120,15 +120,65 @@ if [ "$STRICT" = "--strict" ]; then
   fi
 
   if command -v git >/dev/null 2>&1 && [ -d "$PROJECT_ROOT/.git" ]; then
+    # Which revisions to compare.
+    #
+    # `git diff` with no range only ever reports UNCOMMITTED working-tree
+    # changes. That is right locally, and useless in CI: after a clean checkout
+    # the tree is pristine, so this check returned empty every time and had
+    # never once fired on a pull request. Resolve a real base when one exists.
+    #
+    # Every git call is guarded: under `set -euo pipefail` an unresolvable ref
+    # would abort the whole script with exit 128.
+    DIFF_RANGE=""
+    DIFF_SOURCE="working tree (uncommitted changes)"
+    if [ -n "${SDD_DIFF_BASE:-}" ]; then
+      if git -C "$PROJECT_ROOT" rev-parse --verify --quiet "${SDD_DIFF_BASE}^{commit}" >/dev/null 2>&1; then
+        DIFF_RANGE="${SDD_DIFF_BASE}...HEAD"
+        DIFF_SOURCE="SDD_DIFF_BASE=${SDD_DIFF_BASE}"
+      else
+        warn "Strict mode: SDD_DIFF_BASE='${SDD_DIFF_BASE}' does not resolve in this repository; falling back to the working tree."
+      fi
+    elif [ -n "${GITHUB_BASE_REF:-}" ]; then
+      # Pull request. The remote-tracking ref is the one that exists after
+      # actions/checkout; the bare branch name usually does not.
+      for candidate in "refs/remotes/origin/${GITHUB_BASE_REF}" "origin/${GITHUB_BASE_REF}" "${GITHUB_BASE_REF}"; do
+        if git -C "$PROJECT_ROOT" rev-parse --verify --quiet "${candidate}^{commit}" >/dev/null 2>&1; then
+          DIFF_RANGE="${candidate}...HEAD"
+          DIFF_SOURCE="$candidate"
+          break
+        fi
+      done
+      if [ -z "$DIFF_RANGE" ]; then
+        warn "Strict mode: base ref '${GITHUB_BASE_REF}' is not in this checkout. Add 'fetch-depth: 0' to actions/checkout so the spec/history check can run."
+      fi
+    fi
+
+    if [ -n "$DIFF_RANGE" ]; then
+      changed_specs="$(git -C "$PROJECT_ROOT" diff --name-only "$DIFF_RANGE" -- "$SPEC_PREFIX" 2>/dev/null || true)"
+    else
+      changed_specs="$(git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX" 2>/dev/null || true)"
+    fi
+
     while IFS= read -r spec_path; do
+      [ -n "$spec_path" ] || continue
+      case "$spec_path" in
+        */history.md) continue ;;
+      esac
       spec_name="${spec_path#$SPEC_PREFIX/}"
       spec_name="${spec_name%%/*}"
-      if [ -n "$spec_name" ] && [[ "$spec_name" =~ ^[0-9]{3}- ]]; then
-        if ! git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/$spec_name/history.md" | grep -q .; then
-          warn "Strict mode: $spec_name changed but history.md was not updated in working tree."
+      if [ -n "$spec_name" ] && printf "%s" "$spec_name" | grep -Eq '^[0-9]{3}-'; then
+        if [ -n "$DIFF_RANGE" ]; then
+          history_changed="$(git -C "$PROJECT_ROOT" diff --name-only "$DIFF_RANGE" -- "$SPEC_PREFIX/$spec_name/history.md" 2>/dev/null || true)"
+        else
+          history_changed="$(git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/$spec_name/history.md" 2>/dev/null || true)"
+        fi
+        if [ -z "$history_changed" ]; then
+          warn "Strict mode: $spec_name changed but history.md was not updated ($DIFF_SOURCE)."
         fi
       fi
-    done < <(git -C "$PROJECT_ROOT" diff --name-only -- "$SPEC_PREFIX/*" | grep -Ev "$SPEC_PREFIX/.*/history\.md$" || true)
+    done <<EOF_CHANGED
+$changed_specs
+EOF_CHANGED
   else
     warn "Strict mode requested, but git repository is not available in the project root."
   fi

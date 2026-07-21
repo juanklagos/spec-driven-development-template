@@ -34,10 +34,10 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 
 ## H3 — Fallos, herencia y ámbito de archivos
 
-- [ ] **T3a** `specId` en el esquema de entrada de `sdd_record_user_consent`
+- [x] **T3a** `specId` en el esquema de entrada de `sdd_record_user_consent`
       (`packages/sdd-mcp/src/server.ts:171-192`) y pasarlo al tercer argumento que `recordUserConsent`
       ya acepta. Hoy todo consentimiento registrado por la interfaz MCP degrada a línea heredada.
-- [ ] **T3b** Rango de revisiones real en `scripts/validate-sdd.sh:127` y `:131`. Añadir
+- [x] **T3b** Rango de revisiones real en `scripts/validate-sdd.sh:127` y `:131`. Añadir
       `fetch-depth: 0` en `.github/workflows/validate.yml:14`. Verificar que la comprobación se
       dispara de verdad en un PR.
 - [ ] **T3c** Aviso de compuerta cuando el workspace todavía contiene las specs de ejemplo del
