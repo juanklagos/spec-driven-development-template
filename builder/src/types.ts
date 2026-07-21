@@ -118,6 +118,12 @@ export interface SpecSectionsInput {
   story?: string;
   scenarios?: string[];
   criteria?: string[];
+  /** Requirements list (spec 010, R2). */
+  requirements?: string[];
+  /** Spec properties list — bridge to executable specs (spec 010, R2). */
+  properties?: string[];
+  /** Success criteria list (spec 010, R2). */
+  successCriteria?: string[];
   outOfScope?: string;
 }
 

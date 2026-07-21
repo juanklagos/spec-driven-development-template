@@ -5,12 +5,23 @@
 // touches the disk while previewing. The "Have an AI agent?" section offers
 // the copyable MCP orchestrator prompt for real-intelligence generation.
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { X } from "lucide-react";
 import { errorMessage } from "../api";
 import { draftToPlan, generateDraft, type AssistantDraft } from "../assistant";
+import { useT } from "../i18n";
 import { buildOrchestratorPrompt } from "../prompts";
 import { useBuilderStore } from "../store";
 import { PromptBox } from "./PromptBox";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
 
 interface EditableSpec {
   key: string;
@@ -18,23 +29,19 @@ interface EditableSpec {
 }
 
 function AgentPromptSection({ description }: { description: string }) {
+  const { t, lang } = useT();
   const projectRoot = useBuilderStore((s) => s.projectRoot);
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="agent-section">
-      <button type="button" className="btn small" onClick={() => setOpen(!open)}>
-        {open ? "▾" : "▸"} 🤖 ¿Tienes un agente IA? / Have an AI agent?
-      </button>
+    <div className="flex flex-col gap-2.5 border-t pt-3">
+      <Button size="sm" variant="outline" className="self-start" onClick={() => setOpen(!open)}>
+        {open ? "▾" : "▸"} {t("assistant.agent.toggle")}
+      </Button>
       {open ? (
         <>
-          <p className="modal-note">
-            Pega este prompt en tu agente conectado al MCP <code>sdd-mcp</code>: generará el board con
-            inteligencia real (specs con borrador incluido). / Paste this prompt into your agent
-            connected to the <code>sdd-mcp</code> MCP: it will generate the board with real
-            intelligence (specs with a draft included).
-          </p>
-          <PromptBox prompt={buildOrchestratorPrompt(description, projectRoot)} />
+          <p className="m-0 text-xs text-muted-foreground">{t("assistant.agent.note")}</p>
+          <PromptBox prompt={buildOrchestratorPrompt(description, projectRoot, lang)} />
         </>
       ) : null}
     </div>
@@ -42,6 +49,7 @@ function AgentPromptSection({ description }: { description: string }) {
 }
 
 export function AssistantWizard() {
+  const { t, lang } = useT();
   const setAssistantOpen = useBuilderStore((s) => s.setAssistantOpen);
   const applyBoardPlan = useBuilderStore((s) => s.applyBoardPlan);
   const hasSpecs = useBuilderStore((s) => Object.keys(s.specs).length > 0);
@@ -56,17 +64,8 @@ export function AssistantWizard() {
     if (!busy) setAssistantOpen(false);
   };
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [busy]);
-
   const propose = (variant: number) => {
-    const next = generateDraft(description, variant);
+    const next = generateDraft(description, variant, lang);
     setDraft(next);
     setSpecs(next.specs.map(({ key, name }) => ({ key, name })));
     setError(null);
@@ -84,7 +83,7 @@ export function AssistantWizard() {
     if (!draft || busy) return;
     const chosen = specs.map((spec) => ({ ...spec, name: spec.name.trim() })).filter((spec) => spec.name);
     if (chosen.length === 0) {
-      setError("Deja al menos una spec en el borrador / Keep at least one spec in the draft");
+      setError(t("assistant.keepOne"));
       return;
     }
     setBusy(true);
@@ -109,112 +108,109 @@ export function AssistantWizard() {
     : [];
 
   return (
-    <div className="modal-backdrop" onClick={close} role="presentation">
-      <div
-        className="modal wide"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-label="Asistente de proyecto / Project assistant"
-      >
-        <h2>✨ Descríbeme tu proyecto / Describe your project</h2>
+    <Dialog open onOpenChange={(open) => !open && close()}>
+      <DialogContent className="sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>{t("assistant.title")}</DialogTitle>
+          {draft === null ? <DialogDescription>{t("assistant.intro")}</DialogDescription> : null}
+        </DialogHeader>
 
         {draft === null ? (
           <>
-            <p className="modal-note">
-              Escribe tu proyecto en una frase o párrafo y te propongo un borrador de board: idea,
-              épicas y specs conectadas. Nada se guarda hasta que aceptes. / Write your project in a
-              sentence or a paragraph and I will propose a draft board: idea, epics and connected
-              specs. Nothing is saved until you accept.
-            </p>
             <textarea
               autoFocus
-              className="assistant-input"
+              className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40"
               rows={4}
               value={description}
-              placeholder="p. ej. una tienda online de plantas con pagos y panel de administración / e.g. an online plant store with payments and an admin panel"
+              placeholder={t("assistant.ph")}
               onChange={(e) => setDescription(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && description.trim()) propose(0);
               }}
             />
-            <div className="modal-actions">
-              <button className="btn" onClick={close}>
-                Cancelar / Cancel
-              </button>
-              <button className="btn primary" disabled={!description.trim()} onClick={() => propose(0)}>
-                ✨ Proponer borrador / Propose draft
-              </button>
-            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={close}>
+                {t("common.cancel")}
+              </Button>
+              <Button disabled={!description.trim()} onClick={() => propose(0)}>
+                {t("assistant.propose")}
+              </Button>
+            </DialogFooter>
           </>
         ) : (
           <>
-            <p className="modal-note">
-              Borrador (aún sin guardar): renombra o quita specs antes de crear. / Draft (not saved
-              yet): rename or remove specs before creating.
-            </p>
+            <p className="m-0 text-xs text-muted-foreground">{t("assistant.draftNote")}</p>
             {hasSpecs ? (
-              <p className="modal-error">
-                ⚠ Este workspace ya tiene specs; el asistente solo se aplica en un workspace vacío. /
-                This workspace already has specs; the assistant only applies to an empty workspace.
+              <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+                ⚠ {t("assistant.hasSpecs")}
               </p>
             ) : null}
-            <div className="draft-preview">
-              <p className="draft-idea">{draft.ideaText}</p>
-              <p className="draft-meta">
-                {specs.length} specs · {usedEpics.length}{" "}
-                {usedEpics.length === 1 ? "épica / epic" : "épicas / epics"}:{" "}
-                {usedEpics.map((epic) => epic.label).join(" · ")}
+            <div className="flex flex-col gap-2.5">
+              <p className="m-0 rounded-md border border-[var(--amber)] bg-[var(--amber-soft)] px-3 py-2 text-sm">
+                {draft.ideaText}
               </p>
-              <div className="draft-list">
+              <p className="m-0 text-xs text-muted-foreground">
+                {t(usedEpics.length === 1 ? "assistant.meta.one" : "assistant.meta.many", {
+                  specs: specs.length,
+                  epics: usedEpics.length,
+                  names: usedEpics.map((epic) => epic.label).join(" · ")
+                })}
+              </p>
+              <div className="flex max-h-[40vh] flex-col gap-2 overflow-y-auto">
                 {specs.map((spec) => (
-                  <div className="draft-row" key={spec.key}>
-                    <span className="draft-epic-tag" title="Épica / Epic">
+                  <div className="flex items-center gap-2" key={spec.key}>
+                    <span
+                      className="shrink-0 rounded-full border bg-muted px-2.5 py-0.5 text-[0.68rem] font-semibold whitespace-nowrap text-muted-foreground"
+                      title={t("assistant.epicTag")}
+                    >
                       {epicOf(spec.key)}
                     </span>
                     <input
+                      className="flex-1 rounded-md border border-input bg-background px-2.5 py-1.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40"
                       value={spec.name}
                       onChange={(e) => renameSpec(spec.key, e.target.value)}
-                      aria-label={`Nombre de la spec ${spec.key} / Spec name`}
+                      aria-label={t("assistant.specNameAria", { key: spec.key })}
                     />
-                    <button
+                    <Button
                       type="button"
-                      className="icon-btn"
-                      aria-label="Quitar / Remove"
-                      title="Quitar / Remove"
+                      size="icon"
+                      variant="ghost"
+                      aria-label={t("common.remove")}
+                      title={t("common.remove")}
                       onClick={() => removeSpec(spec.key)}
                     >
-                      ✕
-                    </button>
+                      <X />
+                    </Button>
                   </div>
                 ))}
               </div>
             </div>
-            {error ? <p className="modal-error">⚠ {error}</p> : null}
-            <div className="modal-actions">
-              <button className="btn" onClick={() => setDraft(null)} disabled={busy}>
-                ← Volver / Back
-              </button>
-              <button
-                className="btn"
+            {error ? (
+              <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+                ⚠ {error}
+              </p>
+            ) : null}
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDraft(null)} disabled={busy}>
+                {t("common.back")}
+              </Button>
+              <Button
+                variant="outline"
                 onClick={() => propose(draft.variant + 1)}
                 disabled={busy}
-                title="Propone nombres alternativos / Proposes alternative names"
+                title={t("assistant.regenerate.title")}
               >
-                ↺ Regenerar / Regenerate
-              </button>
-              <button
-                className="btn primary"
-                onClick={() => void create()}
-                disabled={busy || hasSpecs || specs.length === 0}
-              >
-                {busy ? "Creando… / Creating…" : "✅ Crear en el board / Create on the board"}
-              </button>
-            </div>
+                {t("assistant.regenerate")}
+              </Button>
+              <Button onClick={() => void create()} disabled={busy || hasSpecs || specs.length === 0}>
+                {busy ? t("assistant.creating") : t("assistant.create")}
+              </Button>
+            </DialogFooter>
           </>
         )}
 
         <AgentPromptSection description={description} />
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

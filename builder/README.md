@@ -38,5 +38,8 @@ npm run typecheck  # tsc --noEmit
 
 Vite + React 18 + TypeScript + [@xyflow/react](https://reactflow.dev) (canvas) +
 [@dnd-kit/core](https://dndkit.com) (paleta / palette) + [zustand](https://zustand.docs.pmnd.rs)
-(estado / state). Todo MIT / All MIT. CSS plano con variables y dark/light por
-`prefers-color-scheme` / Plain CSS with variables and dark/light via `prefers-color-scheme`.
+(estado / state) + [Tailwind CSS v4](https://tailwindcss.com) y
+[shadcn/ui](https://ui.shadcn.com) (Radix) para la UI (spec 010). Todo MIT / All MIT.
+Dark/light por `prefers-color-scheme`; i18n propio ES/EN en `src/i18n.ts` (un idioma a la vez,
+switcher en la TopBar) / Dark/light via `prefers-color-scheme`; own ES/EN i18n in `src/i18n.ts`
+(one language at a time, TopBar switcher).

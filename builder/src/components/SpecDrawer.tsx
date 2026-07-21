@@ -1,34 +1,79 @@
-import { useEffect, useRef, useState } from "react";
+// Spec detail sheet (spec 007 drawer → spec 010 R2/R3 Sheet): a wide
+// non-modal Sheet (the canvas stays interactive) with four tabs:
+//   - Summary: approval badge, implement kickoff, live tasks, GitHub issues,
+//     spec.md excerpt.
+//   - Edit spec: one form per template section (SectionEditor, accordion).
+//   - Approval: the real approval block as a form (status read-only, date,
+//     approver, evidence) writing through POST /api/spec/:id/approve.
+//   - Relations: incoming/outgoing purposeful connections of this spec with
+//     type change + delete (edges live in board.canvas).
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
+import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
+import { useT } from "../i18n";
+import { parseApproval } from "../sections";
 import { useBuilderStore } from "../store";
 import { ImplementModal } from "./ImplementModal";
+import { EDGE_KIND_ICON } from "./LabeledEdge";
 import { SectionEditor } from "./SectionEditor";
-import type { CreateIssuesResult, SpecDetail, TaskItem } from "../types";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { AppNode, CreateIssuesResult, SpecDetail, TaskItem } from "../types";
 
 const EXCERPT_LINES = 25;
 
-/** The SDD hard stop, shown on the disabled implement button (spec 008, R2). */
-const HARD_STOP =
-  "No hay código sin spec aprobada y plan consistente — aprueba la spec primero. / " +
-  "No code before approved spec and consistent plan — approve the spec first.";
+const inputClass =
+  "w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40";
 
-type DrawerTab = "view" | "edit";
-
-// Inline confirmation for "Approve spec": asks who approves and states what
-// will be written into spec.md before touching the disk (spec 007, R2).
-function ApprovePanel({ specId, onDone }: { specId: string; onDone: () => void }) {
-  const [open, setOpen] = useState(false);
-  const [approver, setApprover] = useState("");
+// Approval tab (spec 010, R2): the 4 fields of the real block in spec.md.
+// Status and date are read-only (approveSpec stamps `Aprobado` + today);
+// approver and evidence are editable and written surgically.
+function ApprovalPanel({
+  specId,
+  specMarkdown,
+  onDone
+}: {
+  specId: string;
+  specMarkdown: string;
+  onDone: () => void;
+}) {
+  const { t } = useT();
+  const approval = useMemo(() => parseApproval(specMarkdown), [specMarkdown]);
+  const isApproved = /aprobad[oa]|approved/i.test(approval.status);
+  const [approver, setApprover] = useState(approval.approver);
+  const [evidence, setEvidence] = useState(approval.evidence);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
 
-  const confirm = async () => {
+  // Re-prime when another spec is selected or the doc refreshes on disk.
+  useEffect(() => {
+    setApprover(approval.approver);
+    setEvidence(approval.evidence);
+    setError(null);
+    setDone(false);
+  }, [specId, approval.approver, approval.evidence]);
+
+  const submit = async () => {
     if (!approver.trim() || busy) return;
     setBusy(true);
     setError(null);
+    setDone(false);
     try {
-      await api.approveSpec(specId, approver.trim());
-      setOpen(false);
+      await api.approveSpec(specId, approver.trim(), evidence.trim() || undefined);
+      setDone(true);
       onDone();
     } catch (err) {
       setError(errorMessage(err));
@@ -37,39 +82,173 @@ function ApprovePanel({ specId, onDone }: { specId: string; onDone: () => void }
     }
   };
 
-  if (!open) {
-    return (
-      <button className="btn primary approve-btn" onClick={() => setOpen(true)}>
-        ✅ Aprobar spec / Approve spec
-      </button>
-    );
-  }
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="approve-panel">
-      <p className="drawer-note">
-        Se escribirá la aprobación real en spec.md (estado, fecha de hoy y aprobador). / The real
-        approval will be written into spec.md (status, today's date and approver).
-      </p>
-      <input
-        autoFocus
-        value={approver}
-        placeholder="¿Quién aprueba? / Who approves?"
-        onChange={(e) => setApprover(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") void confirm();
-          if (e.key === "Escape") setOpen(false);
-        }}
-      />
-      {error ? <p className="drawer-error">⚠ {error}</p> : null}
-      <div className="approve-actions">
-        <button className="btn small" onClick={() => setOpen(false)} disabled={busy}>
-          Cancelar / Cancel
-        </button>
-        <button className="btn small primary" onClick={() => void confirm()} disabled={busy || !approver.trim()}>
-          {busy ? "Aprobando… / Approving…" : "Confirmar / Confirm"}
-        </button>
+    <div className="flex flex-col gap-3 pt-2">
+      <p className="m-0 text-xs text-muted-foreground">{t("approval.note")}</p>
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+          {t("approval.status")}
+        </span>
+        <span>
+          <Badge
+            variant="outline"
+            className={
+              isApproved
+                ? "border-primary bg-[var(--primary-soft)] text-primary"
+                : "border-[var(--amber)] bg-[var(--amber-soft)] text-[var(--amber)]"
+            }
+          >
+            {isApproved ? t("status.approved") : t("status.pending")}
+          </Badge>
+        </span>
       </div>
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+          {t("approval.date")}
+        </span>
+        <input
+          className={inputClass + " opacity-70"}
+          value={approval.date || today}
+          readOnly
+          title={t("approval.dateToday")}
+        />
+        <p className="m-0 text-xs text-muted-foreground">{t("approval.dateToday")}</p>
+      </div>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+          {t("approval.approver")}
+        </span>
+        <input
+          className={inputClass}
+          value={approver}
+          placeholder={t("approval.approverPh")}
+          onChange={(e) => setApprover(e.target.value)}
+        />
+      </label>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+          {t("approval.evidence")}
+        </span>
+        <textarea
+          className={inputClass + " resize-y"}
+          rows={3}
+          value={evidence}
+          placeholder={t("approval.evidencePh")}
+          onChange={(e) => setEvidence(e.target.value)}
+        />
+      </label>
+      {error ? (
+        <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+          ⚠ {error}
+        </p>
+      ) : null}
+      {done ? (
+        <p className="m-0 rounded-md bg-[var(--primary-soft)] px-3 py-2 text-sm text-primary">
+          ✓ {t("approval.done")}
+        </p>
+      ) : null}
+      <Button onClick={() => void submit()} disabled={busy || !approver.trim()}>
+        {busy ? t("approval.busy") : isApproved ? t("approval.update") : t("approval.submit")}
+      </Button>
+    </div>
+  );
+}
+
+// Relations tab (spec 010, R3): every purposeful connection touching this
+// spec's canvas node, grouped by direction, with type change + delete.
+function RelationsPanel({ specId }: { specId: string }) {
+  const { t, lang } = useT();
+  const nodes = useBuilderStore((s) => s.nodes);
+  const edges = useBuilderStore((s) => s.edges);
+  const updateEdgeLabel = useBuilderStore((s) => s.updateEdgeLabel);
+  const removeEdge = useBuilderStore((s) => s.removeEdge);
+
+  const nodeId = nodes.find((n) => n.type === "spec" && n.data.specId === specId)?.id;
+  const incoming = edges.filter((e) => e.target === nodeId);
+  const outgoing = edges.filter((e) => e.source === nodeId);
+
+  const nodeLabel = (id: string): string => {
+    const node = nodes.find((n) => n.id === id) as AppNode | undefined;
+    if (!node) return id;
+    if (node.type === "spec") return `📋 ${node.data.specId}`;
+    const firstLine = (node.data.text ?? "").split("\n")[0].trim();
+    return firstLine || t("note.empty");
+  };
+
+  const kindOf = (label: string | undefined): EdgeKind => edgeKind(label);
+
+  const changeKind = (edgeId: string, next: EdgeKind) => {
+    updateEdgeLabel(edgeId, next === "related" ? "" : EDGE_KIND_LABELS[next][lang]);
+  };
+
+  const renderRow = (edge: (typeof edges)[number], otherEnd: string) => {
+    const kind = kindOf(edge.data?.label);
+    const Icon = EDGE_KIND_ICON[kind];
+    return (
+      <li key={edge.id} className="flex items-center gap-2 rounded-md border bg-muted/40 px-2.5 py-2">
+        <span className={`edge-label kind-${kind} !static !flex shrink-0 !shadow-none`}>
+          <Icon size={12} aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1 truncate text-sm" title={otherEnd}>
+          {otherEnd}
+        </span>
+        <Select value={kind} onValueChange={(value) => changeKind(edge.id, value as EdgeKind)}>
+          <SelectTrigger size="sm" className="w-36 shrink-0" aria-label={t("relations.typeAria")}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {(["contains", "depends", "blocks", "related"] as const).map((option) => (
+              <SelectItem key={option} value={option}>
+                {t(`edge.kind.${option}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="size-7 shrink-0 text-destructive"
+          aria-label={t("relations.delete")}
+          title={t("relations.delete")}
+          onClick={() => removeEdge(edge.id)}
+        >
+          ✕
+        </Button>
+      </li>
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-3 pt-2">
+      <p className="m-0 text-xs text-muted-foreground">{t("relations.note")}</p>
+      {incoming.length === 0 && outgoing.length === 0 ? (
+        <p className="m-0 text-sm text-muted-foreground">{t("relations.none")}</p>
+      ) : (
+        <>
+          {incoming.length > 0 ? (
+            <>
+              <h3 className="m-0 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                → {t("relations.incoming")} ({incoming.length})
+              </h3>
+              <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                {incoming.map((edge) => renderRow(edge, nodeLabel(edge.source)))}
+              </ul>
+            </>
+          ) : null}
+          {outgoing.length > 0 ? (
+            <>
+              <h3 className="m-0 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                {t("relations.outgoing")} ({outgoing.length}) →
+              </h3>
+              <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                {outgoing.map((edge) => renderRow(edge, nodeLabel(edge.target)))}
+              </ul>
+            </>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }
@@ -78,6 +257,7 @@ function ApprovePanel({ specId, onDone }: { specId: string; onDone: () => void }
 // idempotent by title. The server's bilingual precondition errors (no git
 // repo/remote, gh missing or unauthenticated) are shown as-is with a hint.
 function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: number }) {
+  const { t } = useT();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreateIssuesResult | null>(null);
@@ -107,50 +287,59 @@ function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: n
   const noPending = pendingCount === 0;
 
   return (
-    <div className="issues-panel">
-      <h3>Issues de GitHub / GitHub issues</h3>
-      <button
-        className="btn issues-btn"
+    <div className="mt-1">
+      <h3 className="mt-4 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+        {t("sheet.issues")}
+      </h3>
+      <Button
+        variant="outline"
+        className="w-full"
         disabled={busy || noPending}
-        title={
-          noPending
-            ? "No hay tareas pendientes / No pending tasks"
-            : "Un issue por tarea pendiente vía gh CLI; los títulos existentes se saltan / One issue per pending task via the gh CLI; existing titles are skipped"
-        }
+        title={noPending ? t("sheet.issues.noPending") : t("sheet.issues.tooltip")}
         onClick={() => void create()}
       >
-        🐙 {busy ? "Creando issues… / Creating issues…" : "Crear issues / Create issues"}
-      </button>
+        🐙 {busy ? t("sheet.issues.creating") : t("sheet.issues.btn")}
+      </Button>
       {error ? (
-        <div className="drawer-error">
-          <p className="issues-error-msg">⚠ {error}</p>
-          <p className="issues-error-hint">
-            Requiere un repo git con remote y gh CLI autenticado. / Requires a git repo with a remote
-            and an authenticated gh CLI.
-          </p>
+        <div className="mt-2 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+          <p className="m-0">⚠ {error}</p>
+          <p className="m-0 mt-1 text-xs opacity-85">{t("sheet.issues.hint")}</p>
         </div>
       ) : null}
       {result ? (
-        <div className="issues-result">
-          <p className="issues-summary">
-            <code>{result.repo}</code> · {result.created} creadas/created · {result.skipped}{" "}
-            saltadas/skipped · {result.failed} fallidas/failed
+        <div className="mt-2 rounded-md border bg-muted/50 px-3 py-2.5">
+          <p className="m-0 mb-1.5 text-xs font-semibold">
+            <code>{result.repo}</code> ·{" "}
+            {t("sheet.issues.summary", {
+              created: result.created,
+              skipped: result.skipped,
+              failed: result.failed
+            })}
           </p>
           {result.results.length === 0 ? (
-            <p className="drawer-dim">Sin tareas pendientes / No pending tasks</p>
+            <p className="m-0 text-xs text-muted-foreground">{t("sheet.issues.noPending")}</p>
           ) : (
-            <ul className="issues-list">
+            <ul className="m-0 flex list-none flex-col gap-1 p-0 text-xs">
               {result.results.map((row) => (
-                <li key={row.line} className={`issue-row ${row.status}`}>
+                <li
+                  key={row.line}
+                  className={
+                    row.status === "failed"
+                      ? "text-destructive"
+                      : row.status === "skipped"
+                        ? "text-muted-foreground"
+                        : ""
+                  }
+                >
                   <span aria-hidden>{STATUS_ICON[row.status]}</span>{" "}
                   {row.url ? (
-                    <a href={row.url} target="_blank" rel="noreferrer">
+                    <a className="text-[var(--blue)]" href={row.url} target="_blank" rel="noreferrer">
                       {row.title}
                     </a>
                   ) : (
                     row.title
                   )}
-                  {row.error ? <span className="issue-error"> — {row.error}</span> : null}
+                  {row.error ? <span className="text-[0.72rem]"> — {row.error}</span> : null}
                 </li>
               ))}
             </ul>
@@ -162,6 +351,7 @@ function IssuesPanel({ specId, pendingCount }: { specId: string; pendingCount: n
 }
 
 export function SpecDrawer() {
+  const { t } = useT();
   const specId = useBuilderStore((s) => s.selectedSpecId);
   const summary = useBuilderStore((s) => (s.selectedSpecId ? s.specs[s.selectedSpecId] : undefined));
   const specsVersion = useBuilderStore((s) => s.specsVersion);
@@ -171,7 +361,7 @@ export function SpecDrawer() {
   const refreshSpecs = useBuilderStore((s) => s.refreshSpecs);
   const refreshGate = useBuilderStore((s) => s.refreshGate);
 
-  const [tab, setTab] = useState<DrawerTab>("view");
+  const [tab, setTab] = useState("summary");
   const [detail, setDetail] = useState<SpecDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -181,7 +371,7 @@ export function SpecDrawer() {
   pendingRef.current = pendingLine;
 
   useEffect(() => {
-    setTab("view");
+    setTab("summary");
     setImplementOpen(false);
     if (!specId) {
       setDetail(null);
@@ -208,7 +398,7 @@ export function SpecDrawer() {
   }, [specId]);
 
   // Live sync: when spec documents change on disk (specsVersion bump from the
-  // SSE watcher), silently re-fetch the open spec so the drawer reflects the
+  // SSE watcher), silently re-fetch the open spec so the sheet reflects the
   // disk without a loading flash. Skipped while a checkbox toggle is in
   // flight — that PUT already returns the fresh tasks.
   useEffect(() => {
@@ -270,94 +460,130 @@ export function SpecDrawer() {
   const excerpt = detail ? detail.docs.spec.split("\n").slice(0, EXCERPT_LINES).join("\n") : "";
 
   return (
-    <section className="drawer" aria-label={`Detalle de spec ${specId} / Spec detail`}>
-      <header className="drawer-head">
-        <h2>📋 {specId}</h2>
-        <button className="icon-btn" onClick={() => selectSpec(null)} aria-label="Cerrar / Close">
-          ✕
-        </button>
-      </header>
-      {summary ? (
-        <p className="drawer-sub">
-          <span className={`badge ${isApproved ? "ok" : "pending"}`}>{summary.status}</span>
-          <code>{summary.dir}</code>
-        </p>
-      ) : null}
-      <nav className="drawer-tabs" aria-label="Pestañas / Tabs">
-        <button className={`drawer-tab${tab === "view" ? " active" : ""}`} onClick={() => setTab("view")}>
-          Ver / View
-        </button>
-        <button className={`drawer-tab${tab === "edit" ? " active" : ""}`} onClick={() => setTab("edit")}>
-          ✏️ Editar / Edit
-        </button>
-      </nav>
-      {loading ? <p className="drawer-dim">Cargando… / Loading…</p> : null}
-      {error ? <p className="drawer-error">⚠ {error}</p> : null}
-      {detail && tab === "view" ? (
-        <div className="drawer-body nowheel">
-          {!isApproved ? <ApprovePanel specId={specId} onDone={handleApproved} /> : null}
-          {/* Copy-first implement kickoff (spec 008, R2): hard stop while not approved. */}
-          <span className="implement-wrap" title={isApproved ? undefined : HARD_STOP}>
-            <button
-              className={`btn implement-btn${isApproved ? " primary" : ""}`}
-              disabled={!isApproved}
-              title={
-                isApproved
-                  ? "Prepara el prompt exacto para tu agente / Prepares the exact prompt for your agent"
-                  : HARD_STOP
-              }
-              onClick={() => setImplementOpen(true)}
-            >
-              🤖 Implementar con agente / Implement with agent
-            </button>
-          </span>
-          <h3>Tareas / Tasks</h3>
-          <ul className="task-list">
-            {detail.tasks.length === 0 ? (
-              <li className="drawer-dim">Sin tareas / No tasks</li>
-            ) : (
-              detail.tasks.map((task) => (
-                <li key={task.line}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={task.done}
-                      disabled={pendingLine !== null}
-                      onChange={() => void toggle(task)}
+    <Sheet modal={false} open onOpenChange={(open) => !open && selectSpec(null)}>
+      <SheetContent
+        side="right"
+        className="w-full gap-0 sm:max-w-[540px]"
+        aria-label={t("sheet.aria", { id: specId })}
+        onInteractOutside={(e) => e.preventDefault()}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <SheetHeader className="pb-2">
+          <SheetTitle>📋 {specId}</SheetTitle>
+          {summary ? (
+            <SheetDescription className="flex flex-wrap items-center gap-2">
+              <Badge
+                variant="outline"
+                className={
+                  isApproved
+                    ? "border-primary bg-[var(--primary-soft)] text-primary"
+                    : "border-[var(--amber)] bg-[var(--amber-soft)] text-[var(--amber)]"
+                }
+              >
+                {summary.status}
+              </Badge>
+              <code>{summary.dir}</code>
+            </SheetDescription>
+          ) : null}
+        </SheetHeader>
+        <Tabs value={tab} onValueChange={setTab} className="min-h-0 flex-1 gap-0 px-4 pb-4">
+          <TabsList className="w-full">
+            <TabsTrigger value="summary">{t("sheet.tab.summary")}</TabsTrigger>
+            <TabsTrigger value="edit">✏️ {t("sheet.tab.edit")}</TabsTrigger>
+            <TabsTrigger value="approval">{t("sheet.tab.approval")}</TabsTrigger>
+            <TabsTrigger value="relations">{t("sheet.tab.relations")}</TabsTrigger>
+          </TabsList>
+          {loading ? <p className="px-1 pt-3 text-sm text-muted-foreground">{t("sheet.loading")}</p> : null}
+          {error ? (
+            <p className="mx-1 mt-3 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+              ⚠ {error}
+            </p>
+          ) : null}
+          {detail ? (
+            <>
+              <TabsContent value="summary" className="nowheel min-h-0 flex-1">
+                <ScrollArea className="h-full pr-3">
+                  <div className="flex flex-col pt-3 pb-2">
+                    {/* Copy-first implement kickoff (spec 008, R2): hard stop while not approved. */}
+                    <span title={isApproved ? undefined : t("sheet.hardStop")}>
+                      <Button
+                        variant={isApproved ? "default" : "outline"}
+                        className="w-full"
+                        disabled={!isApproved}
+                        title={isApproved ? t("sheet.implement.ready") : t("sheet.hardStop")}
+                        onClick={() => setImplementOpen(true)}
+                      >
+                        {t("sheet.implement")}
+                      </Button>
+                    </span>
+                    <h3 className="mt-4 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                      {t("sheet.tasks")}
+                    </h3>
+                    <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
+                      {detail.tasks.length === 0 ? (
+                        <li className="text-sm text-muted-foreground">{t("sheet.noTasks")}</li>
+                      ) : (
+                        detail.tasks.map((task) => (
+                          <li key={task.line}>
+                            <label className="flex cursor-pointer items-start gap-2 rounded-md px-1.5 py-1.5 text-sm hover:bg-accent">
+                              <input
+                                type="checkbox"
+                                className="mt-0.5 size-[15px] shrink-0 accent-[var(--primary)]"
+                                checked={task.done}
+                                disabled={pendingLine !== null}
+                                onChange={() => void toggle(task)}
+                              />
+                              <span className={task.done ? "text-muted-foreground line-through" : ""}>
+                                {task.text}
+                              </span>
+                            </label>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                    <IssuesPanel
+                      key={specId}
+                      specId={specId}
+                      pendingCount={detail.tasks.filter((task) => !task.done).length}
                     />
-                    <span className={task.done ? "task-done" : ""}>{task.text}</span>
-                  </label>
-                </li>
-              ))
-            )}
-          </ul>
-          <IssuesPanel
-            key={specId}
+                    <Separator className="my-4" />
+                    <h3 className="m-0 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                      {t("sheet.excerpt")}
+                    </h3>
+                    <pre className="m-0 max-h-64 overflow-auto rounded-md border bg-muted/50 px-3 py-2.5 text-xs leading-relaxed break-words whitespace-pre-wrap">
+                      {excerpt}
+                    </pre>
+                    <p className="mt-2 mb-0 text-xs text-muted-foreground">{t("sheet.excerptNote")}</p>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="edit" className="nowheel min-h-0 flex-1">
+                <ScrollArea className="h-full pr-3">
+                  <SectionEditor specId={specId} specMarkdown={detail.docs.spec} onSaved={handleSectionsSaved} />
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="approval" className="nowheel min-h-0 flex-1">
+                <ScrollArea className="h-full pr-3">
+                  <ApprovalPanel specId={specId} specMarkdown={detail.docs.spec} onDone={handleApproved} />
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="relations" className="nowheel min-h-0 flex-1">
+                <ScrollArea className="h-full pr-3">
+                  <RelationsPanel specId={specId} />
+                </ScrollArea>
+              </TabsContent>
+            </>
+          ) : null}
+        </Tabs>
+        {implementOpen && isApproved ? (
+          <ImplementModal
             specId={specId}
-            pendingCount={detail.tasks.filter((task) => !task.done).length}
+            specDir={summary?.dir ?? `specs/${specId}`}
+            projectRoot={projectRoot}
+            onClose={() => setImplementOpen(false)}
           />
-          <h3>spec.md (extracto / excerpt)</h3>
-          <pre className="spec-excerpt">{excerpt}</pre>
-          <p className="drawer-note">
-            Usa la pestaña «Editar» para las secciones guiadas; el contenido largo se edita en tu
-            editor. / Use the “Edit” tab for the guided sections; long-form content is edited in your
-            editor.
-          </p>
-        </div>
-      ) : null}
-      {detail && tab === "edit" ? (
-        <div className="drawer-body nowheel">
-          <SectionEditor specId={specId} specMarkdown={detail.docs.spec} onSaved={handleSectionsSaved} />
-        </div>
-      ) : null}
-      {implementOpen && isApproved ? (
-        <ImplementModal
-          specId={specId}
-          specDir={summary?.dir ?? `specs/${specId}`}
-          projectRoot={projectRoot}
-          onClose={() => setImplementOpen(false)}
-        />
-      ) : null}
-    </section>
+        ) : null}
+      </SheetContent>
+    </Sheet>
   );
 }

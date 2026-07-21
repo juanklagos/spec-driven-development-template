@@ -43,18 +43,18 @@ Todo lo que hay en el lienzo corresponde a algo real:
 
 - **Las tarjetas de spec** muestran el número y nombre del bundle, un badge de aprobación (Pendiente / Aprobado / Hecho) y una barra de progreso calculada con los checkboxes reales de `tasks.md`. Arrastra una tarjeta **Spec** desde la paleta y ponle nombre: se crea al momento un bundle real `specs/NNN-slug/` (spec, plan, tasks, history).
 - **Las notas 💡 Idea y 📦 Épica** son nodos de texto libres, con color, para dar forma a la historia alrededor de tus specs. Viven solo en `board.canvas`.
-- **Las uniones** se dibujan arrastrando entre tarjetas. Haz doble clic en una unión para etiquetarla — y ahí es donde las uniones se vuelven *tipadas*: elige **relacionada** (por defecto), **depende de** (ámbar), **bloquea** (rojo) o cualquier etiqueta libre. El tipo viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas.
+- **Las uniones** se dibujan arrastrando entre tarjetas — y en el momento de crear una se abre un selector de propósito sobre la propia unión (spec 010): **contiene** (gris, épica → spec), **depende de** (ámbar), **bloquea** (rojo), **relacionada** (azul, por defecto) o cualquier etiqueta libre. Doble clic en la unión para cambiar su propósito después. El propósito viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas.
 - **Mover tarjetas** guarda posiciones (con debounce) en `board.canvas` — nunca toca tus `.md`. El lienzo tiene deshacer/rehacer (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para exportar el tablero como imagen.
 
-Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero bloqueada por `001-catalogo-de-plantas`, que no lo está — de ahí el aviso.
+Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero depende de `001-catalogo-de-plantas`, que no lo está — de ahí el aviso.
 
 El **semáforo del gate** de la barra superior es el hard stop de SDD hecho visible: un chip vivo (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real del proyecto. Los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
 
 Al hacer clic en cualquier tarjeta de spec se abre el **panel (drawer)** — el puente entre lienzo y markdown:
 
-![El panel de una spec aprobada: botón verde «Implementar con agente», tareas como checkboxes (tres hechas, tres pendientes), botón de issues de GitHub y las pestañas Ver/Editar](../assets/builder/drawer.png)
+![El panel de una spec aprobada: botón verde «Implementar con agente», tareas como checkboxes, botón de issues de GitHub y las pestañas Resumen / Editar spec / Aprobación / Relaciones](../assets/builder/drawer.png)
 
-*El panel de una spec aprobada: las tareas son los checkboxes reales de `tasks.md`, y el botón «Implementar con agente» está habilitado porque la spec está aprobada.*
+*El panel de una spec aprobada: las tareas son los checkboxes reales de `tasks.md`, el botón «Implementar con agente» está habilitado porque la spec está aprobada, y las cuatro pestañas (Resumen, Editar spec, Aprobación, Relaciones) cubren el ciclo completo.*
 
 En el panel, las tareas son checkboxes vivos: marcar uno cambia la línea `- [ ]` de `tasks.md` a `- [x]` quirúrgicamente, y la barra de progreso de la tarjeta lo refleja. Debajo de las tareas tienes un extracto de `spec.md` en solo lectura — el contenido largo se edita en tu editor, por diseño: el lienzo compone, tu editor escribe.
 
@@ -62,9 +62,9 @@ La **sincronización en vivo** mantiene todo esto honesto. El servidor vigila tu
 
 ## Editar y aprobar specs
 
-La pestaña **«✏️ Editar»** del panel es un editor guiado de spec. Escribe cuatro secciones de `spec.md` de forma quirúrgica — historia de usuario, escenarios de aceptación, criterios EARS y fuera de alcance — y no toca nada más (bloque de aprobación y requisitos incluidos). El campo EARS autocompleta el prefijo `CUANDO … EL SISTEMA DEBERÁ …` al enfocar, y un **lint EARS en vivo** marca cada criterio con un borde verde (con forma EARS) o ámbar (sugerencia) más una pista corta bilingüe — el esqueleto a seguir y las palabras vagas sin número medible (*rápido, fácil, intuitivo…*). Solo consultivo: nunca bloquea el guardado. La misma regla está exportada para agentes como `validateEarsCriterion` en `sdd-core`.
+La pestaña **«✏️ Editar spec»** del panel es un editor guiado completo (spec 010): un formulario por CADA sección del template — historia de usuario, escenarios de aceptación, criterios EARS, requisitos, propiedades de la spec, criterios de éxito y fuera de alcance — en un acordeón ordenado con añadir/quitar/reordenar en cada lista. Cada guardado es quirúrgico: solo se reescriben los headings editados de `spec.md`, y el bloque de aprobación nunca se toca. El campo EARS autocompleta el prefijo `CUANDO … EL SISTEMA DEBERÁ …` al enfocar, y un **lint EARS en vivo** marca cada criterio con un borde verde (con forma EARS) o ámbar (sugerencia) más una pista corta — el esqueleto a seguir y las palabras vagas sin número medible (*rápido, fácil, intuitivo…*). Solo consultivo: nunca bloquea el guardado. La misma regla está exportada para agentes como `validateEarsCriterion` en `sdd-core`.
 
-Cuando la spec está lista, **«✅ Aprobar spec»** pregunta quién aprueba y, al confirmar, escribe el bloque de aprobación real en `spec.md`: estado `Aprobado`, la fecha de hoy, quien aprueba y la evidencia. Si la spec no tiene bloque de aprobación, recibes un error claro en lugar de un arreglo silencioso.
+Cuando la spec está lista, la pestaña **«Aprobación»** muestra el bloque real como formulario — estado y fecha en solo lectura (aprobar estampa `Aprobado` + la fecha de hoy), aprobador y evidencia editables — y lo escribe quirúrgicamente en `spec.md`. Si la spec no tiene bloque de aprobación, recibes un error claro en lugar de un arreglo silencioso. La pestaña **«Relaciones»** lista cada unión con propósito que toca la spec (entrantes/salientes) con su icono y color, y permite cambiar el propósito o eliminar la unión.
 
 La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga el prompt exacto de arranque de implementación — ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión — con un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
 
@@ -94,6 +94,48 @@ Si prefieres partir de una forma probada en lugar de una frase, el botón **🧩
 ## Desde un agente IA (MCP)
 
 Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board. Las tools del board — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — están respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Los agentes también tienen los poderes del panel (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), y los avisos de dependencias aparecen en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`. Ver guía 41 (referencia completa de MCP).
+
+### Conecta tu agente
+
+El comando exacto por cliente — ejecútalo desde (o apuntando a) el proyecto en el que quieres que trabaje el agente. Todo lo que el agente escribe aparece **en vivo** en `/builder` (el watcher SSE recoge cada cambio en disco), y todo lo que haces en el builder lo ve el agente al instante.
+
+**Claude Code** (un comando, desde el directorio de tu proyecto):
+
+```bash
+claude mcp add sdd --env SDD_PROJECT_ROOT=$(pwd) -- npx -y @juanklagos/sdd-mcp
+```
+
+**Codex** (añade a `~/.codex/config.toml`):
+
+```toml
+[mcp_servers.sdd]
+command = "npx"
+args = ["-y", "@juanklagos/sdd-mcp"]
+env = { SDD_PROJECT_ROOT = "/ruta/absoluta/a/tu/proyecto" }
+```
+
+**Gemini CLI** (añade a `~/.gemini/settings.json`, o al `.gemini/settings.json` del proyecto):
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "npx",
+      "args": ["-y", "@juanklagos/sdd-mcp"],
+      "env": { "SDD_PROJECT_ROOT": "/ruta/absoluta/a/tu/proyecto" }
+    }
+  }
+}
+```
+
+**Claude Desktop / ChatGPT (conector HTTP)**: arranca el servidor HTTP y apunta un conector personalizado al endpoint Streamable HTTP:
+
+```bash
+SDD_PROJECT_ROOT=/ruta/absoluta/a/tu/proyecto npm run mcp:http:start
+# URL del conector: http://127.0.0.1:3334/mcp   (SDD_MCP_HTTP_PORT cambia el puerto)
+```
+
+En clientes con soporte de MCP Apps, pedir el board renderiza la vista embebida dentro del chat (la tool `sdd_board_app` — ver la sección MCP App más abajo).
 
 ### El prompt orquestador (IA real vía MCP)
 

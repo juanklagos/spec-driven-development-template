@@ -43,18 +43,18 @@ Everything on the canvas maps to something real:
 
 - **Spec cards** show the bundle number and name, an approval badge (Pending / Approved / Done), and a progress bar computed from the real checkboxes in `tasks.md`. Drag a **Spec** card from the palette and name it: a real `specs/NNN-slug/` bundle (spec, plan, tasks, history) is created on the spot.
 - **💡 Idea and 📦 Epic notes** are free, color-coded text nodes for shaping the story around your specs. They live only in `board.canvas`.
-- **Connections** are drawn by dragging between cards. Double-click a connection to label it — and this is where connections become *typed*: pick **related** (default), **depends on** (amber), **blocks** (red), or any free-text label. The type travels in the `label` field of `board.canvas` (EN and ES spellings are both canonical) plus a standard JSON Canvas `color`.
+- **Connections** are drawn by dragging between cards — and the moment you create one, a purpose picker opens right on the edge (spec 010): **contains** (gray, epic → spec), **depends on** (amber), **blocks** (red), **related** (blue, the default) or any free-text label. Double-click a connection to change its purpose later. The purpose travels in the `label` field of `board.canvas` (EN and ES spellings are both canonical) plus a standard JSON Canvas `color`.
 - **Moving cards** saves positions (debounced) to `board.canvas` — it never touches your `.md` files. The canvas has undo/redo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) and a "📷 PNG" button to export the board as an image.
 
-Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you — an amber `⚠ N dep` chip next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. Advisory only: the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but blocked by the unapproved `001-catalogo-de-plantas` — hence the warning.
+Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you — an amber `⚠ N dep` chip next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. Advisory only: the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but depends on the unapproved `001-catalogo-de-plantas` — hence the warning.
 
 The **gate semaphore** in the top bar is the SDD hard stop made visible: a live chip (🟢 open / 🔴 closed) plus a "Validate now" button that runs the real project validation. Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
 
 Clicking any spec card opens the **drawer** — the bridge between canvas and markdown:
 
-![The drawer for an approved spec: green "Implement with agent" button, tasks as checkboxes (three done, three pending), GitHub issues button, and the View/Edit tabs](../assets/builder/drawer.png)
+![The spec sheet for an approved spec: green "Implement with agent" button, tasks as checkboxes, GitHub issues button, and the Summary / Edit spec / Approval / Relations tabs](../assets/builder/drawer.png)
 
-*The drawer of an approved spec: tasks are the real `tasks.md` checkboxes, and the "Implement with agent" button is enabled because the spec is approved.*
+*The sheet of an approved spec: tasks are the real `tasks.md` checkboxes, the "Implement with agent" button is enabled because the spec is approved, and the four tabs (Summary, Edit spec, Approval, Relations) cover the whole loop.*
 
 In the drawer, tasks are live checkboxes: toggling one flips the `- [ ]` line in `tasks.md` to `- [x]` surgically, and the card's progress bar follows. Below the tasks you get a read-only excerpt of `spec.md` — long-form content is edited in your editor, by design: the canvas composes, your editor writes.
 
@@ -62,9 +62,9 @@ In the drawer, tasks are live checkboxes: toggling one flips the `- [ ]` line in
 
 ## Editing and approving specs
 
-The drawer's **"✏️ Edit" tab** is a guided spec editor. It writes four sections of `spec.md` surgically — user story, acceptance scenarios, EARS criteria and out-of-scope — and never touches anything else (approval block and requirements included). The EARS field autocompletes the `WHEN … THE SYSTEM SHALL …` prefix on focus, and a **live EARS lint** marks each criterion with a green (EARS-shaped) or amber (suggestion) border plus a short bilingual hint — the skeleton to follow and vague words without a measurable number (*fast, easy, user-friendly…*). Advisory only: it never blocks saving. The same rule is exported for agents as `validateEarsCriterion` in `sdd-core`.
+The sheet's **"✏️ Edit spec" tab** is a full guided editor (spec 010): one form per template section — user story, acceptance scenarios, EARS criteria, requirements, spec properties, success criteria and out-of-scope — in an ordered accordion with add/remove/reorder on every list. Each save is surgical: only the edited headings of `spec.md` are rewritten, and the approval block is never touched. The EARS field autocompletes the `WHEN … THE SYSTEM SHALL …` prefix on focus, and a **live EARS lint** marks each criterion with a green (EARS-shaped) or amber (suggestion) border plus a short hint — the skeleton to follow and vague words without a measurable number (*fast, easy, user-friendly…*). Advisory only: it never blocks saving. The same rule is exported for agents as `validateEarsCriterion` in `sdd-core`.
 
-When the spec is ready, **"✅ Approve spec"** asks who approves and, on confirmation, writes the real approval block into `spec.md`: status `Aprobado`, today's date, the approver, and evidence. If the spec has no approval block, you get a clear error instead of a silent fix.
+When the spec is ready, the **"Approval" tab** shows the real block as a form — status and date read-only (approving stamps `Aprobado` + today), approver and evidence editable — and writes it surgically into `spec.md`. If the spec has no approval block, you get a clear error instead of a silent fix. The **"Relations" tab** lists every purposeful connection touching the spec (incoming/outgoing) with its icon and color, and lets you change the purpose or delete the connection.
 
 Approval unlocks **"🤖 Implement with agent"**: a modal preloads the exact implementation kickoff prompt — workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract — with one "Copy prompt" button. Copy-first by design: no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop spelled out: *no code before approved spec and consistent plan*.
 
@@ -94,6 +94,48 @@ If you would rather start from a proven shape than from a sentence, the **🧩 T
 ## From an AI agent (MCP)
 
 Any MCP client connected to `sdd-mcp` can work with the same board. The board tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — are backed by the exact same `sdd-core` layer as the canvas, so what your agent writes is what you see in `/builder` (and vice versa). Agents also get the drawer's powers (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), and the dependency warnings appear in the `dependencyWarnings` field of `sdd_gate_summary` and of `GET /api/gate`. See guide 41 (complete MCP reference).
+
+### Connect your agent
+
+The exact command per client — run each one from (or pointing at) the project you want the agent to work on. Everything the agent writes shows up **live** in `/builder` (the SSE watcher picks up every disk change), and everything you do in the builder is instantly visible to the agent.
+
+**Claude Code** (one command, from your project directory):
+
+```bash
+claude mcp add sdd --env SDD_PROJECT_ROOT=$(pwd) -- npx -y @juanklagos/sdd-mcp
+```
+
+**Codex** (add to `~/.codex/config.toml`):
+
+```toml
+[mcp_servers.sdd]
+command = "npx"
+args = ["-y", "@juanklagos/sdd-mcp"]
+env = { SDD_PROJECT_ROOT = "/absolute/path/to/your/project" }
+```
+
+**Gemini CLI** (add to `~/.gemini/settings.json`, or the project's `.gemini/settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "sdd": {
+      "command": "npx",
+      "args": ["-y", "@juanklagos/sdd-mcp"],
+      "env": { "SDD_PROJECT_ROOT": "/absolute/path/to/your/project" }
+    }
+  }
+}
+```
+
+**Claude Desktop / ChatGPT (HTTP connector)**: start the HTTP server and point a custom connector at the Streamable HTTP endpoint:
+
+```bash
+SDD_PROJECT_ROOT=/absolute/path/to/your/project npm run mcp:http:start
+# connector URL: http://127.0.0.1:3334/mcp   (SDD_MCP_HTTP_PORT changes the port)
+```
+
+In clients that support MCP Apps, asking for the board renders the embedded board view right inside the chat (the `sdd_board_app` tool — see the MCP App section below).
 
 ### The orchestrator prompt (real AI via MCP)
 

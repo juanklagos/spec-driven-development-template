@@ -51,19 +51,24 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       }
       const approveMatch = route.match(/^\/api\/spec\/([^/]+)\/approve$/);
       if (req.method === "POST" && approveMatch) {
-        const body = (await readBody(req)) as { approver?: string };
+        const body = (await readBody(req)) as { approver?: string; evidence?: string };
         if (typeof body?.approver !== "string" || !body.approver.trim()) {
-          json(res, 400, { error: "Expected { approver: string }" });
+          json(res, 400, { error: "Expected { approver: string, evidence?: string }" });
           return true;
         }
-        json(res, 200, await approveSpec(projectRoot, approveMatch[1], body.approver));
+        // Optional evidence overrides the line in spec.md (spec 010, R2).
+        const evidence = typeof body.evidence === "string" ? body.evidence : undefined;
+        json(res, 200, await approveSpec(projectRoot, approveMatch[1], body.approver, evidence));
         return true;
       }
       const sectionsMatch = route.match(/^\/api\/spec\/([^/]+)\/sections$/);
       if (req.method === "PUT" && sectionsMatch) {
         const body = (await readBody(req)) as SpecSectionsInput | undefined;
         if (typeof body !== "object" || body === null) {
-          json(res, 400, { error: "Expected { story?, scenarios?, criteria?, outOfScope? }" });
+          json(res, 400, {
+            error:
+              "Expected { story?, scenarios?, criteria?, requirements?, properties?, successCriteria?, outOfScope? }"
+          });
           return true;
         }
         json(res, 200, await updateSpecSections(projectRoot, sectionsMatch[1], body));

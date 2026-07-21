@@ -19,6 +19,7 @@ import {
   flowToBoard,
   styleEdgeForLabel
 } from "./convert";
+import { currentLang, translate } from "./i18n";
 import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates";
 import type {
   AppEdge,
@@ -102,6 +103,7 @@ interface BuilderStore {
   addSpecNode: (specId: string, position: XYPosition) => void;
   updateNoteText: (id: string, text: string) => void;
   updateEdgeLabel: (id: string, label: string) => void;
+  removeEdge: (id: string) => void;
   setEditingEdge: (id: string | null) => void;
   setViewMode: (mode: ViewMode) => void;
   setPresenceCount: (count: number) => void;
@@ -200,15 +202,17 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     if (!connection.source || !connection.target) return;
     if (connection.source === connection.target) return;
     get().pushHistory();
-    const edge: AppEdge = {
+    const edge: AppEdge = styleEdgeForLabel({
       id: `e-${uid()}`,
       source: connection.source,
       target: connection.target,
       type: "labeled",
       data: { label: "" },
       markerEnd: ARROW
-    };
-    set({ edges: addEdge(edge, get().edges) });
+    });
+    // New connections immediately ask for their purpose (spec 010, R3): the
+    // freshly created edge opens the picker; "related" stays the default.
+    set({ edges: addEdge(edge, get().edges), editingEdgeId: edge.id });
     get().scheduleSave();
   },
 
@@ -219,7 +223,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
       type: "note",
       position,
       data: {
-        text: kind === "idea" ? "💡 Idea nueva / New idea" : "📦 Épica nueva / New epic",
+        text: kind === "idea" ? translate("note.idea.new") : translate("note.epic.new"),
         color: kind === "idea" ? IDEA_COLOR : EPIC_COLOR,
         ...NOTE_CARD
       }
@@ -267,6 +271,17 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         e.id === id ? styleEdgeForLabel({ ...e, data: { ...e.data, label } }) : e
       ),
       editingEdgeId: null
+    });
+    get().scheduleSave();
+  },
+
+  // Remove one connection (relations panel, spec 010, R3).
+  removeEdge: (id) => {
+    if (!get().edges.some((e) => e.id === id)) return;
+    get().pushHistory();
+    set({
+      edges: get().edges.filter((e) => e.id !== id),
+      editingEdgeId: get().editingEdgeId === id ? null : get().editingEdgeId
     });
     get().scheduleSave();
   },
@@ -352,10 +367,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   applyBoardPlan: async (plan) => {
     const board = await api.getBoard();
     if (board.specs.length > 0) {
-      throw new Error(
-        "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío. / " +
-          "This workspace already has specs; templates only apply to an empty workspace."
-      );
+      throw new Error(translate("error.templatesNonEmpty"));
     }
 
     const idByKey = new Map<string, string>();
@@ -413,7 +425,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     await get().load();
   },
 
-  applyTemplate: async (template) => get().applyBoardPlan(templateToPlan(template)),
+  applyTemplate: async (template) => get().applyBoardPlan(templateToPlan(template, currentLang())),
 
   openTour: () => set({ tourOpen: true }),
 

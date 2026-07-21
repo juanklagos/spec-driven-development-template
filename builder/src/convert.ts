@@ -33,35 +33,54 @@ const SPEC_FILE_RE = /^specs\/([^/]+)\/spec\.md$/;
 
 export const ARROW = { type: MarkerType.ArrowClosed, width: 18, height: 18 } as const;
 
-// --- Typed edges (spec 009, R2) --------------------------------------------
-// The edge label carries the canonical dependency type (ES and EN spellings
-// are both canonical). KEEP THE LABEL SETS IN SYNC with the core copy in
-// packages/sdd-core/src/board.ts (`classifyEdgeLabel`) — same keep-in-sync
-// contract as the EARS lint in ears.ts.
+// --- Typed edges (spec 009, R2 + spec 010, R3) -----------------------------
+// The edge label carries the canonical connection purpose (ES and EN
+// spellings are both canonical). KEEP THE LABEL SETS IN SYNC with the core
+// copy in packages/sdd-core/src/board.ts (`classifyEdgeLabel`) — same
+// keep-in-sync contract as the EARS lint in ears.ts.
 
-export type EdgeKind = "related" | "depends" | "blocks";
+export type EdgeKind = "related" | "depends" | "blocks" | "contains";
 
 const DEPENDS_EDGE_LABELS = new Set(["depende de", "depends on"]);
 const BLOCKS_EDGE_LABELS = new Set(["bloquea", "blocks"]);
+const CONTAINS_EDGE_LABELS = new Set(["contiene", "contains", "contiene / contains"]);
 
-/** Stroke/marker colors readable in both themes (amber depends, red blocks). */
-const EDGE_KIND_STROKE: Partial<Record<EdgeKind, string>> = {
+/**
+ * Stroke/marker colors readable in both themes: blue related (the default
+ * purpose), amber depends, red blocks, gray contains (epic → spec).
+ */
+const EDGE_KIND_STROKE: Record<EdgeKind, string> = {
+  related: "#3b82f6",
   depends: "#d97706",
-  blocks: "#dc2626"
+  blocks: "#dc2626",
+  contains: "#6b7280"
 };
 
-/** JSON Canvas preset color persisted for typed edges (mirrors sdd-core). */
+/**
+ * JSON Canvas color persisted for typed edges (mirrors sdd-core
+ * canvasEdgeColorForLabel): presets for depends/blocks, hex for contains,
+ * none for the default related.
+ */
 const EDGE_KIND_CANVAS_COLOR: Partial<Record<EdgeKind, string>> = {
   depends: "3",
-  blocks: "1"
+  blocks: "1",
+  contains: "#6b7280"
 };
 
 export function edgeKind(label: string | undefined): EdgeKind {
   const value = (label ?? "").trim().toLowerCase();
   if (DEPENDS_EDGE_LABELS.has(value)) return "depends";
   if (BLOCKS_EDGE_LABELS.has(value)) return "blocks";
+  if (CONTAINS_EDGE_LABELS.has(value)) return "contains";
   return "related";
 }
+
+/** Canonical label written to board.canvas for a purpose, per language. */
+export const EDGE_KIND_LABELS: Record<Exclude<EdgeKind, "related">, { es: string; en: string }> = {
+  depends: { es: "depende de", en: "depends on" },
+  blocks: { es: "bloquea", en: "blocks" },
+  contains: { es: "contiene", en: "contains" }
+};
 
 /**
  * Derive the visual style (stroke + arrow color) of an edge from its label.
@@ -72,8 +91,8 @@ export function styleEdgeForLabel(edge: AppEdge): AppEdge {
   const stroke = EDGE_KIND_STROKE[edgeKind(edge.data?.label)];
   return {
     ...edge,
-    style: stroke ? { stroke, strokeWidth: 1.8 } : undefined,
-    markerEnd: { ...ARROW, ...(stroke ? { color: stroke } : {}) }
+    style: { stroke, strokeWidth: 1.8 },
+    markerEnd: { ...ARROW, color: stroke }
   };
 }
 

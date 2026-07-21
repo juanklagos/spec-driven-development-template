@@ -1,110 +1,147 @@
 import { useState } from "react";
+import { CircleHelp, Redo2, Undo2 } from "lucide-react";
 import { errorMessage } from "../api";
 import { exportBoardPng } from "../exportPng";
+import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
-import type { LiveStatus, SaveState } from "../types";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import type { SaveState } from "../types";
 
-const SAVE_LABELS: Record<SaveState, string> = {
-  saved: "Guardado / Saved",
-  dirty: "Sin guardar / Unsaved",
-  saving: "Guardando… / Saving…",
-  error: "Error al guardar / Save error"
-};
-
-const LIVE_LABELS: Record<LiveStatus, string> = {
-  on: "🟢 En vivo / Live",
-  off: "🌗 Sin conexión en vivo / Live off"
-};
-
-const LIVE_TITLES: Record<LiveStatus, string> = {
-  on: "Los cambios en disco se reflejan solos / Disk changes sync automatically",
-  off: "Reconectando con /api/events… / Reconnecting to /api/events…"
+const SAVE_KEYS: Record<SaveState, string> = {
+  saved: "topbar.save.saved",
+  dirty: "topbar.save.dirty",
+  saving: "topbar.save.saving",
+  error: "topbar.save.error"
 };
 
 function GateChip() {
+  const { t } = useT();
   const gate = useBuilderStore((s) => s.gate);
   const gateBusy = useBuilderStore((s) => s.gateBusy);
   const gateError = useBuilderStore((s) => s.gateError);
   const refreshGate = useBuilderStore((s) => s.refreshGate);
 
-  const tone = gate == null ? "unknown" : gate.ok ? "open" : "closed";
-  const label =
+  const tone =
     gate == null
-      ? "⚪ Gate…"
+      ? "border-border text-muted-foreground"
       : gate.ok
-        ? "🟢 Gate abierto / Gate open"
-        : "🔴 Gate cerrado / Gate closed";
+        ? "border-primary bg-[var(--primary-soft)] text-primary"
+        : "border-destructive bg-[var(--danger-soft)] text-destructive";
+  const label = gate == null ? `⚪ ${t("topbar.gate.loading")}` : gate.ok ? `🟢 ${t("topbar.gate.open")}` : `🔴 ${t("topbar.gate.closed")}`;
   const title = gateError
     ? `⚠ ${gateError}`
     : gate == null
-      ? "Comprobando el gate… / Checking the gate…"
-      : `${gate.errors} errores/errors · ${gate.warnings} avisos/warnings · ` +
-        `${gate.approvedSpecs}/${gate.totalSpecs} specs aprobadas/approved`;
+      ? t("topbar.gate.checking")
+      : t("topbar.gate.stats", {
+          errors: gate.errors,
+          warnings: gate.warnings,
+          approved: gate.approvedSpecs,
+          total: gate.totalSpecs
+        });
   const depWarnings = gate?.dependencyWarnings ?? [];
 
   return (
-    <span className="gate-group" data-tour="gate">
-      <span className={`gate-chip ${tone}`} title={title}>
+    <span className="inline-flex items-center gap-2" data-tour="gate">
+      <span
+        className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold whitespace-nowrap ${tone}`}
+        title={title}
+      >
         {label}
       </span>
       {depWarnings.length > 0 ? (
         // Advisory amber (spec 009, R2): typed edges where an approved spec
         // depends on a not-approved one. Never closes the gate.
         <span
-          className="gate-chip warn"
-          title={
-            "Dependencias sin aprobar / Unapproved dependencies:\n" +
-            depWarnings.map((w) => `• ${w.message}`).join("\n")
-          }
+          className="inline-flex cursor-help items-center gap-1 rounded-full border border-[var(--amber)] bg-[var(--amber-soft)] px-2.5 py-0.5 text-xs font-bold whitespace-nowrap text-[var(--amber)]"
+          title={`${t("topbar.gate.depTitle")}\n${depWarnings.map((w) => `• ${w.message}`).join("\n")}`}
         >
           ⚠ {depWarnings.length} dep
         </span>
       ) : null}
-      <button
-        className="btn small"
+      <Button
+        size="sm"
+        variant="outline"
         onClick={() => void refreshGate()}
         disabled={gateBusy}
-        title="Ejecuta la validación real del proyecto / Runs the real project validation"
+        title={t("topbar.gate.validateTitle")}
       >
-        {gateBusy ? "Validando… / Validating…" : "Validar ahora / Validate now"}
-      </button>
+        {gateBusy ? t("topbar.gate.validating") : t("topbar.gate.validate")}
+      </Button>
     </span>
   );
 }
 
 /** Canvas ↔ kanban toggle (spec 009, R1). Same data, two projections. */
 function ViewToggle() {
+  const { t } = useT();
   const viewMode = useBuilderStore((s) => s.viewMode);
   const setViewMode = useBuilderStore((s) => s.setViewMode);
+  const base =
+    "px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer";
   return (
-    <span className="view-toggle" role="group" aria-label="Vista / View">
+    <span
+      className="inline-flex overflow-hidden rounded-md border"
+      role="group"
+      aria-label={t("topbar.view.label")}
+    >
       <button
-        className={`view-btn${viewMode === "canvas" ? " active" : ""}`}
+        className={`${base} ${viewMode === "canvas" ? "bg-[var(--primary-soft)] text-primary" : "bg-card text-muted-foreground hover:bg-accent hover:text-foreground"}`}
         onClick={() => setViewMode("canvas")}
         aria-pressed={viewMode === "canvas"}
       >
-        🗺️ Lienzo / Canvas
+        🗺️ {t("topbar.view.canvas")}
       </button>
       <button
-        className={`view-btn${viewMode === "board" ? " active" : ""}`}
+        className={`${base} border-l ${viewMode === "board" ? "bg-[var(--primary-soft)] text-primary" : "bg-card text-muted-foreground hover:bg-accent hover:text-foreground"}`}
         onClick={() => setViewMode("board")}
         aria-pressed={viewMode === "board"}
       >
-        📋 Tablero / Board
+        📋 {t("topbar.view.board")}
       </button>
+    </span>
+  );
+}
+
+/** ES/EN switcher (spec 010, R1): persisted, one language at a time. */
+function LangSwitcher() {
+  const { t, lang, setLang } = useT();
+  const base = "px-2 py-1 text-xs font-bold uppercase transition-colors cursor-pointer";
+  return (
+    <span
+      className="inline-flex overflow-hidden rounded-md border"
+      role="group"
+      aria-label={t("topbar.lang")}
+    >
+      {(["es", "en"] as const).map((code, i) => (
+        <button
+          key={code}
+          className={`${base} ${i > 0 ? "border-l" : ""} ${
+            lang === code
+              ? "bg-[var(--primary-soft)] text-primary"
+              : "bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+          }`}
+          onClick={() => setLang(code)}
+          aria-pressed={lang === code}
+        >
+          {code}
+        </button>
+      ))}
     </span>
   );
 }
 
 /** 👥 N when more than one SSE client is on this workspace (spec 009, R4). */
 function PresenceChip() {
+  const { t } = useT();
   const liveStatus = useBuilderStore((s) => s.liveStatus);
   const count = useBuilderStore((s) => s.presenceCount);
   if (liveStatus !== "on" || count < 2) return null;
   return (
     <span
-      className="presence-chip"
-      title={`${count} personas viendo este workspace / ${count} people viewing this workspace`}
+      className="inline-flex cursor-help items-center gap-1 rounded-full border border-primary bg-[var(--primary-soft)] px-2.5 py-0.5 text-xs font-bold whitespace-nowrap text-primary"
+      title={t("topbar.presence.title", { n: count })}
     >
       👥 {count}
     </span>
@@ -112,35 +149,39 @@ function PresenceChip() {
 }
 
 function HistoryButtons() {
+  const { t } = useT();
   const canUndo = useBuilderStore((s) => s.past.length > 0);
   const canRedo = useBuilderStore((s) => s.future.length > 0);
   const undo = useBuilderStore((s) => s.undo);
   const redo = useBuilderStore((s) => s.redo);
   return (
     <>
-      <button
-        className="icon-btn"
+      <Button
+        size="icon"
+        variant="ghost"
         onClick={undo}
         disabled={!canUndo}
-        aria-label="Deshacer / Undo"
-        title="Deshacer (⌘Z / Ctrl+Z) / Undo"
+        aria-label={t("topbar.undo")}
+        title={t("topbar.undo.title")}
       >
-        ↶
-      </button>
-      <button
-        className="icon-btn"
+        <Undo2 />
+      </Button>
+      <Button
+        size="icon"
+        variant="ghost"
         onClick={redo}
         disabled={!canRedo}
-        aria-label="Rehacer / Redo"
-        title="Rehacer (⇧⌘Z / Ctrl+Shift+Z) / Redo"
+        aria-label={t("topbar.redo")}
+        title={t("topbar.redo.title")}
       >
-        ↷
-      </button>
+        <Redo2 />
+      </Button>
     </>
   );
 }
 
 function ExportPngButton() {
+  const { t } = useT();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -158,18 +199,19 @@ function ExportPngButton() {
   };
 
   return (
-    <button
-      className="btn"
+    <Button
+      variant="outline"
       onClick={() => void handleExport()}
       disabled={busy}
-      title={error ?? "Exporta el tablero como imagen / Exports the board as an image"}
+      title={error ?? t("topbar.png.title")}
     >
-      📷 {busy ? "Exportando… / Exporting…" : error ? "⚠ PNG" : "PNG"}
-    </button>
+      📷 {busy ? t("topbar.png.exporting") : error ? "⚠ PNG" : t("topbar.png")}
+    </Button>
   );
 }
 
 export function TopBar() {
+  const { t } = useT();
   const projectRoot = useBuilderStore((s) => s.projectRoot);
   const saveState = useBuilderStore((s) => s.saveState);
   const saveError = useBuilderStore((s) => s.saveError);
@@ -179,55 +221,68 @@ export function TopBar() {
   const setGalleryOpen = useBuilderStore((s) => s.setGalleryOpen);
   const setAssistantOpen = useBuilderStore((s) => s.setAssistantOpen);
 
+  const saveDot =
+    saveState === "error"
+      ? "bg-destructive"
+      : saveState === "saved"
+        ? "bg-primary"
+        : "bg-[var(--amber)]";
+
   return (
-    <header className="topbar">
-      <h1>🌱 SDD Builder</h1>
+    <header className="z-20 flex items-center gap-3.5 border-b bg-card px-4 py-2">
+      <h1 className="m-0 text-base font-bold whitespace-nowrap">🌱 SDD Builder</h1>
       {projectRoot ? (
         // The path is truncated by CSS; the title shows the full workspace.
-        <code className="workspace" title={`Workspace: ${projectRoot}`}>
+        <code className="workspace" title={`${t("topbar.workspace")}: ${projectRoot}`}>
           {projectRoot}
         </code>
       ) : null}
-      <div className="topbar-right">
+      <div className="ml-auto flex flex-wrap items-center justify-end gap-2.5">
         <ViewToggle />
-        <span className="topbar-sep" aria-hidden />
+        <Separator orientation="vertical" className="!h-5" />
         <GateChip />
-        <span className="topbar-sep" aria-hidden />
+        <Separator orientation="vertical" className="!h-5" />
         <HistoryButtons />
         <ExportPngButton />
-        <button
-          className="btn"
-          onClick={() => setAssistantOpen(true)}
-          title="Describe tu proyecto y genera un borrador de board / Describe your project and generate a draft board"
-        >
-          ✨ Asistente / Assistant
-        </button>
-        <button className="btn" onClick={() => setGalleryOpen(true)}>
-          🧩 Plantillas / Templates
-        </button>
-        <button
-          className="icon-btn"
-          onClick={openTour}
-          aria-label="Ver el tour de bienvenida / Show the welcome tour"
-          title="Tour de bienvenida / Welcome tour"
-        >
-          ?
-        </button>
-        <span className="topbar-sep" aria-hidden />
+        <Button variant="outline" onClick={() => setAssistantOpen(true)} title={t("topbar.assistant.title")}>
+          ✨ {t("topbar.assistant")}
+        </Button>
+        <Button variant="outline" onClick={() => setGalleryOpen(true)}>
+          🧩 {t("topbar.templates")}
+        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="ghost" onClick={openTour} aria-label={t("topbar.tour")}>
+              <CircleHelp />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t("topbar.tour.title")}</TooltipContent>
+        </Tooltip>
+        <Separator orientation="vertical" className="!h-5" />
         <PresenceChip />
-        <span className={`live-indicator ${liveStatus}`} title={LIVE_TITLES[liveStatus]}>
-          {LIVE_LABELS[liveStatus]}
+        <span
+          className={`text-xs whitespace-nowrap ${liveStatus === "on" ? "text-primary" : "text-muted-foreground"}`}
+          title={liveStatus === "on" ? t("topbar.live.title.on") : t("topbar.live.title.off")}
+        >
+          {liveStatus === "on" ? "🟢" : "🌗"} {liveStatus === "on" ? t("topbar.live.on") : t("topbar.live.off")}
         </span>
-        <span className={`save-indicator ${saveState}`} title={saveError ?? SAVE_LABELS[saveState]}>
-          <span className="save-dot" aria-hidden />
-          {SAVE_LABELS[saveState]}
+        <span
+          className="inline-flex items-center gap-1.5 text-xs whitespace-nowrap text-muted-foreground"
+          title={saveError ?? t(SAVE_KEYS[saveState])}
+        >
+          <span
+            className={`inline-block size-2 rounded-full ${saveDot} ${saveState === "saving" ? "animate-pulse" : ""}`}
+            aria-hidden
+          />
+          {t(SAVE_KEYS[saveState])}
         </span>
-        <button className="btn" onClick={() => void flushSave()}>
-          Guardar / Save
-        </button>
-        <a className="btn ghost" href="/dashboard">
-          Dashboard
-        </a>
+        <Button variant="outline" onClick={() => void flushSave()}>
+          {t("topbar.saveBtn")}
+        </Button>
+        <LangSwitcher />
+        <Button variant="ghost" asChild>
+          <a href="/dashboard">Dashboard</a>
+        </Button>
       </div>
     </header>
   );

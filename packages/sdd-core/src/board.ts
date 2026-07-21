@@ -247,29 +247,33 @@ export async function connectBoardCards(
 }
 
 // ---------------------------------------------------------------------------
-// Typed edges + dependency warnings (spec 009, R2)
+// Typed edges + dependency warnings (spec 009, R2; "contains" in spec 010, R3)
 // ---------------------------------------------------------------------------
-// An edge's `label` carries the canonical dependency type; the ES and EN
+// An edge's `label` carries the canonical connection purpose; the ES and EN
 // spellings are both canonical so agents and the builder UI can write either.
 // KEEP THE LABEL SETS IN SYNC with builder/src/convert.ts (the frontend does
 // not import sdd-core; same keep-in-sync contract as the EARS lint).
 
-export type CanvasEdgeKind = "related" | "depends" | "blocks";
+export type CanvasEdgeKind = "related" | "depends" | "blocks" | "contains";
 
 const DEPENDS_EDGE_LABELS = new Set(["depende de", "depends on"]);
 const BLOCKS_EDGE_LABELS = new Set(["bloquea", "blocks"]);
+// The legacy bilingual template label is read as the same purpose.
+const CONTAINS_EDGE_LABELS = new Set(["contiene", "contains", "contiene / contains"]);
 
-/** JSON Canvas preset colors used for typed edges (amber/red). */
+/** JSON Canvas colors for typed edges: presets for amber/red, hex for gray. */
 const EDGE_KIND_CANVAS_COLOR: Partial<Record<CanvasEdgeKind, string>> = {
   depends: "3", // amber preset
-  blocks: "1" // red preset
+  blocks: "1", // red preset
+  contains: "#6b7280" // gray (epic → spec); no gray preset exists in JSON Canvas
 };
 
-/** Classify an edge label into its dependency kind ("related" by default). */
+/** Classify an edge label into its purpose ("related" by default). */
 export function classifyEdgeLabel(label: string | undefined): CanvasEdgeKind {
   const value = (label ?? "").trim().toLowerCase();
   if (DEPENDS_EDGE_LABELS.has(value)) return "depends";
   if (BLOCKS_EDGE_LABELS.has(value)) return "blocks";
+  if (CONTAINS_EDGE_LABELS.has(value)) return "contains";
   return "related";
 }
 
@@ -320,7 +324,9 @@ export async function getDependencyWarnings(projectRoot: string): Promise<Depend
   const warnings: DependencyWarning[] = [];
   for (const edge of canvas.edges) {
     const kind = classifyEdgeLabel(edge.label);
-    if (kind === "related") continue;
+    // Only depends/blocks encode an approval-order dependency; "related" and
+    // the structural "contains" (epic → spec) never warn.
+    if (kind !== "depends" && kind !== "blocks") continue;
     const from = nodeToSpec.get(edge.fromNode);
     const to = nodeToSpec.get(edge.toNode);
     if (!from || !to || from === to) continue;

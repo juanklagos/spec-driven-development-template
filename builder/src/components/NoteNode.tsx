@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { colorToHex, IDEA_COLOR } from "../convert";
+import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import type { NoteFlowNode } from "../types";
 
 export function NoteNode({ id, data, selected }: NodeProps<NoteFlowNode>) {
+  const { t } = useT();
   const updateNoteText = useBuilderStore((s) => s.updateNoteText);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(data.text);
@@ -27,10 +29,10 @@ export function NoteNode({ id, data, selected }: NodeProps<NoteFlowNode>) {
         width: data.width,
         minHeight: data.height,
         borderTopColor: color,
-        background: `color-mix(in srgb, ${color} 8%, var(--surface))`
+        background: `color-mix(in srgb, ${color} 8%, var(--card))`
       }}
       onDoubleClick={startEdit}
-      title="Doble clic para editar / Double-click to edit"
+      title={t("note.editTitle")}
     >
       <Handle type="target" position={Position.Left} />
       {editing ? (
@@ -49,9 +51,11 @@ export function NoteNode({ id, data, selected }: NodeProps<NoteFlowNode>) {
           }}
         />
       ) : (
-        <p className="note-text">{data.text || "(vacío / empty)"}</p>
+        <p className="m-0 text-sm break-words whitespace-pre-wrap">{data.text || t("note.empty")}</p>
       )}
-      {data.file ? <span className="note-file">📄 {data.file}</span> : null}
+      {data.file ? (
+        <span className="font-mono text-[0.7rem] break-all text-muted-foreground">📄 {data.file}</span>
+      ) : null}
       <Handle type="source" position={Position.Right} />
     </div>
   );

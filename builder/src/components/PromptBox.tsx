@@ -4,14 +4,16 @@
 // and the button says so, so a manual ⌘C/Ctrl+C always works.
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "../i18n";
 import { copyToClipboard } from "../prompts";
+import { Button } from "@/components/ui/button";
 
 type CopyState = "idle" | "copied" | "manual";
 
-const COPY_LABELS: Record<CopyState, string> = {
-  idle: "📋 Copiar prompt / Copy prompt",
-  copied: "✓ Copiado / Copied",
-  manual: "⚠ Selecciona y copia (⌘C) / Select and copy (Ctrl+C)"
+const COPY_KEYS: Record<CopyState, string> = {
+  idle: "prompt.copy",
+  copied: "prompt.copied",
+  manual: "prompt.manual"
 };
 
 interface Props {
@@ -20,6 +22,7 @@ interface Props {
 }
 
 export function PromptBox({ prompt, rows = 10 }: Props) {
+  const { t } = useT();
   const [state, setState] = useState<CopyState>("idle");
   const areaRef = useRef<HTMLTextAreaElement | null>(null);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -43,17 +46,18 @@ export function PromptBox({ prompt, rows = 10 }: Props) {
   };
 
   return (
-    <div className="prompt-box">
+    <div className="flex flex-col gap-2">
       <textarea
         ref={areaRef}
         readOnly
         rows={rows}
         value={prompt}
         onFocus={(e) => e.currentTarget.select()}
+        className="w-full resize-y rounded-md border bg-muted px-3 py-2 font-mono text-xs leading-relaxed outline-none"
       />
-      <button type="button" className="btn small primary" onClick={() => void copy()}>
-        {COPY_LABELS[state]}
-      </button>
+      <Button size="sm" className="self-start" onClick={() => void copy()}>
+        {t(COPY_KEYS[state])}
+      </Button>
     </div>
   );
 }

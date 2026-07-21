@@ -11,7 +11,11 @@ import type {
   UpdateSpecSectionsResult
 } from "./types";
 
+import { translate } from "./i18n";
+
 // Same-origin API served by packages/sdd-mcp (http://127.0.0.1:3334/builder).
+// Client-side errors are localized; errors coming FROM the server may still
+// be bilingual (documented limitation of spec 010, R1).
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
@@ -20,10 +24,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       ...init
     });
   } catch {
-    throw new Error(
-      "No se pudo conectar con la API / Could not reach the API — arranca el servidor / start the server: " +
-        "SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start"
-    );
+    throw new Error(translate("error.apiUnreachable"));
   }
   if (!res.ok) {
     let message = `HTTP ${res.status}`;
@@ -60,10 +61,10 @@ export const api = {
 
   getGate: (): Promise<GateSummary> => request("/api/gate"),
 
-  approveSpec: (id: string, approver: string): Promise<ApproveSpecResult> =>
+  approveSpec: (id: string, approver: string, evidence?: string): Promise<ApproveSpecResult> =>
     request(`/api/spec/${encodeURIComponent(id)}/approve`, {
       method: "POST",
-      body: JSON.stringify({ approver })
+      body: JSON.stringify(evidence ? { approver, evidence } : { approver })
     }),
 
   putSections: (id: string, sections: SpecSectionsInput): Promise<UpdateSpecSectionsResult> =>

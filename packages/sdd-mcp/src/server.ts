@@ -512,11 +512,15 @@ export function createSddMcpServer(): McpServer {
     {
       title: "Approve spec",
       description:
-        "Surgically fill the existing approval block of a spec.md: Estado -> Aprobado, approval date -> today, approver -> given name, evidence when empty. Fails clearly when the block is missing.",
+        "Surgically fill the existing approval block of a spec.md: Estado -> Aprobado, approval date -> today, approver -> given name, evidence when provided (always wins) or when the line is empty. Fails clearly when the block is missing.",
       inputSchema: {
         projectRoot: projectRootSchema,
         specId: specIdSchema,
-        approver: z.string().min(1).describe("Person or role approving the spec.")
+        approver: z.string().min(1).describe("Person or role approving the spec."),
+        evidence: z
+          .string()
+          .optional()
+          .describe("Approval evidence (link or short quote); overwrites the evidence line when given.")
       },
       outputSchema: {
         specId: z.string(),
@@ -527,8 +531,8 @@ export function createSddMcpServer(): McpServer {
         fieldsUpdated: z.array(z.string())
       }
     },
-    async ({ projectRoot, specId, approver }) => {
-      const result = await approveSpec(projectRoot, specId, approver);
+    async ({ projectRoot, specId, approver, evidence }) => {
+      const result = await approveSpec(projectRoot, specId, approver, evidence);
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
@@ -541,13 +545,19 @@ export function createSddMcpServer(): McpServer {
     {
       title: "Update spec sections",
       description:
-        "Replace ONLY the content under the guided-editor headings of a spec.md (user story, acceptance scenarios, EARS criteria, out of scope) preserving everything else. Tolerant to the EN/ES headings of both repo templates.",
+        "Replace ONLY the content under the guided-editor headings of a spec.md (user story, acceptance scenarios, EARS criteria, requirements, spec properties, success criteria, out of scope — the full template) preserving everything else, the approval block included. Tolerant to the EN/ES headings of both repo templates.",
       inputSchema: {
         projectRoot: projectRootSchema,
         specId: specIdSchema,
         story: z.string().optional().describe("Main user story (free text)."),
         scenarios: z.array(z.string()).optional().describe("Acceptance scenarios (numbered list)."),
         criteria: z.array(z.string()).optional().describe("EARS acceptance criteria (bullet list)."),
+        requirements: z.array(z.string()).optional().describe("Requirements (bullet list)."),
+        properties: z
+          .array(z.string())
+          .optional()
+          .describe("Spec properties — universal, testable properties (bullet list)."),
+        successCriteria: z.array(z.string()).optional().describe("Success criteria (bullet list)."),
         outOfScope: z.string().optional().describe("Out of scope (free text).")
       },
       outputSchema: {
@@ -556,8 +566,16 @@ export function createSddMcpServer(): McpServer {
         created: z.array(z.string())
       }
     },
-    async ({ projectRoot, specId, story, scenarios, criteria, outOfScope }) => {
-      const result = await updateSpecSections(projectRoot, specId, { story, scenarios, criteria, outOfScope });
+    async ({ projectRoot, specId, story, scenarios, criteria, requirements, properties, successCriteria, outOfScope }) => {
+      const result = await updateSpecSections(projectRoot, specId, {
+        story,
+        scenarios,
+        criteria,
+        requirements,
+        properties,
+        successCriteria,
+        outOfScope
+      });
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

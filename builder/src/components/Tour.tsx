@@ -1,52 +1,26 @@
 // Welcome tour (spec 007, R3): five anchored steps with a homemade overlay —
 // a highlight ring around the target (data-tour attributes) plus a tooltip
 // card. No dependency; dismissable and re-launchable from the "?" button.
+// Localized (one language at a time) since spec 010, R1.
 
 import { useCallback, useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
+import { Button } from "@/components/ui/button";
 
 interface TourStep {
   target: string;
-  title: string;
-  body: string;
+  titleKey: string;
+  bodyKey: string;
 }
 
 const STEPS: TourStep[] = [
-  {
-    target: "palette",
-    title: "1 · La paleta / The palette",
-    body:
-      "Arrastra 💡 Idea, 📦 Épica o 📋 Spec desde aquí al lienzo (o haz clic). / " +
-      "Drag 💡 Idea, 📦 Epic or 📋 Spec from here onto the canvas (or click)."
-  },
-  {
-    target: "palette-spec",
-    title: "2 · Crear una spec / Create a spec",
-    body:
-      "La tarjeta 📋 Spec crea una carpeta real specs/NNN-… con spec, plan y tareas — sin tocar la terminal. / " +
-      "The 📋 Spec card creates a real specs/NNN-… folder with spec, plan and tasks — no terminal needed."
-  },
-  {
-    target: "canvas",
-    title: "3 · Conectar tarjetas / Connect cards",
-    body:
-      "Arrastra desde el punto derecho de una tarjeta hasta otra para unirlas; doble clic en la línea para etiquetarla. / " +
-      "Drag from a card's right handle to another card to connect them; double-click the line to label it."
-  },
-  {
-    target: "canvas",
-    title: "4 · Tareas y editor / Tasks and editor",
-    body:
-      "Haz clic en una tarjeta de spec para abrir el panel: marca tareas y usa la pestaña Editar para escribir la spec guiada. / " +
-      "Click a spec card to open the drawer: tick tasks and use the Edit tab to write the spec with guidance."
-  },
-  {
-    target: "gate",
-    title: "5 · El gate / The gate",
-    body:
-      "El semáforo del gate te dice si puedes implementar: 🟢 abierto, 🔴 cerrado. Pulsa «Validar ahora» para comprobarlo. / " +
-      "The gate semaphore tells you whether you can implement: 🟢 open, 🔴 closed. Press “Validate now” to check."
-  }
+  { target: "palette", titleKey: "tour.1.title", bodyKey: "tour.1.body" },
+  { target: "palette-spec", titleKey: "tour.2.title", bodyKey: "tour.2.body" },
+  { target: "canvas", titleKey: "tour.3.title", bodyKey: "tour.3.body" },
+  { target: "canvas", titleKey: "tour.4.title", bodyKey: "tour.4.body" },
+  { target: "gate", titleKey: "tour.5.title", bodyKey: "tour.5.body" }
 ];
 
 const RING_PADDING = 6;
@@ -66,6 +40,7 @@ function targetRect(target: string): Rect | null {
 }
 
 export function Tour() {
+  const { t } = useT();
   const closeTour = useBuilderStore((s) => s.closeTour);
   const [step, setStep] = useState(0);
   const [dontShowAgain, setDontShowAgain] = useState(false);
@@ -115,7 +90,7 @@ export function Tour() {
   }
 
   return (
-    <div className="tour-layer" role="dialog" aria-label="Tour de bienvenida / Welcome tour">
+    <div className="tour-layer" role="dialog" aria-label={t("tour.aria")}>
       {rect ? (
         <div
           className="tour-ring"
@@ -130,42 +105,48 @@ export function Tour() {
         <div className="tour-backdrop" />
       )}
       <div className="tour-card" style={cardStyle}>
-        <header className="tour-card-head">
-          <strong>{current.title}</strong>
-          <button
-            className="icon-btn"
+        <header className="flex items-center justify-between gap-2">
+          <strong>{t(current.titleKey)}</strong>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-7"
             onClick={() => closeTour(dontShowAgain)}
-            aria-label="Cerrar el tour / Close the tour"
+            aria-label={t("tour.close")}
           >
-            ✕
-          </button>
+            <X />
+          </Button>
         </header>
-        <p>{current.body}</p>
-        <div className="tour-dots" aria-hidden>
+        <p className="m-0 text-sm text-muted-foreground">{t(current.bodyKey)}</p>
+        <div className="flex gap-1.5" aria-hidden>
           {STEPS.map((s, i) => (
-            <span key={`${s.target}-${i}`} className={`tour-dot${i === step ? " active" : ""}`} />
+            <span
+              key={`${s.target}-${i}`}
+              className={`size-[7px] rounded-full ${i === step ? "bg-primary" : "bg-border"}`}
+            />
           ))}
         </div>
-        <label className="tour-dontshow">
+        <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
           <input
             type="checkbox"
+            className="accent-[var(--primary)]"
             checked={dontShowAgain}
             onChange={(e) => setDontShowAgain(e.target.checked)}
           />
-          No mostrar de nuevo / Don't show again
+          {t("tour.dontShow")}
         </label>
-        <div className="tour-actions">
-          <button className="btn small" onClick={() => setStep(step - 1)} disabled={step === 0}>
-            ← Atrás / Back
-          </button>
+        <div className="flex justify-between gap-2">
+          <Button size="sm" variant="outline" onClick={() => setStep(step - 1)} disabled={step === 0}>
+            {t("tour.back")}
+          </Button>
           {isLast ? (
-            <button className="btn small primary" onClick={() => closeTour(dontShowAgain)}>
-              Terminar / Finish
-            </button>
+            <Button size="sm" onClick={() => closeTour(dontShowAgain)}>
+              {t("tour.finish")}
+            </Button>
           ) : (
-            <button className="btn small primary" onClick={() => setStep(step + 1)}>
-              Siguiente / Next →
-            </button>
+            <Button size="sm" onClick={() => setStep(step + 1)}>
+              {t("tour.next")}
+            </Button>
           )}
         </div>
       </div>

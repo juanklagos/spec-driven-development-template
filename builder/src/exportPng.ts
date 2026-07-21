@@ -5,6 +5,7 @@
 
 import { getNodesBounds, getViewportForBounds } from "@xyflow/react";
 import { toPng } from "html-to-image";
+import { currentLang } from "./i18n";
 import type { AppNode } from "./types";
 
 const MIN_SIZE = 480;
@@ -12,12 +13,15 @@ const MAX_SIZE = 3072;
 const PADDING = 0.08;
 
 export async function exportBoardPng(nodes: AppNode[]): Promise<void> {
+  const es = currentLang() === "es";
   if (nodes.length === 0) {
-    throw new Error("Nada que exportar: el lienzo está vacío / Nothing to export: the canvas is empty");
+    throw new Error(
+      es ? "Nada que exportar: el lienzo está vacío" : "Nothing to export: the canvas is empty"
+    );
   }
   const viewportEl = document.querySelector<HTMLElement>(".react-flow__viewport");
   if (!viewportEl) {
-    throw new Error("No se encontró el lienzo / Could not find the canvas");
+    throw new Error(es ? "No se encontró el lienzo" : "Could not find the canvas");
   }
 
   const bounds = getNodesBounds(nodes);

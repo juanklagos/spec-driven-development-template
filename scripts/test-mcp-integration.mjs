@@ -344,6 +344,10 @@ async function main() {
           story: "Como tester, quiero secciones quirúrgicas, para no romper el resto del spec.",
           scenarios: ["Dado un spec de plantilla, cuando guardo secciones, entonces la aprobación no cambia."],
           criteria: ["CUANDO se guarden secciones, EL SISTEMA DEBERÁ preservar el bloque de aprobación."],
+          // Full-template sections (spec 010, R2):
+          requirements: ["R1 fixture: requisito escrito por el editor completo."],
+          properties: ["Para toda escritura de secciones, EL SISTEMA DEBERÁ preservar el resto del documento."],
+          successCriteria: ["El bloque de aprobación sobrevive a todas las ediciones."],
           outOfScope: "Editor de texto libre completo."
         }
       })
@@ -357,8 +361,34 @@ async function main() {
     // Surgical guarantee: the approval block written above is untouched.
     assert.match(editedOnDisk, /Estado \/ Status: `Aprobado`/);
     assert.match(editedOnDisk, /Aprobado por \/ Approved by: `MCP Integration Test`/);
-    // And unrelated sections (Requisitos) survive too.
-    assert.match(editedOnDisk, /## Requisitos/);
+    // Full-template sections landed under their headings (spec 010, R2).
+    assert.match(editedOnDisk, /## Requisitos\n\n- R1 fixture: requisito escrito por el editor completo\./);
+    assert.match(editedOnDisk, /## Propiedades de la spec[^\n]*\n\n- Para toda escritura de secciones/);
+    assert.match(editedOnDisk, /## Criterios de éxito\n\n- El bloque de aprobación sobrevive/);
+    // The template placeholders of the replaced sections are gone.
+    assert.doesNotMatch(editedOnDisk, /- Requisito 1/);
+    assert.doesNotMatch(editedOnDisk, /- Criterio 1/);
+
+    // Evidence pass-through (spec 010, R2): re-approving with explicit
+    // evidence overwrites the evidence line and nothing else.
+    const reApproved = asObject(
+      await client.callTool({
+        name: "sdd_approve_spec",
+        arguments: {
+          projectRoot,
+          specId: secondSpecId,
+          approver: "MCP Integration Test",
+          evidence: "Evidencia fixture 010 — aprobado con evidencia explícita."
+        }
+      })
+    );
+    assert.equal(reApproved.evidenceUpdated, true);
+    assert.ok(reApproved.fieldsUpdated.includes("evidence"));
+    const reApprovedOnDisk = await fs.readFile(secondSpecPath, "utf8");
+    assert.match(reApprovedOnDisk, /Evidencia fixture 010 — aprobado con evidencia explícita\./);
+    assert.doesNotMatch(reApprovedOnDisk, /Aprobado desde SDD Builder/);
+    // The surgical sections written above are still intact after re-approving.
+    assert.match(reApprovedOnDisk, /## Requisitos\n\n- R1 fixture/);
 
     const postSummary = asObject(
       await client.callTool({ name: "sdd_gate_summary", arguments: { projectRoot } })
@@ -412,6 +442,20 @@ async function main() {
     );
     assert.ok(depEdge, "the typed edge should be persisted");
     assert.equal(depEdge.color, "3", "'depende de' edges carry the amber preset color");
+
+    // "contiene"/"contains" purpose (spec 010, R3): gray hex color persisted,
+    // and NEVER a dependency warning (structural, not an approval-order edge).
+    const containsConnect = asObject(
+      await client.callTool({
+        name: "sdd_board_connect",
+        arguments: { projectRoot, fromNode: "note-1", toNode: specId, label: "contiene" }
+      })
+    );
+    const containsEdge = containsConnect.canvas.edges.find(
+      (edge) => edge.fromNode === "note-1" && edge.toNode === specId
+    );
+    assert.ok(containsEdge, "the contains edge should be persisted");
+    assert.equal(containsEdge.color, "#6b7280", "'contiene' edges carry the gray hex color");
 
     const depSummary = asObject(
       await client.callTool({ name: "sdd_gate_summary", arguments: { projectRoot } })

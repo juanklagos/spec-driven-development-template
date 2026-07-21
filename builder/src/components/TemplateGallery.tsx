@@ -2,12 +2,23 @@
 // create real specs (POST /api/spec each) plus a tidy pre-laid-out canvas.
 // Only allowed on a workspace with zero specs; otherwise a warning is shown.
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { errorMessage } from "../api";
+import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import { BOARD_TEMPLATES, type BoardTemplate } from "../templates";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
 
 export function TemplateGallery() {
+  const { t, lang } = useT();
   const setGalleryOpen = useBuilderStore((s) => s.setGalleryOpen);
   const applyTemplate = useBuilderStore((s) => s.applyTemplate);
   const hasSpecs = useBuilderStore((s) => Object.keys(s.specs).length > 0);
@@ -18,15 +29,6 @@ export function TemplateGallery() {
   const close = () => {
     if (!busyId) setGalleryOpen(false);
   };
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [busyId]);
 
   const apply = async (template: BoardTemplate) => {
     if (busyId) return;
@@ -43,53 +45,58 @@ export function TemplateGallery() {
   };
 
   return (
-    <div className="modal-backdrop" onClick={close} role="presentation">
-      <div
-        className="modal wide"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-label="Galería de plantillas / Template gallery"
-      >
-        <h2>🧩 Plantillas / Templates</h2>
-        <p className="modal-note">
-          Cada plantilla crea specs reales (<code>specs/NNN-…</code>) y un tablero conectado. / Each
-          template creates real specs (<code>specs/NNN-…</code>) and a connected board.
-        </p>
+    <Dialog open onOpenChange={(open) => !open && close()}>
+      <DialogContent className="sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>🧩 {t("gallery.title")}</DialogTitle>
+          <DialogDescription>{t("gallery.note", { dir: "specs/NNN-…" })}</DialogDescription>
+        </DialogHeader>
         {hasSpecs ? (
-          <p className="modal-error">
-            ⚠ Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío. /
-            This workspace already has specs; templates only apply to an empty workspace.
+          <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+            ⚠ {t("gallery.hasSpecs")}
           </p>
         ) : null}
-        {error ? <p className="modal-error">⚠ {error}</p> : null}
-        <div className="template-grid">
+        {error ? (
+          <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+            ⚠ {error}
+          </p>
+        ) : null}
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-3">
           {BOARD_TEMPLATES.map((template) => (
-            <article key={template.id} className="template-card">
-              <p className="template-emoji" aria-hidden>
+            <article
+              key={template.id}
+              className="flex flex-col gap-1.5 rounded-lg border bg-muted/60 p-3.5"
+            >
+              <p className="m-0 text-2xl" aria-hidden>
                 {template.emoji}
               </p>
-              <h3>{template.name}</h3>
-              <p className="template-desc">{template.description}</p>
-              <p className="template-meta">
-                {template.specs.length} specs · {template.epics.length}{" "}
-                {template.epics.length === 1 ? "épica / epic" : "épicas / epics"}
+              <h3 className="m-0 text-sm font-semibold">{template.name[lang]}</h3>
+              <p className="m-0 flex-1 text-xs text-muted-foreground">
+                {template.description[lang]}
               </p>
-              <button
-                className="btn primary small"
+              <p className="m-0 text-xs font-semibold text-muted-foreground">
+                {t(template.epics.length === 1 ? "gallery.meta.one" : "gallery.meta.many", {
+                  specs: template.specs.length,
+                  epics: template.epics.length
+                })}
+              </p>
+              <Button
+                size="sm"
+                className="self-start"
                 disabled={hasSpecs || busyId !== null}
                 onClick={() => void apply(template)}
               >
-                {busyId === template.id ? "Aplicando… / Applying…" : "Usar / Use"}
-              </button>
+                {busyId === template.id ? t("gallery.applying") : t("gallery.use")}
+              </Button>
             </article>
           ))}
         </div>
-        <div className="modal-actions">
-          <button className="btn" onClick={close} disabled={busyId !== null}>
-            Cerrar / Close
-          </button>
-        </div>
-      </div>
-    </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={close} disabled={busyId !== null}>
+            {t("common.close")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

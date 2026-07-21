@@ -2,8 +2,10 @@
 //   - approveSpec: fill the existing "Estado de aprobación / Approval status"
 //     block (status, date, approver, evidence) without touching anything else.
 //   - updateSpecSections: replace ONLY the content under the guided-editor
-//     headings (user story, scenarios, EARS criteria, out of scope) and
-//     preserve the rest of the document (approval block, requirements, ...).
+//     headings (user story, scenarios, EARS criteria, requirements, spec
+//     properties, success criteria, out of scope — the full template since
+//     spec 010, R2) and preserve the rest of the document (approval block,
+//     any custom sections, ...).
 // Both operations are tolerant to the EN/ES headings of the two spec
 // templates shipped in this repo (specs/_template/spec.md and
 // templates/spec/spec.template.md) and reuse the atomic read/write layer
@@ -38,13 +40,16 @@ const BUILDER_EVIDENCE = "Aprobado desde SDD Builder / Approved from SDD Builder
 /**
  * Approve a spec by surgically editing the existing approval block of its
  * spec.md: Estado -> `Aprobado`, approval date -> today, approver -> given
- * name, and the evidence line -> "Aprobado desde SDD Builder" when empty.
+ * name, and the evidence line -> the given evidence (spec 010, R2) or
+ * "Aprobado desde SDD Builder" when empty. A caller-provided evidence always
+ * wins; without one, existing evidence is never overwritten.
  * Fails with a clear bilingual error when the block does not exist.
  */
 export async function approveSpec(
   projectRoot: string,
   specId: string,
-  approver: string
+  approver: string,
+  evidence?: string
 ): Promise<ApproveSpecResult> {
   const approverName = approver.trim();
   if (!approverName) {
@@ -75,9 +80,16 @@ export async function approveSpec(
     return `${prefix}\`${approverName}\``;
   });
 
+  const providedEvidence = evidence?.trim();
   let evidenceUpdated = false;
   next = next.replace(EVIDENCE_LINE_RE, (_line, prefix: string, existing: string | undefined) => {
-    // Only fill the evidence when it is empty; never overwrite a real link/quote.
+    // Caller-provided evidence always wins (spec 010, R2); otherwise only
+    // fill the line when it is empty — never overwrite a real link/quote.
+    if (providedEvidence) {
+      evidenceUpdated = true;
+      fieldsUpdated.push("evidence");
+      return `${prefix} ${providedEvidence}`;
+    }
     if (existing && existing.trim()) return `${prefix} ${existing.trim()}`;
     evidenceUpdated = true;
     fieldsUpdated.push("evidence");
@@ -99,6 +111,12 @@ export interface SpecSectionsInput {
   scenarios?: string[];
   /** EARS acceptance criteria; written as a bullet list. */
   criteria?: string[];
+  /** Requirements; written as a bullet list (spec 010, R2). */
+  requirements?: string[];
+  /** Spec properties (bridge to executable specs); bullet list (spec 010, R2). */
+  properties?: string[];
+  /** Success criteria; written as a bullet list (spec 010, R2). */
+  successCriteria?: string[];
   /** Out of scope (free text). */
   outOfScope?: string;
 }
@@ -144,6 +162,22 @@ const SECTION_SPECS: Record<SpecSectionKey, SectionSpec> = {
       "## Criterios de aceptación (formato EARS recomendado) / Acceptance criteria (EARS format recommended)",
     render: renderBullets
   },
+  requirements: {
+    aliases: [/^##\s+requisitos/i, /^##\s+requirements/i],
+    heading: "## Requisitos",
+    render: renderBullets
+  },
+  properties: {
+    aliases: [/^##\s+propiedades de la spec/i, /^##\s+spec propert/i],
+    heading:
+      "## Propiedades de la spec (opcional, puente a specs ejecutables) / Spec properties (optional)",
+    render: renderBullets
+  },
+  successCriteria: {
+    aliases: [/^##\s+criterios de [ée]xito/i, /^##\s+success criteria/i],
+    heading: "## Criterios de éxito",
+    render: renderBullets
+  },
   outOfScope: {
     aliases: [/^##\s+fuera de alcance/i, /^##\s+out of scope/i],
     heading: "## Fuera de alcance / Out of scope",
@@ -151,14 +185,31 @@ const SECTION_SPECS: Record<SpecSectionKey, SectionSpec> = {
   }
 };
 
-const SECTION_ORDER: SpecSectionKey[] = ["story", "scenarios", "criteria", "outOfScope"];
+/** Document order of the spec template (specs/_template/spec.md). */
+const SECTION_ORDER: SpecSectionKey[] = [
+  "story",
+  "scenarios",
+  "criteria",
+  "requirements",
+  "properties",
+  "successCriteria",
+  "outOfScope"
+];
+
+const LIST_SECTIONS = new Set<SpecSectionKey>([
+  "scenarios",
+  "criteria",
+  "requirements",
+  "properties",
+  "successCriteria"
+]);
 
 function normalizeSections(input: SpecSectionsInput): Map<SpecSectionKey, string> {
   const provided = new Map<SpecSectionKey, string>();
   for (const key of SECTION_ORDER) {
     const value = input[key];
     if (value === undefined) continue;
-    if (key === "scenarios" || key === "criteria") {
+    if (LIST_SECTIONS.has(key)) {
       if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) {
         throw new Error(`Section "${key}" must be an array of strings / debe ser una lista de textos`);
       }
@@ -167,13 +218,13 @@ function normalizeSections(input: SpecSectionsInput): Map<SpecSectionKey, string
       if (typeof value !== "string") {
         throw new Error(`Section "${key}" must be a string / debe ser texto`);
       }
-      provided.set(key, SECTION_SPECS[key].render(value));
+      provided.set(key, SECTION_SPECS[key].render(value as string));
     }
   }
   if (provided.size === 0) {
     throw new Error(
-      "Expected at least one section: story, scenarios, criteria, outOfScope / " +
-        "Se esperaba al menos una sección: story, scenarios, criteria, outOfScope"
+      "Expected at least one section: story, scenarios, criteria, requirements, properties, successCriteria, outOfScope / " +
+        "Se esperaba al menos una sección: story, scenarios, criteria, requirements, properties, successCriteria, outOfScope"
     );
   }
   return provided;

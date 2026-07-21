@@ -19,6 +19,7 @@ import {
   type XYPosition
 } from "@xyflow/react";
 import { api } from "./api";
+import { useT } from "./i18n";
 import { startLive } from "./live";
 import { AssistantWizard } from "./components/AssistantWizard";
 import { KanbanBoard } from "./components/KanbanBoard";
@@ -31,6 +32,9 @@ import { SpecNode } from "./components/SpecNode";
 import { TemplateGallery } from "./components/TemplateGallery";
 import { TopBar } from "./components/TopBar";
 import { Tour } from "./components/Tour";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { useBuilderStore } from "./store";
 import type { AppEdge, AppNode, PaletteKind } from "./types";
 
@@ -38,47 +42,43 @@ const nodeTypes = { spec: SpecNode, note: NoteNode };
 const edgeTypes = { labeled: LabeledEdge };
 
 function EmptyOverlay({ onCreate }: { onCreate: () => void }) {
+  const { t } = useT();
   return (
-    <div className="empty-overlay">
-      <div className="empty-card">
-        <p className="empty-emoji" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 z-[5] grid place-items-center">
+      <div className="pointer-events-auto max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+        <p className="m-0 text-4xl" aria-hidden>
           🪴
         </p>
-        <h2>Tu lienzo está vacío / Your canvas is empty</h2>
-        <p>
-          Arrastra 💡 Idea o 📦 Épica para pensar, o 📋 Spec para crear tu primera spec real. / Drag 💡
-          Idea or 📦 Epic to think, or 📋 Spec to create your first real spec.
-        </p>
-        <button className="btn primary" onClick={onCreate}>
-          📋 Crear la primera spec / Create the first spec
-        </button>
+        <h2 className="mt-2 mb-2 text-lg font-semibold">{t("empty.title")}</h2>
+        <p className="mb-4 text-sm text-muted-foreground">{t("empty.body")}</p>
+        <Button onClick={onCreate}>{t("empty.cta")}</Button>
       </div>
     </div>
   );
 }
 
 function LoadErrorScreen({ message, onRetry }: { message: string; onRetry: () => void }) {
+  const { t } = useT();
   return (
-    <div className="center-screen">
-      <div className="empty-card">
-        <p className="empty-emoji" aria-hidden>
+    <div className="grid flex-1 place-items-center p-8">
+      <div className="max-w-md rounded-2xl border bg-card p-8 text-center shadow-lg">
+        <p className="m-0 text-4xl" aria-hidden>
           🔌
         </p>
-        <h2>No se pudo cargar el tablero / Could not load the board</h2>
-        <p className="load-error-detail">{message}</p>
-        <p>
-          ¿Está corriendo el servidor? / Is the server running?{" "}
-          <code>SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start</code>
+        <h2 className="mt-2 mb-2 text-lg font-semibold">{t("loadError.title")}</h2>
+        <p className="mb-2 font-mono text-xs break-words text-destructive">{message}</p>
+        <p className="mb-4 text-sm text-muted-foreground">
+          {t("loadError.hint")}{" "}
+          <code>SDD_PROJECT_ROOT=/path npm run mcp:http:start</code>
         </p>
-        <button className="btn primary" onClick={onRetry}>
-          Reintentar / Retry
-        </button>
+        <Button onClick={onRetry}>{t("common.retry")}</Button>
       </div>
     </div>
   );
 }
 
 function Shell() {
+  const { t } = useT();
   const loading = useBuilderStore((s) => s.loading);
   const loadError = useBuilderStore((s) => s.loadError);
   const workspaceChanged = useBuilderStore((s) => s.workspaceChanged);
@@ -214,23 +214,29 @@ function Shell() {
     <div className="app">
       <TopBar />
       {workspaceChanged ? (
-        <div className="workspace-banner" role="alert">
-          ⚠ El workspace del servidor cambió — recarga / Server workspace changed — reload
-          <button className="btn small" onClick={() => window.location.reload()}>
-            Recargar / Reload
-          </button>
+        <div
+          className="flex items-center gap-3 border-b bg-[var(--amber-soft)] px-4 py-2 text-sm font-semibold text-[var(--amber)]"
+          role="alert"
+        >
+          ⚠ {t("banner.workspaceChanged")}
+          <Button size="sm" variant="outline" onClick={() => window.location.reload()}>
+            {t("banner.reload")}
+          </Button>
         </div>
       ) : null}
       {saveState === "error" && saveError ? (
-        <div className="save-banner" role="alert">
+        <div
+          className="flex items-center gap-3 border-b bg-[var(--danger-soft)] px-4 py-2 text-sm text-destructive"
+          role="alert"
+        >
           ⚠ {saveError}
-          <button className="btn small" onClick={() => void flushSave()}>
-            Reintentar / Retry
-          </button>
+          <Button size="sm" variant="outline" onClick={() => void flushSave()}>
+            {t("common.retry")}
+          </Button>
         </div>
       ) : null}
       {viewMode === "board" ? (
-        // Kanban projection (spec 009, R1): same specs, same drawer.
+        // Kanban projection (spec 009, R1): same specs, same detail sheet.
         <main className="main">
           <KanbanBoard />
           <SpecDrawer />
@@ -271,7 +277,11 @@ function Shell() {
               <Controls />
               <MiniMap pannable zoomable />
             </ReactFlow>
-            {loading ? <div className="loading-overlay">Cargando el tablero… / Loading the board…</div> : null}
+            {loading ? (
+              <div className="absolute inset-0 z-[5] grid place-items-center bg-background/70 text-sm text-muted-foreground">
+                {t("app.loading")}
+              </div>
+            ) : null}
             {showEmpty ? <EmptyOverlay onCreate={() => setSpecModalPos({ x: 120, y: 120 })} /> : null}
           </div>
           <SpecDrawer />
@@ -279,7 +289,7 @@ function Shell() {
         <DragOverlay dropAnimation={null}>
           {dragItem ? (
             <div className="palette-ghost">
-              {dragItem.emoji} {dragItem.label}
+              {dragItem.emoji} {t(dragItem.labelKey)}
             </div>
           ) : null}
         </DragOverlay>
@@ -298,7 +308,10 @@ function Shell() {
 export default function App() {
   return (
     <ReactFlowProvider>
-      <Shell />
+      <TooltipProvider delayDuration={300}>
+        <Shell />
+        <Toaster />
+      </TooltipProvider>
     </ReactFlowProvider>
   );
 }

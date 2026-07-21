@@ -2,11 +2,20 @@
 // fragile deep links into a specific agent app — the exact, gate-respecting
 // kickoff prompt is preloaded and copyable, and works with any agent
 // (Claude Code, Codex, Cursor, ...). Only reachable for APPROVED specs; the
-// hard stop lives on the drawer button that opens this modal.
+// hard stop lives on the sheet button that opens this modal.
 
-import { useEffect } from "react";
+import { useT } from "../i18n";
 import { buildImplementPrompt } from "../prompts";
 import { PromptBox } from "./PromptBox";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
 
 interface Props {
   specId: string;
@@ -17,38 +26,23 @@ interface Props {
 }
 
 export function ImplementModal({ specId, specDir, projectRoot, onClose }: Props) {
-  const prompt = buildImplementPrompt({ projectRoot, specId, specDir });
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  const { t, lang } = useT();
+  const prompt = buildImplementPrompt({ projectRoot, specId, specDir }, lang);
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="presentation">
-      <div
-        className="modal wide"
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-label={`Implementar ${specId} con agente / Implement ${specId} with an agent`}
-      >
-        <h2>🤖 Implementar con agente / Implement with agent</h2>
-        <p className="modal-note">
-          Copia este prompt y pégalo en tu agente (Claude Code, Codex, Cursor…). Incluye el
-          workspace, la spec aprobada y la compuerta SDD con consentimiento. / Copy this prompt and
-          paste it into your agent (Claude Code, Codex, Cursor…). It includes the workspace, the
-          approved spec and the SDD gate with consent.
-        </p>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-3xl" aria-label={t("implement.aria", { id: specId })}>
+        <DialogHeader>
+          <DialogTitle>{t("implement.title")}</DialogTitle>
+          <DialogDescription>{t("implement.note")}</DialogDescription>
+        </DialogHeader>
         <PromptBox prompt={prompt} rows={14} />
-        <div className="modal-actions">
-          <button className="btn" onClick={onClose}>
-            Cerrar / Close
-          </button>
-        </div>
-      </div>
-    </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            {t("common.close")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
