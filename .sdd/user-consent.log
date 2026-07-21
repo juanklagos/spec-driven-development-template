@@ -6,3 +6,4 @@
 [2026-07-20 08:01:38 -0500] Usuario eligió Opción B (ambiciosa) para el builder visual de specs (AskUserQuestion, 2026-07-20)
 [2026-07-20 20:04:38 -0500] Usuario aprobó implementar los 3 paquetes del builder v2/v3/v4 (specs 007-009): 'hazlo todos' (2026-07-20)
 [2026-07-21 08:57:37 -0500] Usuario aprobó builder v5 (spec 010): forms por sección, i18n es/en real, shadcn/ui, uniones con propósito, guía de conexión de agentes (2026-07-21)
+[2026-07-21 11:53:44 -0500] Usuario aprobó la ruta de distribución sin app de escritorio (spec 011: lanzador npx + gate .mcpb): 'has lo mejor a corto y largo plazo' (2026-07-21)

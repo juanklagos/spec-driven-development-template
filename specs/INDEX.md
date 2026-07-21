@@ -12,6 +12,7 @@
 | 008 | builder-v3-ai | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-20 |
 | 009 | builder-v4-teams | Done / Completada | Medium / Media | Juan Klagos / Claude | 2026-07-21 |
 | 010 | builder-v5-pro-ux | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-21 |
+| 011 | one-command-launcher | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-21 |
 
 ## 🌐 Bilingual support / Soporte bilingüe
 
