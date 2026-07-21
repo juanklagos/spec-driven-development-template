@@ -129,6 +129,13 @@ export interface SpecSectionsInput {
   successCriteria?: string[];
   /** Out of scope (free text). */
   outOfScope?: string;
+  /**
+   * Paths this spec governs; bullet list, one backticked path per line.
+   * Optional, parsed and surfaced, enforced by nothing (spec 012, T3e/T3f).
+   * The data accretes now so spec 014 has something real to compare a diff
+   * against instead of inventing a convention later.
+   */
+  fileScope?: string[];
 }
 
 export type SpecSectionKey = keyof SpecSectionsInput;
@@ -192,6 +199,11 @@ const SECTION_SPECS: Record<SpecSectionKey, SectionSpec> = {
     aliases: [/^##\s+fuera de alcance/i, /^##\s+out of scope/i],
     heading: "## Fuera de alcance / Out of scope",
     render: renderText
+  },
+  fileScope: {
+    aliases: [/^##\s+[áa]mbito de archivos/i, /^##\s+file scope/i],
+    heading: "## Ámbito de archivos / File scope",
+    render: renderBullets
   }
 };
 
@@ -203,7 +215,8 @@ const SECTION_ORDER: SpecSectionKey[] = [
   "requirements",
   "properties",
   "successCriteria",
-  "outOfScope"
+  "outOfScope",
+  "fileScope"
 ];
 
 const LIST_SECTIONS = new Set<SpecSectionKey>([
@@ -211,7 +224,8 @@ const LIST_SECTIONS = new Set<SpecSectionKey>([
   "criteria",
   "requirements",
   "properties",
-  "successCriteria"
+  "successCriteria",
+  "fileScope"
 ]);
 
 function normalizeSections(input: SpecSectionsInput): Map<SpecSectionKey, string> {

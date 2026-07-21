@@ -214,7 +214,10 @@ export function createSddMcpServer(): McpServer {
           z.object({
             id: z.string(),
             dir: z.string(),
-            status: z.string()
+            status: z.string(),
+            // Optional-with-default so an older workspace, whose specs have no
+            // File scope section, still validates against this schema.
+            fileScope: z.array(z.string()).default([])
           })
         )
       }

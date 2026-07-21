@@ -44,9 +44,9 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
       template.
 - [ ] **T3d** Documentar `reset-template.sh --confirm` como primer paso para quien llega por «Use
       this template» o `degit`, en QUICKSTART y en ambos READMEs.
-- [ ] **T3e** Sección `## Ámbito de archivos / File scope` en `specs/_template/spec.md`. Solo el
+- [x] **T3e** Sección `## Ámbito de archivos / File scope` en `specs/_template/spec.md`. Solo el
       encabezado: nada de prosa dentro de un archivo de plantilla, que sobrevive al `cp`.
-- [ ] **T3f** Parser junto a `extractApprovalStatus` en `workspace.ts`, siembra en `new-spec.sh` y en
+- [x] **T3f** Parser junto a `extractApprovalStatus` en `workspace.ts`, siembra en `new-spec.sh` y en
       el builder, exposición en `sdd_spec_coverage`. No gobierna nada.
 
 ## H4 — Documentación y activos

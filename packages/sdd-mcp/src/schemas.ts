@@ -78,7 +78,17 @@ export const boardSpecCardSchema = z.object({
   status: z.string(),
   tasks: z.object({ done: z.number(), total: z.number() }),
   /** Computed by sdd-core specTone: the one state every surface renders. */
-  tone: z.enum(["pending", "ok", "done"])
+  tone: z.enum(["pending", "ok", "done"]),
+  /**
+   * Paths the spec declares it governs. Optional-with-default so a workspace
+   * whose specs predate the File scope section still validates.
+   *
+   * BoardSpecCard spreads SpecSummary, so every field added there arrives here
+   * automatically — and this schema rejects undeclared properties. That is how
+   * `tone` broke once and `fileScope` broke again; test-mcp-integration.mjs now
+   * asserts the two shapes round-trip.
+   */
+  fileScope: z.array(z.string()).default([])
 });
 
 export const boardViewSchema = z.object({

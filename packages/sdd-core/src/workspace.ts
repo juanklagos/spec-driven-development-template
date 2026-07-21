@@ -11,6 +11,14 @@ export interface SpecSummary {
   id: string;
   dir: string;
   status: string;
+  /**
+   * Paths declared under "## Ámbito de archivos / File scope". Empty when the
+   * section is absent or has no backticked entries.
+   *
+   * Nothing enforces this yet, by design: spec 012 only starts capturing it so
+   * spec 014 has real data to compare a pull request diff against.
+   */
+  fileScope: string[];
 }
 
 /**
@@ -190,7 +198,8 @@ export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
     items.push({
       id: entry.name,
       dir: path.join(specsRoot, entry.name),
-      status: extractApprovalStatus(content)
+      status: extractApprovalStatus(content),
+      fileScope: extractFileScope(content)
     });
   }
 
@@ -247,6 +256,29 @@ async function isSddRoot(candidate: string): Promise<boolean> {
  * spec rendered green in the builder while the gate treated it as unapproved
  * and skipped every approval quality check.
  */
+/**
+ * Paths declared in the File scope section.
+ *
+ * Reads only that section, and takes the FIRST backticked token of each `-`
+ * line, so prose after the path is free text. Deliberately tolerant: an absent
+ * section is an empty list, never an error, because no spec written before
+ * 2026-07-21 has one.
+ */
+export function extractFileScope(content: string): string[] {
+  const lines = content.split(/\r?\n/);
+  const start = lines.findIndex((line) => /^##\s+(ámbito de archivos|ambito de archivos|file scope)/i.test(line));
+  if (start === -1) return [];
+
+  const paths: string[] = [];
+  for (const line of lines.slice(start + 1)) {
+    if (/^##\s/.test(line)) break;
+    if (!/^\s*-\s/.test(line)) continue;
+    const token = line.match(/`([^`]+)`/)?.[1]?.trim();
+    if (token) paths.push(token);
+  }
+  return paths;
+}
+
 export function extractApprovalStatus(content: string): string {
   const match = content.match(/Estado \/ Status:\s*`([^`]+)`/i);
   return match?.[1].trim() ?? "Pendiente";

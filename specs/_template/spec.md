@@ -31,6 +31,11 @@
 <!-- Propiedades universales que un test property-based podría verificar (estilo Kiro). / Universal properties a property-based test could verify. -->
 <!-- Ejemplo / Example: "Para toda entrada de usuario, EL SISTEMA DEBERÁ responder en <2s" -->
 
+## Ámbito de archivos / File scope
+
+<!-- Opcional. Rutas que gobierna esta spec, una por línea, entre comillas invertidas. / Optional. Paths this spec governs, one per line, in backticks. -->
+<!-- Ejemplo / Example: - `src/payments/` — flujo de cobro / charge flow -->
+
 ## Criterios de éxito
 
 - Criterio 1

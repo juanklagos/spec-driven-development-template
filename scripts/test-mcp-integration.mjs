@@ -4,6 +4,7 @@ import {
   DOC_GUIDES,
   NEGATED_STATUS_ERE,
   extractApprovalStatus,
+  extractFileScope,
   canvasEdgeColorForLabel,
   computeVerdict,
   classifyEdgeLabel,
@@ -12,6 +13,7 @@ import {
   specTone
 } from "../packages/sdd-core/dist/index.js";
 import { renderDashboard } from "../packages/sdd-mcp/dist/dashboard.js";
+import { boardSpecCardSchema } from "../packages/sdd-mcp/dist/schemas.js";
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import os from "node:os";
@@ -155,6 +157,7 @@ Fixture integration test for MCP.
  */
 async function runSddScript(scriptName, ...args) {
   try {
+
     const { stdout, stderr } = await execFileAsync("bash", [path.join(REPO_ROOT, "scripts", scriptName), ...args]);
     return { code: 0, output: `${stdout}${stderr}` };
   } catch (error) {
@@ -217,6 +220,31 @@ async function writeGateGuardSpec(sddRoot, specId, status, { healthy = true, con
 }
 
 async function main() {
+  // Static shape check, before anything else: it needs no workspace, and
+  // running it first means a schema/type mismatch fails with this
+  // explanation instead of an opaque SDK "-32602 must NOT have additional
+  // properties" hundreds of lines later.
+  // Twice now a field added to SpecSummary has broken the MCP board at
+  // runtime, because BoardSpecCard spreads it and boardSpecCardSchema rejects
+  // undeclared properties: `tone` in July, `fileScope` today. Both times the
+  // failure surfaced as an opaque "must NOT have additional properties" from
+  // the SDK, not as a type error. Assert the two shapes agree.
+  {
+    const specKeys = Object.keys({
+      id: "",
+      dir: "",
+      status: "",
+      fileScope: []
+    });
+    const cardKeys = Object.keys(boardSpecCardSchema.shape);
+    const undeclared = specKeys.filter((key) => !cardKeys.includes(key));
+    assert.deepEqual(
+      undeclared,
+      [],
+      `SpecSummary field(s) ${undeclared.join(", ")} are spread into BoardSpecCard but missing from boardSpecCardSchema — the MCP board will fail at runtime, not at compile time`
+    );
+  }
+
   const projectName = `mcp-fixture-${Date.now()}`;
   let projectRoot = "";
   let guardRoot = "";
@@ -265,7 +293,7 @@ async function main() {
     // with the status the template actually writes (`Pendiente`).
     assert.deepEqual(
       asObject(await client.callTool({ name: "sdd_list_specs", arguments: { projectRoot } })).specs,
-      [{ id: specId, dir: path.join(sddRoot, "specs", specId), status: "Pendiente" }],
+      [{ id: specId, dir: path.join(sddRoot, "specs", specId), status: "Pendiente", fileScope: [] }],
       "sdd_list_specs must report the freshly created spec as pending"
     );
 
@@ -1037,6 +1065,41 @@ async function main() {
       "a workspace with nothing approved must be closed, never open — this is the state the dashboard used to call 'implementation allowed'"
     );
 
+    // File scope (spec 012, T3e/T3f). Parsed and surfaced; enforced by nothing.
+    // Spec 014 consumes this, so the shape has to be right before the data
+    // starts accruing — a format change later invalidates every spec written
+    // in between.
+    const SCOPE_CASES = [
+      ["## Ámbito de archivos / File scope\n- `src/a.ts` — nota con `otra` cosa\n", ["src/a.ts"], "takes the first backticked token, prose after it is free"],
+      ["## File scope\n- no backticks here\n- `src/b.ts`\n", ["src/b.ts"], "skips lines with no backticked token"],
+      ["## Ámbito de archivos\n- `src/c.ts`\n## Otra sección\n- `src/no.ts`\n", ["src/c.ts"], "stops at the next heading"],
+      ["## Ambito de archivos\n- `src/d.ts`\n", ["src/d.ts"], "matches the unaccented heading too"],
+      ["## Requisitos\n- `src/e.ts`\n", [], "never reads paths from another section"],
+      ["# Spec with no scope section\n\n## Requisitos\n- uno\n", [], "an absent section is an empty list, never an error"],
+      ["## File scope\n- `  src/f.ts  `\n", ["src/f.ts"], "trims the token"]
+    ];
+    for (const [markdown, expected, why] of SCOPE_CASES) {
+      assert.deepEqual(extractFileScope(markdown), expected, `extractFileScope ${why}`);
+    }
+
+    // Dogfooding: spec 012 introduces the section and uses it.
+    const ownScope = extractFileScope(
+      await fs.readFile(path.join(REPO_ROOT, "specs/012-gate-verdict/spec.md"), "utf8")
+    );
+    assert.ok(
+      ownScope.includes("scripts/check-sdd-gate.sh"),
+      "spec 012 must declare its own file scope — the section is worthless if the spec that adds it does not use it"
+    );
+
+    // And the template ships the heading, or no new spec ever gets one.
+    const specTemplate = await fs.readFile(path.join(REPO_ROOT, "specs/_template/spec.md"), "utf8");
+    assert.match(
+      specTemplate,
+      /^##\s+Ámbito de archivos \/ File scope$/m,
+      "specs/_template/spec.md must ship the File scope heading"
+    );
+
+
     gateRoot = String(
       asObject(
         await client.callTool({
@@ -1092,7 +1155,7 @@ async function main() {
       ).specs;
       assert.deepEqual(
         listedGate.find((item) => item.id === gateSpecId),
-        { id: gateSpecId, dir: path.join(gateSddRoot, "specs", gateSpecId), status: status.trim() },
+        { id: gateSpecId, dir: path.join(gateSddRoot, "specs", gateSpecId), status: status.trim(), fileScope: [] },
         `sdd_list_specs must report "${status}" trimmed`
       );
 
