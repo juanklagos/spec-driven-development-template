@@ -26,6 +26,11 @@
 - Requisito 1
 - Requisito 2
 
+## Propiedades de la spec (opcional, puente a specs ejecutables) / Spec properties (optional)
+
+<!-- Propiedades universales que un test property-based podría verificar (estilo Kiro). / Universal properties a property-based test could verify. -->
+<!-- Ejemplo / Example: "Para toda entrada de usuario, EL SISTEMA DEBERÁ responder en <2s" -->
+
 ## Criterios de éxito
 
 - Criterio 1

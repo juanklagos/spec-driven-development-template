@@ -71,7 +71,16 @@ cp -n "$ROOT_DIR/templates/sidecar/template-context/core-instructions/AGENT_OPER
 
 cp -n "$ROOT_DIR/idea/IDEA_GENERAL.md" "$SPEC_ROOT/idea/IDEA_GENERAL.md"
 cp -n "$ROOT_DIR/specs/README.md" "$SPEC_ROOT/specs/README.md"
-cp -n "$ROOT_DIR/specs/INDEX.md" "$SPEC_ROOT/specs/INDEX.md"
+# Write a clean spec index for the new workspace instead of copying the
+# framework repo index (which carries this template's own spec rows).
+if [ ! -f "$SPEC_ROOT/specs/INDEX.md" ]; then
+  cat > "$SPEC_ROOT/specs/INDEX.md" << 'INDEXEOF'
+# Specification Index / Índice de especificaciones
+
+| Number / Número | Name / Nombre | Status / Estado | Priority / Prioridad | Owner / Responsable | Updated / Actualización |
+|---|---|---|---|---|---|
+INDEXEOF
+fi
 cp -n "$ROOT_DIR/specs/_template/spec.md" "$SPEC_ROOT/specs/_template/spec.md"
 cp -n "$ROOT_DIR/specs/_template/plan.md" "$SPEC_ROOT/specs/_template/plan.md"
 cp -n "$ROOT_DIR/specs/_template/tasks.md" "$SPEC_ROOT/specs/_template/tasks.md"
