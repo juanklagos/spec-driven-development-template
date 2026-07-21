@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía muestra cómo debería verse el uso fácil de MCP en clientes reales.
+Cómo se ve el uso fácil de MCP en clientes reales, con los mensajes tal cual aparecen.
 
 No es una especificación de transporte. Es una referencia de experiencia de usuario.
 

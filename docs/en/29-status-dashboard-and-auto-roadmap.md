@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > Automated tools to visualize your project's progress and generate roadmaps from your specs.
 
-## 🛠️ Available scripts
+## Available scripts
 
 ### `./scripts/generate-status.sh`
 
@@ -101,7 +101,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ---
 
-## 📊 Recommended workflow
+## Recommended workflow
 
 ```mermaid
 flowchart LR
@@ -142,21 +142,4 @@ gantt
     001-user-auth :active, a1, 2026-01-01, 14d
   section UI
     002-dashboard :       a2, after a1, 10d
-```
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
 ```

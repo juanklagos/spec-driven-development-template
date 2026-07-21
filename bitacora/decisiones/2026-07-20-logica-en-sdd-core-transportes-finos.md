@@ -36,7 +36,7 @@ En paralelo se rompió el ciclo extrayendo las primitivas compartidas (`resolveS
 | **Duplicar la lógica en cada transporte** | Rechazada explícitamente en la historia de la spec: *"cero lógica duplicada entre transportes"*. Dos copias de la regla de tareas divergen en la primera corrección de bug |
 | **Dejar `http.ts` monolítico y solo añadir las tools** | Habría resuelto la coherencia MCP sin resolver la causa: la lógica seguía dentro del handler HTTP y no había desde dónde llamarla sin arrastrar el transporte |
 
-**Honestidad de registro:** no consta una evaluación formal de alternativas ni un documento de investigación en `idea/` para esta decisión. Fue una pasada de refactor pedida por el autor y ejecutada en una sesión; las «alternativas» de arriba son las que la evidencia deja ver como descartadas (el estado previo y la duplicación nombrada), no un análisis comparativo que haya existido.
+No consta una evaluación formal de alternativas ni un documento de investigación en `idea/` para esta decisión. Fue una pasada de refactor pedida por el autor y ejecutada en una sesión; las «alternativas» de arriba son las que la evidencia deja ver como descartadas (el estado previo y la duplicación nombrada), no un análisis comparativo que haya existido.
 
 ## Consequences / Consecuencias
 

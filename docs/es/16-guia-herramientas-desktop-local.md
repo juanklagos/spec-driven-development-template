@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -37,15 +37,9 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 ## 🎯 Objetivo
 
-Que cualquier persona pueda usar herramientas como:
+Que puedas trabajar con Codex de escritorio, Claude de escritorio o cualquier otra herramienta que lea y escriba en tus carpetas, sin que el proyecto pierda el hilo por el camino.
 
-- Codex en escritorio
-- Claude en escritorio
-- Otras herramientas con acceso a carpetas locales
-
-sin perder orden, trazabilidad ni consistencia.
-
-## 📦 Qué significa “acceso local”
+## Qué significa “acceso local”
 
 Significa que la herramienta puede:
 
@@ -53,7 +47,7 @@ Significa que la herramienta puede:
 - Crear y editar documentos.
 - Ejecutar comandos en terminal (si está habilitado).
 
-## 🧭 Flujo recomendado (siempre)
+## Flujo recomendado (siempre)
 
 ```mermaid
 flowchart LR
@@ -65,7 +59,7 @@ flowchart LR
   F --> G["Actualizar bitácora"]
 ```
 
-## ✅ Checklist de inicio de sesión
+## Checklist de inicio de sesión
 
 - [ ] Abriste la carpeta raíz correcta.
 - [ ] Confirmaste que existen `idea/`, `specs/`, `bitacora/`.
@@ -73,7 +67,7 @@ flowchart LR
 - [ ] Leíste `specs/INDEX.md`.
 - [ ] Leíste el último archivo de `bitacora/handoffs/`.
 
-## 🗣️ Prompt base para asistentes de escritorio
+## Prompt base para asistentes de escritorio
 
 ```text
 Trabaja en modo local sobre esta carpeta.
@@ -97,7 +91,7 @@ Formato de salida:
 5) Próximo paso
 ```
 
-## 🛠️ Configuración sugerida por tipo de herramienta
+## Configuración sugerida por tipo de herramienta
 
 ## 1) Codex en escritorio
 
@@ -154,20 +148,16 @@ Si tu asistente de escritorio soporta servidores MCP, conecta el servidor local 
 Referencia:
 - [Guía del servidor MCP](./33-guia-servidor-mcp.md)
 
-Por qué mejora el flujo:
-- las tools son explícitas
-- la política y las plantillas se exponen como resources
-- los prompts son reutilizables y consistentes
-- el flujo SDD depende menos de improvisación del modelo
+Por qué mejora el flujo: las tools quedan explícitas en vez de sugeridas, la política y las plantillas viajan como resources, y los prompts se reutilizan tal cual entre sesiones. El flujo SDD depende así bastante menos de lo que el modelo decida improvisar ese día.
 
-## 🔒 Buenas prácticas de seguridad y control
+## Buenas prácticas de seguridad y control
 
 - Revisa rutas antes de confirmar cambios.
 - Evita comandos destructivos en carpetas no relacionadas.
 - Haz commit frecuente con mensajes claros.
 - No subas secretos o credenciales al repositorio.
 
-## 🧪 Validación mínima por sesión
+## Validación mínima por sesión
 
 | Validación | Resultado esperado |
 |---|---|
@@ -175,7 +165,7 @@ Por qué mejora el flujo:
 | Spec activa actualizada | `history.md` refleja cambios |
 | Bitácora actualizada | Global + diaria + handoff (si aplica) |
 
-## 🚨 Señales de alerta
+## Señales de alerta
 
 Detén implementación y alinea primero si:
 
@@ -183,26 +173,9 @@ Detén implementación y alinea primero si:
 - Se detecta cambio de alcance no documentado.
 - No existe criterio de aceptación claro.
 
-## ✅ Cierre de sesión (obligatorio)
+## Cierre de sesión (obligatorio)
 
 - [ ] Actualizar `bitacora/global/PROJECT_LOG.md`
 - [ ] Actualizar `bitacora/diaria/AAAA-MM-DD.md`
 - [ ] Crear handoff si quedan pendientes
 - [ ] Verificar siguiente paso exacto
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

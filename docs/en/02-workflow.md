@@ -1,4 +1,4 @@
-# 🧭 Workflow
+# Workflow
 
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
@@ -35,14 +35,14 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ## Quick view
 
-| Step | Action | Outcome |
+| Step | Action | What it writes |
 |---|---|---|
-| 1 | Define idea | Clear project direction |
-| 2 | Create specification | Defined scope |
-| 3 | Plan and split tasks | Structured execution |
-| 4 | Implement | Real deliverable |
-| 5 | Update logbook | Full traceability |
-| 6 | Refine | Continuous improvement |
+| 1 | Define idea | `idea/IDEA_GENERAL.md` |
+| 2 | Create specification | `specs/NNN-name/spec.md` |
+| 3 | Plan and split tasks | `plan.md` + `tasks.md` |
+| 4 | Implement | code, plus the ticked boxes in `tasks.md` |
+| 5 | Update logbook | `bitacora/diaria/YYYY-MM-DD.md` |
+| 6 | Refine | the spec's `history.md` |
 
 ## Visual flow
 
@@ -57,11 +57,11 @@ flowchart LR
   G --> B
 ```
 
-## Step 1: Define project idea ✨
+## Step 1: Define the project idea
 
 Complete `idea/IDEA_GENERAL.md`.
 
-## Step 2: Create a specification 📄
+## Step 2: Create a specification
 
 Create a numbered folder in `specs/`.
 
@@ -69,7 +69,7 @@ Example:
 
 - `specs/001-authentication/`
 
-## Step 3: Complete required files ✅
+## Step 3: Complete the required files
 
 - `spec.md`
 - `plan.md`
@@ -78,11 +78,11 @@ Example:
 - `history.md`
 - `contracts/` when needed
 
-## Step 4: Execute real work ⚙️
+## Step 4: Do the work
 
 Implement tasks from `tasks.md`.
 
-## Step 5: Record what happened 📝
+## Step 5: Record what happened
 
 Update:
 
@@ -90,25 +90,8 @@ Update:
 - `bitacora/diaria/YYYY-MM-DD.md`
 - `bitacora/handoffs/` when pending work remains
 
-## Step 6: Refine 🔁
+## Step 6: Refine
 
 If ideas or requirements change, follow:
 
 - `docs/en/11-continuous-refinement.md`
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

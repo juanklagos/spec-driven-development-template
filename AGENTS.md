@@ -1,6 +1,6 @@
-# 🤖 Instructions for any Artificial Intelligence tool / Instrucciones para cualquier herramienta de Inteligencia Artificial
+# 🤖 Instructions for any AI tool / Instrucciones para cualquier herramienta de IA
 
-## 📌 Mandatory repository rule / Regla obligatoria del repositorio
+## Mandatory repository rule / Regla obligatoria del repositorio
 
 Cloning is optional. The mandatory requirement is to work with this repository template and guides as the primary reference.
 
@@ -30,7 +30,7 @@ Quick start for AI tools / Inicio rápido para herramientas de IA:
 - `docs/es/10-agentes-ia-soportados-y-prompts.md`
 - `docs/en/10-supported-ai-agents-and-prompts.md`
 
-## 🧭 Repository context lock / Bloqueo de contexto del repositorio
+## Repository context lock / Bloqueo de contexto del repositorio
 
 - EN: Treat this repository as a starter template, not as a single in-progress product.
 - ES: Trata este repositorio como un template de arranque, no como un único producto en desarrollo.
@@ -44,7 +44,7 @@ Before implementation tasks, explicitly determine:
 5. Use `www/<project-name>/` only as the clean container when the target project should live inside this repository.
 6. If the target project lives inside this repository, keep it under `www/` to avoid mixing framework and product work.
 
-## 📚 Mandatory reading order / Orden obligatorio de lectura
+## Mandatory reading order / Orden obligatorio de lectura
 
 1. `idea/IDEA_GENERAL.md`
 2. `specs/INDEX.md`
@@ -52,7 +52,7 @@ Before implementation tasks, explicitly determine:
 4. Reusable templates in `templates/` / plantillas reutilizables en `templates/`
 5. Optional packs and quality evidence (`playbooks/`, `quality/`) when needed
 
-## 🔧 Mandatory workflow / Flujo obligatorio
+## Mandatory workflow / Flujo obligatorio
 
 1. Confirm the target project path.
    - recommended clean workspace inside this template: `./scripts/create-www-project.sh <project-name> <assistant>`
@@ -84,7 +84,7 @@ Before implementation tasks, explicitly determine:
 
 Optional modules are accelerators, not blockers. If they are not used, keep core consistency with `idea/`, `specs/`, and `bitacora/`.
 
-## 🔁 Mandatory refinement protocol / Protocolo obligatorio de refinamiento
+## Mandatory refinement protocol / Protocolo obligatorio de refinamiento
 
 If idea, scope, priority, or requirements change:
 
@@ -97,7 +97,7 @@ Do not continue implementation until documentation is aligned.
 
 No continúes implementación hasta que la documentación quede alineada.
 
-## 🧭 Required reference / Referencia obligatoria
+## Required reference / Referencia obligatoria
 
 Read and apply:
 
@@ -126,7 +126,7 @@ For operator level (beginner/intermediate/advanced), use:
 - `docs/es/14-guia-intermedia.md` / `docs/en/14-intermediate-guide.md`
 - `docs/es/15-guia-avanzada.md` / `docs/en/15-advanced-guide.md`
 
-## ✅ Final requirement / Requisito final
+## Final requirement / Requisito final
 
 No implementation without specification, refinement trace, and logbook updates.
 
@@ -134,13 +134,13 @@ No hay implementación sin especificación, traza de refinamiento y actualizaci�
 
 
 
-## ⭐ Uso explícito del repositorio base
+## Uso explícito del repositorio base
 
 Usa siempre este repositorio como referencia principal:
 
 - `https://github.com/juanklagos/spec-driven-development-template`
 
-### 🆕 Caso 1: crear un proyecto nuevo desde esta base
+### Caso 1: crear un proyecto nuevo desde esta base
 
 Prompt sugerido para la IA:
 
@@ -151,7 +151,7 @@ Instala solo la carpeta compacta `spec/` y guíame paso a paso para definir idea
 No saltes pasos.
 ```
 
-### ♻️ Caso 2: adaptar un proyecto existente usando esta base
+### Caso 2: adaptar un proyecto existente usando esta base
 
 Prompt sugerido para la IA:
 
@@ -160,7 +160,7 @@ Usando https://github.com/juanklagos/spec-driven-development-template y su guía
 No copies el template completo. Integra solo el sidecar `spec/`, mantén el código actual en la raíz, crea la primera spec basada en lo que ya existe y deja trazabilidad completa.
 ```
 
-### ✅ Resultado mínimo esperado
+### Resultado mínimo esperado
 
 - Proyecto creado o adaptado con estructura estándar.
 - Primera especificación creada.
@@ -169,15 +169,15 @@ No copies el template completo. Integra solo el sidecar `spec/`, mantén el cód
 
 
 
-## ⭐ Explicit base repository usage
+## Explicit base repository usage
 
 Always use this repository as the primary reference:
 
 - `https://github.com/juanklagos/spec-driven-development-template`
 
-### 🆕 Case 1: create a new project from this base
+### Case 1: create a new project from this base
 
-Suggested prompt for the Artificial Intelligence assistant:
+Suggested prompt:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template create a new project for [GOAL].
@@ -186,30 +186,30 @@ Install only the compact `spec/` sidecar and guide me step by step to define ide
 Do not skip steps.
 ```
 
-### ♻️ Case 2: adapt an existing project using this base
+### Case 2: adapt an existing project using this base
 
-Suggested prompt for the Artificial Intelligence assistant:
+Suggested prompt:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template and its guide, adapt this existing project: [PROJECT_PATH].
 Do not copy the full template. Install only the `spec/` sidecar, keep current code in the project root, create the first specification based on existing behavior, and leave complete traceability.
 ```
 
-### ✅ Minimum expected outcome
+### Minimum expected outcome
 
 - Project created or adapted with standard structure.
 - First specification created.
 - Initial logbook entry recorded.
 - Clear next step to continue.
 
-## 🌐 Bilingual support / Soporte bilingüe
+## Bilingual support / Soporte bilingüe
 
 - EN: This repository is designed to be used in English and Spanish.
 - ES: Este repositorio está diseñado para usarse en inglés y español.
 - EN: Keep instructions simple, direct, and copy/paste-ready.
 - ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
 
-## 🗣️ Prompt base / Base prompt
+## Prompt base / Base prompt
 
 ```text
 EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
@@ -225,7 +225,7 @@ Instala solo el sidecar `spec/` por defecto.
 No omitas idea, spec, plan, tasks, bitácora y validación.
 ```
 
-## 💡 Tips / Consejos
+## Tips / Consejos
 
 - EN: Ask the AI to confirm the active spec before coding.
 - ES: Pide a la IA confirmar la spec activa antes de programar.
@@ -234,7 +234,7 @@ No omitas idea, spec, plan, tasks, bitácora y validación.
 - EN: Prefer simple language and concrete deliverables.
 - ES: Prefiere lenguaje simple y entregables concretos.
 
-## 📊 Visual flow / Flujo visual
+## Visual flow / Flujo visual
 
 ```mermaid
 flowchart LR

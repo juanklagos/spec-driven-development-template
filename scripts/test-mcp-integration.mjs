@@ -1555,7 +1555,7 @@ async function main() {
     const closedEn = await renderDashboard(gateRoot, { lang: "en" });
     assert.match(closedEs, /Gate cerrado/, "the gate guard workspace must render as closed");
     assert.ok(
-      closedEs.includes("gate-missing") && closedEs.includes("regla de oro protegiendo"),
+      closedEs.includes("gate-missing") && closedEs.includes("regla de oro haciendo su trabajo"),
       "a closed gate must say it is the golden rule working and what is missing, not just glow red"
     );
     assert.match(

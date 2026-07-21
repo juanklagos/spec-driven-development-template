@@ -27,14 +27,14 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > Transform an existing codebase into a well-structured SDD project without breaking anything.
 
-## 🎯 When to use this
+## When to use this
 
 - You have an existing application with no formal specifications
 - You want to add traceability and structure without rewriting
 - You need to onboard new team members to a legacy system
 - You want AI tools to understand your existing code properly
 
-## 📋 Migration workflow
+## Migration workflow
 
 ### Phase 1: Discovery (non-destructive)
 
@@ -97,7 +97,7 @@ For each domain spec:
 3. Then — and only then — create a new spec for improvements
 4. Keep the baseline spec as a reference point
 
-## 🤖 AI-assisted migration prompts
+## AI-assisted migration prompts
 
 ### Initial discovery prompt:
 
@@ -134,20 +134,3 @@ Help me:
 | Not testing current behavior | Can't verify things still work | Add regression tests before touching code |
 | Migrating everything at once | Overwhelm, merge conflicts | One domain spec at a time |
 | Skipping the baseline spec | No reference point for "before" | 001-baseline is mandatory |
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

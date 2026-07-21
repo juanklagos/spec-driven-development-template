@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía documenta qué crea, qué modifica y qué devuelve cada script principal y cada tool MCP.
+Qué crea, qué modifica y qué devuelve cada script principal y cada tool MCP. Consúltala cuando quieras saber, antes de ejecutar algo, exactamente qué va a tocar en disco.
 
 Si quieres primero la vista amigable por comandos, empieza aquí:
 - [Guía fácil de MCP](./43-guia-mcp-facil.md)

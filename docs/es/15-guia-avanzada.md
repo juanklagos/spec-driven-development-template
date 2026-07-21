@@ -16,7 +16,7 @@ Guíame por nivel y no omitas especificación, plan, tareas, bitácora y validac
 
 
 Para quién es:
-- Equipos que estandarizan SDD entre múltiples herramientas y modelos de IA.
+- Equipos que necesitan el mismo SDD funcionando con varias herramientas y varios modelos a la vez.
 
 ## Objetivo
 Entregar resultados equivalentes sin depender del agente/modelo usado.
@@ -91,20 +91,3 @@ Incluye impacto en release/gobernanza si aplica.
 - [Checklists de calidad](./21-checklists-calidad-por-etapa.md)
 - [Decisiones de arquitectura](./24-decisiones-de-arquitectura.md)
 - [Checklist de release](./09-release-checklist.md)
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

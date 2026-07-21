@@ -16,10 +16,10 @@ Guíame por nivel y no omitas especificación, plan, tareas, bitácora y validac
 
 
 Para quién es:
-- Para equipos que ya usan SDD básico y necesitan ejecución consistente.
+- Para equipos que ya tienen SDD funcionando y ahora necesitan que cada sesión salga igual de bien.
 
 ## Objetivo
-Ejecutar sesiones repetibles con trazabilidad y bajo retrabajo.
+Que una sesión de trabajo se pueda repetir tal cual, deje traza y no obligue a rehacer lo de ayer.
 
 ## Flujo estándar por sesión
 
@@ -69,20 +69,3 @@ Además verifica si INDEX.md necesita actualización.
 
 ## Próximo paso
 - [docs/es/15-guia-avanzada.md](./15-guia-avanzada.md)
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

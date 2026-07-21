@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía entrega recetas exactas y copiables para los principales clientes IA locales usados con este framework.
+Recetas exactas y copiables para los clientes IA locales que más se usan con este framework. Sin variantes ni ramas: el archivo, el bloque a pegar y cómo comprobar que quedó bien.
 
 ## Mapa de setup por cliente
 

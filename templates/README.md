@@ -31,4 +31,6 @@ Copia siempre el cuerpo de la spec desde `specs/_template/spec.md`. Trae el
 bloque `## Estado de aprobación / Approval status` y los encabezados canónicos;
 una spec sin ellos falla la compuerta y no se puede aprobar.
 
-These templates are language-neutral and work for Spanish and English teams.
+Nothing here forces a language: fill the sections in English or in Spanish.
+
+Nada aquí obliga a un idioma: llena las secciones en inglés o en español.

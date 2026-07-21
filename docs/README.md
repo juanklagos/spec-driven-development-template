@@ -43,7 +43,7 @@ flowchart LR
 
 ## Full index by topic / Índice completo por tema
 
-### 🌱 Fundamentals / Fundamentos
+### Fundamentals / Fundamentos
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -55,7 +55,7 @@ flowchart LR
 | 06 | What this template uses / Qué usa esta plantilla | [EN](./en/06-what-this-template-uses.md) | [ES](./es/06-que-usa-esta-plantilla.md) |
 | 50 | SDD in 2026: state of the art / Estado del arte SDD 2026 | [EN](./en/50-sdd-state-of-the-art-2026.md) | [ES](./es/50-estado-del-arte-sdd-2026.md) |
 
-### 🎓 Learning path / Ruta de aprendizaje
+### Learning path / Ruta de aprendizaje
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -66,7 +66,7 @@ flowchart LR
 | 23 | 30-minute onboarding / Onboarding 30 minutos | [EN](./en/23-30-minute-onboarding.md) | [ES](./es/23-onboarding-30-minutos.md) |
 | 25 | Idea to spec, 3 levels / De idea a spec, 3 niveles | [EN](./en/25-idea-to-spec-with-sdd-3-levels.md) | [ES](./es/25-de-idea-a-spec-con-sdd-3-niveles.md) |
 
-### 🤖 Working with AI / Trabajar con IA
+### Working with AI / Trabajar con IA
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -79,7 +79,7 @@ flowchart LR
 | 30 | Prompts by template feature / Prompts por característica | [EN](./en/30-prompts-by-template-feature.md) | [ES](./es/30-guia-prompts-por-caracteristica.md) |
 | 49 | Spec sidecar prompts / Prompts sidecar `spec/` | [EN](./en/49-spec-sidecar-prompts.md) | [ES](./es/49-prompts-sidecar-spec.md) |
 
-### ✅ Specs & quality / Specs y calidad
+### Specs & quality / Specs y calidad
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -90,7 +90,7 @@ flowchart LR
 | 24 | Architecture decisions (ADR) / Decisiones de arquitectura | [EN](./en/24-architecture-decisions.md) | [ES](./es/24-decisiones-de-arquitectura.md) |
 | 29 | Status dashboard and auto-roadmap / Dashboard y roadmap | [EN](./en/29-status-dashboard-and-auto-roadmap.md) | [ES](./es/29-dashboard-status-y-roadmap.md) |
 
-### 👥 Teams & real projects / Equipos y proyectos reales
+### Teams & real projects / Equipos y proyectos reales
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -100,7 +100,7 @@ flowchart LR
 | 42 | Project organization map / Mapa de organización | [EN](./en/42-project-organization-map.md) | [ES](./es/42-mapa-organizacion-proyecto.md) |
 | 51 | SDD Builder visual guide / Guía visual del SDD Builder | [EN](./en/51-sdd-builder-visual-guide.md) | [ES](./es/51-guia-visual-sdd-builder.md) |
 
-### 🔌 MCP
+### MCP
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -114,7 +114,7 @@ flowchart LR
 | 47 | Free external MCP options / Opciones MCP externas gratis | [EN](./en/47-free-external-mcp-options.md) | [ES](./es/47-opciones-gratis-mcp-externo.md) |
 | 48 | Connect with GitMCP / Conectar con GitMCP | [EN](./en/48-how-to-connect-this-repo-with-gitmcp.md) | [ES](./es/48-como-conectar-este-repo-con-gitmcp.md) |
 
-### 🚀 Releases & project meta / Releases y meta del proyecto
+### Releases & project meta / Releases y meta del proyecto
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
@@ -126,13 +126,13 @@ flowchart LR
 | 37 | Versioning strategy / Estrategia de versionado | [EN](./en/37-versioning-strategy.md) | [ES](./es/37-estrategia-versionado.md) |
 | 38 | Media kit / Kit de medios | [EN](./en/38-media-kit.md) | [ES](./es/38-kit-medios.md) |
 
-### ⚖️ Legal
+### Legal
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|
 | 31 | Legal framework and commercial use / Marco legal y uso comercial | [EN](./en/31-legal-framework-and-commercial-use.md) | [ES](./es/31-marco-legal-y-uso-comercial.md) |
 
-### 🗄️ Historical records / Registros históricos
+### Historical records / Registros históricos
 
 | # | Guide / Guía | EN | ES |
 |---|---|---|---|

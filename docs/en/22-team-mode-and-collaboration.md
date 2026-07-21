@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > SDD works for solo developers and teams alike. This guide explains how to scale from 1 to N contributors.
 
-## 🎭 Recommended roles
+## Recommended roles
 
 | Role | Responsibility | Who typically fills it |
 |---|---|---|
@@ -39,7 +39,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 > [!TIP]
 > On solo projects, one person fills all roles. The discipline remains the same.
 
-## 📐 Team conventions
+## Team conventions
 
 ### Spec ownership
 - **One owner per active spec.** Multiple people can contribute, but one person is accountable.
@@ -61,7 +61,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 - Spec changes must go through `history.md` — no silent edits
 - Architectural decisions that affect multiple specs go in `bitacora/decisiones/`
 
-## 🔄 Visual workflow
+## Visual workflow
 
 ```mermaid
 flowchart LR
@@ -78,7 +78,7 @@ flowchart LR
   style E fill:#ff9,stroke:#333
 ```
 
-## 📋 Team kickoff checklist
+## Team kickoff checklist
 
 When starting a team project with SDD:
 
@@ -89,7 +89,7 @@ When starting a team project with SDD:
 5. [ ] Run `./scripts/validate-sdd.sh . --strict` and fix any issues
 6. [ ] Schedule weekly 15-min SDD sync: review INDEX, check logbook, redistribute specs
 
-## 💬 Communication protocol
+## Communication protocol
 
 | Event | Action | Where to record |
 |---|---|---|
@@ -97,20 +97,3 @@ When starting a team project with SDD:
 | Scope change | Discuss with Spec Owner first | `history.md` + `bitacora/decisiones/` |
 | Blocker found | Raise immediately, document | `bitacora/handoffs/` |
 | Spec completed | Review & close, update INDEX | `specs/INDEX.md` status → `Done` |
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

@@ -1,8 +1,8 @@
 # Template Context Hub
 
-This folder defines the canonical context for this repository as a starter template.
+This folder holds the canonical context for the repository: what it is, how an agent should behave inside it, and where the entry flows live. Read it before anything else in the repo.
 
-Esta carpeta define el contexto canónico de este repositorio como plantilla de arranque.
+Esta carpeta contiene el contexto canónico del repositorio: qué es, cómo debe comportarse un agente dentro de él y dónde están los flujos de entrada. Léela antes que cualquier otra cosa.
 
 ## Canonical statement / Declaración canónica
 
@@ -23,14 +23,15 @@ Esta carpeta define el contexto canónico de este repositorio como plantilla de 
 10. `09-SPECKIT-STANDARDIZATION-PLAN.md`
 11. `prompts/`
 
-## 🌐 Bilingual support / Soporte bilingüe
+Read them in that order the first time. The base prompt and the tips live here in the hub so the rest can stay short.
 
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
+## Bilingual use / Uso bilingüe
 
-## 🗣️ Prompt base / Base prompt
+Everything here works in English and Spanish. Keep instructions short, direct and ready to paste.
+
+Todo esto funciona en inglés y en español. Mantén las instrucciones cortas, directas y listas para pegar.
+
+## Base prompt / Prompt base
 
 ```text
 EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
@@ -42,16 +43,13 @@ Mi proyecto es: [explica el proyecto en lenguaje simple].
 No omitas idea, spec, plan, tasks, bitácora y validación.
 ```
 
-## 💡 Tips / Consejos
+## Tips / Consejos
 
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
+- Make the agent say which spec is active before it writes a line of code. / Haz que el agente diga qué spec está activa antes de escribir una línea de código.
+- Never end a session without one clear next step. / Nunca cierres una sesión sin un próximo paso claro.
+- Plain language and a concrete deliverable beat a clever description. / El lenguaje llano y un entregable concreto le ganan a una descripción ingeniosa.
 
-## 📊 Visual flow / Flujo visual
+## The flow / El flujo
 
 ```mermaid
 flowchart LR

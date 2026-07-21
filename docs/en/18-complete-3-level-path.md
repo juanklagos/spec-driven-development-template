@@ -36,7 +36,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 > cd spec-driven-development-template
 > ```
 
-## 🌈 Global visual map
+## Global visual map
 
 ```mermaid
 flowchart LR
@@ -47,7 +47,7 @@ flowchart LR
   C --> F["Unified execution + Scalability"]
 ```
 
-## 🧱 What each level means
+## What each level means
 
 | Level | Profile | Main goal |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ flowchart LR
 | <img src="https://img.shields.io/badge/🟡_Intermediate-D29922?style=flat-square" alt="Intermediate"> | Basic project experience | Keep consistency across sessions |
 | <img src="https://img.shields.io/badge/🔴_Advanced-DA3633?style=flat-square" alt="Advanced"> | High-discipline technical teams | Unify outputs across tools and scale quality |
 
-## 🗺️ Path by topic (full system)
+## Path by topic (full system)
 
 | Topic | <img src="https://img.shields.io/badge/🟢_Beginner-238636?style=flat-square" alt="Beginner"> | <img src="https://img.shields.io/badge/🟡_Intermediate-D29922?style=flat-square" alt="Intermediate"> | <img src="https://img.shields.io/badge/🔴_Advanced-DA3633?style=flat-square" alt="Advanced"> |
 | --- | --- | --- | --- |
@@ -133,7 +133,7 @@ Run technical and functional validations.
 Return unified report: goal, files, commands, validations, risks, next step.
 ```
 
-## 🎓 Which guide to read by level
+## Which guide to read by level
 
 - <img src="https://img.shields.io/badge/🟢_Beginner-238636?style=flat-square" alt="Beginner">:
   - `docs/en/13-quick-guide-non-programmers.md`
@@ -142,23 +142,6 @@ Return unified report: goal, files, commands, validations, risks, next step.
 - <img src="https://img.shields.io/badge/🔴_Advanced-DA3633?style=flat-square" alt="Advanced">:
   - `docs/en/15-advanced-guide.md`
 
-## 🔁 Final rule
+## Final rule
 
 If there is no documentation traceability, work is not considered complete.
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

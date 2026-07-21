@@ -46,7 +46,7 @@ Es decir: **la decisión de posponer se revirtió por evidencia, no por impacien
 - `packages/sdd-mcp/src/app-ui.ts:1-11` documenta el HTML autocontenido: sin CDNs, sin peticiones externas, sin template literals ni la secuencia `</script`.
 - Techo adicional del canal: la CSP por defecto de la vista es `connect-src 'none'` — *la vista no puede hablar con el server HTTP local ni con el stream SSE; todo va y vuelve por `tools/call`* (`idea/EVALUACION_DESKTOP_2026-07-21.md:144`, sección «Fase 4 — Reencuadrar el MCP App que ya enviaste»).
 
-**Honestidad de verificación**
+**Hasta dónde llega la verificación**
 - La interacción host↔iframe se verificó **por protocolo y estándar, no dentro de un cliente de producción** (`specs/006-visual-spec-builder/history.md:46`).
 
 **Lo que no se pudo reconstruir**

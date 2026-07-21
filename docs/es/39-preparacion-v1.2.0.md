@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta página registra la barra mínima para la siguiente minor release.
+La barra mínima para la siguiente minor release. Si algo de esto no está, la release no sale.
 
 ## Flujo de preparación del release
 

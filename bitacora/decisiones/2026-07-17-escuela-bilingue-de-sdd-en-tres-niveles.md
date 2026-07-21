@@ -34,7 +34,7 @@ Cada nivel fue aprobado por el autor en el chat, con las palabras registradas en
 | **Repo aparte de curso con formato GitHub Skills** (§3.2) | Quedó **fuera del alcance** de la spec 004 y se documentó como T10 (`specs/004-site-dashboard-community/history.md:6`, `tasks.md:12`). Nota: se ejecutó igualmente más tarde ese mismo día bajo la spec 005 — el repo `aprende-sdd` quedó creado y verificado end-to-end en CI (`specs/005-learning-for-everyone/history.md`). |
 | **MCP Apps embebido para el dashboard** (§3.1B) | Pospuesto; el dashboard vive en el transporte HTTP existente de `sdd-mcp` (`specs/004-site-dashboard-community/history.md:8`). |
 
-Nota de honestidad: no hay registro escrito de que se evaluara **no** hacer nada del documento, ni de un análisis de capacidad de mantenimiento previo a aprobar los tres niveles. Los costos de abajo se hacen explícitos aquí por primera vez.
+No hay registro escrito de que se evaluara **no** hacer nada del documento, ni de un análisis de capacidad de mantenimiento previo a aprobar los tres niveles. Los costos de abajo se hacen explícitos aquí por primera vez.
 
 ## Consequences / Consecuencias
 

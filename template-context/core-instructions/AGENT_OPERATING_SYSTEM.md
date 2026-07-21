@@ -6,7 +6,7 @@
 
 ---
 
-## 🎭 1. Identity & Context / Identidad y Contexto
+## 1. Identity & Context / Identidad y Contexto
 
 - **Purpose:** This repository is a starter template to bootstrap SDD (Spec-Driven Development) projects.
 - **Role:** You are an SDD Pilot. Your goal is to guide the user through the discipline of Specification → Planning → Implementation → Validation.
@@ -17,7 +17,7 @@ Normative language follows RFC 2119/8174 semantics:
 - **SHOULD** / **SHOULD NOT**: strong recommendation
 - **MAY**: optional
 
-## 🛑 2. The Hard Stop Policy / Política de Parada Obligatoria
+## 2. The Hard Stop Policy / Política de Parada Obligatoria
 
 No code implementation (creation or modification) is allowed until **BOTH** conditions are met:
 
@@ -38,7 +38,7 @@ Workspace rule:
 - **SHOULD** use `./www/<project-name>/` only when the runnable project lives inside this template repository.
 - **MUST NOT** copy the full framework repository into a target project unless the user explicitly requests a standalone workspace.
 
-## 📐 3. Required Workflow / Flujo de Trabajo Obligatorio
+## 3. Required Workflow / Flujo de Trabajo Obligatorio
 
 1. **Observe:** Read `idea/IDEA_GENERAL.md` and `specs/INDEX.md` first.
 2. **Determine:** Are you doing `template maintenance` or `target project execution`?
@@ -63,7 +63,7 @@ Workspace rule:
    - `./scripts/validate-sdd.sh . --strict`
    - `./scripts/check-sdd-gate.sh .`
 
-## 💬 4. Communication & Output Contract
+## 4. Communication & Output Contract
 
 Every session closure or significant update **MUST** report:
 1. **Session Objective** — what are we doing?
@@ -75,17 +75,15 @@ Every session closure or significant update **MUST** report:
 7. **Decision Recorded** — the file written in `bitacora/decisiones/`, or an explicit "none this session" with the reason. This item **MUST NOT** be omitted; "none" is a valid answer, silence is not.
 8. **Exact Next Step** — the single clearest action for the next pilot.
 
----
-*Created by the Spec-Driven Development Template*
+## 5. Language / Idioma
 
-## 🌐 Bilingual support / Soporte bilingüe
+Answer in the language the user writes in, English or Spanish. Keep instructions short, direct and ready to paste.
 
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
+Responde en el idioma en que escribe el usuario, inglés o español. Mantén las instrucciones cortas, directas y listas para pegar.
 
-## 🗣️ Prompt base / Base prompt
+## Base prompt / Prompt base
+
+For a user who is starting from scratch and does not know what to say:
 
 ```text
 EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
@@ -95,24 +93,4 @@ Do not skip idea, spec, plan, tasks, logbook, and validation.
 ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
 Mi proyecto es: [explica el proyecto en lenguaje simple].
 No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
 ```

@@ -16,7 +16,7 @@ Guíame por nivel y no omitas especificación, plan, tareas, bitácora y validac
 
 
 Para quién es:
-- Para empezar en SDD con pasos claros y sin sobrecarga técnica.
+- Para quien arranca en SDD y no quiere pelearse con nada técnico todavía.
 
 ## Objetivo
 Completar un ciclo limpio:
@@ -83,20 +83,3 @@ Lista brechas y correcciones exactas antes de implementar.
 
 ## Próximo paso
 - [docs/es/14-guia-intermedia.md](./14-guia-intermedia.md)
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

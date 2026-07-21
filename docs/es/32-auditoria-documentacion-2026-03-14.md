@@ -55,20 +55,3 @@ Si es nuevo, inicialízalo desde este template.
 Si ya existe, adáptalo sin romper el comportamiento actual.
 Mantenme en flujo SDD (idea -> spec -> plan -> tasks -> implementación), con lenguaje claro.
 ```
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

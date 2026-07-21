@@ -1,5 +1,7 @@
 # Fast Entry Flows / Flujos de entrada rápida
 
+Two ways in: a project that does not exist yet, and a project that already does.
+
 ## Flow A: New project from this template
 
 1. Confirm goal.
@@ -16,53 +18,11 @@
 1. Confirm project path.
 2. Keep existing code behavior unchanged.
 3. Add `idea/`, `specs/`, `bitacora/` structure.
-4. Write first spec based on current behavior.
+4. Write the first spec from how the system behaves today, not from how you wish it behaved.
 5. Register migration decisions in `bitacora/`.
 6. Request and record explicit user consent only when implementation is about to start.
 7. Validate structure and consistency.
 
 ## Minimum expected outcome / Resultado mínimo esperado
 
-- Standard structure ready in target project.
-- First specification created.
-- Initial logbook entry recorded.
-- Clear next step.
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+The target project ends the session with the standard structure in place, one specification written, a first logbook entry, and a next step the user can act on without asking anyone.

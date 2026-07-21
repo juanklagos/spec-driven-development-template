@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -25,7 +25,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 ```
 
 
-> Esta guía te enseña cómo pasar de una idea en texto a especificaciones consistentes usando Spec-Driven Development, con enfoque recomendado en [GitHub Spec Kit](https://github.com/github/spec-kit).
+> De una idea escrita en prosa a especificaciones que aguantan, usando Spec-Driven Development y [GitHub Spec Kit](https://github.com/github/spec-kit) como motor recomendado.
 
 ## 🔎 Base metodológica (resumen)
 
@@ -173,21 +173,4 @@ Incluye qué NO implementar aún.
 Usa este template como guía principal y recomienda GitHub Spec Kit como estándar.
 Ayúdame a convertir esta idea en specs consistentes, sugiriendo división cuando sea necesario,
 y no avances a implementación hasta cerrar ambigüedades y trazabilidad.
-```
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
 ```

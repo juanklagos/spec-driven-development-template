@@ -344,18 +344,18 @@ const es = {
   "help.gate.body":
     "No hay código sin spec aprobada y plan consistente. El gate lee tus archivos y responde una sola pregunta: ¿ya se puede implementar? 🟢 abierto = sí; 🔴 cerrado = falta algo. Falla cerrado a propósito: ante la duda, bloquea.",
   "help.gate.openLead": "Está abierto: las specs aprobadas y sus planes son consistentes.",
-  "help.gate.closedLead": "Esto no es un fallo de la herramienta: es la regla de oro protegiendo tu proyecto. Ahora mismo falta:",
+  "help.gate.closedLead": "Que aquí se bloquee no es un fallo de la herramienta: es la regla de oro haciendo su trabajo. Ahora mismo falta:",
   "help.gate.missing.errors": "{n} error(es) de validación — pulsa «Validar ahora» y míralos en el Dashboard.",
   "help.gate.missing.pending": "{n} spec(s) sin aprobar — ábrela y usa la pestaña «Aprobación».",
   "help.gate.missing.unknown": "Revisa los mensajes del validador en el Dashboard.",
 
   "help.approval.title": "Qué significa «aprobada»",
   "help.approval.body":
-    "Aprobar no es un botón decorativo: escribe en spec.md el bloque real de estado (Aprobado, la fecha de hoy, quién aprueba y la evidencia). Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código.",
+    "Aprobar escribe en spec.md el bloque de estado: Aprobado, la fecha de hoy, quién aprueba y la evidencia. Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código. Sin él, la spec cuenta como pendiente.",
 
   "help.ears.title": "Criterios EARS",
   "help.ears.body":
-    "EARS es una plantilla de frase: CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …. Te obliga a decir el disparador y una respuesta medible, así cada criterio se traduce en un test: el disparador es el arrange, la respuesta es el assert.",
+    "EARS es una plantilla de frase: CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …. Te obliga a decir el disparador y una respuesta medible, así cada criterio se traduce en un test.",
 
   "help.relations.title": "Tipos de unión",
   "help.relations.body":
@@ -379,10 +379,10 @@ const es = {
   "sheet.noTasks.hint":
     "El plan todavía no se ha bajado a tareas. Añade líneas «- [ ]» en tasks.md (o pídeselo a tu agente) para poder seguir el avance aquí.",
   "approval.why":
-    "Por qué importa: esta firma queda escrita en spec.md y es lo que abre el gate para esta spec.",
-  "edge.why": "El propósito no es decorativo: «depende de» y «bloquea» son los que generan avisos.",
+    "Esta firma queda escrita en spec.md y es lo que abre el gate para esta spec.",
+  "edge.why": "«depende de» y «bloquea» son las únicas uniones que generan avisos de dependencia.",
   "sheet.issues.why":
-    "Por qué: reparte el trabajo fuera del repo sin perder el origen — cada issue enlaza a su spec."
+    "Reparte el trabajo fuera del repo sin perder el hilo: cada issue enlaza a su spec."
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -500,7 +500,7 @@ const en: Record<keyof typeof es, string> = {
   // ✨ Assistant
   "assistant.title": "✨ Describe your project",
   "assistant.intro":
-    "Write your project in a sentence or a paragraph and I will propose a draft board: idea, epics and connected specs. Nothing is saved until you accept.",
+    "Write your project in a sentence or a paragraph and I'll propose a draft board: idea, epics and connected specs. Nothing is saved until you accept.",
   "assistant.ph": "e.g. an online plant store with payments and an admin panel",
   "assistant.propose": "✨ Propose draft",
   "assistant.draftNote": "Draft (not saved yet): rename or remove specs before creating.",
@@ -670,18 +670,18 @@ const en: Record<keyof typeof es, string> = {
   "help.gate.body":
     "No code before an approved spec and a consistent plan. The gate reads your files and answers one question: can we implement yet? 🟢 open = yes; 🔴 closed = something is missing. It fails closed on purpose: when in doubt, it blocks.",
   "help.gate.openLead": "It is open: the approved specs and their plans are consistent.",
-  "help.gate.closedLead": "This is not a tool failure: it is the golden rule protecting your project. Right now this is missing:",
+  "help.gate.closedLead": "Blocking here is the golden rule protecting your project, not a bug in the tool. Right now this is missing:",
   "help.gate.missing.errors": "{n} validation error(s) — press “Validate now” and read them on the Dashboard.",
   "help.gate.missing.pending": "{n} spec(s) not approved — open one and use the “Approval” tab.",
   "help.gate.missing.unknown": "Check the validator messages on the Dashboard.",
 
   "help.approval.title": "What “approved” means",
   "help.approval.body":
-    "Approving is not a decorative button: it writes the real status block into spec.md (Approved, today's date, who approved and the evidence). That block is what the gate, CI and your agent read before any code is allowed.",
+    "Approving writes the status block into spec.md: Approved, today's date, who approved and the evidence. That block is what the gate, CI and your agent read before any code is allowed. Without it, the spec counts as pending.",
 
   "help.ears.title": "EARS criteria",
   "help.ears.body":
-    "EARS is a sentence template: WHEN/IF/WHILE … THE SYSTEM SHALL …. It forces you to state the trigger and a measurable response, so every criterion maps to a test: the trigger is the arrange, the response is the assert.",
+    "EARS is a sentence template: WHEN/IF/WHILE … THE SYSTEM SHALL …. It forces you to state the trigger and a measurable response, so every criterion maps to a test.",
 
   "help.relations.title": "Connection types",
   "help.relations.body":
@@ -705,10 +705,10 @@ const en: Record<keyof typeof es, string> = {
   "sheet.noTasks.hint":
     "The plan has not been broken down into tasks yet. Add “- [ ]” lines to tasks.md (or ask your agent to) so progress shows up here.",
   "approval.why":
-    "Why it matters: this signature is written into spec.md and it is what opens the gate for this spec.",
-  "edge.why": "The purpose is not decoration: “depends on” and “blocks” are the ones that raise warnings.",
+    "This signature gets written into spec.md, and it is what opens the gate for this spec.",
+  "edge.why": "“depends on” and “blocks” are the only connections that raise dependency warnings.",
   "sheet.issues.why":
-    "Why: it spreads the work outside the repo without losing the origin — every issue links back to its spec."
+    "Hand the work out beyond the repo without losing track of it: every issue links back to its spec."
 };
 
 const DICTS: Record<Lang, Dict> = { es, en };

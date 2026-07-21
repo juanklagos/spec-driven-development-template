@@ -35,7 +35,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 This guide explains how to update project documentation when ideas, priorities, or requirements change.
 
-## 🎯 Goal
+## Goal
 
 Keep consistency between:
 
@@ -43,7 +43,7 @@ Keep consistency between:
 - `specs/` (all specifications)
 - `bitacora/` (real execution records)
 
-## 📌 Main rule
+## Main rule
 
 Every relevant change must be reflected in 3 places:
 
@@ -51,7 +51,7 @@ Every relevant change must be reflected in 3 places:
 2. Specification history file.
 3. Session logbook.
 
-## 🧭 Change type and required action
+## Change type and required action
 
 | Change type | Required action | Where to register |
 |---|---|---|
@@ -61,7 +61,7 @@ Every relevant change must be reflected in 3 places:
 | Findings-based adjustment | Update research | `research.md`, `history.md`, daily log |
 | Scope change | Mark impact and priority | `specs/INDEX.md` + `history.md` |
 
-## 📈 Refinement visual flow
+## Refinement visual flow
 
 ```mermaid
 flowchart LR
@@ -72,7 +72,7 @@ flowchart LR
   E --> F["Revalidate plan and tasks"]
 ```
 
-## ✅ Quick refinement checklist
+## Quick refinement checklist
 
 - [ ] Does this change affect project idea?
 - [ ] Was active specification updated?
@@ -80,13 +80,13 @@ flowchart LR
 - [ ] Was logbook updated?
 - [ ] Were tasks reviewed for consistency?
 
-## 📝 Suggested `history.md` format
+## Suggested `history.md` format
 
 | Date | Change type | Summary | Impacted files | Owner |
 |---|---|---|---|---|
 | 2026-03-12 | Scope change | Split spec into two phases | `spec.md`, `tasks.md` | AI |
 
-## 🤖 Rule for Artificial Intelligence tools
+## Rule for Artificial Intelligence tools
 
 If you detect contradiction between idea and specification:
 
@@ -94,20 +94,3 @@ If you detect contradiction between idea and specification:
 2. Propose refinement.
 3. Update documentation.
 4. Continue implementation only after alignment.
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

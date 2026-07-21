@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Este documento define cómo debe funcionar el versionado entre el framework y sus paquetes internos.
+Cómo se versionan el framework y sus paquetes internos, y por qué van siempre al mismo número.
 
 ## Mapa de alineación de versiones
 

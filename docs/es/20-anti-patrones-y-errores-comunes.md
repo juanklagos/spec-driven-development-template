@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -26,7 +26,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 
 > [!CAUTION]
-> Estos son los errores más frecuentes que rompen el flujo SDD. Apréndelos para evitar sesiones desperdiciadas.
+> Estos son los errores que más veces rompen el flujo SDD. Todos se ven inocentes en el momento.
 
 ## 🚫 Anti-patrones críticos
 
@@ -69,34 +69,17 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 - `history.md` no muestra cambios pero el código sí ha evolucionado
 - `validate-sdd.sh` no se ha ejecutado desde el inicio del proyecto
 
-## 📏 La única regla que recordar
+## 📏 La regla que resume todo
 
-> **Si no está documentado, no está alineado. Si no está alineado, se va a romper.**
+> **La decisión que no escribiste es la discusión que vas a tener otra vez dentro de tres semanas.**
 
 ## 💡 Protocolo de recuperación
 
-Si te descubres (o a tu equipo) rompiendo la disciplina SDD:
+Si te descubres saltándote la disciplina, o descubres que el equipo lo está haciendo:
 
-1. **Para de codificar** inmediatamente
-2. Ejecuta `./scripts/validate-sdd.sh . --strict` para ver qué falta
-3. Llena los vacíos: actualiza la spec activa, documenta decisiones, crea handoff
-4. Solo entonces retoma la implementación
+1. Para de escribir código. Ahora, no al terminar lo que estabas haciendo.
+2. Ejecuta `./scripts/validate-sdd.sh . --strict` y mira qué falta.
+3. Tapa los huecos: spec activa al día, decisiones documentadas, handoff creado.
+4. Recién ahí vuelve a implementar.
 
-Esto toma 15 minutos y ahorra horas de retrabajo.
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```
+Son quince minutos. El retrabajo que evitan se mide en días.

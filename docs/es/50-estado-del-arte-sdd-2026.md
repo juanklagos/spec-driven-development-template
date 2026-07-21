@@ -5,9 +5,9 @@
 
 ---
 
-## 1. El panorama SDD en un párrafo
+## 1. Dónde está el SDD en 2026
 
-Entre 2025 y 2026, Spec-Driven Development pasó de idea emergente a práctica dominante de la ingeniería asistida por IA. GitHub, AWS, Anthropic, Cursor y Google ofrecen alguna variante del flujo `spec -> plan -> tareas -> implementación`. Los patrones que se consolidaron: archivos de constitución/steering, criterios de aceptación en notación EARS, specs compactas (1-3 páginas) con "fuera de alcance" explícito, compuertas de revisión humana entre fases y trazabilidad de la spec al commit. El punto de equilibrio práctico de la comunidad es el desarrollo **spec-anchored**: la spec sobrevive a la feature y evoluciona junto al código.
+Entre 2025 y 2026, Spec-Driven Development pasó de idea emergente a práctica dominante de la ingeniería asistida por IA. GitHub, AWS, Anthropic, Cursor y Google ofrecen alguna variante del flujo `spec -> plan -> tareas -> implementación`. Los patrones que se consolidaron: archivos de constitución/steering, criterios de aceptación en notación EARS, specs compactas (1-3 páginas) con "fuera de alcance" explícito, compuertas de revisión humana entre fases y trazabilidad de la spec al commit. Donde la comunidad ha terminado asentándose es en el desarrollo **spec-anchored**: la spec sobrevive a la feature y evoluciona junto al código.
 
 ## 2. Los tres niveles de SDD (taxonomía de referencia)
 
@@ -16,7 +16,7 @@ Taxonomía de Birgitta Böckeler (Thoughtworks) en martinfowler.com, adoptada ya
 | Nivel | Significado | Estado en 2026 |
 | :--- | :--- | :--- |
 | **Spec-first** | La spec guía una tarea y luego se descarta | Común, baja ceremonia |
-| **Spec-anchored** | La spec sobrevive y la feature evoluciona a través de ella | **Punto óptimo práctico** — lo que implementa este template |
+| **Spec-anchored** | La spec sobrevive y la feature evoluciona a través de ella | **Lo que mejor funciona hoy** — lo que implementa este template |
 | **Spec-as-source** | Solo se edita la spec; el código es un artefacto compilado | Sigue siendo promesa (Tessl Framework nunca llegó a GA) |
 
 ## 3. Comparativa de herramientas principales
@@ -50,7 +50,7 @@ Dónde se ubica este template: **una capa práctica alrededor de GitHub Spec Kit
 | **Specs ejecutables / property-based testing** (estilo Kiro) | ❌ Aún no | Oportunidad: derivar propiedades de test desde los criterios de aceptación |
 | **Integración tareas -> issues** (`/speckit.taskstoissues`) | ❌ Aún no | Oportunidad para modo equipo |
 
-Veredicto: el template está **alineado con el núcleo consolidado** del SDD de 2026 (gate, constitución, bundle spec-anchored, trazabilidad, MCP, AGENTS.md) y sus diferenciales son reales: ruta de aprendizaje bilingüe EN/ES, onboarding no técnico, scripts de cumplimiento y el sidecar compacto para proyectos reales. Las oportunidades abiertas: specs ejecutables e integración tareas → issues.
+O sea: el núcleo está cubierto. Lo que falta son las dos filas con ❌ — derivar propiedades de test desde los criterios de aceptación, y convertir `tasks.md` en issues.
 
 ## 5. Críticas que debes conocer (y cómo responde este template)
 

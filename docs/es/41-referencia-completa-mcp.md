@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta es la referencia dedicada y orientada al usuario para el servidor local `sdd-mcp`.
+La referencia completa del servidor local `sdd-mcp`, escrita desde el punto de vista de quien lo usa.
 
 Usa esta página cuando necesites saber:
 - para qué sirve el servidor MCP
@@ -11,9 +11,7 @@ Usa esta página cuando necesites saber:
 - qué efectos laterales produce
 - qué puede esperar el usuario como salida
 
-Mantén [33-guia-servidor-mcp.md](./33-guia-servidor-mcp.md) como guía de instalación y conexión.
-Mantén [40-referencia-resultados-comandos.md](./40-referencia-resultados-comandos.md) como referencia de resultados script por script.
-Mantén [43-guia-mcp-facil.md](./43-guia-mcp-facil.md) como vista no técnica y por comandos estilo slash.
+La instalación y la conexión están en [33-guia-servidor-mcp.md](./33-guia-servidor-mcp.md), y los resultados script por script en [40-referencia-resultados-comandos.md](./40-referencia-resultados-comandos.md). Si no eres técnico, empieza por [43-guia-mcp-facil.md](./43-guia-mcp-facil.md) en vez de por esta página.
 
 ## Qué es `sdd-mcp`
 
@@ -27,7 +25,7 @@ Da a los clientes IA una forma estructurada de:
 - escribir artefactos de trazabilidad
 - leer contexto clave del proyecto a través de resources MCP
 
-No es solo acceso a documentación. Es la interfaz ejecutable del framework.
+También sirve la documentación del framework, pero lo que importa son las operaciones: un agente conduce el proyecto a través de esta interfaz.
 
 ## Arquitectura visual
 
@@ -125,10 +123,6 @@ Qué hace:
 - crea `contracts/README.md`
 - agrega una fila en `specs/INDEX.md`
 
-Qué debe esperar el usuario:
-- una nueva carpeta numerada de spec
-- el índice del proyecto actualizado automáticamente
-
 Salida estructurada:
 - `specId`
 - `specDir`
@@ -150,10 +144,6 @@ Qué hace:
 - verifica carpetas requeridas
 - verifica archivos requeridos
 - verifica bundles numerados de spec
-
-Qué debe esperar el usuario:
-- un resumen estructurado de validación
-- errores y warnings explícitos
 
 Salida estructurada:
 - `ok`
@@ -178,10 +168,6 @@ Qué hace:
 - revisa presencia de tareas
 - revisa exigencia de consentimiento cuando existen specs aprobadas
 
-Qué debe esperar el usuario:
-- un resultado claro tipo sí/no
-- razones explícitas si la implementación debe seguir bloqueada
-
 Salida estructurada:
 - `ok`
 - `errors`
@@ -205,9 +191,6 @@ Entrada:
 Qué hace:
 - agrega una línea con timestamp en `.sdd/user-consent.log`
 
-Qué debe esperar el usuario:
-- una traza durable de aprobación
-
 Salida estructurada:
 - `logFile`
 - `summary`
@@ -227,9 +210,6 @@ Entrada:
 Qué hace:
 - lee las specs numeradas
 - extrae el estado de aprobación desde `spec.md`
-
-Qué debe esperar el usuario:
-- una lista compacta de las specs actuales y su estado
 
 Salida estructurada:
 - `specs[]`
@@ -255,9 +235,6 @@ Qué hace:
 - resume progreso de tareas
 - incluye extracto reciente del log global
 
-Qué debe esperar el usuario:
-- un documento de estado listo para revisar o compartir
-
 Salida estructurada:
 - `path`
 - `content`
@@ -276,10 +253,6 @@ Entrada:
 Qué hace:
 - crea o reemplaza `docs/roadmap.mmd`
 - crea o reemplaza `docs/roadmap.md`
-
-Qué debe esperar el usuario:
-- una fuente Mermaid
-- un documento markdown del roadmap
 
 Salida estructurada:
 - `mermaidPath`
@@ -301,9 +274,6 @@ Entrada:
 
 Qué hace:
 - agrega contenido a `bitacora/global/PROJECT_LOG.md`
-
-Qué debe esperar el usuario:
-- un archivo de log global actualizado
 
 Salida estructurada:
 - `path`
@@ -328,9 +298,6 @@ Reglas:
 Qué hace:
 - crea o reemplaza `bitacora/diaria/YYYY-MM-DD.md`
 
-Qué debe esperar el usuario:
-- un documento de log por fecha
-
 Salida estructurada:
 - `path`
 - `content`
@@ -354,9 +321,6 @@ Reglas:
 Qué hace:
 - crea o reemplaza `bitacora/handoffs/<fileName>`
 
-Qué debe esperar el usuario:
-- un handoff durable
-
 Salida estructurada:
 - `path`
 - `content`
@@ -379,9 +343,6 @@ Reglas:
 
 Qué hace:
 - crea o reemplaza `bitacora/decisiones/<fileName>`
-
-Qué debe esperar el usuario:
-- un registro de decisión durable
 
 Salida estructurada:
 - `path`

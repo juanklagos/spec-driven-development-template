@@ -8,7 +8,7 @@
 
 En marzo de 2026 el template tenía reglas de agente repartidas en archivos distintos (`.clauderules`, `.cursorrules`, `.github/copilot-instructions.md`, `AGENTS.md`) y dos caminos de inicialización que no coincidían. La pregunta de fondo era si el template debía **generar sus propias specs** o **apoyarse en un motor externo** ya adoptado.
 
-Nota de honestidad: esta decisión **se tomó en commits, no en una spec**. La primera spec numerada del repositorio (`specs/001-sdd-mcp-foundation/spec.md`) aparece el 2026-03-18 (commit `9a314e8`), cuatro días después, y no hay entrada de bitácora diaria de marzo — la más antigua es `bitacora/diaria/2026-07-17.md`. La reconstrucción de abajo sale de git, CHANGELOG y del plan escrito ese mismo día.
+Conviene decirlo antes de seguir: esta decisión **se tomó en commits, no en una spec**. La primera spec numerada del repositorio (`specs/001-sdd-mcp-foundation/spec.md`) aparece el 2026-03-18 (commit `9a314e8`), cuatro días después, y no hay entrada de bitácora diaria de marzo — la más antigua es `bitacora/diaria/2026-07-17.md`. La reconstrucción de abajo sale de git, CHANGELOG y del plan escrito ese mismo día.
 
 ## Decision / Decisión
 

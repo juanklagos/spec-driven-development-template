@@ -5,7 +5,7 @@
 
 ---
 
-## 1. The SDD landscape in one paragraph
+## 1. Where SDD stands in 2026
 
 Between 2025 and 2026, Spec-Driven Development moved from an emerging idea to the dominant practice for AI-assisted engineering. GitHub, AWS, Anthropic, Cursor, and Google all ship some variant of the `spec -> plan -> tasks -> implement` flow. The patterns that consolidated are: constitution/steering files, EARS-style acceptance criteria, compact specs (1-3 pages) with explicit "out of scope" sections, human review gates between phases, and traceability from spec to commit. The community's practical sweet spot is **spec-anchored** development: the spec survives the feature and evolves with the code.
 
@@ -50,7 +50,7 @@ Where this template sits: **a practical layer around GitHub Spec Kit** — start
 | **Executable specs / property-based testing** (Kiro-style) | ❌ Not yet | Opportunity: derive test properties from acceptance criteria |
 | **Tasks -> issues integration** (`/speckit.taskstoissues`) | ❌ Not yet | Opportunity for team mode |
 
-Verdict: the template is **aligned with the consolidated core** of SDD in 2026 (gate, constitution, spec-anchored bundle, traceability, MCP, AGENTS.md) and its differentiators are real: bilingual EN/ES teaching path, non-technical onboarding, enforcement scripts, and the compact sidecar for real projects. The open opportunities are executable specs and tasks-to-issues integration.
+So: the core is covered. What is missing is the two ❌ rows — deriving test properties from acceptance criteria, and turning `tasks.md` into issues.
 
 ## 5. Criticisms you should know (and how this template answers them)
 

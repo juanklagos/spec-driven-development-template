@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta página guarda copy corto y reutilizable para la difusión del framework.
+Copy corto y reutilizable para anunciar el framework. Cópialo, ajústale la versión y publícalo.
 
 ## Flujo de lanzamiento
 

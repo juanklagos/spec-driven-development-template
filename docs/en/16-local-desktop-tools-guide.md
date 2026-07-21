@@ -35,25 +35,15 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > This guide explains how to use this template with Artificial Intelligence desktop assistants that can read and write local files.
 
-## 🎯 Goal
+## Goal
 
-Enable anyone to work with tools such as:
+Codex desktop, Claude desktop, or any other assistant you have pointed at a local folder: same structure, same trace, same result. The tool changes; the discipline does not.
 
-- Codex desktop
-- Claude desktop
-- Other desktop tools with local folder access
+## What “local access” means
 
-while preserving structure, traceability, and consistency.
+The assistant can read your project files, create and edit documents, and — if you allow it — run terminal commands. That last one is where mistakes get expensive, so read the safety notes below before you enable it.
 
-## 📦 What “local access” means
-
-The tool can:
-
-- Read project files.
-- Create and edit documents.
-- Run terminal commands (if enabled).
-
-## 🧭 Recommended workflow (always)
+## Recommended workflow (always)
 
 ```mermaid
 flowchart LR
@@ -65,7 +55,7 @@ flowchart LR
   F --> G["Update logbook"]
 ```
 
-## ✅ Session startup checklist
+## Session startup checklist
 
 - [ ] Opened the correct project root.
 - [ ] Confirmed `idea/`, `specs/`, `bitacora/` exist.
@@ -73,7 +63,7 @@ flowchart LR
 - [ ] Read `specs/INDEX.md`.
 - [ ] Read latest file in `bitacora/handoffs/`.
 
-## 🗣️ Base prompt for desktop assistants
+## Base prompt for desktop assistants
 
 ```text
 Work in local mode on this folder.
@@ -97,7 +87,7 @@ Output format:
 5) Next step
 ```
 
-## 🛠️ Suggested setup by tool type
+## Suggested setup by tool type
 
 ## 1) Codex desktop
 
@@ -160,14 +150,14 @@ Why this is better:
 - prompts are reusable and consistent
 - the SDD workflow becomes less dependent on model improvisation
 
-## 🔒 Safety and control best practices
+## Safety and control best practices
 
 - Review file paths before confirming changes.
 - Avoid destructive commands in unrelated folders.
 - Commit often with clear messages.
 - Never push secrets or credentials.
 
-## 🧪 Minimum validation per session
+## Minimum validation per session
 
 | Validation | Expected result |
 |---|---|
@@ -183,26 +173,9 @@ Stop implementation and align first if:
 - Undocumented scope change appears.
 - Acceptance criteria are unclear.
 
-## ✅ Session close (mandatory)
+## Session close (mandatory)
 
 - [ ] Update `bitacora/global/PROJECT_LOG.md`
 - [ ] Update `bitacora/diaria/YYYY-MM-DD.md`
 - [ ] Create handoff if pending work remains
 - [ ] Confirm exact next step
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

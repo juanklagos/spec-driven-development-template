@@ -91,6 +91,11 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 - **ES:** El dolor real no eran los comandos sino que el builder no viaja en el paquete npm. Se elige lanzador de un comando → spike `.mcpb` → `.mcpb`; Electron queda diferido, no descartado.
 - **EN:** The real pain was distribution, not commands: one-command launcher first, `.mcpb` next, Electron deferred but not discarded.
 
+### 2026-07-21 — [La Action usa los scripts del consumidor](2026-07-21-action-usa-los-scripts-del-consumidor.md)
+
+- **ES:** La GitHub Action ejecuta la compuerta del sidecar del proyecto, no la suya: imponer la propia cambiaría las reglas de validación de repos ajenos sin su consentimiento. Costo aceptado: un sidecar obsoleto valida con reglas obsoletas.
+- **EN:** The Action runs the consumer's gate, not its own — imposing ours would silently change a foreign repo's validation rules. Accepted cost: a stale sidecar validates with stale rules.
+
 ---
 
 ## Housekeeping / Mantenimiento
@@ -101,8 +106,3 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 - ES: Agrega aquí la fila nueva al escribir un registro — este índice es lo que hace navegable la carpeta.
 - EN: Learn the practice in guide 24: [`docs/en/24-architecture-decisions.md`](../../docs/en/24-architecture-decisions.md).
 - ES: Aprende la práctica en la guía 24: [`docs/es/24-decisiones-de-arquitectura.md`](../../docs/es/24-decisiones-de-arquitectura.md).
-
-### 2026-07-21 — [La Action usa los scripts del consumidor](2026-07-21-action-usa-los-scripts-del-consumidor.md)
-
-- **ES:** La GitHub Action ejecuta la compuerta del sidecar del proyecto, no la suya: imponer la propia cambiaría las reglas de validación de repos ajenos sin su consentimiento. Costo aceptado: un sidecar obsoleto valida con reglas obsoletas.
-- **EN:** The Action runs the consumer's gate, not its own — imposing ours would silently change a foreign repo's validation rules. Accepted cost: a stale sidecar validates with stale rules.

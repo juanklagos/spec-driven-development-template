@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía es solo para setup y conectividad MCP.
+Solo setup y conectividad MCP. Nada más.
 
 Si quieres primero la ruta no técnica, empieza aquí:
 - [Guía fácil de MCP](./43-guia-mcp-facil.md)

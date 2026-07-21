@@ -34,7 +34,7 @@ https://github.com/juanklagos/spec-driven-development-template
 ```text
 I just shipped v1.4.x of my Spec-Driven Development Template.
 
-This repository is evolving into an operational SDD framework, not just a documentation starter.
+It started as a documentation starter. It is now an operational SDD framework.
 
 What it now includes:
 - GitHub Spec Kit as the primary reference flow

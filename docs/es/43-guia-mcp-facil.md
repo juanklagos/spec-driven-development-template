@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía explica cómo usar `sdd-mcp` de la forma más fácil posible.
+La ruta más corta para usar `sdd-mcp` sin pelearte con nada técnico.
 
 Úsala cuando:
 - no quieres pensar en detalles técnicos de instalación
@@ -17,11 +17,7 @@ Mantén [48-como-conectar-este-repo-con-gitmcp.md](./48-como-conectar-este-repo-
 
 ## La idea simple
 
-Piensa en `sdd-mcp` así:
-- la IA es la ayudante
-- MCP es la caja de herramientas
-- tu proyecto es la caja donde se guarda el trabajo
-- cada acción crea o actualiza archivos muy concretos
+Piensa en `sdd-mcp` así: la IA es quien hace el trabajo, MCP es la caja de herramientas que le pasas, y tu proyecto es donde queda todo guardado. Cada acción toca archivos concretos, y siempre te dice cuáles.
 
 ```mermaid
 flowchart LR
@@ -33,7 +29,7 @@ flowchart LR
 
 ## La forma más fácil de usarlo
 
-Tienes 3 formas amigables de usar el MCP.
+Hay tres maneras de hablarle. Cualquiera sirve; usa la que te resulte cómoda.
 
 ### 1. Lenguaje natural
 
@@ -362,10 +358,7 @@ flowchart LR
   C --> D["El usuario revisa y aprueba"]
 ```
 
-Por qué importa:
-- la guía alojada reduce fricción de instalación
-- la ejecución local conserva acceso real a archivos en el proyecto del usuario
-- el usuario mantiene un modelo mental simple mientras el framework sigue siendo riguroso
+Por qué importa: la guía alojada quita la parte que más gente abandona, la instalación. La ejecución local conserva el acceso real a los archivos, que es lo que de verdad hace falta. Y el usuario se queda con un modelo mental sencillo sin que el framework afloje sus reglas.
 
 ## Mensaje copiar/pegar para usuarios no técnicos
 

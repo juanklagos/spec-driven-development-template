@@ -22,7 +22,7 @@ El consentimiento del usuario deja de ser una afirmación en el chat y pasa a se
 **2) La exigencia vive en el borde de EJECUCIÓN, no en el de creación de la spec.**
 `cd01c5d` (11:10:30 -0500) exigía consentimiento **antes de crear specs** y metía 15 líneas de bloqueo en `scripts/new-spec.sh`. Nueve minutos después, `bbf0390` (11:19:28 -0500, *"fix(flow): build SDD base first and require consent only before execution"*) borra 8 de esas líneas de bloqueo, mueve +12 a `check-sdd-gate.sh`, cambia la clave de política de `required_before_spec_creation` a `required_before_execution_after_spec_approval`, mueve el comando de consentimiento del paso 5 al paso 6 de `QUICKSTART.md` y escribe la regla en `AI_START_HERE.md`: **crear la base SDD (`idea/spec/plan/tasks/bitacora`) no requiere consentimiento de ejecución.**
 
-> **Honestidad sobre las fuentes:** no existe prosa del autor explicando el porqué de la marcha atrás. El motivo se reconstruye del asunto del commit y del diff: la primera versión bloqueaba justo el artefacto que la compuerta necesita para tener algo que evaluar. Nadie escribió esa frase en su momento.
+> No existe prosa del autor explicando el porqué de la marcha atrás. El motivo se reconstruye del asunto del commit y del diff: la primera versión bloqueaba justo el artefacto que la compuerta necesita para tener algo que evaluar. Nadie escribió esa frase en su momento.
 
 ## Alternatives considered / Alternativas consideradas
 

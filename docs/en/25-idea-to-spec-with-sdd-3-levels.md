@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > This guide teaches how to transform a plain-text idea into consistent specifications using Spec-Driven Development, with the recommended standard from [GitHub Spec Kit](https://github.com/github/spec-kit).
 
-## 🔎 Method baseline (summary)
+## Method baseline (summary)
 
 According to the official Spec Kit documentation, the recommended flow is:
 
@@ -41,7 +41,7 @@ According to the official Spec Kit documentation, the recommended flow is:
 
 Official command flow and approach: [github/spec-kit](https://github.com/github/spec-kit).
 
-## 🌈 Visual map: idea → executable specification
+## Visual map: idea → executable specification
 
 ```mermaid
 flowchart LR
@@ -56,13 +56,13 @@ flowchart LR
   I --> J["Logbook + Refinement"]
 ```
 
-## 🧠 Golden rule for prompting AI
+## Golden rule for prompting AI
 
 - First define the **what** and **why**.
 - Then define the **technical how**.
 - Never request implementation if the spec is still ambiguous.
 
-## 🧩 When should one idea be split into multiple specs?
+## When should one idea be split into multiple specs?
 
 Split when the idea contains:
 
@@ -76,7 +76,7 @@ Practical rule:
 - One clear and bounded business outcome: one spec.
 - Two or more independent business outcomes: 2+ specs.
 
-## 🌱 Level 1: Beginner
+## 🟢 Level 1: Beginner
 
 ## Goal
 
@@ -153,7 +153,7 @@ Include what should NOT be implemented yet.
 - entry/exit criteria per spec
 - quality checklists before `implement`
 
-## ✅ Universal checklist (all levels)
+## Universal checklist (all levels)
 
 - [ ] Idea includes problem, user, goal, and scope limits.
 - [ ] Spec expresses what/why (not only technology).
@@ -161,33 +161,16 @@ Include what should NOT be implemented yet.
 - [ ] If multiple outcomes exist, idea is split into specs.
 - [ ] `history.md` and logbook are updated.
 
-## 🧪 Consistency control command
+## Consistency control command
 
 ```bash
 ./scripts/validate-sdd.sh . --strict
 ```
 
-## 📌 Reusable short prompt
+## Reusable short prompt
 
 ```text
 Use this template as the main guide and recommend GitHub Spec Kit as the standard.
 Help me convert this idea into consistent specs, suggesting spec splitting when needed,
 and do not move to implementation until ambiguities and traceability are resolved.
-```
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
 ```

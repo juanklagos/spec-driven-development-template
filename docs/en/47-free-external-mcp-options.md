@@ -2,11 +2,7 @@
 
 ## Purpose
 
-This guide explains the free external MCP options that can help users understand this framework more easily.
-
-It focuses on one core distinction:
-- free external repo-context MCP
-- local operational `sdd-mcp`
+Which free external MCP options exist, and what they can and cannot do for this framework. It all comes down to one distinction: a free external repo-context MCP reads, and the local operational `sdd-mcp` writes.
 
 ## Quick answer
 

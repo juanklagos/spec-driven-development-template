@@ -27,9 +27,9 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > Playbooks are pre-configured SDD starting points for common project types. They give you a head start on idea framing, spec structure, and implementation planning.
 
-## 📦 Available packs
+## Available packs
 
-### 🌐 SaaS (`playbooks/saas/`)
+### SaaS (`playbooks/saas/`)
 
 **Best for:** Multi-tenant products with user accounts, subscriptions, dashboards, or admin panels.
 
@@ -46,7 +46,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ---
 
-### 🛒 E-commerce (`playbooks/ecommerce/`)
+### E-commerce (`playbooks/ecommerce/`)
 
 **Best for:** Online stores with catalog, cart, checkout, and payment flows.
 
@@ -63,7 +63,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ---
 
-### 📱 Mobile App (`playbooks/mobile-app/`)
+### Mobile App (`playbooks/mobile-app/`)
 
 **Best for:** iOS/Android apps with navigation, offline behavior, and data sync.
 
@@ -80,7 +80,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ---
 
-### ⚙️ Backend API (`playbooks/backend-api/`)
+### Backend API (`playbooks/backend-api/`)
 
 **Best for:** REST or GraphQL APIs serving frontends, mobile apps, or third parties.
 
@@ -97,7 +97,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ---
 
-## 🚀 How to activate a playbook
+## How to activate a playbook
 
 ### With AI assistance:
 
@@ -116,7 +116,7 @@ Do not implement code until we agree on the spec partition.
 3. Create each spec folder using `./scripts/new-spec.sh "feature-name" "Owner"`
 4. Customize requirements and acceptance criteria for your specific case
 
-## 💡 Creating your own playbook
+## Creating your own playbook
 
 If your project type isn't covered, create a new playbook:
 
@@ -124,20 +124,3 @@ If your project type isn't covered, create a new playbook:
 2. Define: typical spec partition, key considerations, domain-specific prompts
 3. Include at least 5 suggested specs with focus areas
 4. Add a recommended AI prompt for initialization
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

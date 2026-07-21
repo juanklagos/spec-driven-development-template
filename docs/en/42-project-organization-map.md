@@ -2,15 +2,7 @@
 
 ## Purpose
 
-This document explains how the repository is organized at the folder level.
-
-It is not a code map.
-It is an operating map for humans and AI agents so they know:
-- what belongs in each folder
-- what is framework-only
-- what is project-runtime material
-- what should be edited often
-- what should remain stable
+This document explains how the repository is organized at the folder level. It maps operations, not code — the point is that a human or an agent opening the repo for the first time can tell what belongs in each folder, which parts are framework-only and which are project material, and which files are meant to change every session versus which are meant to sit still.
 
 ## Reading rule
 

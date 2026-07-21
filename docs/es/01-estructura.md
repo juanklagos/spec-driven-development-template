@@ -98,20 +98,3 @@ Contiene scripts para instalar esta estructura en otro repositorio.
 - `quality/`: plantillas de evidencia para pruebas y control de calidad.
 
 Estas carpetas son opcionales. Si no se usan, el flujo base `idea/specs/bitacora` sigue siendo válido.
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

@@ -17,11 +17,7 @@ Keep [48-how-to-connect-this-repo-with-gitmcp.md](./48-how-to-connect-this-repo-
 
 ## The simple idea
 
-Think of `sdd-mcp` like this:
-- the AI is the helper
-- MCP is the toolbox
-- your project is the box where work is stored
-- each action creates or updates very specific files
+The AI is the helper. MCP is the toolbox it reaches into. Your project is the box where the work ends up. Nothing is vague about the last part: every action creates or updates named files, and you will always be told which.
 
 ```mermaid
 flowchart LR
@@ -33,7 +29,7 @@ flowchart LR
 
 ## The easiest way to use it
 
-You have 3 friendly ways to use the MCP.
+Three ways in, depending on how much you feel like typing.
 
 ### 1. Plain language
 
@@ -78,14 +74,9 @@ Important:
 
 ## External MCP, explained simply
 
-There are 2 very different things that may look similar:
+Two things get confused constantly: an external repo-context MCP such as `GitMCP`, and this framework's own operational MCP, `sdd-mcp`.
 
-1. an external repo-context MCP such as `GitMCP`
-2. this framework's own operational MCP, `sdd-mcp`
-
-Think of them like this:
-- `GitMCP` is like a public librarian for your repository
-- `sdd-mcp` is like the project operator that can guide and organize work
+`GitMCP` is the librarian for your repository — it can find things and read them out. `sdd-mcp` is the operator: it can actually organize and move the work.
 
 ### What `GitMCP` is good for
 
@@ -362,10 +353,7 @@ flowchart LR
   C --> D["User reviews and approves"]
 ```
 
-Why this matters:
-- hosted guidance reduces installation friction
-- local execution keeps real file access in the user project
-- the user keeps a simple mental model while the framework stays rigorous
+The reason to bother: hosted guidance removes the install step that loses most people, local execution keeps real access to the files, and the user never has to hold more than one idea in their head while the framework keeps its rules.
 
 ## Copy-paste message for non-technical users
 

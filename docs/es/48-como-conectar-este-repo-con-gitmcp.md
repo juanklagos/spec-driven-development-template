@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía explica, en lenguaje muy simple, cómo usar `GitMCP` con este repositorio.
+Cómo usar `GitMCP` con este repositorio, explicado sin dar nada por sabido.
 
 Usa esta guía cuando:
 - quieres una opción externa gratuita de MCP

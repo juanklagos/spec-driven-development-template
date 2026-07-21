@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > This document summarizes the licensing terms. For complete legal language, refer to the root-level legal documents.
 
-## 📋 Project licensing status
+## Project licensing status
 
 This repository is licensed under **PolyForm Noncommercial 1.0.0**. It is **source-available** but **not OSI-approved open source**.
 
@@ -59,7 +59,7 @@ This repository is licensed under **PolyForm Noncommercial 1.0.0**. It is **sour
 | White-labeling for clients | ❌ Needs license | Contact author |
 | Integration into commercial CI/CD tools | ❌ Needs license | Contact author |
 
-## 📄 Legal documents in this repository
+## Legal documents in this repository
 
 | Document | Purpose |
 |---|---|
@@ -72,7 +72,7 @@ This repository is licensed under **PolyForm Noncommercial 1.0.0**. It is **sour
 | [CLA.md](../../legal/CLA.md) | Contributor License Agreement |
 | [LEGAL_OVERVIEW.md](../../legal/LEGAL_OVERVIEW.md) | Summary of all legal documents |
 
-## 🤝 Contributor License Agreement (CLA)
+## Contributor License Agreement (CLA)
 
 By contributing to this repository, you agree to the CLA terms in `legal/CLA.md`. Key points:
 - You retain copyright of your contributions
@@ -83,20 +83,3 @@ By contributing to this repository, you agree to the CLA terms in `legal/CLA.md`
 
 > [!WARNING]
 > This document is **informational only** and does not constitute legal advice. For binding terms, refer to the actual license text in `LICENSE`. When in doubt, consult a lawyer.
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

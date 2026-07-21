@@ -33,45 +33,20 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 
 
-This template is simple and universal.
+The stack is deliberately boring, so that nothing here goes stale on you.
 
 ## File formats
 
-- Markdown for documentation
-- Plain text for templates and configuration
-- Shell script for project initialization
+Documentation is Markdown. Templates and configuration are plain text. Project initialization is shell script. That is the whole list.
 
-## Recommended tools
+## Tools you need
 
-- Text editor
-- Git version control
-- GitHub for sharing
+A text editor and Git. GitHub if you want to share the result — any other host works too.
 
 ## What it does not require
 
-- A specific programming language
-- A specific framework
-- A specific Artificial Intelligence tool
+No particular programming language, no framework, no specific AI tool. If your assistant can read a Markdown file, it can work here.
 
 ## What it does require
 
-- Writing specifications before coding
-- Session-by-session logging
-- Clear key decisions
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```
+Three habits, and they are not optional: you write the specification before the code, you log each session as you close it, and you write down the decisions that were actually decisions.

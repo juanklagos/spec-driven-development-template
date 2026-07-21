@@ -45,7 +45,7 @@ Verificado en código: `packages/sdd-core/src/board.ts:3` (JSON Canvas, jsoncanv
 - Bug real de **atomicidad de `createSpec`** encontrado y corregido durante la Fase 1 (commit `5d5a39d`, `006/history.md:16`): sin bundle parcial ante fallo.
 
 **Vigencia**
-- **Vigente**, no superseded. Commits: `e058949` (investigación, 07:58) → `ceb9c19` (`board.ts` + REST, 08:04) → `5d5a39d` (frontend, 08:30) → `a457375` (sync vivo, 09:12) → release **v1.6.0** (`2ba804b`, 09:14; `CHANGELOG.md:99,106`).
+- **Vigente**, no superada. Commits: `e058949` (investigación, 07:58) → `ceb9c19` (`board.ts` + REST, 08:04) → `5d5a39d` (frontend, 08:30) → `a457375` (sync vivo, 09:12) → release **v1.6.0** (`2ba804b`, 09:14; `CHANGELOG.md:99,106`).
 
 **Cuándo revisar esta decisión**
 - Si editar `.md` quirúrgicamente por AST deja de ser fiable al crecer las secciones editables (la spec 010 ya amplió mucho `updateSpecSections`): si aparecen pérdidas de contenido no gestionado, el criterio EARS de `spec.md:26` es el que se rompe primero.

@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -34,7 +34,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 ## Para quién es esta plantilla
 
-Para personas nuevas y para profesionales que quieren un sistema claro, repetible y fácil de auditar.
+Para quien empieza y para quien lleva años, siempre que la meta sea la misma: un sistema que se repite igual cada vez y que otra persona pueda auditar sin pedir explicaciones.
 
 ## Problema que resuelve
 
@@ -44,21 +44,15 @@ En muchos proyectos:
 - Se cambia código sin contexto.
 - Es difícil retomar trabajo después de varios días.
 
-Esta plantilla evita eso usando una estructura fija.
+La estructura fija de esta plantilla existe para cortar esos tres problemas de raíz.
 
 ## Resultado esperado
 
-- Menos confusión.
-- Más continuidad.
-- Mejor colaboración entre personas y herramientas de Inteligencia Artificial.
+Menos tiempo perdido reconstruyendo contexto, y una base común entre las personas del equipo y las herramientas de IA que trabajan sobre el mismo proyecto.
 
-## 💡 Tips rápidos
+Si solo te llevas una cosa de aquí: la spec activa se confirma antes de escribir código, no después.
 
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
+## El flujo
 
 ```mermaid
 flowchart LR

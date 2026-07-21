@@ -44,7 +44,7 @@ El alcance de la reversión es **solo la UI del producto**. La documentación si
 - `/dashboard` y builder comparten la misma preferencia almacenada, así que no se contradicen entre sí.
 
 **Costos aceptados**
-- **Limitación honesta, registrada y no ocultada**: `specs/010-builder-v5-pro-ux/history.md` lo dice tal cual — *«los errores que vienen del SERVIDOR (API/MCP) siguen bilingües»*. El mismo aviso está en el encabezado del módulo (`builder/src/i18n.ts:5-6`). La reversión es **parcial y consciente**.
+- **Queda una excepción viva, y está anotada donde toca**: `specs/010-builder-v5-pro-ux/history.md` lo dice tal cual — *«los errores que vienen del SERVIDOR (API/MCP) siguen bilingües»*. El mismo aviso está en el encabezado del módulo (`builder/src/i18n.ts:5-6`). La reversión es **parcial y consciente**.
 - Tres specs previas (002, 003, 006) quedan con un criterio EARS que ya no describe el sistema. No se reescribieron: este registro es la anotación de esa divergencia.
 - Cada texto nuevo de UI ahora exige dos entradas en el diccionario; olvidar una se ve como una cadena suelta en el idioma equivocado.
 

@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía explica las opciones gratuitas de MCP externo que pueden ayudar a los usuarios a entender este framework de forma más fácil.
+Qué opciones gratuitas de MCP externo existen hoy y cuál conviene para que la IA entienda este framework.
 
 Se enfoca en una distinción clave:
 - MCP externo gratuito de contexto de repositorio

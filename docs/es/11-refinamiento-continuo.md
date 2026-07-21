@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -33,9 +33,9 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 
 
-Esta guía define cómo mejorar el proyecto cuando cambian ideas, prioridades o requisitos.
+Las ideas cambian, las prioridades se reordenan y los requisitos aparecen a mitad de camino. Esta guía define qué hacer cuando eso pasa.
 
-## 🎯 Objetivo
+## Objetivo
 
 Mantener consistencia entre:
 
@@ -43,7 +43,7 @@ Mantener consistencia entre:
 - `specs/` (todas las especificaciones)
 - `bitacora/` (registro real de lo que pasó)
 
-## 📌 Regla principal
+## Regla principal
 
 Cada cambio importante debe dejar rastro en 3 lugares:
 
@@ -51,7 +51,7 @@ Cada cambio importante debe dejar rastro en 3 lugares:
 2. Historial de la especificación.
 3. Bitácora de sesión.
 
-## 🧭 Tipos de cambio y acción obligatoria
+## Tipos de cambio y acción obligatoria
 
 | Tipo de cambio | Qué hacer | Dónde registrar |
 |---|---|---|
@@ -61,7 +61,7 @@ Cada cambio importante debe dejar rastro en 3 lugares:
 | Ajuste por hallazgos | Actualizar investigación | `research.md`, `history.md`, bitácora diaria |
 | Cambio de alcance | Marcar impacto y priorización | `specs/INDEX.md` + `history.md` |
 
-## 📈 Flujo visual de refinamiento
+## Flujo visual de refinamiento
 
 ```mermaid
 flowchart LR
@@ -72,7 +72,7 @@ flowchart LR
   E --> F["Revalidar plan y tareas"]
 ```
 
-## ✅ Checklist rápido de refinamiento
+## Checklist rápido de refinamiento
 
 - [ ] ¿El cambio afecta idea general?
 - [ ] ¿Se actualizó la spec activa?
@@ -80,13 +80,13 @@ flowchart LR
 - [ ] ¿Se actualizó bitácora global o diaria?
 - [ ] ¿Se revisaron tareas para evitar contradicciones?
 
-## 📝 Formato recomendado para `history.md`
+## Formato recomendado para `history.md`
 
 | Fecha | Tipo de cambio | Resumen | Archivos impactados | Responsable |
 |---|---|---|---|---|
 | 2026-03-12 | Cambio de alcance | Se dividió spec en dos fases | `spec.md`, `tasks.md` | IA |
 
-## 🤖 Regla para herramientas de Inteligencia Artificial
+## Regla para herramientas de Inteligencia Artificial
 
 Si detectas contradicción entre idea y spec:
 
@@ -94,20 +94,3 @@ Si detectas contradicción entre idea y spec:
 2. Proponer refinamiento.
 3. Actualizar documentación.
 4. Recién después continuar implementación.
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

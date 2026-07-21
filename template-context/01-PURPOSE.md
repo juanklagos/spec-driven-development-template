@@ -7,57 +7,16 @@
 
 ## What it is / Qué es
 
-- A reusable base to start new projects with Spec-Driven Development.
-- A migration support base to adapt existing projects to SDD.
-- A documentation-first structure to keep traceability and execution discipline.
+A reusable base for starting a project with Spec-Driven Development, and a way to bring an existing codebase under the same discipline without rewriting it. The structure is documentation-first: the spec comes before the code, and what changed stays written down.
 
 ## What it is not / Qué no es
 
-- It is not the execution log of a single product.
-- It is not a monolithic backlog for this repository itself.
-- It is not a place to force fake active specs when no user project is being executed.
+It is not the execution log of a product, and not a backlog for this repository. When nobody is running a real project through it, there is no active spec here — do not invent one to make a check pass.
 
-## Success criteria of this repository / Criterios de éxito de este repositorio
+## Success criteria / Criterios de éxito
 
-- New users can start with low friction in minutes.
-- Any AI can guide without confusing template context with product context.
-- Teams can produce consistent `idea/`, `specs/`, and `bitacora/` outputs in their own projects.
+- A new user gets from clone to first spec in minutes, not in an afternoon.
+- An agent can tell template context from product context without being told twice.
+- Teams end up with `idea/`, `specs/` and `bitacora/` that look the same across their own projects.
 
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```
+The base prompt, the bilingual conventions and the flow diagram live in `template-context/README.md`.

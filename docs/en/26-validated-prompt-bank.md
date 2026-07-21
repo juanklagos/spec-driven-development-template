@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > Tested prompts that produce consistent, high-quality outputs across ChatGPT, Claude, Gemini, Copilot, and Cursor.
 
-## 🎯 How to use this bank
+## How to use this bank
 
 1. Pick the prompt that matches your goal
 2. Replace `[BRACKETS]` with your specific content
@@ -147,7 +147,7 @@ Then tell me:
 
 ---
 
-## 📏 Output quality rules
+## Output quality rules
 
 Every AI response during SDD work should include:
 
@@ -157,20 +157,3 @@ Every AI response during SDD work should include:
 4. **Changes performed** — what was modified
 5. **Validation** — did we run `validate-sdd.sh`?
 6. **Exact next step** — one clear action for the next session
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

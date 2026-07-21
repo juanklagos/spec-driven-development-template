@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta página centraliza assets reutilizables de cara al público para posts, preview del repositorio, charlas y posicionamiento del producto.
+Todo lo que se usa de cara al público vive aquí: assets para posts, la imagen de preview del repositorio, material de charla y las frases de posicionamiento.
 
 ## Estructura de medios
 
@@ -39,7 +39,7 @@ Combina un framework de arranque, reglas multi-agente, documentación guiada, un
 ## Intro para charla o sesión
 
 ```text
-Este proyecto no es solo un template de documentación. Es un framework operativo para Spec-Driven Development.
+Este proyecto es un framework operativo para Spec-Driven Development, no un paquete de plantillas de documentación.
 Guía tanto a usuarios técnicos como no técnicos, deja ./www/<nombre-proyecto> como default limpio cuando el proyecto vive dentro del template, sigue soportando rutas externas y da a los asistentes de IA un flujo consistente mediante policy, specs, disciplina de bitácora y tooling MCP.
 ```
 

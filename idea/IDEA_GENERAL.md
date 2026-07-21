@@ -16,17 +16,17 @@ Spec-Driven Development Template (SDD Template)
 <!-- EN: Describe the current pain point or gap you are addressing. -->
 <!-- ES: Describe el problema actual o la brecha que intentas resolver. -->
 
-Developers and teams lose critical decisions in chat threads, start coding without clear requirements, suffer painful onboarding when new members join, and struggle to maintain traceability between ideas and implementation. AI assistants compound this by generating code without structured context, leading to hallucinations and scope creep.
+Decisions get made in a chat thread and then vanish. Coding starts before anyone wrote down what the thing is supposed to do, so the requirements live in one person's head and whoever joins next spends their first week reconstructing them. Nothing connects the original idea to the code that came out of it. Add an AI assistant on top and it gets worse: with no structured context it invents details and widens the scope without being asked.
 
-Los desarrolladores y equipos pierden decisiones críticas en hilos de chat, empiezan a codificar sin requisitos claros, sufren onboarding doloroso cuando se unen nuevos miembros, y luchan por mantener trazabilidad entre ideas e implementación. Los asistentes de IA agravan esto al generar código sin contexto estructurado, provocando alucinaciones y scope creep.
+Las decisiones se toman en un hilo de chat y ahí se pierden. Se empieza a programar antes de que nadie haya escrito qué debe hacer la cosa, así que los requisitos viven en la cabeza de una sola persona y quien llega después se pasa la primera semana reconstruyéndolos. Nada conecta la idea original con el código que salió de ella. Súmale un asistente de IA y empeora: sin contexto estructurado inventa detalles y agranda el alcance sin que nadie se lo pida.
 
 ## 🚀 Main Goal / Objetivo principal
 <!-- EN: What is the single most important outcome of this project? -->
 <!-- ES: ¿Cuál es el resultado más importante que busca este proyecto? -->
 
-Provide a ready-to-use, zero-configuration template that any developer (from beginner to advanced) can adopt in under 30 minutes to bring specification-first discipline to their projects — with or without AI assistance.
+A template you clone and use as it comes, with nothing to configure, that gets any developer — beginner or veteran — writing the spec before the code in under 30 minutes. It works the same with or without an AI assistant.
 
-Proveer un template listo para usar, sin configuración, que cualquier desarrollador (de principiante a avanzado) pueda adoptar en menos de 30 minutos para aplicar disciplina specification-first en sus proyectos — con o sin asistencia de IA.
+Un template que se clona y se usa tal cual, sin nada que configurar, y que en menos de 30 minutos deja a cualquier desarrollador, principiante o veterano, escribiendo la spec antes que el código. Funciona igual con o sin asistente de IA.
 
 ## 📏 Initial Scope / Alcance inicial (MVP)
 <!-- EN: List the core features for the first version. -->
@@ -54,7 +54,7 @@ Proveer un template listo para usar, sin configuración, que cualquier desarroll
 <!-- EN: Who are you building this for? -->
 <!-- ES: ¿Para quién estás construyendo esto? -->
 
-1. **Solo developers** using AI tools (ChatGPT, Claude, Copilot, Cursor) who want structured project execution
+1. **Solo developers** using AI tools (ChatGPT, Claude, Copilot, Cursor) who want the project to run on something sturdier than the chat history
 2. **Small teams** (2–5 people) looking for lightweight process without heavy tooling
 3. **Non-programmers** who want to define ideas clearly before handing off to developers or AI
 4. **Legacy project owners** who need to retrofit structure and traceability into existing codebases
@@ -89,42 +89,3 @@ Proveer un template listo para usar, sin configuración, que cualquier desarroll
 
 ---
 *Created using the [Spec-Driven Development Template](https://github.com/juanklagos/spec-driven-development-template)*
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```

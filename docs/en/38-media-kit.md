@@ -39,7 +39,7 @@ It combines a starter framework, multi-agent rules, guided documentation, an eas
 ## Conference/session intro
 
 ```text
-This project is not just a documentation template. It is an operational framework for Spec-Driven Development.
+This project started as a documentation template and grew into an operational framework for Spec-Driven Development.
 It guides both technical and non-technical users, defaults runnable work cleanly to ./www/<project-name> when it lives inside the template, still supports external target paths, and gives AI assistants a consistent flow through policy, specs, logbook discipline, and MCP tooling.
 ```
 

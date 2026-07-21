@@ -57,7 +57,7 @@ Electron queda **diferido, no descartado**: se revisará solo si las tres fases 
 - En el nicho SDD (spec-kit, OpenSpec, spec-workflow-mcp, Traycer): **cero apps de escritorio**. La excepción, Kiro, es un fork de VS Code financiado por AWS.
 
 **Vigencia**
-- **Vigente**, no superseded. Aprobación del autor: *"has lo mejor a corto y largo plazo"* (`.sdd/user-consent.log:9`, 2026-07-21 11:53:44 -0500).
+- **Vigente**, no superada. Aprobación del autor: *"has lo mejor a corto y largo plazo"* (`.sdd/user-consent.log:9`, 2026-07-21 11:53:44 -0500).
 - La spec `011-one-command-launcher` existe y está aprobada, pero **la implementación está en espera** de que aterricen los arreglos críticos, porque comparten archivos (`specs/011-one-command-launcher/history.md`). Es decir: la decisión está tomada y **aún no ejecutada** — al leer este registro, verificar primero si `builder/dist` ya viaja en el paquete.
 
 ## Cuándo revisar esta decisión / When to revisit

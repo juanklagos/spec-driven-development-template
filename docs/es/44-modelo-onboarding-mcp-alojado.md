@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta guía explica el modelo de producto más fácil para este framework:
+El modelo de producto más fácil para este framework se apoya en dos piezas:
 - un MCP alojado para onboarding, docs, prompts y ayuda visual
 - un MCP local o bridge local para escribir archivos reales en el proyecto del usuario
 
@@ -25,7 +25,7 @@ flowchart LR
   F --> I["bitacora/"]
 ```
 
-## Por qué este modelo es el correcto
+## Por qué este reparto y no otro
 
 Problema:
 - un MCP totalmente local da acceso real a archivos, pero sigue sintiéndose técnico de configurar
@@ -35,10 +35,7 @@ Solución:
 - dejar el MCP alojado para la capa de enseñanza
 - dejar el MCP local para la capa de ejecución
 
-Esto da:
-- onboarding más fácil
-- escritura real en archivos del proyecto
-- reglas consistentes entre distintos clientes IA
+Con eso el arranque deja de ser el cuello de botella, las escrituras siguen ocurriendo de verdad en el proyecto, y las reglas no cambian según el cliente IA que tengas abierto.
 
 ## Responsabilidades por capa
 

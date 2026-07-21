@@ -34,31 +34,19 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 ## Who this template is for
 
-This template is designed for beginners and professionals who want a clear, repeatable, and auditable way of working.
+Anyone who wants the same way of working on Monday that they had on Friday. You do not need to be a programmer to use it, and you do not need to abandon it once you are one.
 
 ## Problem it solves
 
-In many projects:
+Three things go wrong in most projects, whether or not an AI is involved. Decisions get made in a chat window and then evaporate. Code changes land with no record of what they were for. And after a two-week break, nobody — including you — can pick the work back up without re-reading everything.
 
-- Decisions are lost in chats.
-- Code changes happen without context.
-- Work is hard to resume after breaks.
+A fixed structure fixes all three, because there is exactly one place each of those things belongs.
 
-This template solves that with a fixed structure.
+## What you get
 
-## Expected outcome
+Mostly it means fewer "wait, why did we do it that way?" moments, and work you can walk back into cold after two weeks away. The other half of it is the AI assistant, which reads the same context you do instead of guessing.
 
-- Less confusion
-- Better continuity
-- Better collaboration between people and Artificial Intelligence tools
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
+## The flow
 
 ```mermaid
 flowchart LR

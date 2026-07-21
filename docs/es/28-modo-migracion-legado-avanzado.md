@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -25,14 +25,11 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 ```
 
 
-> Transforma un codebase existente en un proyecto SDD bien estructurado sin romper nada.
+> Cómo meter un codebase que ya existe dentro de SDD sin tocar su comportamiento.
 
 ## 🎯 Cuándo usar esto
 
-- Tienes una aplicación existente sin especificaciones formales
-- Quieres agregar trazabilidad y estructura sin reescribir
-- Necesitas hacer onboarding de nuevos miembros a un sistema legado
-- Quieres que las herramientas de IA entiendan tu código existente correctamente
+Cuatro situaciones típicas: la aplicación existe pero no hay ni una spec formal; quieres trazabilidad sin reescribir nada; entra gente nueva a un sistema que nadie documentó; o necesitas que las herramientas de IA entiendan el código que ya tienes en vez de inventarse otro.
 
 ## 📋 Flujo de migración
 
@@ -130,24 +127,7 @@ Ayúdame a:
 
 | Error | Por qué es peligroso | Prevención |
 |---|---|---|
-| Reescribir antes de entender | Rompe comportamiento existente | Completa Fase 1-2 primero |
+| Reescribir antes de entender | Rompes comportamiento que nadie sabía que existía | Completa las fases 1 y 2 primero |
 | No testear comportamiento actual | No puedes verificar que siga funcionando | Agrega tests de regresión antes de tocar código |
-| Migrar todo al mismo tiempo | Overwhelm, conflictos de merge | Un dominio/spec a la vez |
+| Migrar todo al mismo tiempo | Te ahogas, y los merges se pelean entre sí | Un dominio (una spec) a la vez |
 | Saltarse la spec baseline | Sin punto de referencia para el "antes" | 001-baseline es obligatorio |
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

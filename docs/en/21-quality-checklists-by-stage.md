@@ -27,7 +27,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > Use these checklists at each stage gate. Copy them into your PR description or session log.
 
-## ✅ Stage 1: Before implementation / Pre-coding gate
+## Stage 1: Before implementation / Pre-coding gate
 
 **Specification readiness:**
 - [ ] `idea/IDEA_GENERAL.md` is filled with real content (not just placeholders)
@@ -46,7 +46,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 - [ ] AI has been fed `IDEA_GENERAL.md` + active `spec.md` as context
 - [ ] AI mode is clarified: `template maintenance` or `project execution`
 
-## ✅ Stage 2: Before opening a Pull Request
+## Stage 2: Before opening a Pull Request
 
 **Code alignment:**
 - [ ] All changes are within the scope defined in `spec.md`
@@ -63,7 +63,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 - [ ] Handoff entry prepared in `bitacora/handoffs/`
 - [ ] Decisions documented in `bitacora/decisiones/` (if any were made)
 
-## ✅ Stage 3: Before release / deployment
+## Stage 3: Before release / deployment
 
 **Completeness:**
 - [ ] All acceptance criteria in `spec.md` are met
@@ -81,7 +81,7 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 - [ ] `PROJECT_LOG.md` has a session entry for the release
 - [ ] Next steps are clearly defined (even if "none — spec is complete")
 
-## 🔄 Quick daily checklist (< 2 minutes)
+## Quick daily checklist (< 2 minutes)
 
 Use this at the start of every working session:
 
@@ -89,20 +89,3 @@ Use this at the start of every working session:
 - [ ] Check `specs/INDEX.md` for the active spec
 - [ ] Open `tasks.md` and identify the next unchecked item
 - [ ] Begin work
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

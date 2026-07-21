@@ -53,7 +53,7 @@ const ES = {
 
   // Dashboard chrome
   "dash.title": "Panel SDD",
-  "dash.subtitle": "Resumen ejecutivo del workspace",
+  "dash.subtitle": "Estado del workspace, solo lectura",
   "dash.openBuilder": "Abrir el builder",
   "dash.reason.open": "Implementación permitida: las specs aprobadas y sus planes son consistentes.",
   "dash.reason.closed": "Implementación bloqueada: refina la spec y el plan antes de escribir código.",
@@ -91,13 +91,13 @@ const ES = {
   "help.gate.body":
     "No hay código sin spec aprobada y plan consistente. El gate lee tus archivos y responde una sola pregunta: ¿ya se puede implementar? 🟢 abierto = sí; 🔴 cerrado = falta algo. Falla cerrado a propósito: ante la duda, bloquea.",
   "help.gate.closedLead":
-    "Esto no es un fallo de la herramienta: es la regla de oro protegiendo tu proyecto. Ahora mismo falta:",
+    "Que aquí se bloquee no es un fallo de la herramienta: es la regla de oro haciendo su trabajo. Ahora mismo falta:",
   "help.gate.missing.errors": "{n} error(es) de validación — están listados más abajo en esta página.",
   "help.gate.missing.pending": "{n} spec(s) sin aprobar — ábrela en el builder y usa la pestaña «Aprobación».",
   "help.gate.missing.unknown": "Revisa los mensajes del validador listados más abajo.",
   "help.approval.title": "Qué significa «aprobada»",
   "help.approval.body":
-    "Aprobar no es un botón decorativo: escribe en spec.md el bloque real de estado (Aprobado, la fecha de hoy, quién aprueba y la evidencia). Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código.",
+    "Aprobar escribe en spec.md el bloque de estado: Aprobado, la fecha de hoy, quién aprueba y la evidencia. Ese bloque es lo que leen el gate, la CI y tu agente antes de permitir código. Sin él, la spec cuenta como pendiente.",
   "help.dep.title": "Aviso de dependencia",
   "help.dep.body":
     "Una spec aprobada depende de otra que aún no lo está: implementarla sería construir sobre un contrato sin firmar. Es un aviso, no un bloqueo — el gate sigue abierto. Aprueba la dependencia o corrige el tipo de unión.",
@@ -134,7 +134,7 @@ const EN: Record<Key, string> = {
 
   // Dashboard chrome
   "dash.title": "SDD Dashboard",
-  "dash.subtitle": "Executive overview of the workspace",
+  "dash.subtitle": "Workspace status, read-only",
   "dash.openBuilder": "Open builder",
   "dash.reason.open": "Implementation allowed: approved specs and their plans are consistent.",
   "dash.reason.closed": "Implementation blocked: refine the spec and the plan before writing code.",
@@ -172,13 +172,13 @@ const EN: Record<Key, string> = {
   "help.gate.body":
     "No code before an approved spec and a consistent plan. The gate reads your files and answers one question: can we implement yet? 🟢 open = yes; 🔴 closed = something is missing. It fails closed on purpose: when in doubt, it blocks.",
   "help.gate.closedLead":
-    "This is not a tool failure: it is the golden rule protecting your project. Right now this is missing:",
+    "Blocking here is the golden rule protecting your project, not a bug in the tool. Right now this is missing:",
   "help.gate.missing.errors": "{n} validation error(s) — they are listed further down this page.",
   "help.gate.missing.pending": "{n} spec(s) not approved — open one in the builder and use the “Approval” tab.",
   "help.gate.missing.unknown": "Check the validator messages listed further down.",
   "help.approval.title": "What “approved” means",
   "help.approval.body":
-    "Approving is not a decorative button: it writes the real status block into spec.md (Approved, today's date, who approved and the evidence). That block is what the gate, CI and your agent read before any code is allowed.",
+    "Approving writes the status block into spec.md: Approved, today's date, who approved and the evidence. That block is what the gate, CI and your agent read before any code is allowed. Without it, the spec counts as pending.",
   "help.dep.title": "Dependency warning",
   "help.dep.body":
     "An approved spec depends on one that is not approved yet: implementing it would build on an unsigned contract. It is advisory, not a block — the gate stays open. Approve the dependency or fix the connection type.",

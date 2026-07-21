@@ -13,7 +13,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -27,19 +27,19 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 
 > [!TIP]
-> **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto. Lovable entiende perfectamente esta estructura si se la provees como contexto.
+> **Inicio recomendado (baja fricción):** no necesitas clonar este repositorio si ya estás trabajando en un proyecto. Basta con pasarle la estructura a Lovable como contexto.
 
 ## 🎯 Objetivo de esta guía
 
-El objetivo de esta guía es enseñarte cómo utilizar **Lovable** (o asistentes visuales similares) en conjunto con el **Spec-Driven Development**. Cuando combinas la capacidad de escritura de código de Lovable con el rigor de las especificaciones, obtienes aplicaciones de alta calidad, cero alucinaciones y mantenimiento real a largo plazo.
+Aquí verás cómo usar **Lovable** (o cualquier asistente visual parecido) sin renunciar al Spec-Driven Development. Lovable escribe código muy rápido; la spec es lo que evita que ese código se vaya por su cuenta. Con las dos cosas juntas el proyecto sigue siendo mantenible dentro de seis meses, que es cuando se nota la diferencia.
 
-Hemos estructurado esta guía en **3 niveles de profundidad** para que la adoptes a tu propio ritmo.
+La guía va por niveles: empieza en el 1 y sube cuando el anterior te quede corto.
 
 ---
 
-## 🟢 Nivel 1: Principiante (El flujo básico)
+## 🟢 Nivel 1: Principiante (el flujo básico)
 
-Este nivel es ideal si nunca has usado la estructura de specs y quieres resultados rápidos con Lovable.
+Empieza aquí si nunca has usado una estructura de specs y quieres ver resultados el mismo día.
 
 ### 1. Preparar el terreno
 
@@ -50,9 +50,9 @@ Antes de darle órdenes a Lovable, necesitas tener los requisitos claros. No use
 | **Idea clara** | `idea/IDEA_GENERAL.md` |
 | **Especificación**| `specs/001-feature/spec.md` |
 
-### 2. El Prompt Mágico para Lovable
+### 2. El prompt de arranque
 
-Copia y pega este prompt inicial en tu chat de Lovable, adjuntando tus archivos `.md`:
+Copia y pega esto en tu chat de Lovable, adjuntando tus archivos `.md`:
 
 ```text
 Actúa como desarrollador experto. Usa estos documentos adjuntos como tu fuente de la verdad para esta sesión:
@@ -65,7 +65,7 @@ Reglas estrictas:
 3. Al finalizar, muéstrame exactamente qué archivos modificaste.
 ```
 
-### 3. Flujo Visual Principiante
+### 3. Cómo se ve el ciclo
 
 ```mermaid
 graph TD
@@ -77,20 +77,20 @@ graph TD
 
 ---
 
-## 🟡 Nivel 2: Intermedio (Calidad y Control)
+## 🟡 Nivel 2: Intermedio (calidad y control)
 
-Aquí dejamos de ser operadores básicos y empezamos a comportarnos como ingenieros de software controlando una IA.
+A partir de aquí ya no le pides cosas a Lovable: lo diriges.
 
-### 1. Requisitos Técnicos
+### 1. Requisitos técnicos
 
-Además de la `spec.md`, ahora requieres planificación técnica. Este nivel exige que tú o tu arquitecto (otra IA) redacten un `plan.md` y `tasks.md`.
+Además de la `spec.md` hace falta planificación técnica. Tú (o el arquitecto del equipo, que puede ser otra IA) redactan `plan.md` y `tasks.md` antes de abrir Lovable.
 
 | Herramienta | Acción requerida |
 | :--- | :--- |
 | **Control de versiones**| No hagas commits directo a `main`. Usa ramas: <kbd>git checkout -b feature/001</kbd> |
 | **Tareas** | Sigue estrictamente el archivo `specs/001-feature/tasks.md` |
 
-### 2. Flujo de Ejecución por Tareas
+### 2. Una tarea por vez
 
 En lugar de pedirle a Lovable que haga "todo el feature", divídelo por tareas:
 
@@ -99,13 +99,13 @@ Hoy implementaremos únicamente la [TAREA 1] descrita en tasks.md.
 Asegúrate de ejecutar y mantener libre de errores de lint y pruebas antes de decir que terminaste. Pídeme que revise cuando estés en un estado estable.
 ```
 
-### 3. Ejecutar y Validar Localmente
+### 3. Ejecutar y validar en tu máquina
 
-Lovable suele funcionar en la nube. **Descarga el código a tu máquina local** regularmente y ejecuta:
+Lovable corre en la nube. Baja el código a local con frecuencia y ejecuta:
 
 1. Instalación: <kbd>npm install</kbd>
 2. Desarrollo: <kbd>npm run dev</kbd>
-3. Validaciones: Pasa tu mouse visualmente, verifica logs de consola.
+3. Validación: recorre la interfaz a mano y revisa la consola del navegador.
 
 > [!CAUTION]
 > **No te confíes de la vista previa de Lovable.** Siempre verifica que el código funciona en tu máquina local antes de dar la tarea por cerrada.
@@ -127,15 +127,15 @@ sequenceDiagram
 
 ## 🔴 Nivel 3: Avanzado (Automatización y GitHub Spec Kit)
 
-En este nivel integramos Lovable con herramientas de línea de comandos, CI/CD, y automatización estricta.
+Aquí Lovable deja de ser el centro y pasa a ser una pieza más: línea de comandos, CI/CD y reglas que no se negocian.
 
 ### 1. Sincronización con GitHub Spec Kit
 
-No escribimos las specs a mano. Usamos Spec Kit para automatizar la carpeta y el estado:
+Las specs dejan de escribirse a mano. Spec Kit se encarga de la carpeta y del estado:
 
 <kbd>specify implement . --ai lovable</kbd>
 
-### 2. Prompt Estratégico de Ingeniería
+### 2. Prompt de ingeniería
 
 ```text
 Asume tu rol como Ingeniero de Software Principal.
@@ -153,11 +153,11 @@ Reglas de Calidad (Strict Mode):
 Genera el código y entrega un reporte de "Handoff" al terminar detallando los riesgos técnicos.
 ```
 
-### 3. Reporte Handoff y Cierre
+### 3. Handoff y cierre
 
-Exige a Lovable que te entregue un reporte formal al terminar sus tareas, que deberás guardar en `bitacora/handoffs/YYYY-MM-DD.md`.
+Pide a Lovable un reporte formal al terminar sus tareas y guárdalo en `bitacora/handoffs/YYYY-MM-DD.md`.
 
-**Formato de Handoff a exigir:**
+**Formato de handoff a exigir:**
 1. Archivos totales afectados (+ / -)
 2. Librerías nuevas instaladas y justificación
 3. Decisiones de arquitectura tomadas
@@ -185,7 +185,7 @@ flowchart LR
 ## ⭐ Uso explícito del repositorio base
 
 > [!NOTE]
-> Siempre mantén este repositorio como tu brújula:  
+> Ten este repositorio siempre a mano como referencia:  
 > <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
 <details>
@@ -213,20 +213,3 @@ Analiza nuestro código roto, integra la estructura idea/specs/bitacora, y ayúd
 ```
 
 </details>
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

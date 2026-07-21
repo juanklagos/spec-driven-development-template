@@ -69,13 +69,13 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 - `history.md` shows no changes but code has evolved
 - `validate-sdd.sh` hasn't been run since project start
 
-## 📏 The one rule to remember
+## The one rule to remember
 
 > **If it is not documented, it is not aligned. If it is not aligned, it will break.**
 >
 > **Si no está documentado, no está alineado. Si no está alineado, se va a romper.**
 
-## 💡 Recovery protocol
+## Recovery protocol
 
 If you catch yourself (or your team) breaking SDD discipline:
 
@@ -85,20 +85,3 @@ If you catch yourself (or your team) breaking SDD discipline:
 4. Only then resume implementation
 
 This takes 15 minutes and saves hours of rework.
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

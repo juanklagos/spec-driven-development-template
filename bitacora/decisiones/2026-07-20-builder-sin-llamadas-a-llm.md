@@ -31,7 +31,7 @@ En concreto:
 | **Llamadas directas del server a APIs de LLM** | Rechazada de entrada: figura en «Fuera de alcance» de `spec.md:32` — *"Llamadas directas del server a APIs de LLM (sin keys)"*. Se rechazó **la categoría entera**, no un proveedor |
 | **Deep links a una app de agente concreta** | Rechazados por fragilidad entre agentes (`prompts.ts:2`, `ImplementModal.tsx:1`). El ítem 14 del catálogo de ideas los dejaba abiertos (*"deep link o copy"*); la implementación eligió copy |
 
-**Honestidad de registro:** no hay en la evidencia ninguna comparación de proveedores, costos por token ni benchmark de calidad heurística vs. LLM. Tampoco un documento de investigación dedicado. El rechazo está escrito como línea de alcance, no como análisis de trade-off.
+En la evidencia no hay comparación de proveedores, ni costos por token, ni benchmark de calidad heurística contra LLM. Tampoco un documento de investigación dedicado. El rechazo está escrito como línea de alcance, no como análisis de trade-off.
 
 ## Consequences / Consecuencias
 

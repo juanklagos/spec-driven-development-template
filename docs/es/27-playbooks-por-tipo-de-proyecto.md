@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -25,13 +25,13 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 ```
 
 
-> Los playbooks son puntos de partida SDD pre-configurados para tipos de proyecto comunes. Te dan ventaja en el encuadre de idea, estructura de specs y planificación de implementación.
+> Un playbook es un punto de partida ya armado para un tipo de proyecto conocido. No te ahorra pensar, te ahorra la página en blanco: llegas con la idea encuadrada y una partición de specs que suele funcionar.
 
 ## 📦 Packs disponibles
 
 ### 🌐 SaaS (`playbooks/saas/`)
 
-**Ideal para:** Productos multi-tenant con cuentas de usuario, suscripciones, dashboards o paneles de admin.
+**Para:** productos multi-tenant con cuentas de usuario, suscripciones y panel de administración.
 
 **Partición típica de specs:**
 | Spec | Área de enfoque |
@@ -42,13 +42,13 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 | 004-dashboard | Interfaz principal, visualización de métricas |
 | 005-admin | Panel de administración, gestión de usuarios, configuración |
 
-**Consideraciones clave:** Estrategia de aislamiento de tenants, ciclo de vida de suscripciones, control de acceso por roles.
+**Lo que hay que decidir temprano:** cómo aislas los datos entre tenants. Casi todo lo demás se puede cambiar después; eso no.
 
 ---
 
 ### 🛒 E-commerce (`playbooks/ecommerce/`)
 
-**Ideal para:** Tiendas online con catálogo, carrito, checkout y flujos de pago.
+**Para:** tiendas online con catálogo, carrito, checkout y pagos.
 
 **Partición típica de specs:**
 | Spec | Área de enfoque |
@@ -59,13 +59,13 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 | 004-payment | Integración con pasarela de pago, confirmación |
 | 005-orders | Historial de órdenes, seguimiento, actualizaciones de estado |
 
-**Consideraciones clave:** Gestión de inventario, fallbacks de proveedor de pago, checkout invitado vs. autenticado.
+**Lo que hay que decidir temprano:** checkout invitado o solo con cuenta, y qué pasa cuando la pasarela de pago se cae. El inventario suele morder más tarde, pero muerde.
 
 ---
 
 ### 📱 App Móvil (`playbooks/mobile-app/`)
 
-**Ideal para:** Apps iOS/Android con navegación, comportamiento offline y sincronización de datos.
+**Para:** apps iOS/Android con navegación propia, uso sin conexión y sincronización de datos.
 
 **Partición típica de specs:**
 | Spec | Área de enfoque |
@@ -76,13 +76,13 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 | 004-notifications | Push notifications, alertas in-app |
 | 005-core-feature | La feature principal de tu app específica |
 
-**Consideraciones clave:** Estrategia offline-first vs. online-first, comportamientos específicos por plataforma, requisitos de app store.
+**Lo que hay que decidir temprano:** offline-first u online-first. Esa elección arrastra el modelo de datos entero. Suma después las diferencias por plataforma y los requisitos de las tiendas.
 
 ---
 
 ### ⚙️ Backend API (`playbooks/backend-api/`)
 
-**Ideal para:** APIs REST o GraphQL que sirven frontends, apps móviles o terceros.
+**Para:** APIs REST o GraphQL que sirven a un frontend, a una app móvil o a terceros.
 
 **Partición típica de specs:**
 | Spec | Área de enfoque |
@@ -93,7 +93,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 | 004-integration | Conexiones con APIs de terceros, webhooks |
 | 005-observability | Logging, monitoreo, tracking de errores, health checks |
 
-**Consideraciones clave:** Estrategia de versionado de API, mecanismo de autenticación (JWT vs. OAuth2 vs. API keys), estandarización de respuestas de error.
+**Lo que hay que decidir temprano:** cómo vas a versionar la API y con qué mecanismo autenticas (JWT, OAuth2 o API keys). Y estandariza el formato de error el primer día: reescribirlo con veinte endpoints vivos no es gratis.
 
 ---
 
@@ -124,20 +124,3 @@ Si tu tipo de proyecto no está cubierto, crea un nuevo playbook:
 2. Define: partición típica de specs, consideraciones clave, prompts específicos del dominio
 3. Incluye al menos 5 specs sugeridas con áreas de enfoque
 4. Agrega un prompt de IA recomendado para inicialización
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

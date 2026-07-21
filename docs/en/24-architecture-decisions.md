@@ -28,23 +28,23 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 > A spec says **what** the system must do. A plan says **how** you will build it. Neither says **why you chose this over the other thing you seriously considered.** That is what a decision record is for.
 
-## 🧭 What an ADR is
+## What an ADR is
 
 An **ADR** (Architecture Decision Record) is a short document capturing one decision at the moment it is made: the context, the choice, the alternatives you rejected, the consequences you accepted, and the signal that should make you revisit it.
 
 It is written **once**, at decision time, and never rewritten as the project evolves. If the decision changes later, you write a new record and link back — you do not edit history. A decision log is a series of snapshots, not a wiki page.
 
-Three properties make it work:
+Three properties make it work.
 
-| Property | Why it matters |
-|---|---|
-| **Immutable** | A record edited to match today's opinion tells you nothing about why the choice was made then. |
-| **Sourced** | Every rationale points at a commit, a `file:line`, a spec `history.md`, a `CHANGELOG.md` line, or a document in `idea/`. |
-| **Honest** | Where no written rationale exists, the record says so. Invented retrospective justification is worse than a blank. |
+**Immutable.** A record edited to match today's opinion tells you nothing about why the choice was made then.
+
+**Sourced.** Every rationale points at a commit, a `file:line`, a spec `history.md`, a `CHANGELOG.md` line, or a document in `idea/`.
+
+**Honest.** Where no written rationale exists, the record says so. Invented retrospective justification is worse than a blank.
 
 That last one is not decoration. A decision log that contains a plausible story nobody actually had is actively harmful: future readers will trust it and reason from a fiction.
 
-## 📐 When to write one — and when not to
+## When to write one — and when not to
 
 Write a record when **any** of these is true:
 
@@ -65,7 +65,7 @@ Do **not** write one otherwise. A padded log is a log nobody reads.
 
 **Rule of thumb:** if changing this later would require touching multiple specs or a significant refactor, record it.
 
-## 🗂️ Where records live and how they are named
+## Where records live and how they are named
 
 ```
 bitacora/decisiones/
@@ -102,7 +102,7 @@ Copy `bitacora/templates/DECISION_TEMPLATE.md` (mirrored at `templates/bitacora/
 - **Consequences** — what improves, what trade-off you accept, which specs are affected, what this makes harder.
 - **Related records** — what this extends, narrows, or supersedes. Superseded records stay on disk forever.
 
-## ⏳ Why "When to revisit" is the section that matters
+## Why "When to revisit" is the section that matters
 
 Most decision logs rot the same way. A choice made under real constraints — a budget, a beta API, a two-person team — is read two years later, out of context, as a permanent law of the system. Nobody remembers the constraint, so nobody notices when it lifts.
 
@@ -116,7 +116,7 @@ Most decision logs rot the same way. A choice made under real constraints — a 
 
 A record without this section is not a decision. It is dogma with a date on it.
 
-## 🤖 How `/sdd:decision` works
+## How `/sdd:decision` works
 
 ```
 /sdd:decision we are not building a desktop app for now
@@ -132,7 +132,7 @@ The command:
 
 It answers in your language (EN/ES). The Copilot mirror is `.github/prompts/sdd-decision.prompt.md`.
 
-## 🔗 Integration with the SDD workflow
+## Integration with the SDD workflow
 
 - **During `plan.md`** — the natural moment: you are choosing an approach, so the alternatives are still fresh.
 - **At session close** — `/sdd:close` asks whether the session contained a decision worth recording, but only when one of the three criteria plausibly holds. It does not nag on trivial sessions. The close contract carries a **Decision recorded** item; *"none this session"* is a valid answer, silence is not.
@@ -142,7 +142,7 @@ It answers in your language (EN/ES). The Copilot mirror is `.github/prompts/sdd-
 
 The canonical rule lives in `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` (§3 Required Workflow and §4 Output Contract) and in `sdd.policy.yaml` under `decision_log`.
 
-## 📚 A real example: this template's own log
+## A real example: this template's own log
 
 `bitacora/decisiones/` in this repository holds 14 records reconstructed from git history, spec histories, the changelog, and research documents in `idea/`. Read [`bitacora/decisiones/README.md`](../../bitacora/decisiones/README.md) for the full index. Three worth reading as models:
 
@@ -162,9 +162,8 @@ The MCP App was postponed because "the standard is still moving". Before writing
 - Write it at decision time. Reconstructing later costs hours and loses the alternatives you rejected in your head.
 - If you cannot name a real alternative, ask whether it was actually a decision.
 - Prefer one honest sentence over three plausible paragraphs.
-- Close every session with validation and a clear next step.
 
-## 📊 Visual flow
+## Visual flow
 
 ```mermaid
 flowchart LR

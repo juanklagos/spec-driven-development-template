@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Este roadmap hace explícitos los siguientes pasos del producto para que los usuarios sepan hacia dónde va el framework.
+Aquí queda por escrito hacia dónde va el framework, para que nadie tenga que adivinarlo leyendo commits.
 
 ## Línea del roadmap
 

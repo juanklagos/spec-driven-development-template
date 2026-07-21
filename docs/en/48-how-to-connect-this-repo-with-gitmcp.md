@@ -12,16 +12,9 @@ Use this guide when:
 
 ## The simple idea
 
-Think about it like this:
+GitHub is the bookshelf. GitMCP is what lets an AI take a book off it. `sdd-mcp` is the assistant that actually does the work once it has read.
 
-- GitHub is the bookshelf
-- GitMCP is the reader that helps the AI open the bookshelf
-- `sdd-mcp` is the working assistant that helps run the real SDD workflow
-
-So:
-- use `GitHub` to share the repository with people
-- use `GitMCP` so an AI can read the public repository as MCP context
-- use `sdd-mcp` when you need the real guided workflow of the framework
+So: GitHub to share the repository with people, GitMCP so an AI can read it as MCP context, and `sdd-mcp` when you need the guided workflow itself.
 
 ## The two URLs you need
 

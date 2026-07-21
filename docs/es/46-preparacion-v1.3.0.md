@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Esta página define la barra mínima para la release `v1.3.0`.
+La barra mínima para la release `v1.3.0`.
 
 ## Enfoque de la release
 

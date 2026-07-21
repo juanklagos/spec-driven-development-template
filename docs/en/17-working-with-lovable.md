@@ -27,32 +27,34 @@ Do not skip specification, plan, tasks, refinement trace, logbook, and validatio
 
 
 > [!TIP]
-> **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project. Lovable understands this structure perfectly if provided as context.
+> **Recommended start (low friction):** you do not need to clone this repository if you are already working inside a project. Give Lovable this structure as context and it follows it well.
 
-## 🎯 Goal of this guide
+## What this guide is for
 
-The goal of this guide is to teach you how to use **Lovable** (or similar visual AI assistants) in conjunction with **Spec-Driven Development**. When you combine Lovable's raw code generation power with the rigor of structured specifications, you achieve high-quality applications, zero hallucinations, and genuine long-term maintainability.
+**Lovable** is very good at turning a description into a working screen, and very bad at remembering what you agreed on two prompts ago. Spec-Driven Development covers exactly that gap: the spec is the memory Lovable does not have. This guide shows how to run the two together.
 
-We have structured this guide into **3 levels of depth** so you can adapt it at your own pace.
+It will not eliminate hallucinations — nothing does. It will make them obvious, because there is a written contract to compare the output against.
+
+Three levels below, from "I have never written a spec" to "this is wired into CI". Start wherever you are.
 
 ---
 
-## 🟢 Level 1: Beginner (The Basic Flow)
+## 🟢 Level 1: Beginner (the basic loop)
 
-This level is ideal if you have never used the specs structure and want fast, reliable results with Lovable.
+Use this level if you have never touched the specs structure and mostly want Lovable to stop drifting.
 
-### 1. Prepare the Ground
+### 1. Prepare the ground
 
-Before giving commands to Lovable, you need clear requirements. Do not use Lovable to "brainstorm" the product from scratch without leaving a paper trail.
+Write the requirements before you open the chat. Brainstorming the product inside Lovable is fine as thinking, but if nothing lands in a file, you will be having the same conversation again next week.
 
 | Requirement | Where it lives |
 | :--- | :--- |
 | **Clear Idea** | `idea/IDEA_GENERAL.md` |
 | **Specification**| `specs/001-feature/spec.md` |
 
-### 2. The Magic Initial Prompt
+### 2. The opening prompt
 
-Copy and paste this initial prompt into your Lovable chat, attaching your `.md` files:
+Paste this into your Lovable chat with your `.md` files attached:
 
 ```text
 Act as an expert developer. Use the attached documents as your source of truth for this session:
@@ -65,7 +67,7 @@ Strict Rules:
 3. Once finished, tell me exactly which files you modified.
 ```
 
-### 3. Beginner Visual Flow
+### 3. What the loop looks like
 
 ```mermaid
 graph TD
@@ -77,38 +79,38 @@ graph TD
 
 ---
 
-## 🟡 Level 2: Intermediate (Quality and Control)
+## 🟡 Level 2: Intermediate (quality and control)
 
-Now we stop acting as basic users and start behaving like software engineers controlling an AI.
+Same tool, tighter leash. From here on you review Lovable's output the way you would review a contractor's.
 
-### 1. Technical Requirements
+### 1. What you need beyond the spec
 
-In addition to the `spec.md`, you now require technical planning. This level demands that you or your architect (another AI) draft a `plan.md` and `tasks.md`.
+A `spec.md` is no longer enough. You (or another AI acting as architect) also draft `plan.md` and `tasks.md`, so the work arrives in reviewable slices.
 
 | Tool | Required Action |
 | :--- | :--- |
 | **Version Control**| Do not commit directly to `main`. Use branches: <kbd>git checkout -b feature/001</kbd> |
 | **Task Management**| Strictly follow the file `specs/001-feature/tasks.md` |
 
-### 2. Task-Based Execution Flow
+### 2. One task at a time
 
-Instead of asking Lovable to act on "the entire feature", slice it into actionable tasks:
+Asking for "the whole feature" is how you end up reverting an afternoon. Ask for one task:
 
 ```text
 Today we will strictly implement [TASK 1] as described in tasks.md.
 Ensure you test and resolve any lint errors before claiming it is done. Let me know to review only when you are in a stable state.
 ```
 
-### 3. Run and Validate Locally
+### 3. Run it locally
 
-Lovable runs in the cloud. You must **pull the code to your local machine** regularly and execute:
+Lovable runs in the cloud, so pull the code down regularly and check it on your own machine:
 
 1. Install deps: <kbd>npm install</kbd>
-2. Dev Server: <kbd>npm run dev</kbd>
-3. QA Validation: Click through it yourself, always check browser console logs.
+2. Dev server: <kbd>npm run dev</kbd>
+3. Click through it yourself, with the browser console open.
 
 > [!CAUTION]
-> **Do not blindly trust Lovable's web preview.** Always verify the code runs stably on your local machine before marking the task as resolved.
+> **The web preview is not proof.** It has its own build, its own cache and its own opinions. Verify locally before you call a task done.
 
 ```mermaid
 sequenceDiagram
@@ -125,17 +127,17 @@ sequenceDiagram
 
 ---
 
-## 🔴 Level 3: Advanced (Automation and GitHub Spec Kit)
+## 🔴 Level 3: Advanced (automation and GitHub Spec Kit)
 
-At this level, we integrate Lovable with command-line tools, CI/CD, and strict automation tracking.
+Here Lovable becomes one step in a pipeline that also involves the command line, CI and a spec generator.
 
-### 1. GitHub Spec Kit Synchronization
+### 1. Sync with GitHub Spec Kit
 
-We don't write specs fully by hand here. We use Spec Kit to automate the folder states:
+At this point you stop hand-writing the whole bundle and let Spec Kit lay out the folder states:
 
 <kbd>specify implement . --ai lovable</kbd>
 
-### 2. Strategic Engineering Prompt
+### 2. The engineering prompt
 
 ```text
 Assume your role as a Principal Software Engineer.
@@ -153,11 +155,9 @@ Strict Quality Rules:
 Generate the code, and deliver a "Handoff" report when finished detailing your technical risks.
 ```
 
-### 3. Handoff Report and Closure
+### 3. Handoff and closure
 
-Require Lovable to deliver a formal report at the end of its tasks, which you must save manually in `bitacora/handoffs/YYYY-MM-DD.md`.
-
-**Mandatory Handoff Format:**
+Make Lovable file a report when it finishes, and save it yourself in `bitacora/handoffs/YYYY-MM-DD.md`. Four things, no prose:
 1. Total files modified (+ / - lines)
 2. New third-party libraries installed (and why)
 3. Architecture decisions made
@@ -182,17 +182,17 @@ flowchart LR
 
 ---
 
-## ⭐ Explicit Base Repository Usage
+## Keeping the base repository in the loop
 
 > [!NOTE]
-> Always keep this repository as your ultimate compass:  
+> Point every assistant back at this repository:  
 > <kbd>https://github.com/juanklagos/spec-driven-development-template</kbd>
 
 <details>
 <summary>🆕 <b>Case: Setting up a project for Lovable from scratch</b></summary>
 <br>
 
-Send this prompt to your favorite AI (Local or ChatGPT) *before* diving into Lovable:
+Send this to your assistant of choice (local or ChatGPT) *before* you open Lovable:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template initialize the local structure for a new [REACT/VUE/ETC] project.
@@ -205,7 +205,7 @@ Only create the text files and structure; Lovable will handle the actual coding 
 <summary>♻️ <b>Case: Lovable broke an existing project</b></summary>
 <br>
 
-Sometimes Lovable "hallucinates" on massive projects. Send this prompt to stop the bleeding:
+On large projects Lovable will confidently invent things. This prompt stops the bleeding:
 
 ```text
 Using https://github.com/juanklagos/spec-driven-development-template and its guide, we are pausing code writing.
@@ -213,20 +213,3 @@ Analyze our broken code, integrate the idea/specs/bitacora structure, and help m
 ```
 
 </details>
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

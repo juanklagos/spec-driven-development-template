@@ -55,20 +55,3 @@ If it is new, initialize it from this template.
 If it already exists, adapt it without breaking current behavior.
 Keep me in SDD flow (idea -> spec -> plan -> tasks -> implementation), in simple language.
 ```
-
-## 💡 Quick tips
-
-- Start from a simple one-paragraph project description.
-- Ask the AI to confirm the active spec before coding.
-- Close every session with validation and a clear next step.
-
-## 📊 Visual flow
-
-```mermaid
-flowchart LR
-  A["Project idea"] --> B["Spec approved"]
-  B --> C["Plan aligned"]
-  C --> D["Tasks prioritized"]
-  D --> E["Implementation"]
-  E --> F["Validation + Logbook"]
-```

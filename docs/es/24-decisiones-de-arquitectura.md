@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -28,23 +28,23 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 
 > Una spec dice **qué** debe hacer el sistema. Un plan dice **cómo** lo vas a construir. Ninguno dice **por qué elegiste esto y no aquello otro que también estuvo sobre la mesa.** Para eso existe el registro de decisión.
 
-## 🧭 Qué es un ADR
+## Qué es un ADR
 
 Un **ADR** (Architecture Decision Record, registro de decisión de arquitectura) es un documento corto que captura **una** decisión en el momento en que se toma: el contexto, la elección, las alternativas descartadas, las consecuencias aceptadas y la señal que debería hacerte revisarla.
 
 Se escribe **una vez**, cuando se decide, y no se reescribe después. Si la decisión cambia, escribes un registro nuevo y lo enlazas — no editas la historia. Una bitácora de decisiones es una serie de fotos, no una página de wiki.
 
-Tres propiedades la hacen funcionar:
+Tres propiedades la hacen funcionar.
 
-| Propiedad | Por qué importa |
-|---|---|
-| **Inmutable** | Un registro editado para que coincida con la opinión de hoy no dice nada de por qué se eligió entonces. |
-| **Con fuente** | Cada justificación apunta a un commit, un `file:line`, un `history.md` de spec, una línea de `CHANGELOG.md` o un documento en `idea/`. |
-| **Honesta** | Donde no hay justificación escrita, el registro lo dice. Una justificación inventada a posteriori es peor que un vacío. |
+**Inmutable.** Un registro editado para que coincida con la opinión de hoy no dice nada de por qué se eligió entonces.
+
+**Con fuente.** Cada justificación apunta a un commit, un `file:line`, un `history.md` de spec, una línea de `CHANGELOG.md` o un documento en `idea/`.
+
+**Honesta.** Donde no hay justificación escrita, el registro lo dice. Una justificación inventada a posteriori es peor que un vacío.
 
 Lo último no es decoración. Una bitácora que contiene una historia verosímil que nadie tuvo en realidad hace daño activo: quien la lea después va a confiar en ella y razonar desde una ficción.
 
-## 📐 Cuándo escribir uno — y cuándo no
+## Cuándo escribir uno — y cuándo no
 
 Escribe un registro cuando se cumpla **alguna** de estas:
 
@@ -65,7 +65,7 @@ Si no se cumple ninguna, **no** lo escribas. Una bitácora inflada es una bitác
 
 **Regla práctica:** si cambiar esto después obligaría a tocar varias specs o a refactorizar en serio, regístralo.
 
-## 🗂️ Dónde viven los registros y cómo se nombran
+## Dónde viven los registros y cómo se nombran
 
 ```
 bitacora/decisiones/
@@ -102,7 +102,7 @@ Copia `bitacora/templates/DECISION_TEMPLATE.md` (espejo en `templates/bitacora/d
 - **Consecuencias** — qué mejora, qué trade-off aceptas, qué specs se ven afectadas, qué se vuelve más difícil.
 - **Registros relacionados** — qué extiende, acota o reemplaza. Los registros reemplazados se quedan en disco para siempre.
 
-## ⏳ Por qué "Cuándo revisar" es la sección que importa
+## Por qué "Cuándo revisar" es la sección que importa
 
 Casi todas las bitácoras de decisiones se pudren igual. Una elección tomada bajo restricciones reales — un presupuesto, una API en beta, un equipo de dos personas — se lee dos años después, fuera de contexto, como una ley permanente del sistema. Nadie recuerda la restricción, así que nadie nota cuándo desaparece.
 
@@ -116,7 +116,7 @@ Casi todas las bitácoras de decisiones se pudren igual. Una elección tomada ba
 
 Un registro sin esta sección no es una decisión. Es dogma con fecha.
 
-## 🤖 Cómo funciona `/sdd:decision`
+## Cómo funciona `/sdd:decision`
 
 ```
 /sdd:decision no vamos a construir app de escritorio por ahora
@@ -132,7 +132,7 @@ El comando:
 
 Responde en tu idioma (ES/EN). El espejo para Copilot es `.github/prompts/sdd-decision.prompt.md`.
 
-## 🔗 Integración con el flujo SDD
+## Integración con el flujo SDD
 
 - **Durante `plan.md`** — el momento natural: estás eligiendo un enfoque, así que las alternativas siguen frescas.
 - **Al cerrar la sesión** — `/sdd:close` pregunta si la sesión contuvo una decisión que valga la pena registrar, pero solo cuando alguno de los tres criterios se cumple de forma plausible. No molesta en sesiones triviales. El contrato de cierre lleva un ítem **Decisión registrada**; *"ninguna esta sesión"* es una respuesta válida, el silencio no.
@@ -142,7 +142,7 @@ Responde en tu idioma (ES/EN). El espejo para Copilot es `.github/prompts/sdd-de
 
 La regla canónica vive en `template-context/core-instructions/AGENT_OPERATING_SYSTEM.md` (§3 Flujo obligatorio y §4 Contrato de salida) y en `sdd.policy.yaml` bajo `decision_log`.
 
-## 📚 Un ejemplo real: la bitácora de este template
+## Un ejemplo real: la bitácora de este template
 
 `bitacora/decisiones/` en este repositorio tiene 14 registros reconstruidos desde el historial de git, las historias de spec, el changelog y documentos de investigación en `idea/`. Lee [`bitacora/decisiones/README.md`](../../bitacora/decisiones/README.md) para el índice completo. Tres valen como modelo:
 
@@ -162,9 +162,8 @@ La MCP App se pospuso porque "el estándar sigue moviéndose". Antes de escribir
 - Escríbelo en el momento de decidir. Reconstruirlo después cuesta horas y pierde las alternativas que descartaste solo en tu cabeza.
 - Si no puedes nombrar una alternativa real, pregúntate si de verdad fue una decisión.
 - Prefiere una frase honesta antes que tres párrafos verosímiles.
-- Cierra cada sesión con validación y próximo paso claro.
 
-## 📊 Flujo visual
+## Flujo visual
 
 ```mermaid
 flowchart LR

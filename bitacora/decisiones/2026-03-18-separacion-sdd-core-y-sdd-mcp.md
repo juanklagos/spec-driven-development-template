@@ -29,7 +29,7 @@ Registrado como tres decisiones en `bitacora/global/PROJECT_LOG.md`, Sesión 2 (
 | **Dejar los contratos solo como scripts de shell** | Rechazada en `spec.md:24`: contratos basados en texto no son verificables ni tipables por un cliente MCP |
 | **Empezar por Streamable HTTP** | Pospuesta, no rechazada (`spec.md:34`): `stdio` primero por ser el transporte que los clientes ya soportaban |
 
-**Honestidad de registro:** no hay más arquitecturas evaluadas en la evidencia. El commit de arquitectura `9a314e8` (2026-03-18 08:57:49 -0500) es documentación pura — 13 archivos `.md`, 204 líneas añadidas, cero código. No existe un documento de investigación en `idea/` para esta decisión (los que hay son de julio); `research.md` cita solo la especificación MCP, el SDK oficial y `sdd.policy.yaml`. La comparación con alternativas fue, hasta donde consta, breve.
+No hay más arquitecturas evaluadas en la evidencia. El commit de arquitectura `9a314e8` (2026-03-18 08:57:49 -0500) es documentación pura — 13 archivos `.md`, 204 líneas añadidas, cero código. No existe un documento de investigación en `idea/` para esta decisión (los que hay son de julio); `research.md` cita solo la especificación MCP, el SDK oficial y `sdd.policy.yaml`. La comparación con alternativas fue, hasta donde consta, breve.
 
 ## Consequences / Consecuencias
 

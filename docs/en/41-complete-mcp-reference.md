@@ -11,9 +11,7 @@ Use this page when you need to know:
 - what side effects it produces
 - what output the user should expect
 
-Keep [33-mcp-server-guide.md](./33-mcp-server-guide.md) for setup and connectivity.
-Keep [40-command-results-reference.md](./40-command-results-reference.md) for script-by-script output details.
-Keep [43-easy-mcp-guide.md](./43-easy-mcp-guide.md) for the non-technical and slash-style command view.
+Setup and connectivity live in [33-mcp-server-guide.md](./33-mcp-server-guide.md), per-script output in [40-command-results-reference.md](./40-command-results-reference.md). If you are not technical, start at [43-easy-mcp-guide.md](./43-easy-mcp-guide.md) instead of here.
 
 ## What `sdd-mcp` is
 
@@ -27,7 +25,7 @@ It gives AI clients a structured way to:
 - write traceability artifacts
 - read key project context through MCP resources
 
-It is not just documentation access. It is the runnable interface to the framework.
+It serves the framework docs too, but the point is the operations: an agent drives the project through this interface.
 
 ## Visual architecture
 
@@ -53,12 +51,7 @@ Reading path:
 
 ## What the user can expect
 
-When an AI client is connected to `sdd-mcp`, the user can expect:
-- structured outputs instead of vague free text
-- deterministic file writes for status, roadmap, logbook, and traceability
-- explicit gate checks before implementation
-- the option to use the clean default workspace under `./www/<project-name>/`
-- support for external target project paths on `projectRoot`-based tools
+With `sdd-mcp` connected, an AI client returns structured output instead of free-text guesswork, and its writes to status, roadmap, logbook and traceability files are deterministic. Gate checks happen before implementation, not after. Work can live in the default workspace under `./www/<project-name>/`, or at any external path on the tools that take a `projectRoot`.
 
 ## Scope rules
 
@@ -125,10 +118,6 @@ What it does:
 - creates `contracts/README.md`
 - appends a row to `specs/INDEX.md`
 
-What the user should expect:
-- one new numbered spec directory
-- the project index updated automatically
-
 Structured output:
 - `specId`
 - `specDir`
@@ -150,10 +139,6 @@ What it does:
 - checks required folders
 - checks required files
 - checks numbered spec bundles
-
-What the user should expect:
-- a structured validation summary
-- explicit errors and warnings
 
 Structured output:
 - `ok`
@@ -178,10 +163,6 @@ What it does:
 - checks tasks presence
 - checks consent log requirement when approved specs exist
 
-What the user should expect:
-- a clear yes/no style gate result
-- explicit reasons if implementation must remain blocked
-
 Structured output:
 - `ok`
 - `errors`
@@ -205,9 +186,6 @@ Input:
 What it does:
 - appends a timestamped line to `.sdd/user-consent.log`
 
-What the user should expect:
-- durable approval trace
-
 Structured output:
 - `logFile`
 - `summary`
@@ -227,9 +205,6 @@ Input:
 What it does:
 - reads numbered specs
 - extracts approval status from `spec.md`
-
-What the user should expect:
-- a compact list of current specs and states
 
 Structured output:
 - `specs[]`
@@ -255,9 +230,6 @@ What it does:
 - summarizes task progress
 - includes recent project log excerpt
 
-What the user should expect:
-- one status document ready to review or share
-
 Structured output:
 - `path`
 - `content`
@@ -276,10 +248,6 @@ Input:
 What it does:
 - creates or replaces `docs/roadmap.mmd`
 - creates or replaces `docs/roadmap.md`
-
-What the user should expect:
-- one Mermaid diagram source
-- one markdown roadmap document
 
 Structured output:
 - `mermaidPath`
@@ -301,9 +269,6 @@ Input:
 
 What it does:
 - appends content to `bitacora/global/PROJECT_LOG.md`
-
-What the user should expect:
-- one updated project log file
 
 Structured output:
 - `path`
@@ -328,9 +293,6 @@ Rules:
 What it does:
 - creates or replaces `bitacora/diaria/YYYY-MM-DD.md`
 
-What the user should expect:
-- one date-scoped log document
-
 Structured output:
 - `path`
 - `content`
@@ -354,9 +316,6 @@ Rules:
 What it does:
 - creates or replaces `bitacora/handoffs/<fileName>`
 
-What the user should expect:
-- one durable handoff document
-
 Structured output:
 - `path`
 - `content`
@@ -379,9 +338,6 @@ Rules:
 
 What it does:
 - creates or replaces `bitacora/decisiones/<fileName>`
-
-What the user should expect:
-- one durable decision record
 
 Structured output:
 - `path`
@@ -739,11 +695,6 @@ flowchart LR
 7. If approved, record consent with `sdd_record_user_consent`.
 8. Close the session with status, logs, and handoff tools as needed.
 
-## User expectation summary
+## In short
 
-The user should expect this MCP to:
-- guide SDD work with structure, not guesswork
-- create predictable files
-- block implementation when documentation is not ready
-- preserve traceability across sessions
-- make AI clients behave more consistently across the same project
+The server exists to make an AI client predictable on your project: the same files in the same places, traceability that survives between sessions, and a hard stop when the documentation is not ready for code yet.

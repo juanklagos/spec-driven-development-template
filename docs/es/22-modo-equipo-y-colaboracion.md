@@ -12,7 +12,7 @@
 
 ## 🗣️ Prompt amigable (copiar y pegar)
 
-Usa esto cuando no eres técnico y quieres que la IA haga la integración + guía completa:
+Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
 
 ```text
 Usando https://github.com/juanklagos/spec-driven-development-template, crea todo lo necesario para llevar a cabo mi proyecto de principio a fin.
@@ -25,7 +25,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 ```
 
 
-> SDD funciona para desarrolladores solos y equipos por igual. Esta guía explica cómo escalar de 1 a N contribuidores.
+> SDD no cambia cuando pasas de una persona a diez: cambia quién es responsable de cada parte. Aquí está ese reparto.
 
 ## 🎭 Roles recomendados
 
@@ -37,7 +37,7 @@ No omitas especificación, plan, tareas, traza de refinamiento, bitácora y vali
 | **Piloto IA** | Gestiona contexto de herramientas IA, alimenta specs a la IA, valida output | Quien esté manejando la sesión IA |
 
 > [!TIP]
-> En proyectos individuales, una persona llena todos los roles. La disciplina se mantiene igual.
+> Si trabajas solo, los cuatro roles son tuyos. La disciplina no baja por eso; si acaso, sube, porque nadie va a revisarte.
 
 ## 📐 Convenciones de equipo
 
@@ -97,20 +97,3 @@ Al iniciar un proyecto de equipo con SDD:
 | Cambio de alcance | Discutir con el Spec Owner primero | `history.md` + `bitacora/decisiones/` |
 | Bloqueo encontrado | Escalar inmediatamente, documentar | `bitacora/handoffs/` |
 | Spec completada | Revisar y cerrar, actualizar INDEX | `specs/INDEX.md` status → `Done` |
-
-## 💡 Tips rápidos
-
-- Empieza con una descripción corta del proyecto en lenguaje simple.
-- Pide a la IA confirmar la spec activa antes de programar.
-- Cierra cada sesión con validación y próximo paso claro.
-
-## 📊 Flujo visual
-
-```mermaid
-flowchart LR
-  A["Idea del proyecto"] --> B["Spec aprobada"]
-  B --> C["Plan alineado"]
-  C --> D["Tareas priorizadas"]
-  D --> E["Implementación"]
-  E --> F["Validación + Bitácora"]
-```

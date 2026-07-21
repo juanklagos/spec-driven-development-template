@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **`npm run mcp:pack:smoke` (`scripts/smoke-test-npm-package.mjs`), wired into `.github/workflows/mcp.yml`.** It packs both packages, installs the tarballs into a throwaway project, and drives `node_modules/.bin/sdd-mcp` with no interpreter — the way `npx` does — asserting a real MCP handshake, both linked bins, the bundled payload, readable `sdd://` resources and a scaffolded workspace outside `node_modules`. Verified to fail on the pre-fix code for each of the four defects above.
 
 ### Changed
-- **`/dashboard` redesigned to match the builder** (design judge panel: three independent directions scored on coherence, clarity, i18n and correctness): executive layout with a gate band, a hairline KPI grid (approved / pending / done / tasks / errors / warnings), a responsive spec list with progress bars and localized status badges, per-spec and global "open builder" links, dependency-warning and gate-error panels, dark/light from the builder's exact tokens. Still a dependency-free server-rendered page — no build step.
+- **`/dashboard` redesigned to match the builder.** Three independent design directions went through a judge panel scored on coherence, clarity, i18n and correctness. The winner opens with a gate band, then a hairline KPI grid (approved / pending / done / tasks / errors / warnings) and a responsive spec list with progress bars and localized status badges. It also carries "open builder" links per spec and one global, panels for dependency warnings and gate errors, and dark/light taken from the builder's exact tokens. Still one server-rendered page with no dependencies and no build step.
 - **The dashboard now speaks one language at a time**: `resolveDashboardLang` picks `?lang=es|en`, then `Accept-Language`, then `es`; an ES|EN toggle sits in the header and syncs with the builder's stored preference. The raw `Estado / Status` string from `spec.md` moved to a tooltip, so an English page no longer shows a Spanish badge.
 
 ### Fixed
@@ -228,10 +228,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - README, docs index, easy MCP guide, and free external MCP guide now point explicitly to the GitMCP step-by-step path.
-- GitMCP is now explained more clearly as:
-  - free external repo-context MCP
-  - not a replacement for `sdd-mcp`
-  - useful for onboarding and repository understanding
+- GitMCP is now explained more clearly: a free external MCP that serves repository context, handy for onboarding and for understanding a codebase, and not a replacement for `sdd-mcp`.
 
 ### Verified
 - `npm run build`
@@ -324,11 +321,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - media kit
   - next release prep
 - Fixed `sdd_create_spec` to create the spec directory before creating `contracts/`.
-- Repository positioning is now clearly framed as:
-  - operational SDD framework
-  - AI guidance
-  - GitHub Spec Kit reference
-  - MCP support
+- Repository positioning is now stated plainly: an operational SDD framework with AI guidance, the GitHub Spec Kit as reference, and MCP support.
 
 ### Verified
 - `npm run typecheck`
@@ -461,45 +454,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Guided prompts in `IDEA_GENERAL.md` template
 
 #### Improved
-- README restructured with thematic documentation discovery table
+- README restructured around a table that points to the docs by topic
 - docs/README.md reorganized into 4 categories
 - Bilingual documentation (EN/ES) for all 32 guides
-
-## 🌐 Bilingual support / Soporte bilingüe
-
-- EN: This repository is designed to be used in English and Spanish.
-- ES: Este repositorio está diseñado para usarse en inglés y español.
-- EN: Keep instructions simple, direct, and copy/paste-ready.
-- ES: Mantén instrucciones simples, directas y listas para copiar/pegar.
-
-## 🗣️ Prompt base / Base prompt
-
-```text
-EN: Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
-My project is: [describe project in plain language].
-Do not skip idea, spec, plan, tasks, logbook, and validation.
-
-ES: Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
-Mi proyecto es: [explica el proyecto en lenguaje simple].
-No omitas idea, spec, plan, tasks, bitácora y validación.
-```
-
-## 💡 Tips / Consejos
-
-- EN: Ask the AI to confirm the active spec before coding.
-- ES: Pide a la IA confirmar la spec activa antes de programar.
-- EN: Keep one clear next step at the end of each session.
-- ES: Deja un próximo paso claro al final de cada sesión.
-- EN: Prefer simple language and concrete deliverables.
-- ES: Prefiere lenguaje simple y entregables concretos.
-
-## 📊 Visual flow / Flujo visual
-
-```mermaid
-flowchart LR
-  A["EN: Idea / ES: Idea"] --> B["EN: Approved spec / ES: Spec aprobada"]
-  B --> C["EN: Aligned plan / ES: Plan alineado"]
-  C --> D["EN: Prioritized tasks / ES: Tareas priorizadas"]
-  D --> E["EN: Implementation / ES: Implementación"]
-  E --> F["EN: Validation + logbook / ES: Validación + bitácora"]
-```

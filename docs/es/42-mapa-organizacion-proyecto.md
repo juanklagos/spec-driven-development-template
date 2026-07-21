@@ -2,10 +2,9 @@
 
 ## Propósito
 
-Este documento explica cómo está organizado el repositorio a nivel de carpetas.
+Cómo está organizado el repositorio, carpeta por carpeta.
 
-No es un mapa de código.
-Es un mapa operativo para humanos y agentes IA para que entiendan:
+No es un mapa de código, sino un mapa operativo. Sirve para que una persona o un agente IA entienda:
 - qué pertenece a cada carpeta
 - qué es solo del framework
 - qué es material de ejecución del proyecto
@@ -402,15 +401,8 @@ Estas áreas se mueven más durante el uso normal:
 
 ## Resumen corto
 
-- `idea/` explica el proyecto.
-- `specs/` define el trabajo.
-- `bitacora/` preserva la traza.
-- `docs/` enseña el sistema.
-- `scripts/` automatizan el sistema.
-- `template-context/` instruye el comportamiento de la IA.
-- `templates/` estandariza artefactos reutilizables.
-- `packages/` implementa el core productizado y MCP.
-- `site/` renderiza la documentación como sitio público.
-- `builder/` es el lienzo visual sobre las specs.
-- `skills/` empaqueta el flujo como Agent Skill portable.
-- `www/` aloja proyectos ejecutables administrados dentro de este repo.
+El trío del flujo diario: `idea/` explica el proyecto, `specs/` define el trabajo y `bitacora/` guarda la traza de lo que pasó.
+
+Alrededor, la maquinaria del framework: `docs/` enseña el sistema y `site/` lo publica como sitio web; `scripts/` automatiza las validaciones; `templates/` estandariza los artefactos reutilizables y `template-context/` fija el comportamiento esperado de la IA.
+
+Y el producto en código: `packages/` (core + MCP), `builder/` (el lienzo visual sobre las specs) y `skills/` (el mismo flujo empaquetado como Agent Skill portable). `www/` es la única carpeta donde vive código de proyectos hechos con el framework, no del framework.

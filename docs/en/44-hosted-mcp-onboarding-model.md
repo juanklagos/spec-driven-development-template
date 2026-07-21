@@ -2,11 +2,9 @@
 
 ## Purpose
 
-This guide explains the easiest future-facing product model for this framework:
-- a hosted MCP for onboarding, docs, prompts, and visual help
-- a local MCP or local bridge for real file writes in the user project
+A product model for making this framework easier to adopt without softening it: a hosted MCP that handles onboarding, docs, prompts and visual help, plus a local MCP (or a thin local bridge) that does the actual writing in the user's project.
 
-Use this page when you need to explain how the framework can become easier without losing rigor.
+Read this page when someone asks how the framework gets simpler without losing its teeth.
 
 Related reference:
 - [47-free-external-mcp-options.md](./47-free-external-mcp-options.md)
@@ -25,20 +23,11 @@ flowchart LR
   F --> I["bitacora/"]
 ```
 
-## Why this model is the right one
+## Why split it in two
 
-Problem:
-- fully local MCP gives real file access but still feels technical to set up
-- fully hosted MCP is easy to connect but cannot safely write inside a local user project by itself
+Neither half works alone. A fully local MCP can write real files but still asks the user to install something, which is where most people quit. A fully hosted MCP connects in seconds and then cannot safely touch anything on the user's disk.
 
-Solution:
-- keep hosted MCP for the teaching layer
-- keep local MCP for the execution layer
-
-This gives:
-- easier onboarding
-- real project file writes
-- consistent rules across AI clients
+So: hosting handles teaching, local handles execution. Onboarding gets easier without giving up real writes, and the rules stay the same across every AI client.
 
 ## Responsibilities by layer
 
