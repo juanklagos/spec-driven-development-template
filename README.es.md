@@ -215,7 +215,7 @@ npm run mcp:start
 
 - **¿Sin clonar?** Apunta tu cliente MCP directo a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
 - **🎨 SDD Builder (visual, arrastrar y soltar):** compila una vez con `npm run builder:build`, luego `npm run mcp:http:start` y abre `http://127.0.0.1:3334/builder` — construye tus specs como tarjetas conectadas; cada tarjeta es un bundle real `specs/NNN/` en disco.
-- **Dashboard visual:** corre `npm run mcp:http:start` y abre `http://127.0.0.1:3334/dashboard` — specs, estados y compuerta de tu workspace de un vistazo.
+- **Dashboard visual:** corre `npm run mcp:http:start` y abre `http://127.0.0.1:3334/dashboard` — una vista ejecutiva de solo lectura del workspace (estado de la compuerta, tarjetas KPI, progreso por spec y avisos de dependencias) en tu idioma, sin compilar nada.
 - La explicación más simple primero: [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
 - Configuraciones por cliente: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Referencia completa: [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)

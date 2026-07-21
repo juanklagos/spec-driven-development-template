@@ -140,3 +140,9 @@ export function parseApproval(specMarkdown: string): ParsedApproval {
     present: status !== undefined
   };
 }
+
+/**
+ * Mirror of sdd-core `isApprovedStatus` — keep in sync. Only for the approval
+ * tab, which reads raw spec.md text; everywhere else render the server tone.
+ */
+export const isApprovedStatusText = (status: string): boolean => /aprobad[oa]|approved/i.test(status);

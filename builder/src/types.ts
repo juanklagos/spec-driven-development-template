@@ -32,11 +32,16 @@ export interface BoardCanvas {
   edges: CanvasEdge[];
 }
 
+/** Visual state computed once by sdd-core (specTone) and sent by the API. */
+export type SpecTone = "pending" | "ok" | "done";
+
 export interface SpecSummary {
   id: string;
   dir: string;
   status: string;
   tasks: { done: number; total: number };
+  /** Server-computed: never re-derive it here or surfaces drift apart. */
+  tone: SpecTone;
 }
 
 export interface BoardResponse {

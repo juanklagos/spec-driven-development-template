@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
 import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
 import { useT } from "../i18n";
-import { parseApproval } from "../sections";
+import { isApprovedStatusText, parseApproval } from "../sections";
 import { useBuilderStore } from "../store";
 import { ImplementModal } from "./ImplementModal";
 import { EDGE_KIND_ICON } from "./LabeledEdge";
@@ -51,7 +51,7 @@ function ApprovalPanel({
 }) {
   const { t } = useT();
   const approval = useMemo(() => parseApproval(specMarkdown), [specMarkdown]);
-  const isApproved = /aprobad[oa]|approved/i.test(approval.status);
+  const isApproved = isApprovedStatusText(approval.status);
   const [approver, setApprover] = useState(approval.approver);
   const [evidence, setEvidence] = useState(approval.evidence);
   const [busy, setBusy] = useState(false);
@@ -456,7 +456,9 @@ export function SpecDrawer() {
     void refreshGate();
   };
 
-  const isApproved = summary ? /aprobado|approved/i.test(summary.status) : false;
+  // Server-computed tone (sdd-core specTone): the single rule shared with the
+  // canvas, the kanban and the dashboard. Never re-derive it from the string.
+  const isApproved = summary ? summary.tone !== "pending" : false;
   const excerpt = detail ? detail.docs.spec.split("\n").slice(0, EXCERPT_LINES).join("\n") : "";
 
   return (

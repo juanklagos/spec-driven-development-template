@@ -15,13 +15,12 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
   const depWarningsAll = useBuilderStore((s) => s.gate?.dependencyWarnings);
   const gateErrors = gateIssues?.filter((issue) => issue.level === "error") ?? [];
   const depWarnings = (depWarningsAll ?? []).filter((w) => w.dependent === data.specId);
-  const status = spec?.status ?? "Pendiente";
   const done = spec?.tasks.done ?? 0;
   const total = spec?.tasks.total ?? 0;
-  const isDone = total > 0 && done === total;
-  const isApproved = /aprobado|approved/i.test(status);
-  const tone = isDone ? "done" : isApproved ? "ok" : "pending";
-  const badgeText = isDone ? t("status.done") : isApproved ? t("status.approved") : t("status.pending");
+  // Tone comes from the server (sdd-core specTone) so the card, the kanban and
+  // the dashboard can never disagree about what a spec's state is.
+  const tone = spec?.tone ?? "pending";
+  const badgeText = t(tone === "done" ? "status.done" : tone === "ok" ? "status.approved" : "status.pending");
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const { num, name } = splitSpecId(data.specId);
 

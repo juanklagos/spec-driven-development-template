@@ -18,8 +18,13 @@ export interface TaskProgress {
   total: number;
 }
 
+/** Visual state of a spec, shared by every surface (canvas, kanban, dashboard). */
+export type SpecTone = "pending" | "ok" | "done";
+
 export interface BoardSpecCard extends SpecSummary {
   tasks: TaskProgress;
+  /** Computed once here so no client re-derives (and diverges from) the rule. */
+  tone: SpecTone;
 }
 
 export interface BoardView {
@@ -200,12 +205,14 @@ export async function getBoardView(projectRoot: string): Promise<BoardView> {
   const [canvas, specs] = await Promise.all([readBoard(projectRoot), listSpecs(projectRoot)]);
   const cards = await Promise.all(
     specs.map(async (spec): Promise<BoardSpecCard> => {
+      let tasks: TaskProgress = { done: 0, total: 0 };
       try {
         const items = await readSpecTasks(projectRoot, spec.id);
-        return { ...spec, tasks: { done: items.filter((item) => item.done).length, total: items.length } };
+        tasks = { done: items.filter((item) => item.done).length, total: items.length };
       } catch {
-        return { ...spec, tasks: { done: 0, total: 0 } };
+        // No readable tasks.md: the spec still exists, it just has no progress.
       }
+      return { ...spec, tasks, tone: specTone(spec.status, tasks) };
     })
   );
   return { canvas, specs: cards };
@@ -282,9 +289,20 @@ export function canvasEdgeColorForLabel(label: string | undefined): string | und
   return EDGE_KIND_CANVAS_COLOR[classifyEdgeLabel(label)];
 }
 
-/** True when a spec status counts as approved (same rule as the builder UI). */
+/** True when a spec status counts as approved (accepts aprobado/aprobada/approved). */
 export function isApprovedStatus(status: string | undefined): boolean {
   return /aprobad[oa]|approved/i.test(status ?? "");
+}
+
+/**
+ * The one rule every surface renders (canvas card, kanban column, dashboard row,
+ * MCP tools). Approval comes first on purpose: under the golden rule a spec that
+ * was never approved is not "done" no matter how many boxes are ticked — that
+ * combination is precisely the anti-pattern this template exists to surface.
+ */
+export function specTone(status: string | undefined, tasks: TaskProgress): SpecTone {
+  if (!isApprovedStatus(status)) return "pending";
+  return tasks.total > 0 && tasks.done === tasks.total ? "done" : "ok";
 }
 
 export interface DependencyWarning {

@@ -30,13 +30,12 @@ const COLUMNS: { key: ColumnKey; emoji: string; titleKey: string }[] = [
 ];
 
 /**
- * Column from the real .md state — the exact same derivation as the canvas
- * card (SpecNode): all tasks done wins, then the approval status written in
- * spec.md (`Estado / Status`), else draft.
+ * Column from the tone computed once in sdd-core (specTone) and shipped by the
+ * API — the exact same value the canvas card and the dashboard render.
  */
 export function columnForSpec(spec: SpecSummary): ColumnKey {
-  if (spec.tasks.total > 0 && spec.tasks.done === spec.tasks.total) return "done";
-  if (/aprobad[oa]|approved/i.test(spec.status)) return "approved";
+  if (spec.tone === "done") return "done";
+  if (spec.tone === "ok") return "approved";
   return "draft";
 }
 

@@ -215,7 +215,7 @@ npm run mcp:start
 
 - **No clone?** Point your MCP client straight at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
 - **🎨 SDD Builder (visual, drag-and-drop):** build once with `npm run builder:build`, then `npm run mcp:http:start` and open `http://127.0.0.1:3334/builder` — compose your specs as connected cards; every card is a real `specs/NNN/` bundle on disk.
-- **Visual dashboard:** run `npm run mcp:http:start` and open `http://127.0.0.1:3334/dashboard` — specs, statuses, and gate state of your workspace at a glance.
+- **Visual dashboard:** run `npm run mcp:http:start` and open `http://127.0.0.1:3334/dashboard` — a read-only executive view of the workspace (gate status, KPI tiles, per-spec progress and dependency warnings) in your language, no build step required.
 - Easiest explanation first: [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 - Client configs: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Complete reference: [docs/en/41-complete-mcp-reference.md](./docs/en/41-complete-mcp-reference.md)

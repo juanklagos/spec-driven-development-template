@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- **`/dashboard` redesigned to match the builder** (design judge panel: three independent directions scored on coherence, clarity, i18n and correctness): executive layout with a gate band, a hairline KPI grid (approved / pending / done / tasks / errors / warnings), a responsive spec list with progress bars and localized status badges, per-spec and global "open builder" links, dependency-warning and gate-error panels, dark/light from the builder's exact tokens. Still a dependency-free server-rendered page — no build step.
+- **The dashboard now speaks one language at a time**: `resolveDashboardLang` picks `?lang=es|en`, then `Accept-Language`, then `es`; an ES|EN toggle sits in the header and syncs with the builder's stored preference. The raw `Estado / Status` string from `spec.md` moved to a tooltip, so an English page no longer shows a Spanish badge.
+
+### Fixed
+- **One spec-state rule for every surface.** The canvas card, the kanban column, the drawer's implement gating and the dashboard each derived a spec's state on their own, and they disagreed: `SpecNode`'s regex missed the feminine `Aprobada` (approved in the kanban, pending on the canvas), and a spec with every task ticked but never approved read as "done" on the canvas while the dashboard called it pending. The rule now lives once in `sdd-core` (`specTone`, approval-first: no approval, no "done") and travels in `BoardSpecCard.tone` through the REST API and the MCP tools; every surface renders that value. Regression asserts for both edge cases added to `npm run mcp:test`.
+
+
 ### Added
 - **SDD Builder v5 — pro UX (spec 010)**: major frontend redesign driven by the author's real-use feedback.
   - **Real i18n (R1)**: no more simultaneous "Guardar / Save" double labels anywhere. New `builder/src/i18n.ts` (flat ES/EN dictionary + `useT()` hook + `translate()` for stores), language detected from `navigator.language` with a persisted **ES/EN switcher** in the TopBar and `<html lang>` kept in sync. Localized end to end: TopBar, palette, welcome tour, all modals, spec sheet, kanban, toasts, client-side errors, tooltips, aria-labels, template gallery data, ✨ assistant drafts and the copyable agent prompts (now single-language). Honest limitation: errors produced by the server (REST/MCP) are still bilingual.

@@ -9,7 +9,7 @@
 
 import http from "node:http";
 import { createApiHandler } from "./api.js";
-import { renderDashboard } from "./dashboard.js";
+import { renderDashboard, resolveDashboardLang } from "./dashboard.js";
 import { createEventHub } from "./events.js";
 import { serveBuilder } from "./static.js";
 import { createMcpTransportHandler } from "./transport.js";
@@ -38,7 +38,9 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && req.url && (req.url === "/dashboard" || req.url.startsWith("/dashboard?"))) {
     try {
-      const html = await renderDashboard(projectRoot);
+      // One language at a time: ?lang=es|en wins, then Accept-Language, then es.
+      const lang = resolveDashboardLang(parsedUrl, req.headers["accept-language"]);
+      const html = await renderDashboard(projectRoot, { lang });
       res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
       res.end(html);
     } catch (error) {

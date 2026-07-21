@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { specTone } from "../packages/sdd-core/dist/index.js";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -593,6 +594,16 @@ async function main() {
     assert.match(String(logResource.contents[0].text), /Integration test appended project log entry/);
     assert.match(String(handoffResource.contents[0].text), /Integration fixture handoff/);
     assert.match(String(specResource.contents[0].text), /Approved \/ Aprobada/);
+
+    // Regression: ONE tone rule for canvas, kanban, dashboard and MCP tools.
+    // These two cases used to disagree between surfaces (spec 010 follow-up):
+    // a feminine "Aprobada" read as pending on the canvas, and an unapproved
+    // spec with every task ticked read as "done" on the canvas and kanban.
+    assert.equal(specTone("Aprobada", { done: 0, total: 3 }), "ok", "Aprobada must count as approved");
+    assert.equal(specTone("Aprobado", { done: 0, total: 3 }), "ok");
+    assert.equal(specTone("Approved", { done: 3, total: 3 }), "done");
+    assert.equal(specTone("Pendiente", { done: 3, total: 3 }), "pending", "no approval, no done");
+    assert.equal(specTone(undefined, { done: 0, total: 0 }), "pending");
 
     console.log("MCP integration test passed");
     console.log(`Project: ${projectName}`);
