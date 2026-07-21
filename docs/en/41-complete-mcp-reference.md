@@ -639,6 +639,45 @@ These resource templates are for managed projects under `./www/<project-name>/`.
   - `research.md`
   - `history.md`
 
+### Resource URIs / URIs de recursos
+
+Read a resource with `resources/read` using its exact URI. Static resources:
+
+| URI | What it returns |
+|---|---|
+| `sdd://policy/current` | `sdd.policy.yaml` — the machine-readable policy |
+| `sdd://docs/quickstart` | `QUICKSTART.md` |
+| `sdd://docs/ai-start` | `AI_START_HERE.md` |
+| `sdd://docs/easy-mcp` | The easy MCP guide (43) |
+| `sdd://templates/spec` | The spec template used by `sdd_create_spec` |
+
+Per-project templates — substitute `{projectName}` with the workspace name, and `{specId}` / `{document}` (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `history.md`):
+
+| URI template |
+|---|
+| `sdd://project/{projectName}/index` |
+| `sdd://project/{projectName}/idea` |
+| `sdd://project/{projectName}/project-log` |
+| `sdd://project/{projectName}/latest-handoff` |
+| `sdd://project/{projectName}/specs/{specId}/{document}` |
+
+### REST routes (SDD Builder) / Rutas REST del builder
+
+The HTTP transport also serves the builder's own API on the same port. It is loopback-only and rejects cross-origin mutations — see the security notes in guide 51.
+
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/api/board` | Canvas plus every spec with status and task progress |
+| PUT | `/api/board` | Persist the canvas layout (`specs/board.canvas`) |
+| GET | `/api/gate` | Gate summary, per-spec issues and dependency warnings |
+| GET | `/api/events` | SSE stream of workspace changes (live sync) |
+| POST | `/api/spec` | Create a real spec bundle |
+| GET | `/api/spec/:id` | One spec: documents and parsed tasks |
+| PUT | `/api/spec/:id/tasks` | Toggle a task checkbox in `tasks.md` |
+| PUT | `/api/spec/:id/sections` | Rewrite spec.md sections (surgical) |
+| POST | `/api/spec/:id/approve` | Fill the approval block |
+| POST | `/api/spec/:id/issues` | Create GitHub issues for pending tasks (needs `gh`) |
+
 ## Prompt reference
 
 ### `start_new_sdd_project`

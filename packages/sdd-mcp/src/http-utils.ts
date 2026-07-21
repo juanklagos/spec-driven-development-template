@@ -62,7 +62,7 @@ export function readBody(req: http.IncomingMessage, maxBytes = MAX_REQUEST_BODY_
 
     const declared = Number(req.headers["content-length"]);
     if (Number.isFinite(declared) && declared > maxBytes) {
-      req.destroy();
+      req.pause();
       fail(new PayloadTooLargeError(maxBytes));
       return;
     }
@@ -75,8 +75,14 @@ export function readBody(req: http.IncomingMessage, maxBytes = MAX_REQUEST_BODY_
       const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
       size += buffer.length;
       if (size > maxBytes) {
+        // Reject, but let the caller write its 413 first. Destroying the
+        // request synchronously here killed the response too, so a chunked
+        // oversize body answered with ECONNRESET instead of a status code
+        // (the declared-content-length path did return a real 413).
+        // pause() stops the flood without tearing the socket down; the
+        // caller's error handler destroys it after responding.
+        req.pause();
         fail(new PayloadTooLargeError(maxBytes));
-        req.destroy();
         return;
       }
       chunks.push(buffer);

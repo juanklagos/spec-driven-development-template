@@ -190,7 +190,10 @@ sdd_rel_from() {
 # a lock left behind by a killed process is recognised as stale and broken
 # instead of wedging the workspace forever.
 SDD_LOCK_STALE_SECONDS="${SDD_LOCK_STALE_SECONDS:-30}"
-SDD_LOCK_WAIT_SECONDS="${SDD_LOCK_WAIT_SECONDS:-20}"
+# Must exceed SDD_LOCK_STALE_SECONDS: a lock left by a killed process is only
+# breakable once it is stale, so a shorter wait made the next command fail
+# with a timeout instead of recovering.
+SDD_LOCK_WAIT_SECONDS="${SDD_LOCK_WAIT_SECONDS:-45}"
 
 sdd_lock_started_at() {
   awk 'NR==1{print $2}' "$1/owner" 2>/dev/null || true

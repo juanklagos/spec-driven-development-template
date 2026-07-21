@@ -639,6 +639,45 @@ Estos resource templates son para proyectos administrados bajo `./www/<nombre-pr
   - `research.md`
   - `history.md`
 
+### URIs de recursos / Resource URIs
+
+Lee un recurso con `resources/read` usando su URI exacta. Recursos estáticos:
+
+| URI | Qué devuelve |
+|---|---|
+| `sdd://policy/current` | `sdd.policy.yaml` — la política legible por máquina |
+| `sdd://docs/quickstart` | `QUICKSTART.md` |
+| `sdd://docs/ai-start` | `AI_START_HERE.md` |
+| `sdd://docs/easy-mcp` | The easy MCP guide (43) |
+| `sdd://templates/spec` | La plantilla de spec que usa `sdd_create_spec` |
+
+Plantillas por proyecto — sustituye `{projectName}` por el nombre del workspace, y `{specId}` / `{document}` (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `history.md`):
+
+| URI template |
+|---|
+| `sdd://project/{projectName}/index` |
+| `sdd://project/{projectName}/idea` |
+| `sdd://project/{projectName}/project-log` |
+| `sdd://project/{projectName}/latest-handoff` |
+| `sdd://project/{projectName}/specs/{specId}/{document}` |
+
+### Rutas REST del builder / REST routes
+
+El transporte HTTP también sirve la API del builder en el mismo puerto. Escucha solo en loopback y rechaza mutaciones cross-origin — ver las notas de seguridad en la guía 51.
+
+| Método | Ruta | Para qué |
+|---|---|---|
+| GET | `/api/board` | El lienzo y cada spec con su estado y progreso |
+| PUT | `/api/board` | Guarda el layout del lienzo (`specs/board.canvas`) |
+| GET | `/api/gate` | Resumen de la compuerta, errores por spec y avisos de dependencias |
+| GET | `/api/events` | Stream SSE de cambios del workspace (sync en vivo) |
+| POST | `/api/spec` | Crea un paquete de spec real |
+| GET | `/api/spec/:id` | Una spec: documentos y tareas parseadas |
+| PUT | `/api/spec/:id/tasks` | Marca/desmarca una tarea en `tasks.md` |
+| PUT | `/api/spec/:id/sections` | Reescribe secciones de spec.md (quirúrgico) |
+| POST | `/api/spec/:id/approve` | Rellena el bloque de aprobación |
+| POST | `/api/spec/:id/issues` | Crea issues de GitHub para las tareas pendientes (requiere `gh`) |
+
 ## Referencia de prompts
 
 ### `start_new_sdd_project`

@@ -7,3 +7,20 @@
 [2026-07-20 20:04:38 -0500] Usuario aprobó implementar los 3 paquetes del builder v2/v3/v4 (specs 007-009): 'hazlo todos' (2026-07-20)
 [2026-07-21 08:57:37 -0500] Usuario aprobó builder v5 (spec 010): forms por sección, i18n es/en real, shadcn/ui, uniones con propósito, guía de conexión de agentes (2026-07-21)
 [2026-07-21 11:53:44 -0500] Usuario aprobó la ruta de distribución sin app de escritorio (spec 011: lanzador npx + gate .mcpb): 'has lo mejor a corto y largo plazo' (2026-07-21)
+
+# --- Migración a consentimiento por spec (2026-07-21) ---
+# Las líneas de arriba son el registro histórico en texto libre y NO se modifican.
+# Estas entradas hacen explícito, por spec, el consentimiento que ya consta en la
+# sección 'Estado de aprobación' de cada spec.md. No crean consentimiento nuevo.
+# The lines above are the historical free-text record and are left untouched.
+[2026-03-18 00:00:00 -0500] [spec:001-sdd-mcp-foundation] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-17 00:00:00 -0500] [spec:002-interactive-onboarding] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-17 00:00:00 -0500] [spec:003-distribution-and-tutor] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-17 00:00:00 -0500] [spec:004-site-dashboard-community] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-17 00:00:00 -0500] [spec:005-learning-for-everyone] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-20 00:00:00 -0500] [spec:006-visual-spec-builder] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-20 00:00:00 -0500] [spec:007-builder-v2-easy] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-20 00:00:00 -0500] [spec:008-builder-v3-ai] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-20 00:00:00 -0500] [spec:009-builder-v4-teams] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-21 00:00:00 -0500] [spec:010-builder-v5-pro-ux] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
+[2026-07-21 00:00:00 -0500] [spec:011-one-command-launcher] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
