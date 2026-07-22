@@ -17,7 +17,7 @@
 
 ## H3 — La portada muestra un flujo que termina bien
 
-- [ ] **T3a** `demo.tape` andamia antes de ejecutar y trabaja dentro del proyecto creado.
+- [x] **T3a** `demo.tape` andamia antes de ejecutar y trabaja dentro del proyecto creado.
 - [ ] **T3b** Regeneración por CI y revisión de un fotograma tardío.
 
 ## Verificación de cierre

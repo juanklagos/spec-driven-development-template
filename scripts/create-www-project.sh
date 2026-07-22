@@ -101,6 +101,16 @@ else
   fi
 fi
 
+# The full profile installs a standalone layout (scripts at the project root);
+# every other profile installs the compact sidecar under spec/. Printing
+# ./spec/scripts/... for both meant the full profile's five suggested commands
+# all exited 127 — the script contradicted the very paths it had just created.
+if [ "${PROFILE#--profile=}" = "full" ]; then
+  SCRIPTS_PREFIX="./scripts/"
+else
+  SCRIPTS_PREFIX="./spec/scripts/"
+fi
+
 cat <<MSG
 
 ✅ Project workspace created at:
@@ -120,10 +130,10 @@ ES:
 
 Next / Siguiente:
   cd "$TARGET"
-  ./spec/scripts/new-spec.sh "first-feature" "Owner"
+  ${SCRIPTS_PREFIX}new-spec.sh "first-feature" "Owner"
   # Record consent only right before implementation starts:
-  ./spec/scripts/confirm-user-consent.sh "User approved implementation for spec 001"
-  ./spec/scripts/validate-sdd.sh . --strict
-  ./spec/scripts/check-sdd-policy.sh .
-  ./spec/scripts/check-sdd-gate.sh .
+  ${SCRIPTS_PREFIX}confirm-user-consent.sh --spec 001-<slug> "User approved implementation for spec 001-<slug>"
+  ${SCRIPTS_PREFIX}validate-sdd.sh . --strict
+  ${SCRIPTS_PREFIX}check-sdd-policy.sh .
+  ${SCRIPTS_PREFIX}check-sdd-gate.sh .
 MSG

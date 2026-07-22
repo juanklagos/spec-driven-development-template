@@ -197,7 +197,7 @@ Next steps / Siguientes pasos:
   2) Create first spec / Crea la primera spec:
      ./scripts/new-spec.sh "feature-name" "Owner"
   3) Before execution/implementation, record consent:
-     ./scripts/confirm-user-consent.sh "User approved implementation for spec 001"
+     ./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved implementation for spec 001-<slug>"
   4) Log your first session / Registra tu primera sesión:
      bitacora/global/PROJECT_LOG.md
   5) Validate / Valida:
@@ -210,9 +210,9 @@ Next steps / Siguientes pasos:
      ./scripts/generate-status.sh && ./scripts/generate-roadmap.sh
 
 Workspace guidance / Guía de workspace:
-  EN: `./www/<project-name>` is the recommended default inside this template.
+  EN: ./www/<project-name> is the recommended default inside this template.
   EN: External target paths are also supported when you want the runnable project elsewhere.
-  ES: `./www/<nombre-proyecto>` es el espacio recomendado por defecto dentro de este template.
+  ES: ./www/<nombre-proyecto> es el espacio recomendado por defecto dentro de este template.
   ES: También se soportan rutas externas cuando quieres el proyecto ejecutable en otro lugar.
 
 📖 Read QUICKSTART.md for a guided walkthrough and Spec Kit-first setup.
