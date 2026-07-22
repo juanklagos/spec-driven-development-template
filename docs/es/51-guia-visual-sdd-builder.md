@@ -57,7 +57,7 @@ Todo lo que hay en el lienzo corresponde a algo real:
 - **Las uniones** se dibujan arrastrando entre tarjetas — y en el momento de crear una se abre un selector de propósito sobre la propia unión (spec 010): **contiene** (gris, épica → spec), **depende de** (ámbar), **bloquea** (rojo), **relacionada** (azul, por defecto) o cualquier etiqueta libre. Doble clic en la unión para cambiar su propósito después. El propósito viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas.
 - **Mover tarjetas** guarda posiciones (con debounce) en `board.canvas`, y nunca toca tus `.md`. El lienzo tiene deshacer/rehacer (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para exportar el tablero como imagen.
 
-Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero depende de `001-catalogo-de-plantas`, que no lo está. De ahí el aviso.
+Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero depende de `004-envios-y-seguimiento`, que sigue pendiente: no puedes cobrar el total sin saber el costo del envío. De ahí el aviso.
 
 El **semáforo del gate** de la barra superior es el hard stop de SDD hecho visible: un chip vivo (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real del proyecto. Los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
 
@@ -83,7 +83,7 @@ La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga
 
 El toggle **«🗺️ Lienzo ↔ 📋 Tablero»** de la barra superior muestra las mismas specs como un kanban — tres columnas según el estado real de tus `.md`: **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel.
 
-![La vista kanban: columna Borrador con dos specs, Aprobada con la spec de checkout y su aviso de dependencia, Hecha con el panel de administración terminado](../assets/builder/kanban.png)
+![La vista kanban: columna Borrador con dos specs, Aprobada con la spec de checkout y su aviso de dependencia, Hecha con el catálogo de plantas terminado](../assets/builder/kanban.png)
 
 *Los mismos datos, otra proyección: las columnas salen de `spec.md` y `tasks.md`, no de un estado aparte del tablero.*
 

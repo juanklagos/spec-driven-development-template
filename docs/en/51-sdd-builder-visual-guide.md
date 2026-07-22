@@ -57,7 +57,7 @@ Everything on the canvas maps to something real:
 - **Connections** are drawn by dragging between cards, and the moment you create one a purpose picker opens right on the edge (spec 010): **contains** (gray, epic → spec), **depends on** (amber), **blocks** (red), **related** (blue, the default) or any free-text label. Double-click a connection to change its purpose later. The purpose travels in the `label` field of `board.canvas` (EN and ES spellings are both canonical) plus a standard JSON Canvas `color`.
 - **Moving cards** saves positions (debounced) to `board.canvas`. It never touches your `.md` files. The canvas has undo/redo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) and a "📷 PNG" button to export the board as an image.
 
-Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you. An amber `⚠ N dep` chip appears next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. The warning is informational; the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but depends on the unapproved `001-catalogo-de-plantas`, hence the warning.
+Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you. An amber `⚠ N dep` chip appears next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. The warning is informational; the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but depends on `004-envios-y-seguimiento`, which is still pending: you cannot charge the total without knowing the shipping cost. Hence the warning.
 
 The **gate semaphore** in the top bar is the SDD hard stop made visible: a live chip (🟢 open / 🔴 closed) plus a "Validate now" button that runs the real project validation. Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
 
@@ -83,7 +83,7 @@ Approval unlocks **"🤖 Implement with agent"**: a modal preloads the exact imp
 
 The **"🗺️ Canvas ↔ 📋 Board" toggle** in the top bar shows the same specs as a kanban — three columns driven by the real state of your `.md` files: **Draft · Pending**, **Approved** (the `Estado / Status` line in `spec.md`), and **Done** (every task ticked). Cards keep their progress bar and open the same drawer.
 
-![The kanban view: Draft column with two specs, Approved with the checkout spec carrying its dependency warning, Done with the finished admin panel](../assets/builder/kanban.png)
+![The kanban view: Draft column with two specs, Approved with the checkout spec carrying its dependency warning, Done with the finished plant catalogue](../assets/builder/kanban.png)
 
 *Same data, another projection: the columns come from `spec.md` and `tasks.md`, not from a separate board state.*
 
