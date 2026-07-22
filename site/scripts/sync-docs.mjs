@@ -42,8 +42,16 @@ function levelOf(file) {
 	return 'reference';
 }
 
+// A link resolved by one rule must be invisible to the rules that follow. Without this the
+// last rule re-captures the output of the first: ](./19-guia.md) becomes ](../19-guide/) and
+// then a GitHub URL for a path that does not exist. The marker uses NUL, which never appears
+// in the source markdown, and no later rule can match it — they all require ./ or ../
+const HOLD = '\u0000';
+
 function transform(src, locale, file) {
 	let text = readFileSync(src, 'utf8');
+	const resolved = [];
+	const hold = (link) => `${HOLD}${resolved.push(link) - 1}${HOLD}`;
 
 	// Title from first H1 (strip emoji-leading spaces, escape quotes)
 	const h1 = text.match(/^# (.+)$/m);
@@ -57,10 +65,10 @@ function transform(src, locale, file) {
 		.join('\n');
 
 	// Same-folder guide links: ](./NN-xxx.md) or ](NN-xxx.md)
-	text = text.replace(/\]\((?:\.\/)?(\d{2}-[^)#\s]+\.md)(#[^)]*)?\)/g, (_, f, hash = '') => `](../${slugOf(f)}/${hash})`);
+	text = text.replace(/\]\((?:\.\/)?(\d{2}-[^)#\s]+\.md)(#[^)]*)?\)/g, (_, f, hash = '') => `](${hold(`../${slugOf(f)}/${hash}`)})`);
 
 	// Cross-locale guide links: ](../es/NN-xxx.md) / ](../en/NN-xxx.md)
-	text = text.replace(/\]\(\.\.\/(en|es)\/([^)#\s]+\.md)(#[^)]*)?\)/g, (_, loc, f, hash = '') => `](../../../${loc}/guides/${slugOf(f)}/${hash})`);
+	text = text.replace(/\]\(\.\.\/(en|es)\/([^)#\s]+\.md)(#[^)]*)?\)/g, (_, loc, f, hash = '') => `](${hold(`../../../${loc}/guides/${slugOf(f)}/${hash}`)})`);
 
 	// Image links -> raw.githubusercontent (blob HTML pages would break <img>),
 	// resolved from docs/<locale>/ (e.g. ../assets/builder/canvas.png -> docs/assets/…)
@@ -77,6 +85,22 @@ function transform(src, locale, file) {
 		if (resolved.startsWith('..')) return m; // outside repo? leave untouched
 		return `](${GITHUB}/${resolved})`;
 	});
+
+	// Raw HTML anchors and images inside the markdown. The rules above only match markdown
+	// syntax, so an <a href="../../AI_START_HERE.md"> badge reached the site as-is and 404'd
+	// against the page URL it was resolved from.
+	text = text.replace(/(<(?:a|img)\b[^>]*?\b(?:href|src)=")(\.\.?\/[^"]+)(")/g, (m, open, rel, close) => {
+		const target = normalize(join('docs', locale, rel)).replace(/\\/g, '/');
+		if (target.startsWith('..')) return m; // outside repo? leave untouched
+		const base = open.startsWith('<img') ? RAW : GITHUB;
+		return `${open}${base}/${target}${close}`;
+	});
+
+	// Put the resolved links back now that no rule can touch them.
+	text = text.replace(new RegExp(`${HOLD}(\\d+)${HOLD}`, 'g'), (_, i) => resolved[Number(i)]);
+	if (text.includes(HOLD)) {
+		throw new Error(`${file}: a link marker survived the rewrites — the page would show raw markers`);
+	}
 
 	const [badgeText, badgeVariant] = BADGE[locale][levelOf(file)];
 	return `---\ntitle: "${title}"\nsidebar:\n  badge:\n    text: ${badgeText}\n    variant: ${badgeVariant}\n---\n\n${text}`;
