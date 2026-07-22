@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+---
+
+## [v2.2.1] — 2026-07-22
+
 ### Fixed
 - **The first command of the non-technical door failed for the one caller that door sends it to.** `npx @juanklagos/create-sdd-project` asked for the mode on stdin. With no terminal it died with `Detected unsettled top-level await`, naming an internal file and line, having created nothing — and `START_HERE_NON_TECH.md` tells the AI agent to run exactly that. It now detects that nobody can answer, uses the sidecar defaults, and announces what it assumed. Interactive use is unchanged.
 - **The HTTP server never said where the board was.** It printed the `/mcp` URL alone, so anyone following the instructions opened a protocol endpoint and concluded the thing was broken. It now prints `/builder`, `/dashboard` and `/mcp`, the canvas first.

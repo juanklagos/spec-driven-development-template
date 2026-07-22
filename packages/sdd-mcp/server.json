@@ -6,12 +6,12 @@
     "url": "https://github.com/juanklagos/spec-driven-development-template",
     "source": "github"
   },
-  "version": "2.2.0",
+  "version": "2.2.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@juanklagos/sdd-mcp",
-      "version": "2.2.0",
+      "version": "2.2.1",
       "transport": {
         "type": "stdio"
       },
