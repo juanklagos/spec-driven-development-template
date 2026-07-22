@@ -59,7 +59,7 @@ O sea: el núcleo está cubierto. Lo que falta son las dos filas con ❌ — der
 | "SDD es waterfall con más tokens" | El ciclo spec->código que tomaba meses ahora toma minutos; iterar sigue siendo barato (Marc Brooker, AWS) | Las specs son por feature e iterativas; `history.md` registra la evolución |
 | Spec drift: código y spec divergen | Tratar las specs como interfaces vivas compartidas | Scripts de validación + contrato de cierre de sesión fuerzan el realineamiento |
 | Fatiga de markdown / demasiada ceremonia | Specs compactas; omitir SDD en prototipos desechables | El modo sidecar es compacto por diseño; las guías dicen cuándo *no* usar el modo completo |
-| Los agentes ignoran la spec | Compuertas + tareas pequeñas + consentimiento explícito | La política de hard stop se verifica por máquina, no solo por prosa |
+| Los agentes ignoran la spec | Compuertas + tareas pequeñas + consentimiento explícito | La aprobación, la consistencia del plan y el consentimiento se verifican por máquina; la compuerta declara en cada ejecución qué comprobó y qué no |
 
 Thoughtworks aún ubica SDD en **Assess** (no Adopt): vale la pena explorar, los flujos son opinados y no hay consenso sobre el flujo óptimo. Enseñar esto con honestidad es parte del trabajo de este template.
 

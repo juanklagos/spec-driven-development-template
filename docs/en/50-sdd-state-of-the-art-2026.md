@@ -59,7 +59,7 @@ So: the core is covered. What is missing is the two ❌ rows — deriving test p
 | "SDD is waterfall with more tokens" | The spec->code loop that took months now takes minutes; iteration stays cheap (Marc Brooker, AWS) | Specs are per-feature and iterative; `history.md` records evolution |
 | Spec drift: code and spec diverge | Treat specs as living shared interfaces | Validation scripts + session close contract force re-alignment |
 | Markdown fatigue / too much ceremony | Use compact specs; skip SDD for throwaway prototypes | Sidecar mode is compact by design; guides say when *not* to use full mode |
-| Agents ignore the spec | Gates + small tasks + explicit consent | Hard stop policy is machine-checked, not just prose |
+| Agents ignore the spec | Gates + small tasks + explicit consent | Approval, plan consistency and consent are machine-checked; the gate reports on every run what it verified and what it did not |
 
 Thoughtworks still places SDD in **Assess** (not Adopt): worth exploring, workflows are opinionated, no consensus on the optimal flow. Teaching this honestly is part of this template's job.
 

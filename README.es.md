@@ -4,7 +4,7 @@
 
 # 🌱 Spec-Driven Development Template
 
-**Aprende Spec-Driven Development y úsalo en proyectos reales.<br>Una sola regla, y la verifica un script, no tu fuerza de voluntad.**
+**Aprende Spec-Driven Development y úsalo en proyectos reales.<br>Una sola regla, y una compuerta que no se abre hasta que apruebas una spec — y que te dice en cada ejecución qué comprobó.**
 
 [🇺🇸 English](./README.md) · 🇪🇸 **Español**
 
@@ -43,7 +43,7 @@ Por debajo, quien mueve el flujo es [GitHub Spec Kit](https://github.com/github/
 
 </div>
 
-Qué cambia en la práctica: las decisiones dejan de vivir en el historial del chat y pasan a `specs/`. Nada se construye hasta que `spec.md` y `plan.md` existen y coinciden, y eso lo revisa un script, no la memoria de alguien. Quien llegue nuevo, persona o agente, aterriza en una estructura de carpetas que ya reconoce. Y en `bitacora/` queda el registro de cada sesión, así que dentro de seis meses todavía puedes averiguar por qué algo se hizo como se hizo.
+Qué cambia en la práctica: las decisiones dejan de vivir en el historial del chat y pasan a `specs/`. La compuerta no se abre hasta que `spec.md` y `plan.md` existen, coinciden y registras tu consentimiento — y eso lo revisa un script, no la memoria de alguien. Quien llegue nuevo, persona o agente, aterriza en una estructura de carpetas que ya reconoce. Y en `bitacora/` queda el registro de cada sesión, así que dentro de seis meses todavía puedes averiguar por qué algo se hizo como se hizo.
 
 > ¿Quieres el mapa de la industria? Lee [SDD en 2026: estado del arte y cómo se compara este template](./docs/es/50-estado-del-arte-sdd-2026.md).
 
@@ -83,7 +83,7 @@ Si usas **Claude Code**, este repo trae slash commands listos. Empieza con `/sdd
 | `/sdd:help` | Te dice en qué etapa estás y cuál es el único siguiente paso |
 | `/sdd:new` | Inicio guiado: idea → primera spec lista para aprobar |
 | `/sdd:spec` | Crea o refina un paquete de spec con criterios EARS |
-| `/sdd:gate` | Ejecuta la compuerta verificada por máquina y registra tu consentimiento |
+| `/sdd:gate` | Ejecuta la compuerta —aprobación, consistencia del plan, consentimiento— y registra el tuyo |
 | `/sdd:decision` | Una decisión, escrita en `bitacora/decisiones/`: qué, por qué, qué se descartó, cuándo revisarla |
 | `/sdd:close` | Valida y cierra la sesión con el contrato de salida |
 | `/sdd:tutor` | Un curso conversacional de SDD por niveles, corregido por los scripts de validación reales |

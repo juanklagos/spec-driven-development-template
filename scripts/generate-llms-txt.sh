@@ -15,7 +15,7 @@ title_of() {
 {
   echo "# Spec-Driven Development Template"
   echo
-  echo "> Bilingual (EN/ES) template to learn Spec-Driven Development and apply it to real projects with AI agents. GitHub Spec Kit is the base workflow; this repo adds starter structure, a machine-checked gate (no code before approved spec and consistent plan), agent rules, a local MCP server, and a compact spec/ sidecar for existing codebases."
+  echo "> Bilingual (EN/ES) template to learn Spec-Driven Development and apply it to real projects with AI agents. GitHub Spec Kit is the base workflow; this repo adds starter structure, a gate that verifies spec approval, plan consistency and recorded consent, and states its own scope on every run, agent rules, a local MCP server, and a compact spec/ sidecar for existing codebases."
   echo
   echo "Key rules for agents: read AGENTS.md and template-context/core-instructions/AGENT_OPERATING_SYSTEM.md first. Validation: ./scripts/validate-sdd.sh . --strict, ./scripts/check-sdd-policy.sh ., ./scripts/check-sdd-gate.sh ."
   echo

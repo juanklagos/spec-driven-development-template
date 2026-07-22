@@ -4,7 +4,7 @@
 
 # 🌱 Spec-Driven Development Template
 
-**Learn Spec-Driven Development, then use it on real projects.<br>One rule, enforced by a script instead of by good intentions.**
+**Learn Spec-Driven Development, then use it on real projects.<br>One rule, and a gate that stays shut until you approve a spec — and tells you on every run exactly what it checked.**
 
 🇺🇸 **English** · [🇪🇸 Español](./README.es.md)
 
@@ -43,7 +43,7 @@ The workflow engine underneath is [GitHub Spec Kit](https://github.com/github/sp
 
 </div>
 
-What changes in practice: decisions stop living in chat history and move into `specs/`. Nothing gets built until `spec.md` and `plan.md` exist and agree, and a script checks that, not somebody's memory. A new teammate or a new agent lands in a folder layout they already recognize. And `bitacora/` keeps the session log, so six months later you can still find out why something was done the way it was.
+What changes in practice: decisions stop living in chat history and move into `specs/`. The gate stays closed until `spec.md` and `plan.md` exist, agree, and you record your consent — a script checks that, not somebody's memory. A new teammate or a new agent lands in a folder layout they already recognize. And `bitacora/` keeps the session log, so six months later you can still find out why something was done the way it was.
 
 > Want the industry map? Read [SDD in 2026: state of the art and how this template compares](./docs/en/50-sdd-state-of-the-art-2026.md).
 
@@ -83,7 +83,7 @@ If you use **Claude Code**, this repo ships slash commands out of the box. Start
 | `/sdd:help` | Tells you what stage you are in and the single next step |
 | `/sdd:new` | Guided start: idea → first spec ready for approval |
 | `/sdd:spec` | Create or refine a spec bundle with EARS criteria |
-| `/sdd:gate` | Runs the machine-checked gate and records your consent |
+| `/sdd:gate` | Runs the gate — approval, plan consistency, consent — and records yours |
 | `/sdd:decision` | One decision, written down in `bitacora/decisiones/`: what, why, what was rejected, when to revisit |
 | `/sdd:close` | Validates and closes the session with the output contract |
 | `/sdd:tutor` | A conversational SDD course by levels, graded by the real validation scripts |

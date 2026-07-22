@@ -51,11 +51,11 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 
 ## H4 — Documentación y activos
 
-- [ ] **T4a** Reescribir las afirmaciones que dicen que algo se comprueba por máquina cuando no:
+- [x] **T4a** Reescribir las afirmaciones que dicen que algo se comprueba por máquina cuando no:
       `README.md`/`README.es.md`, ambos `site/src/content/docs/*/index.mdx`, `docs/{en,es}/50`,
       `docs/{en,es}/41`, `docs/{en,es}/42`, y las cadenas de «implementación permitida» del builder y
       el dashboard. Editar `scripts/generate-llms-txt.sh:18`, no `llms.txt`.
-- [ ] **T4b** No tocar las 47 apariciones de la frase de hard stop. Enuncian la regla como instrucción
+- [x] **T4b** No tocar las 47 apariciones de la frase de hard stop. Enuncian la regla como instrucción
       a un agente, lo cual es cierto, y `check-sdd-policy.sh:112-116` verifica su redacción exacta.
 - [ ] **T4c** Fixtures: constructor de workspace de layout completo junto al de sidecar; casos de cero
       specs, spec sin aprobar, aprobada y consentida, y una secuencia andamiador→compuerta que debe
