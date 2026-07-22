@@ -43,8 +43,16 @@ Examples:
 }
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+// Nobody can answer a prompt when stdin is not a terminal, and the primary caller of
+// this command is an AI agent: START_HERE_NON_TECH tells it to run exactly this. Asking
+// anyway left `rl.question` pending forever and node exited with "Detected unsettled
+// top-level await", naming an internal file and line, having created nothing.
+// isTTY is `undefined` rather than `false` off a terminal, so this is written as a
+// negation on purpose.
+const interactive = Boolean(process.stdin.isTTY) && !flags.has("yes");
 const ask = async (q, fallback) =>
-  flags.has("yes") ? fallback : ((await rl.question(`${q} [${fallback}]: `)).trim() || fallback);
+  interactive ? ((await rl.question(`${q} [${fallback}]: `)).trim() || fallback) : fallback;
 
 try {
   let target = positional[0];
@@ -54,6 +62,15 @@ try {
   let mode = flags.get("mode") ?? (await ask("Mode: sidecar (recommended) or full / Modo", "sidecar"));
   if (!["sidecar", "full"].includes(mode)) throw new Error(`Unknown mode: ${mode}`);
   const profile = flags.get("profile") ?? "recommended";
+
+  // Defaults chosen without asking are announced, not applied silently: the person
+  // reading the agent's transcript has to be able to see what was decided for them.
+  if (!interactive) {
+    console.log(
+      `Non-interactive: using target=${target}, mode=${mode}, profile=${profile} / ` +
+        `Sin terminal interactiva: usando destino=${target}, modo=${mode}, perfil=${profile}`
+    );
+  }
 
   if (mode === "sidecar" && existsSync(join(targetAbs, "spec"))) {
     throw new Error(`${targetAbs}/spec already exists — aborting to avoid overwriting.`);
