@@ -1903,8 +1903,13 @@ async function main() {
       // silently answered with the wrong directory.
       const wt = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-wt-"));
       await execFileAsync("git", ["init", "-q", path.join(wt, "repo")]);
-      await execFileAsync("git", ["-C", path.join(wt, "repo"), "commit", "-q", "--allow-empty", "-m", "init"]);
-      await execFileAsync("git", ["-C", path.join(wt, "repo"), "worktree", "add", "-q", path.join(wt, "linked")]);
+      // `-c` and not `git config`: a CI runner has no git identity, and the
+      // commit below fails with "empty ident name" (exit 128) without one.
+      // Setting it per-invocation keeps the runner's own config untouched.
+      const asSomebody = ["-c", "user.name=SDD Test", "-c", "user.email=test@example.invalid"];
+      await execFileAsync("git", ["-C", path.join(wt, "repo"), ...asSomebody, "commit", "-q", "--allow-empty", "-m", "init"]);
+      // A worktree needs at least one commit to attach to.
+      await execFileAsync("git", ["-C", path.join(wt, "repo"), ...asSomebody, "worktree", "add", "-q", path.join(wt, "linked")]);
 
       const gitFileIsAFile = await fs.stat(path.join(wt, "linked", ".git")).then((s) => s.isFile());
       assert.equal(gitFileIsAFile, true, "precondition: a git worktree's .git is a file, which is what broke the old check");
