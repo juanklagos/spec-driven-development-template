@@ -207,7 +207,7 @@ npm run mcp:start
 
 - **No clone?** Point your MCP client straight at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
 - **SDD Builder (visual, drag-and-drop):** build once with `npm run builder:build`, then `SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start` and open `http://127.0.0.1:3334/builder` — compose your specs as connected cards, where every card is a real `specs/NNN/` bundle on disk. Inside this template repository the builder is blocked by design (no target-project work in the template root), so always point `SDD_PROJECT_ROOT` at a real workspace. See the [visual guide](./docs/en/51-sdd-builder-visual-guide.md).
-- **Visual dashboard:** run `npm run mcp:http:start` and open `http://127.0.0.1:3334/dashboard` for a read-only executive view of the workspace (gate status, KPI tiles, per-spec progress, dependency warnings) in your language, with no build step.
+- **Visual dashboard:** point the server at a project — `SDD_PROJECT_ROOT=./www/my-project npm run mcp:http:start` — then open `http://127.0.0.1:3334/dashboard` for a read-only executive view (gate verdict, KPI tiles, per-spec progress, dependency warnings) in your language, with no build step. The template root is not a workspace, so running it from here reports exactly that.
 - Easiest explanation first: [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 - Client configs: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Complete reference: [docs/en/41-complete-mcp-reference.md](./docs/en/41-complete-mcp-reference.md)

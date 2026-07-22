@@ -1,0 +1,361 @@
+{
+  "nodes": [
+    {
+      "id": "epic-foundation",
+      "type": "text",
+      "text": "## Cimiento\nEl motor tipado y su transporte MCP.",
+      "x": -60,
+      "y": -320,
+      "width": 300,
+      "height": 120,
+      "color": "5"
+    },
+    {
+      "id": "epic-learning",
+      "type": "text",
+      "text": "## Aprendizaje\nQue cualquiera pueda usarlo.",
+      "x": 700,
+      "y": -320,
+      "width": 300,
+      "height": 120,
+      "color": "4"
+    },
+    {
+      "id": "epic-builder",
+      "type": "text",
+      "text": "## Builder visual\nSpecs como tarjetas conectadas.",
+      "x": 1460,
+      "y": -320,
+      "width": 300,
+      "height": 120,
+      "color": "6"
+    },
+    {
+      "id": "epic-gate",
+      "type": "text",
+      "text": "## La compuerta\nQue un verde signifique algo.",
+      "x": 2220,
+      "y": -320,
+      "width": 300,
+      "height": 120,
+      "color": "3"
+    },
+    {
+      "id": "001-sdd-mcp-foundation",
+      "type": "file",
+      "file": "specs/001-sdd-mcp-foundation/spec.md",
+      "x": -60,
+      "y": -80,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "002-interactive-onboarding",
+      "type": "file",
+      "file": "specs/002-interactive-onboarding/spec.md",
+      "x": 700,
+      "y": -140,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "003-distribution-and-tutor",
+      "type": "file",
+      "file": "specs/003-distribution-and-tutor/spec.md",
+      "x": 700,
+      "y": 80,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "004-site-dashboard-community",
+      "type": "file",
+      "file": "specs/004-site-dashboard-community/spec.md",
+      "x": 700,
+      "y": 300,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "005-learning-for-everyone",
+      "type": "file",
+      "file": "specs/005-learning-for-everyone/spec.md",
+      "x": 700,
+      "y": 520,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "006-visual-spec-builder",
+      "type": "file",
+      "file": "specs/006-visual-spec-builder/spec.md",
+      "x": 1460,
+      "y": -80,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "007-builder-v2-easy",
+      "type": "file",
+      "file": "specs/007-builder-v2-easy/spec.md",
+      "x": 1460,
+      "y": 140,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "008-builder-v3-ai",
+      "type": "file",
+      "file": "specs/008-builder-v3-ai/spec.md",
+      "x": 1460,
+      "y": 360,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "009-builder-v4-teams",
+      "type": "file",
+      "file": "specs/009-builder-v4-teams/spec.md",
+      "x": 1460,
+      "y": 580,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "010-builder-v5-pro-ux",
+      "type": "file",
+      "file": "specs/010-builder-v5-pro-ux/spec.md",
+      "x": 1460,
+      "y": 800,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "011-one-command-launcher",
+      "type": "file",
+      "file": "specs/011-one-command-launcher/spec.md",
+      "x": 2220,
+      "y": 800,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "012-gate-verdict",
+      "type": "file",
+      "file": "specs/012-gate-verdict/spec.md",
+      "x": 2220,
+      "y": -80,
+      "width": 300,
+      "height": 180
+    },
+    {
+      "id": "013-gate-integrity",
+      "type": "file",
+      "file": "specs/013-gate-integrity/spec.md",
+      "x": 2220,
+      "y": 140,
+      "width": 300,
+      "height": 180
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-contains-epic-foundation-001-sdd-mcp-foundation",
+      "fromNode": "epic-foundation",
+      "toNode": "001-sdd-mcp-foundation",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-learning-002-interactive-onboarding",
+      "fromNode": "epic-learning",
+      "toNode": "002-interactive-onboarding",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-learning-003-distribution-and-tutor",
+      "fromNode": "epic-learning",
+      "toNode": "003-distribution-and-tutor",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-learning-004-site-dashboard-community",
+      "fromNode": "epic-learning",
+      "toNode": "004-site-dashboard-community",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-learning-005-learning-for-everyone",
+      "fromNode": "epic-learning",
+      "toNode": "005-learning-for-everyone",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-006-visual-spec-builder",
+      "fromNode": "epic-builder",
+      "toNode": "006-visual-spec-builder",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-007-builder-v2-easy",
+      "fromNode": "epic-builder",
+      "toNode": "007-builder-v2-easy",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-008-builder-v3-ai",
+      "fromNode": "epic-builder",
+      "toNode": "008-builder-v3-ai",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-009-builder-v4-teams",
+      "fromNode": "epic-builder",
+      "toNode": "009-builder-v4-teams",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-010-builder-v5-pro-ux",
+      "fromNode": "epic-builder",
+      "toNode": "010-builder-v5-pro-ux",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-builder-011-one-command-launcher",
+      "fromNode": "epic-builder",
+      "toNode": "011-one-command-launcher",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-gate-012-gate-verdict",
+      "fromNode": "epic-gate",
+      "toNode": "012-gate-verdict",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-contains-epic-gate-013-gate-integrity",
+      "fromNode": "epic-gate",
+      "toNode": "013-gate-integrity",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene / contains",
+      "color": "#6b7280"
+    },
+    {
+      "id": "e-depends-002-interactive-onboarding-001-sdd-mcp-foundation",
+      "fromNode": "002-interactive-onboarding",
+      "toNode": "001-sdd-mcp-foundation",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-004-site-dashboard-community-001-sdd-mcp-foundation",
+      "fromNode": "004-site-dashboard-community",
+      "toNode": "001-sdd-mcp-foundation",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-006-visual-spec-builder-001-sdd-mcp-foundation",
+      "fromNode": "006-visual-spec-builder",
+      "toNode": "001-sdd-mcp-foundation",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-007-builder-v2-easy-006-visual-spec-builder",
+      "fromNode": "007-builder-v2-easy",
+      "toNode": "006-visual-spec-builder",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-008-builder-v3-ai-007-builder-v2-easy",
+      "fromNode": "008-builder-v3-ai",
+      "toNode": "007-builder-v2-easy",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-009-builder-v4-teams-008-builder-v3-ai",
+      "fromNode": "009-builder-v4-teams",
+      "toNode": "008-builder-v3-ai",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-010-builder-v5-pro-ux-009-builder-v4-teams",
+      "fromNode": "010-builder-v5-pro-ux",
+      "toNode": "009-builder-v4-teams",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-011-one-command-launcher-006-visual-spec-builder",
+      "fromNode": "011-one-command-launcher",
+      "toNode": "006-visual-spec-builder",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    },
+    {
+      "id": "e-depends-013-gate-integrity-012-gate-verdict",
+      "fromNode": "013-gate-integrity",
+      "toNode": "012-gate-verdict",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "depende de",
+      "color": "3"
+    }
+  ]
+}
