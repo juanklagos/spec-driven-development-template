@@ -17,8 +17,12 @@
 # Without a .gitignore, both were tracked.
 #
 # The rules, in the order they must appear:
-#   .sdd/*                 machine state (locks, version stamp, archives)
-#   !.sdd/user-consent.log EXCEPT the consent log, which is the audit trail
+#   .sdd/*                    machine state (locks, archives)
+#   !.sdd/user-consent.log    EXCEPT the consent log, which is the audit trail
+#   !.sdd/TEMPLATE_VERSION    and the version stamp, which action.yml reads to
+#                             warn about a stale sidecar. Ignoring it made that
+#                             whole check dead code AND emitted a permanent
+#                             false warning in every consumer's CI.
 #   specs/.lock/           transient allocation lock, only on disk after a kill
 #
 # Deliberately small. This writes into a file the user owns, so it adds the
@@ -33,6 +37,7 @@ sdd_gitignore_rules() {
   printf "%s\n" \
     "${prefix}.sdd/*" \
     "!${prefix}.sdd/user-consent.log" \
+    "!${prefix}.sdd/TEMPLATE_VERSION" \
     "${prefix}specs/.lock/"
 }
 
@@ -99,4 +104,52 @@ sdd_write_empty_spec_index() {
 | Number / Número | Name / Nombre | Status / Estado | Priority / Prioridad | Owner / Responsable | Updated / Actualización |
 |---|---|---|---|---|---|
 SDD_INDEX_EOF
+}
+
+# --- Idea and logbook ---
+
+# sdd_write_empty_idea <idea_dir>
+#
+# A fresh project must not open its own idea file and read MY problem statement.
+# The scaffolders copied idea/IDEA_GENERAL.md verbatim, so every new project
+# started with two mentions of "Spec-Driven Development Template" and this
+# repository's MVP scope. Only writes when absent: never clobber the user's.
+sdd_write_empty_idea() {
+  local idea_dir="${1:-}"
+  [ -d "$idea_dir" ] || return 0
+  [ -f "$idea_dir/IDEA_GENERAL.md" ] && return 0
+
+  cat > "$idea_dir/IDEA_GENERAL.md" <<'SDD_IDEA_EOF'
+# Idea general del proyecto / General project idea
+
+> Rellena esto antes de escribir la primera spec. No hace falta que sea largo.
+> Fill this in before writing the first spec. It does not need to be long.
+
+## Qué es / What it is
+
+## Qué problema resuelve / The problem it solves
+
+## Para quién / Who it is for
+
+## Fuera de alcance por ahora / Out of scope for now
+SDD_IDEA_EOF
+}
+
+# sdd_write_empty_project_log <global_dir>
+#
+# Same reason: a new project inherited 81 lines of this repository's history.
+sdd_write_empty_project_log() {
+  local global_dir="${1:-}"
+  [ -d "$global_dir" ] || return 0
+  [ -f "$global_dir/PROJECT_LOG.md" ] && return 0
+
+  cat > "$global_dir/PROJECT_LOG.md" <<'SDD_LOG_EOF'
+# Bitácora del proyecto / Project log
+
+Una entrada por sesión: qué se decidió, qué se hizo, qué queda.
+One entry per session: what was decided, what was done, what is left.
+
+| Fecha / Date | Sesión / Session | Resumen / Summary |
+|---|---|---|
+SDD_LOG_EOF
 }

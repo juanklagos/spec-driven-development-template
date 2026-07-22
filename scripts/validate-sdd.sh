@@ -56,10 +56,16 @@ require_file "specs/_template/spec.md"
 if [ -f "$ROOT/idea/IDEA_GENERAL.md" ]; then
   # Check if the file has real content beyond the template structure.
   # Strip HTML comments, blank lines, lines starting with # or <!-- or - (empty bullets), and *Created using*
-  real_content=$(sed -e 's/<!--.*-->//g' "$ROOT/idea/IDEA_GENERAL.md" \
+  # `|| true`: grep exits 1 when it selects nothing, and under `set -euo
+  # pipefail` that aborted the whole script mid-run — eight lines of output, no
+  # summary, no error. An idea file that is still a blank template is the NORMAL
+  # state of a brand-new workspace, and it is the second command QUICKSTART tells
+  # you to run.
+  real_content=$( { sed -e 's/<!--.*-->//g' "$ROOT/idea/IDEA_GENERAL.md" \
     | grep -vE '^\s*$|^\s*#|^\s*>|^\s*-\s*$|^\s*\*Created|^\s*---' \
     | grep -vE '^\s*<!--' \
-    | wc -c | tr -d ' ')
+    | wc -c | tr -d ' '; } || true )
+  real_content="${real_content:-0}"
   if [ "$real_content" -le 50 ]; then
     warn "idea/IDEA_GENERAL.md exists but appears to be unfilled (only template structure). Please add your project details."
   fi

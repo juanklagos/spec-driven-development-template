@@ -86,7 +86,8 @@ copy_framework_file() {
 
 copy_if_absent "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
 copy_if_absent "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
-copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
+# NOT a copy of mine (see sdd-scaffold.sh).
+sdd_write_empty_idea "$TARGET/idea"
 copy_if_absent "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
 # NOT a copy of the framework's own index: that listed specs the user does not have.
 sdd_write_empty_spec_index "$TARGET/specs"
@@ -97,7 +98,7 @@ copy_if_absent "$ROOT_DIR/specs/_template/research.md" "$TARGET/specs/_template/
 copy_if_absent "$ROOT_DIR/specs/_template/history.md" "$TARGET/specs/_template/history.md"
 copy_if_absent "$ROOT_DIR/specs/_template/contracts/README.md" "$TARGET/specs/_template/contracts/README.md"
 copy_if_absent "$ROOT_DIR/bitacora/README.md" "$TARGET/bitacora/README.md"
-copy_if_absent "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$TARGET/bitacora/global/PROJECT_LOG.md"
+sdd_write_empty_project_log "$TARGET/bitacora/global"
 copy_if_absent "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$TARGET/bitacora/templates/DAILY_TEMPLATE.md"
 copy_if_absent "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$TARGET/bitacora/templates/HANDOFF_TEMPLATE.md"
 copy_if_absent "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$TARGET/bitacora/templates/DECISION_TEMPLATE.md"
@@ -166,6 +167,26 @@ fi
 # project needs is a record of what it received and under what terms.
 sdd_write_attribution "$TARGET" "$ROOT_DIR"
 sdd_ensure_gitignore "$TARGET" ""
+
+# Version stamp. install-spec-sidecar.sh has written this for a while; this
+# scaffolder never did, so action.yml could not tell a stale workspace from a
+# current one on this path at all.
+read_template_version() {
+  local candidate
+  for candidate in "$ROOT_DIR/package.json" "$ROOT_DIR/../package.json"; do
+    if [ -f "$candidate" ]; then
+      sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$candidate" | head -n 1
+      return 0
+    fi
+  done
+  printf "unknown\n"
+}
+cat > "$TARGET/.sdd/TEMPLATE_VERSION" <<EOF
+template_version=$(read_template_version)
+profile=$PROFILE
+installed_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+source=https://github.com/juanklagos/spec-driven-development-template
+EOF
 
 cat <<MSG
 🎉 Project initialized at / Proyecto inicializado en: $TARGET

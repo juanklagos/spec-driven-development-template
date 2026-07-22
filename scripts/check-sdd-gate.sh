@@ -208,6 +208,42 @@ EOF_ORPHAN
   if [ "$orphan_count" -gt 0 ]; then
     warn "Consent log records $orphan_count spec(s) that do not exist here: $orphan_consent. If you started from a copy of the template, those approvals are not yours. Clear them with: ./scripts/reset-template.sh --confirm"
   fi
+
+  # Consent that predates this workspace.
+  #
+  # The orphan check above only fires when a consent line names a spec that is
+  # gone. It was written for that case and it MISSES the one that matters: a
+  # copy of the template carries specs AND their consent together, so nothing is
+  # orphaned and the newcomer's first gate run reports
+  # "open — 15 spec(s) approved and consented". Reproduced 2026-07-22.
+  #
+  # The honest signal is temporal, not content-based: a consent recorded BEFORE
+  # this workspace was installed cannot be its owner's. Both timestamps are
+  # ISO-8601 UTC, which sorts lexicographically — no date arithmetic in bash.
+  #
+  # No stamp, no warning. This template's own repository has no TEMPLATE_VERSION
+  # and must not accuse itself: an alarm that cries wolf teaches people to
+  # ignore it.
+  stamp_file="$ROOT/.sdd/TEMPLATE_VERSION"
+  if [ -f "$stamp_file" ]; then
+    installed_at="$(sed -n 's/^installed_at=\(.*\)$/\1/p' "$stamp_file" | head -n 1)"
+    case "$installed_at" in
+      [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T*)
+        inherited_count=0
+        while IFS= read -r consent_ts; do
+          [ -n "$consent_ts" ] || continue
+          if [ "$consent_ts" \< "$installed_at" ]; then
+            inherited_count=$((inherited_count + 1))
+          fi
+        done <<EOF_TS
+$(sed -n 's/^\[\([^]]*\)\].*/\1/p' "$inherited_log")
+EOF_TS
+        if [ "$inherited_count" -gt 0 ]; then
+          warn "Consent log has $inherited_count entr(y/ies) recorded BEFORE this workspace was installed ($installed_at). Those approvals belong to whoever you copied this from, not to you. Clear them with: ./scripts/reset-template.sh --confirm"
+        fi
+        ;;
+    esac
+  fi
 fi
 
 if [ "$spec_count" -eq 0 ]; then

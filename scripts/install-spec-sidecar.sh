@@ -91,7 +91,9 @@ copy_if_absent "$ROOT_DIR/templates/sidecar/sdd.policy.yaml" "$SPEC_ROOT/sdd.pol
 copy_if_absent "$ROOT_DIR/templates/sidecar/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md" \
   "$SPEC_ROOT/template-context/core-instructions/AGENT_OPERATING_SYSTEM.md"
 
-copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$SPEC_ROOT/idea/IDEA_GENERAL.md"
+# NOT a copy of mine: a new project must not open its idea file and read
+# this repository's problem statement.
+sdd_write_empty_idea "$SPEC_ROOT/idea"
 copy_if_absent "$ROOT_DIR/specs/README.md" "$SPEC_ROOT/specs/README.md"
 # Write a clean spec index for the new workspace instead of copying the
 # framework repo index (which carries this template's own spec rows).
@@ -103,7 +105,7 @@ copy_if_absent "$ROOT_DIR/specs/_template/research.md" "$SPEC_ROOT/specs/_templa
 copy_if_absent "$ROOT_DIR/specs/_template/history.md" "$SPEC_ROOT/specs/_template/history.md"
 copy_if_absent "$ROOT_DIR/specs/_template/contracts/README.md" "$SPEC_ROOT/specs/_template/contracts/README.md"
 copy_if_absent "$ROOT_DIR/bitacora/README.md" "$SPEC_ROOT/bitacora/README.md"
-copy_if_absent "$ROOT_DIR/bitacora/global/PROJECT_LOG.md" "$SPEC_ROOT/bitacora/global/PROJECT_LOG.md"
+sdd_write_empty_project_log "$SPEC_ROOT/bitacora/global"
 copy_if_absent "$ROOT_DIR/bitacora/templates/DAILY_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DAILY_TEMPLATE.md"
 copy_if_absent "$ROOT_DIR/bitacora/templates/HANDOFF_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/HANDOFF_TEMPLATE.md"
 copy_if_absent "$ROOT_DIR/bitacora/templates/DECISION_TEMPLATE.md" "$SPEC_ROOT/bitacora/templates/DECISION_TEMPLATE.md"
@@ -190,7 +192,7 @@ TEMPLATE_VERSION="$(read_template_version)"
 cat > "$SPEC_ROOT/.sdd/TEMPLATE_VERSION" <<EOF
 template_version=${TEMPLATE_VERSION:-unknown}
 profile=$PROFILE
-installed_at=$(date '+%Y-%m-%d %H:%M:%S %z')
+installed_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 source=https://github.com/juanklagos/spec-driven-development-template
 EOF
 

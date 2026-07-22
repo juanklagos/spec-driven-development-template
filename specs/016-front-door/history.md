@@ -1,0 +1,6 @@
+# Change history / Historial de cambios
+
+| Date / Fecha | Change type / Tipo de cambio | Summary / Resumen | Files impacted / Archivos impactados | Owner / Responsable |
+|---|---|---|---|---|
+| 2026-07-22 | Scope / Alcance | Borrador inicial tras el barrido de 84 agentes: 71 hallazgos confirmados, y los cinco de esta spec verificados a mano. Dos de ellos son trabajo del día anterior que no funciona: el aviso de consentimiento heredado diseñado para el caso equivocado, y el sello de versión que las reglas de ignorado que yo mismo escribí dejan fuera de git. | `spec.md` | Juan Carlos Alvarez Lagos |
+| 2026-07-22 | Implementation / Implementación | H1 y H2. El sello sale del ignorado y lo escriben los dos andamiadores con formato ISO-UTC unificado. El aviso de consentimiento heredado pasa a ser **temporal**: un consentimiento anterior a `installed_at` no puede ser del dueño del workspace. Sin sello, silencio — el propio template no se acusa. La tubería de `validate-sdd.sh` deja de abortar bajo `set -euo pipefail`. Idea y bitácora se crean vacías en vez de copiar las mías. Verificado sobre una copia real del repositorio: avisa nombrando 25 entradas heredadas; sobre el template: calla. | `scripts/{validate-sdd,check-sdd-gate,install-spec-sidecar,init-project}.sh`, `scripts/lib/sdd-scaffold.sh` | Claude |
