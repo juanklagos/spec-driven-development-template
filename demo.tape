@@ -38,6 +38,6 @@ Type "./spec/scripts/check-sdd-gate.sh . | tail -6"
 Enter
 Sleep 3.5s
 
-Type "# No code before approved spec and consistent plan ✅"
+Type "# The gate stays CLOSED until you approve the spec. That is the whole point ✅"
 Enter
 Sleep 2s
