@@ -21,7 +21,7 @@ import {
 } from "./convert";
 import { currentLang, translate } from "./i18n";
 import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates";
-import type {
+import type { DrawerTab,
   AppEdge,
   AppNode,
   BoardCanvas,
@@ -74,6 +74,8 @@ interface BuilderStore {
   saveState: SaveState;
   saveError: string | null;
   selectedSpecId: string | null;
+  /** Consumed once by SpecDrawer when a spec is opened; null means "summary". */
+  requestedDrawerTab: DrawerTab | null;
   editingEdgeId: string | null;
   liveStatus: LiveStatus;
   workspaceChanged: boolean;
@@ -107,7 +109,8 @@ interface BuilderStore {
   setEditingEdge: (id: string | null) => void;
   setViewMode: (mode: ViewMode) => void;
   setPresenceCount: (count: number) => void;
-  selectSpec: (id: string | null) => void;
+  /** Optional tab lets a caller land on the panel that matters (kanban -> approval). */
+  selectSpec: (id: string | null, tab?: DrawerTab) => void;
   applyTasks: (id: string, tasks: TaskItem[]) => void;
   refreshSpecs: () => Promise<void>;
   refreshGate: () => Promise<void>;
@@ -132,6 +135,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   loading: true,
   loadError: null,
   projectRoot: "",
+  requestedDrawerTab: null,
   nodes: [],
   edges: [],
   specs: {},
@@ -242,7 +246,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
       specs: { ...specs, [specId]: summary },
       nodes: [
         ...get().nodes,
-        { id: specId, type: "spec", position, data: { specId, file: `specs/${specId}/spec.md`, ...SPEC_CARD } }
+        { id: specId, type: "spec", deletable: false, position, data: { specId, file: `specs/${specId}/spec.md`, ...SPEC_CARD } }
       ]
     });
     get().scheduleSave();
@@ -292,7 +296,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
 
   setPresenceCount: (count) => set({ presenceCount: count }),
 
-  selectSpec: (id) => set({ selectedSpecId: id }),
+  selectSpec: (id, tab) => set({ selectedSpecId: id, requestedDrawerTab: tab ?? null }),
 
   applyTasks: (id, tasks) => {
     const spec = get().specs[id];
@@ -512,6 +516,13 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         const appended: AppNode[] = fresh.map((spec, i) => ({
           id: spec.id,
           type: "spec",
+          // sdd-note-spec-not-deletable: a spec card stands for a directory on
+          // disk. Pressing Delete used to remove the node, and then THIS very
+          // block put it back at the bottom of the board on the next live
+          // event — the card vanished and reappeared somewhere else, which
+          // reads as the tool corrupting itself. Notes stay deletable; they
+          // exist only on the canvas.
+          deletable: false,
           position: {
             x: (i % 3) * (SPEC_CARD.width + 40),
             y: (nodes.length > 0 ? maxBottom + 60 : 0) + Math.floor(i / 3) * (SPEC_CARD.height + 40)

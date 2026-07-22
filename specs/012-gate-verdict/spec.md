@@ -31,7 +31,7 @@ bash extrae `approved` mientras `packages/sdd-core/src/workspace.ts:251`, con un
 extrae `Pendiente`. La misma línea, dos respuestas, y la de bash es la que abre la puerta.
 
 Esta spec **no** construye el detector de código. Esa pieza (correlacionar los archivos cambiados
-contra las specs aprobadas) necesita datos que hoy no existen y se especifica aparte, en la 013. Lo
+contra las specs aprobadas) necesita datos que hoy no existen y se especifica aparte. Lo
 que sí hace esta spec es que un verde deje de poder significar «no comprobamos nada».
 
 ## Historia de usuario principal
@@ -95,8 +95,8 @@ comprobación ausente.
 
 ## Fuera de alcance / Out of scope
 
-- El detector de código (correlacionar archivos cambiados contra specs aprobadas). Va a la spec 013,
-  que **se está diseñando en paralelo a esta**, no aplazada indefinidamente: al aprobar la 012 el
+- El detector de código (correlacionar archivos cambiados contra specs aprobadas). Va a una spec posterior (la 013 y la 014 fueron a otra cosa),
+  que **se diseñó en paralelo a esta**, no aplazada indefinidamente: al aprobar la 012 el
   autor levantó la restricción con *«REVISA COMO SOLVENTARLO, NO IMPORTA SI HAY QUE CAMBIAR ALGO EN
   GENERAL»*, lo que autoriza expresamente cambios estructurales al framework (formatos, superficie de
   tools MCP, andamiadores, convenciones de git, plantilla de spec). Sale de la 012 por secuencia, no

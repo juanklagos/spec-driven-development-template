@@ -282,7 +282,7 @@ fi
 # suppressed. A green chip must never be able to mean "we did not check".
 printf "\nCompuerta / Gate: %s / %s — %s\n" "$verdict_es" "$verdict" "$verdict_why"
 printf "Comprobado / Checked: politica, estructura de specs, estado de aprobacion, consentimiento por spec, dependencias.\n"
-printf "NO comprobado / NOT checked: si el codigo del proyecto corresponde a una spec aprobada (spec 014).\n"
+printf "NO comprobado / NOT checked: si el codigo del proyecto corresponde a una spec aprobada.\n"
 
 printf "\nSDD Gate summary: %d error(s), %d warning(s).\n" "$errors" "$warnings"
 

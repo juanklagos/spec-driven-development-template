@@ -35,6 +35,7 @@ import { TopBar } from "./components/TopBar";
 import { Tour } from "./components/Tour";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useBuilderStore } from "./store";
 import type { AppEdge, AppNode, PaletteKind } from "./types";
@@ -284,6 +285,18 @@ function Shell() {
               colorMode="system"
               minZoom={0.2}
               deleteKeyCode={["Backspace", "Delete"]}
+              // Spec cards carry `deletable: false`, so React Flow already
+              // refuses them. This only explains WHY, once, instead of letting
+              // the key press do nothing and look broken.
+              onBeforeDelete={async ({ nodes: toDelete, edges: edgesToDelete }) => {
+                const specs = toDelete.filter((n) => n.type === "spec");
+                if (specs.length > 0) {
+                  toast(t("canvas.specNotDeletable"), {
+                    description: t("canvas.specNotDeletableWhy")
+                  });
+                }
+                return { nodes: toDelete.filter((n) => n.type !== "spec"), edges: edgesToDelete };
+              }}
               isValidConnection={(c) => c.source !== c.target}
             >
               <Background gap={22} />

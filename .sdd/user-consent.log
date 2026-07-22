@@ -26,3 +26,4 @@
 [2026-07-21 00:00:00 -0500] [spec:011-one-command-launcher] Consentimiento registrado en la aprobación de la spec (migrado del registro histórico)
 [2026-07-21 17:04:11 -0500] [spec:012-gate-verdict] El autor aprobo la spec 012 en chat: arreglar el fallo real del extractor, que la compuerta reporte todo lo posible para evitar errores sin hacer sufrir al usuario, y resolver la correlacion codigo-spec aun a costa de cambios estructurales
 [2026-07-21 21:01:06 -0500] [spec:013-gate-integrity] El autor aprobo la spec 013 en chat: arreglar los cuatro defectos de integridad a nivel senior con SOLID, dejando todo listo
+[2026-07-21 23:03:06 -0500] [spec:014-builder-first-five-minutes] El autor aprobo la spec 014 en chat: arreglar los tres defectos de los primeros cinco minutos del builder

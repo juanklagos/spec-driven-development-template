@@ -381,7 +381,11 @@ export function SpecDrawer() {
   pendingRef.current = pendingLine;
 
   useEffect(() => {
-    setTab("summary");
+    // Land on the panel the caller asked for (the kanban sends "approval"),
+    // then forget it so a later selection defaults to the summary again.
+    const requested = useBuilderStore.getState().requestedDrawerTab;
+    setTab(requested ?? "summary");
+    if (requested) useBuilderStore.setState({ requestedDrawerTab: null });
     setImplementOpen(false);
     if (!specId) {
       setDetail(null);

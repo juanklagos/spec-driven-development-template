@@ -75,6 +75,8 @@ const es = {
   "topbar.gate.open": "Gate abierto",
   "topbar.gate.closed": "Gate cerrado",
   "topbar.gate.blocked": "Gate bloqueado",
+  "canvas.specNotDeletable": "Las tarjetas de spec no se borran desde el lienzo",
+  "canvas.specNotDeletableWhy": "Cada tarjeta es una carpeta real en specs/. Bórrala en disco si de verdad quieres eliminarla; las notas sí se borran aquí.",
   "dash.reason.blocked": "Hay errores que arreglar antes de nada. Implementación bloqueada.",
   "gate.posture.checked": "Comprobado: política, estructura de specs, estado de aprobación, consentimiento por spec y dependencias.",
   "gate.posture.notChecked": "NO comprobado: si el código del proyecto corresponde a una spec aprobada.",
@@ -304,8 +306,6 @@ const es = {
   "kanban.col.approved": "Aprobada",
   "kanban.col.done": "Hecha",
   "kanban.empty": "— vacío —",
-  "kanban.toast": "🔒 La aprobación se hace en la spec",
-  "kanban.openSpec": "Abrir spec",
 
   // Notes
   "note.idea.new": "💡 Idea nueva",
@@ -412,6 +412,8 @@ const en: Record<keyof typeof es, string> = {
   "topbar.gate.open": "Gate open",
   "topbar.gate.closed": "Gate closed",
   "topbar.gate.blocked": "Gate blocked",
+  "canvas.specNotDeletable": "Spec cards cannot be deleted from the canvas",
+  "canvas.specNotDeletableWhy": "Each card is a real folder under specs/. Delete it on disk if you really mean to remove it; notes can be deleted here.",
   "dash.reason.blocked": "There are errors to fix first. Implementation blocked.",
   "gate.posture.checked": "Checked: policy, spec structure, approval status, per-spec consent and dependencies.",
   "gate.posture.notChecked": "NOT checked: whether the project code corresponds to an approved spec.",
@@ -639,8 +641,6 @@ const en: Record<keyof typeof es, string> = {
   "kanban.col.approved": "Approved",
   "kanban.col.done": "Done",
   "kanban.empty": "— empty —",
-  "kanban.toast": "🔒 Approval happens on the spec",
-  "kanban.openSpec": "Open spec",
 
   // Notes
   "note.idea.new": "💡 New idea",

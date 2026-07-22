@@ -132,6 +132,8 @@ export function boardToFlow(
         nodes.push({
           id: n.id,
           type: "spec",
+          // See sdd-note-spec-not-deletable in store.ts.
+          deletable: false,
           position,
           data: {
             specId,
@@ -172,6 +174,7 @@ export function boardToFlow(
     nodes.push({
       id: spec.id,
       type: "spec",
+      deletable: false,
       position: { x: (i % 3) * (SPEC_CARD.width + 40), y: baseY + Math.floor(i / 3) * (SPEC_CARD.height + 40) },
       data: { specId: spec.id, file: `specs/${spec.id}/spec.md`, ...SPEC_CARD }
     });

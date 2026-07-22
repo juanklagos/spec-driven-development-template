@@ -10,7 +10,6 @@ import {
   type DragEndEvent,
   type DragStartEvent
 } from "@dnd-kit/core";
-import { toast } from "sonner";
 import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import type { SpecSummary } from "../types";
@@ -136,14 +135,22 @@ function KanbanCard({
 function KanbanColumn({
   column,
   specs,
-  onOpen
+  onOpen,
+  acceptsDrop
 }: {
   column: (typeof COLUMNS)[number];
   specs: SpecSummary[];
   onOpen: (id: string) => void;
+  acceptsDrop: boolean;
 }) {
   const { t } = useT();
-  const { setNodeRef, isOver } = useDroppable({ id: `col-${column.key}`, data: { column: column.key } });
+  // Only the one legal transition accepts a drop: draft -> approved. "done" is
+  // derived from task completion, so it can never be a destination.
+  const { setNodeRef, isOver } = useDroppable({
+    id: `col-${column.key}`,
+    data: { column: column.key },
+    disabled: !acceptsDrop
+  });
   return (
     <section
       ref={setNodeRef}
@@ -168,7 +175,6 @@ function KanbanColumn({
 }
 
 export function KanbanBoard() {
-  const { t } = useT();
   const specsById = useBuilderStore((s) => s.specs);
   const selectSpec = useBuilderStore((s) => s.selectSpec);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
@@ -204,13 +210,20 @@ export function KanbanBoard() {
     const spec = specsById[specId];
     const target = event.over?.data.current?.column as ColumnKey | undefined;
     if (!spec || !target || target === columnForSpec(spec)) return;
-    // v1: state lives in the .md files only — moving a card changes nothing.
-    toast(t("kanban.toast"), {
-      action: {
-        label: t("kanban.openSpec"),
-        onClick: () => selectSpec(specId)
-      }
-    });
+
+    // Dragging OPENS the approval, it never performs it.
+    //
+    // The card used to snap back and show a toast: a draggable thing that
+    // cannot be dropped anywhere is a broken affordance. But making a drag
+    // approve a spec would undercut the whole product — approval is a
+    // deliberate act with an approver and evidence, not a gesture. So the drag
+    // takes you to the form.
+    //
+    // "done" is not a destination: it is computed from completed tasks, so it
+    // is not offered as a drop target at all (see droppable below).
+    if (columnForSpec(spec) === "draft" && target === "approved") {
+      selectSpec(specId, "approval");
+    }
   };
 
   const dragSpec = dragId ? specsById[dragId] : undefined;
@@ -220,7 +233,14 @@ export function KanbanBoard() {
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <div className="grid min-h-0 flex-1 grid-cols-[repeat(3,minmax(15rem,1fr))] gap-3.5 overflow-x-auto p-4">
           {COLUMNS.map((column) => (
-            <KanbanColumn key={column.key} column={column} specs={byColumn[column.key]} onOpen={handleOpen} />
+            <KanbanColumn
+              key={column.key}
+              column={column}
+              specs={byColumn[column.key]}
+              onOpen={handleOpen}
+              // Only while a draft is in hand, and only the approved column.
+              acceptsDrop={column.key === "approved" && dragSpec != null && columnForSpec(dragSpec) === "draft"}
+            />
           ))}
         </div>
         <DragOverlay dropAnimation={null}>

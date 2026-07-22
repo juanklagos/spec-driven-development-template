@@ -6,7 +6,7 @@
 // surgical replace lives in sdd-core — the rest of spec.md (the approval
 // block included) is never touched.
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { api, errorMessage } from "../api";
 import { lintEarsCriterion } from "../ears";
@@ -143,6 +143,34 @@ function ListEditor({ items, onChange, placeholder, addLabel, earsAutocomplete, 
   );
 }
 
+/**
+ * Unsaved edits, kept per spec id while the app is open.
+ *
+ * The effect below re-primes every field when another spec is selected. Without
+ * this it overwrote whatever you had typed and there was no warning, no dirty
+ * marker and no undo: click another card mid-sentence and the sentence was
+ * gone. Rather than block the switch with a dialog, the draft travels with the
+ * spec — switch away and back and your text is still there.
+ *
+ * Module scope, not the store: this is transient UI state that must not be
+ * persisted, replayed by undo, or shipped over the wire.
+ */
+type SectionDraft = {
+  story: string;
+  scenarios: string[];
+  criteria: string[];
+  requirements: string[];
+  properties: string[];
+  successCriteria: string[];
+  outOfScope: string;
+};
+const drafts = new Map<string, SectionDraft>();
+
+/** Exposed so a workspace switch can drop drafts that belong to another project. */
+export function clearSectionDrafts(): void {
+  drafts.clear();
+}
+
 export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
   const { t, lang } = useT();
   const parsed = useMemo(() => parseSpecSections(specMarkdown), [specMarkdown]);
@@ -161,15 +189,37 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
   const earsPrefix = lang === "es" ? EARS_PREFIX_ES : EARS_PREFIX_EN;
   const earsPlaceholder = lang === "es" ? EARS_PLACEHOLDER_ES : EARS_PLACEHOLDER_EN;
 
-  // Re-prime the form when another spec is selected.
+  // Re-prime the form when another spec is selected — WITHOUT discarding what
+  // was typed. The outgoing draft is stashed under its own spec id first.
+  const previousSpecId = useRef(specId);
+  const current = { story, scenarios, criteria, requirements, properties, successCriteria, outOfScope };
+  const currentRef = useRef(current);
+  currentRef.current = current;
+
   useEffect(() => {
-    setStory(parsed.story);
-    setScenarios(parsed.scenarios);
-    setCriteria(parsed.criteria);
-    setRequirements(parsed.requirements);
-    setProperties(parsed.properties);
-    setSuccessCriteria(parsed.successCriteria);
-    setOutOfScope(parsed.outOfScope);
+    const leaving = previousSpecId.current;
+    if (leaving && leaving !== specId) {
+      drafts.set(leaving, currentRef.current);
+    }
+    previousSpecId.current = specId;
+
+    const restored = drafts.get(specId);
+    const next = restored ?? {
+      story: parsed.story,
+      scenarios: parsed.scenarios,
+      criteria: parsed.criteria,
+      requirements: parsed.requirements,
+      properties: parsed.properties,
+      successCriteria: parsed.successCriteria,
+      outOfScope: parsed.outOfScope
+    };
+    setStory(next.story);
+    setScenarios(next.scenarios);
+    setCriteria(next.criteria);
+    setRequirements(next.requirements);
+    setProperties(next.properties);
+    setSuccessCriteria(next.successCriteria);
+    setOutOfScope(next.outOfScope);
     setError(null);
     setSavedNote(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,6 +260,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
       setSavedNote(
         touched.length === 1 ? t("editor.saved.one") : t("editor.saved.many", { n: touched.length })
       );
+      drafts.delete(specId);
       onSaved();
     } catch (err) {
       setError(errorMessage(err));

@@ -206,3 +206,6 @@ export interface LiveChange {
 
 export type ChangeKind = "board" | "specs";
 export type LiveStatus = "on" | "off";
+
+/** Tabs of the spec drawer, so callers can open the one that matters. */
+export type DrawerTab = "summary" | "sections" | "approval" | "relations";
