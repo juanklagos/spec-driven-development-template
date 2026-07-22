@@ -200,9 +200,38 @@ async function main() {
       `sdd_validate returned no structured result: ${validation.content?.[0]?.text}`
     );
 
+    // The builder UI must be IN the tarball (spec 011 R1).
+    //
+    // This assertion, not the config change, is the deliverable. Both mechanisms
+    // that could stage the UI fail silently: `files: ["dist"]` simply omits what
+    // is not there, and copying through the framework payload hits an
+    // EXCLUDED_NAMES entry for "dist" that matches on basename and copies
+    // nothing without throwing. Either would publish a green release with no
+    // frontend — which is what shipped for two releases.
+    const builderRoot = path.join(projectDir, "node_modules/@juanklagos/sdd-mcp/dist/builder-ui");
+    assert.ok(
+      await exists(path.join(builderRoot, "index.html")),
+      `The SDD Builder UI is missing from the installed package (${builderRoot}). Using the builder would require cloning the repository.`
+    );
+    const builderAssets = await fs.readdir(path.join(builderRoot, "assets")).catch(() => []);
+    const builderBundles = builderAssets.filter((f) => f.endsWith(".js"));
+    assert.ok(
+      builderBundles.length > 0,
+      `The builder shipped an index.html with no JavaScript bundle under ${builderRoot}/assets — a shell with no app.`
+    );
+    // And the shell must actually reference the bundle it shipped: a stale
+    // index.html pointing at a hash that no longer exists serves a blank page.
+    const builderHtml = await fs.readFile(path.join(builderRoot, "index.html"), "utf8");
+    const referenced = builderHtml.match(/\/assets\/([^"']+\.js)/)?.[1];
+    assert.ok(
+      referenced && builderBundles.includes(referenced),
+      `index.html references "${referenced}", which is not among the shipped bundles (${builderBundles.join(", ")}).`
+    );
+
     console.log("npm package smoke test passed");
     console.log(`Tarballs: ${path.basename(coreTarball)}, ${path.basename(mcpTarball)}`);
     console.log(`Bins: sdd-mcp, sdd-mcp-http`);
+    console.log(`Builder UI: index.html + ${builderBundles.length} bundle(s)`);
     console.log(`Workspace created at: ${projectRoot}`);
   } finally {
     await transport.close().catch(() => {});

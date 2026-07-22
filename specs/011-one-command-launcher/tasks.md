@@ -1,6 +1,6 @@
 # Tareas 011 - one-command-launcher
 
-- [ ] T1 (R1): publicar `builder/dist` en el paquete y resolver `BUILDER_DIST` desde node_modules; smoke del tarball.
+- [x] T1 (R1): publicar `builder/dist` en el paquete y resolver `BUILDER_DIST` desde node_modules; smoke del tarball.
 - [ ] T2 (R2): fallback de puerto + URL efectiva impresa.
 - [ ] T3 (R3): apertura automática del navegador con `--no-open`.
 - [ ] T4 (R4): selector interactivo de workspace + banderas no interactivas.
