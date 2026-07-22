@@ -8,9 +8,9 @@
 
 🇺🇸 **English** · [🇪🇸 Español](./README.es.md)
 
-<img src="https://img.shields.io/badge/version-v2.0.0-3b82f6?style=for-the-badge" alt="Version">
+<img src="https://img.shields.io/badge/version-v2.1.0-3b82f6?style=for-the-badge" alt="Version">
 <img src="https://img.shields.io/badge/license-MIT-8b5cf6?style=for-the-badge" alt="License">
-<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v2.0.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Latest release"></a>
+<a href="https://github.com/juanklagos/spec-driven-development-template/releases/tag/v2.1.0"><img src="https://img.shields.io/badge/release-latest-10b981?style=for-the-badge" alt="Latest release"></a>
 
 <a href="https://juanklagos.github.io/spec-driven-development-template/"><img src="https://img.shields.io/badge/📖_Docs_Site-Browse-0ea5e9?style=for-the-badge" alt="Documentation site"></a>
 <a href="https://github.com/juanklagos/aprende-sdd"><img src="https://img.shields.io/badge/🎓_Course-Learn_by_doing-16a34a?style=for-the-badge" alt="Interactive course"></a>
@@ -116,7 +116,7 @@ If you use **Claude Code**, this repo ships slash commands out of the box. Start
 Enforce it in CI too. This repo doubles as a GitHub Action, listed on the [GitHub Marketplace](https://github.com/marketplace/actions/sdd-validate):
 
 ```yaml
-- uses: juanklagos/spec-driven-development-template@v2.0.0
+- uses: juanklagos/spec-driven-development-template@v2.1.0
   with:
     path: "."      # project root (sidecar or standalone auto-detected)
     strict: "true"
@@ -241,7 +241,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 - License: **MIT** — use it anywhere, including commercially and inside a company, free and without
   asking. Keep the copyright notice. [Legal guide](./docs/en/31-legal-framework-and-commercial-use.md)
 - What you write with the templates is yours: [TEMPLATE-OUTPUT.md](./TEMPLATE-OUTPUT.md)
-- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v2.0.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v2.0.0)
+- Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v2.1.0](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v2.1.0)
 - Copyright (c) 2026 Juan Carlos Alvarez Lagos ([AUTHORS.md](./AUTHORS.md))
 
 ---

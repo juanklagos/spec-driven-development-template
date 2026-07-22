@@ -12,6 +12,39 @@ Nothing yet.
 
 ---
 
+## [v2.1.0] — 2026-07-21
+
+Spec 012. The gate could not tell "you may implement" apart from "nothing is approved, so there is
+nothing to implement" — both were green — and two separate defects let an unapproved spec read as
+approved. This release fixes that and makes the gate state its own scope on every run.
+
+### Added
+- **A three-state verdict: `open` / `closed` / `blocked`**, on `GateResult` and `GateSummary`, derived from one rule (`computeVerdict` in `sdd-core`) so bash, the MCP tools, the dashboard and the builder cannot drift apart. Errors always win. `closed` is no longer painted red — nothing approved yet is where every project starts, and colouring it as a failure teaches people to ignore the colour.
+- **A posture line, printed on every run and impossible to suppress**, stating what the gate checked and — the part that matters — what it did not: *"NOT checked: whether the project code corresponds to an approved spec."* A green result can no longer mean "we did not look".
+- **`--require-open`** on `check-sdd-gate.sh`: exit 2 when the gate is closed, distinguishable from the 1 that means errors. Default exit codes are unchanged, so no existing Action consumer turns red.
+- **`## Ámbito de archivos / File scope`** in the spec template, parsed (`extractFileScope`), exposed on `SpecSummary.fileScope` and `sdd_list_specs`, and **enforced by nothing**. The data starts accruing now so the code-correlation spec has something real to compare a pull request diff against instead of inventing a convention later.
+- **A warning when the consent log names specs that do not exist here** — the "Use this template" and `degit` case, where a new project arrives certifying approvals its owner never gave.
+
+### Fixed
+- **An unapproved spec could read as approved (fail-open).** `check-sdd-gate.sh` and `validate-sdd.sh` each carried their own greedy `sed`, which captures the LAST backtick pair on the line. On `- Estado / Status: \`Pendiente\` (target: \`approved\`)` bash extracted `approved` while `workspace.ts` extracted `Pendiente`. One implementation now (`sdd_extract_status_value`), with a drift test that compares the two extractions over an adversarial table — the previous test pinned the regex constants and never the extraction, which is how this slipped through.
+- **The dashboard told users with zero approved specs that implementation was allowed.** `dash.reason.open` rendered whenever `ok` was true, and `ok` is true when nothing is approved and nothing is broken.
+- **`sdd_record_user_consent` never accepted `specId`**, though `recordUserConsent` has always taken it. Every consent recorded through the MCP server — this project's own primary agent interface — landed as a markerless legacy line, silently downgrading per-spec enforcement to a warning.
+- **`validate-sdd.sh --strict` compared nothing in CI.** It called `git diff --name-only` with no revision range, which only reports uncommitted changes; after a clean checkout the tree is pristine, so the check had never once fired on a pull request. It now resolves a real base (`SDD_DIFF_BASE`, then `GITHUB_BASE_REF` against the remote-tracking ref), with every git call guarded. `.github/workflows/validate.yml` gained `fetch-depth: 0`, without which the base ref is not in the checkout.
+- **`reset-template.sh --confirm` left inherited approvals behind.** The documented cleanup path deleted every spec and kept the consent log, including entries with no `[spec:]` marker that permanently downgrade future consent errors. It now archives the log into `.sdd/inherited/<date>/`.
+- **`check-sdd-gate.sh` parsed arguments positionally**, so `./scripts/check-sdd-gate.sh --require-open` failed with "not an SDD workspace".
+
+### Changed
+- Claims across both READMEs, the docs site taglines, guide 50, the `/sdd:gate` command files and the `llms.txt` generator now describe what the gate verifies (approval, plan consistency, recorded consent) and no longer imply it inspects code. The 16 occurrences of the hard-stop phrase are deliberately untouched: they state the rule as an instruction to an agent, which is true, and `check-sdd-policy.sh` verifies their exact wording.
+
+### Note for TypeScript consumers
+`GateResult`, `GateSummary` and `SpecSummary` gained required fields (`verdict`, `verdict`, `fileScope`). They are return types, so reading code is unaffected; only code that *constructs* one of these objects by hand needs updating.
+
+### Verified
+- Four SDD scripts at 0 errors · `mcp:test` · `mcp:pack:smoke` (tarballs installed into a throwaway project) · site build 158 pages · builder typecheck and build
+- The drift test verified failing against the previous code; the schema round-trip assertion verified failing with the field removed; `--require-open` verified returning 2 on a real sidecar install over a project with existing code
+
+---
+
 ## [v2.0.0] — 2026-07-21
 
 ### BREAKING — relicensed to MIT
