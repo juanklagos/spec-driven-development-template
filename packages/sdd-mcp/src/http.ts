@@ -79,7 +79,16 @@ const server = http.createServer(async (req, res) => {
 
 // The printed URL is the address we actually bound to, not an assumption.
 server.listen(port, host, () => {
-  console.error(`SDD MCP Streamable HTTP server listening on http://${hostForUrl(host)}:${port}/mcp`);
+  // The board first, and by name. This used to print the /mcp URL alone, so somebody
+  // following START_HERE opened a protocol endpoint and concluded it was broken.
+  const base = `http://${hostForUrl(host)}:${port}`;
+  console.error(
+    [
+      `SDD Builder — el lienzo / the board:  ${base}/builder`,
+      `Dashboard:                            ${base}/dashboard`,
+      `MCP endpoint (para tu agente / for your agent):  ${base}/mcp`
+    ].join("\n")
+  );
   if (!isLoopbackHost(host)) {
     console.error(
       [
