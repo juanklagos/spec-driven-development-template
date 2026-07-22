@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 // Sync ../docs/{en,es}/*.md into src/content/docs/{en,es}/guides/ for Starlight:
+// - publish both locales under the SAME file name (the English one, paired by guide number),
+//   because Starlight matches translations by file path: with different names it treats the
+//   Spanish and English guide as two pages and lists both in every sidebar
 // - inject frontmatter title from the first H1 (then strip it)
 // - drop the "back to index" badge line and the language-pair section header noise
 // - rewrite links so nothing 404s on the site:
@@ -11,13 +14,17 @@
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertGuidesAreCovered, publishedSlugs } from '../src/guides.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = normalize(join(here, '..', '..'));
 const GITHUB = 'https://github.com/juanklagos/spec-driven-development-template/blob/main';
 const RAW = 'https://raw.githubusercontent.com/juanklagos/spec-driven-development-template/main';
 
-const slugOf = (file) => file.replace(/\.md$/, '').toLowerCase();
+// Every guide must have a counterpart in the other locale and a home in exactly one sidebar
+// group. Throwing here beats publishing a guide nobody can reach from the menu.
+const guideCount = assertGuidesAreCovered();
+const slugOf = publishedSlugs();
 
 // Curated learning-level map (guide number -> level). Everything else = reference.
 const LEVELS = {
@@ -82,7 +89,9 @@ for (const locale of ['en', 'es']) {
 	mkdirSync(outDir, { recursive: true });
 	const files = readdirSync(srcDir).filter((f) => f.endsWith('.md'));
 	for (const f of files) {
-		writeFileSync(join(outDir, f.toLowerCase()), transform(join(srcDir, f), locale, f));
+		// Published under the shared (English) name so Starlight pairs the two locales.
+		writeFileSync(join(outDir, `${slugOf(f)}.md`), transform(join(srcDir, f), locale, f));
 	}
 	console.log(`${locale}: ${files.length} guides synced`);
 }
+console.log(`${guideCount} guides paired across locales and covered by the sidebar`);

@@ -1,13 +1,19 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { buildLegacyRedirects, buildSidebar } from './src/guides.mjs';
+
+const base = '/spec-driven-development-template';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://juanklagos.github.io',
-	base: '/spec-driven-development-template',
+	base,
 	redirects: {
-		'/': '/spec-driven-development-template/en/',
+		'/': `${base}/en/`,
+		// Guides used to be published under their Spanish file name; they now share the
+		// English one so Starlight pairs the locales. Keep the old URLs alive.
+		...buildLegacyRedirects(base),
 	},
 	integrations: [
 		starlight({
@@ -26,12 +32,7 @@ export default defineConfig({
 				en: { label: 'English', lang: 'en' },
 				es: { label: 'Español', lang: 'es' },
 			},
-			sidebar: [
-				{
-					label: 'Guides / Guías',
-					items: [{ autogenerate: { directory: 'guides' } }],
-				},
-			],
+			sidebar: buildSidebar(),
 		}),
 	],
 });
