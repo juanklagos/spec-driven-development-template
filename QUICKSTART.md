@@ -26,6 +26,28 @@ git clone https://github.com/juanklagos/spec-driven-development-template.git my-
 cd my-project
 ```
 
+### 1b) Clear the template's own work / Limpia el trabajo del propio template
+
+Run this first, before anything else:
+
+Ejecuta esto antes que nada:
+
+```bash
+./scripts/reset-template.sh --confirm
+```
+
+EN: a copy of this repository arrives carrying the template's own specs and its
+recorded approvals. They are not yours, and until you clear them your gate is
+reporting on somebody else's project. This removes the example specs and
+archives the inherited consent log into `.sdd/inherited/`.
+
+ES: una copia de este repositorio llega con las specs del propio template y sus
+aprobaciones registradas. No son tuyas, y hasta que las borres tu compuerta está
+informando sobre el proyecto de otra persona. Esto elimina las specs de ejemplo
+y archiva el registro de consentimiento heredado en `.sdd/inherited/`.
+
+The gate warns you if you skip it. / La compuerta te avisa si te lo saltas.
+
 ### 2) Create execution workspace / Crea espacio de ejecución
 
 ```bash

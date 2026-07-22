@@ -182,6 +182,34 @@ done < <(find "$ROOT/specs" -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9][0-
       [ -f "$d/spec.md" ] && printf "%s\n" "$d/spec.md"
     done)
 
+# Inherited consent, checked unconditionally.
+#
+# The "Use this template" button and degit copy .sdd/user-consent.log verbatim,
+# so a brand-new project starts out certifying approvals its owner never gave.
+# reset-template.sh now archives the log, but a workspace copied before that fix
+# still carries it and nothing else would ever mention it.
+#
+# This must sit at the top level: the workspace it catches has ZERO approved
+# specs — often zero specs at all — so anything nested inside the approved-specs
+# branch below could never see it.
+inherited_log="$ROOT/.sdd/user-consent.log"
+if [ -s "$inherited_log" ]; then
+  orphan_consent=""
+  orphan_count=0
+  while IFS= read -r consent_spec; do
+    [ -n "$consent_spec" ] || continue
+    if [ ! -d "$ROOT/specs/$consent_spec" ]; then
+      orphan_consent="${orphan_consent}${orphan_consent:+, }${consent_spec}"
+      orphan_count=$((orphan_count + 1))
+    fi
+  done <<EOF_ORPHAN
+$(sed -n 's/.*\[spec:\([^]]*\)\].*/\1/p' "$inherited_log" | sort -u)
+EOF_ORPHAN
+  if [ "$orphan_count" -gt 0 ]; then
+    warn "Consent log records $orphan_count spec(s) that do not exist here: $orphan_consent. If you started from a copy of the template, those approvals are not yours. Clear them with: ./scripts/reset-template.sh --confirm"
+  fi
+fi
+
 if [ "$spec_count" -eq 0 ]; then
   warn "No numbered specs found; gate check skipped."
 else

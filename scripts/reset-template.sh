@@ -19,6 +19,7 @@ if [ "${1:-}" != "--confirm" ]; then
   - Clear STATUS.md (keep template format)
   - Remove any numbered spec folders in specs/ (001-*, 002-*, etc.)
   - Remove analysis/ output files
+  - Archive .sdd/user-consent.log (approvals inherited from the template)
 
   Files in examples/, docs/, and scripts/ will NOT be touched.
 
@@ -30,6 +31,23 @@ MSG
 fi
 
 echo "🔄 Resetting SDD template to clean state..."
+
+# Archive the consent log instead of leaving it in place.
+#
+# This command deletes every numbered spec, but it used to keep
+# .sdd/user-consent.log untouched — so the documented cleanup path handed the
+# new owner a log full of approvals they never gave, and any entry without a
+# [spec:] marker permanently downgrades every future consent error to a warning.
+# The log is archived rather than deleted: it is a record, just not this
+# project's record.
+CONSENT_LOG="$ROOT/.sdd/user-consent.log"
+if [ -s "$CONSENT_LOG" ]; then
+  ARCHIVE_DIR="$ROOT/.sdd/inherited/$(date +%Y-%m-%d)"
+  mkdir -p "$ARCHIVE_DIR"
+  mv "$CONSENT_LOG" "$ARCHIVE_DIR/user-consent.log"
+  echo "  📦 Archived $(wc -l < "$ARCHIVE_DIR/user-consent.log" | tr -d ' ') inherited consent line(s) to ${ARCHIVE_DIR#$ROOT/}/user-consent.log"
+  echo "     Those approvals belonged to the template, not to you."
+fi
 
 # Reset IDEA_GENERAL.md to template-only version
 cat > "$ROOT/idea/IDEA_GENERAL.md" <<'IDEA'

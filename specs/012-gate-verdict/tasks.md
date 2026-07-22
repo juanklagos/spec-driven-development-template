@@ -40,9 +40,9 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 - [x] **T3b** Rango de revisiones real en `scripts/validate-sdd.sh:127` y `:131`. Añadir
       `fetch-depth: 0` en `.github/workflows/validate.yml:14`. Verificar que la comprobación se
       dispara de verdad en un PR.
-- [ ] **T3c** Aviso de compuerta cuando el workspace todavía contiene las specs de ejemplo del
+- [x] **T3c** Aviso de compuerta cuando el workspace todavía contiene las specs de ejemplo del
       template.
-- [ ] **T3d** Documentar `reset-template.sh --confirm` como primer paso para quien llega por «Use
+- [x] **T3d** Documentar `reset-template.sh --confirm` como primer paso para quien llega por «Use
       this template» o `degit`, en QUICKSTART y en ambos READMEs.
 - [x] **T3e** Sección `## Ámbito de archivos / File scope` en `specs/_template/spec.md`. Solo el
       encabezado: nada de prosa dentro de un archivo de plantilla, que sobrevive al `cp`.
