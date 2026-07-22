@@ -23,6 +23,7 @@ import { docsUrl } from "./help";
 import { useT } from "./i18n";
 import { startLive } from "./live";
 import { AssistantWizard } from "./components/AssistantWizard";
+import { CommandPalette } from "./components/CommandPalette";
 import { KanbanBoard } from "./components/KanbanBoard";
 import { LabeledEdge } from "./components/LabeledEdge";
 import { NewSpecModal } from "./components/NewSpecModal";
@@ -145,6 +146,21 @@ function Shell() {
 
   // Undo/redo keyboard shortcuts (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z), skipped
   // while typing in inputs/textareas so text editing keeps its own undo.
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  // Cmd+K / Ctrl+K opens the palette. Unlike undo below, it fires from inside
+  // inputs too: wanting to jump somewhere while typing is the normal case.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "z") return;
@@ -254,6 +270,7 @@ function Shell() {
         <main className="main">
           <KanbanBoard />
           <SpecDrawer />
+          <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
         </main>
       ) : (
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>

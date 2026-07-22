@@ -19,8 +19,9 @@ prueba lo dirá antes de que falle en runtime.
 **Consentimiento.** `recordUserConsent(root, summary, specId)` existe en el core. Falta la ruta HTTP
 y el cliente. Va detrás de una acción explícita: el usuario escribe o confirma, nunca automático.
 
-**Paleta.** shadcn ya trae `command`. El atajo global es un `keydown` en `App.tsx` junto a los siete
-manejadores que ya existen.
+**Paleta.** ~~shadcn ya trae `command`~~ — **falso, verificado después**: no existe ese componente ni
+`cmdk` entre las dependencias. Se construye sobre el `Dialog` que sí está, sin dependencia nueva. El
+atajo global es un `keydown` en `App.tsx` junto a los siete manejadores que ya existen.
 
 ## Fases de implementación
 

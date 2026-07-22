@@ -17,14 +17,14 @@
 
 ## H3 — Llegar a una spec cuesta tres teclas
 
-- [ ] **T3a** `CommandPalette` con filtrado por número y título.
-- [ ] **T3b** Atajo global Cmd+K / Ctrl+K y cierre con Escape.
-- [ ] **T3c** Navegación con teclado completa y textos ES/EN.
+- [x] **T3a** `CommandPalette` con filtrado por número y título.
+- [x] **T3b** Atajo global Cmd+K / Ctrl+K y cierre con Escape.
+- [x] **T3c** Navegación con teclado completa y textos ES/EN.
 
 ## Verificación de cierre
 
-- [ ] `npx tsc --noEmit` y `npm run build` del builder en verde.
-- [ ] Los cuatro scripts SDD en 0 errores.
-- [ ] `npm run mcp:test` y `npm run mcp:pack:smoke` en verde.
-- [ ] Comprobado con el servidor arriba: título en tarjetas, consentimiento registrado desde el
+- [x] `npx tsc --noEmit` y `npm run build` del builder en verde.
+- [x] Los cuatro scripts SDD en 0 errores.
+- [x] `npm run mcp:test` y `npm run mcp:pack:smoke` en verde.
+- [x] Comprobado con el servidor arriba: título en tarjetas, consentimiento registrado desde el
       lienzo y compuerta refrescada, paleta abriendo y saltando.
