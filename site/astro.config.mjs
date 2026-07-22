@@ -18,6 +18,14 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'SDD Template',
+			// Two fixed files instead of one adaptive SVG: embedded as an image, the logo
+			// cannot see the site's data-theme, so prefers-color-scheme inside it would
+			// follow the operating system and vanish against the opposite site theme.
+			logo: {
+				light: './src/assets/logo-light.svg',
+				dark: './src/assets/logo-dark.svg',
+				alt: 'SDD Template',
+			},
 			description:
 				'Learn Spec-Driven Development and apply it to real projects with AI agents. / Aprende SDD y aplícalo en proyectos reales con agentes de IA.',
 			social: [
