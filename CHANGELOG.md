@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+---
+
+## [v2.2.0] — 2026-07-22
+
+### Added
+- **The SDD Builder now ships inside the npm package.** Until this release `builder/dist` never left the checkout: `packages/sdd-mcp` declared `files: ["dist"]` and the frontend lives outside it, so `npm pack` produced ~72 kB with no UI at all and using the visual board required cloning the repository. Two releases went out after that was identified. The tarball is now ~311 kB and carries `dist/builder-ui/`, so `npx -p @juanklagos/sdd-mcp sdd-mcp-http` opens a working board at `http://127.0.0.1:3334/builder` with nothing cloned. The build step fails loudly when the copy is empty or partial — both mechanisms it replaces failed silently, which is how an empty frontend shipped green.
+- **El SDD Builder ya viaja dentro del paquete npm.** Hasta este release `builder/dist` no salía del checkout, así que el paquete pesaba ~72 kB sin interfaz y para usar el lienzo había que clonar el repositorio. Ahora el tarball lleva `dist/builder-ui/` y el lienzo abre sin clonar nada.
+- **A three-state gate verdict.** `check-sdd-gate.sh` and the MCP tools answer `open | closed | blocked` instead of a green/red binary, and the gate prints an unsuppressible line declaring what it did **not** check — namely whether the project's code corresponds to an approved spec.
+- **Human titles, consent from the canvas, and a Cmd+K palette** in the builder.
+
 ### Fixed
 - **A recorded mitigation existed only on paper.** [The decision to run the consumer's scripts](bitacora/decisiones/2026-07-21-action-usa-los-scripts-del-consumidor.md) rests on `.sdd/TEMPLATE_VERSION` making a stale sidecar "detectable". The installer stamped it; nothing ever read it. `action.yml` now reads it and warns when the workspace predates the action — naming both versions and the refresh command. The decision itself is not reversed: which scripts run is unchanged, and the warning never touches the exit code. Its own revisit trigger had fired, because spec 012 fixed a *correctness* fail-open rather than a policy preference.
 - **`sdd_project_root` returned the wrong directory in git worktrees and submodules**, where `.git` is a file holding a pointer rather than a directory, so the `-d` test silently failed.

@@ -1,6 +1,6 @@
 {
   "name": "@juanklagos/sdd-mcp",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.7.4",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@juanklagos/sdd-core": "2.1.0",
+    "@juanklagos/sdd-core": "2.2.0",
     "zod": "^3.25.76"
   },
   "description": "Spec-Driven Development MCP server: specs, plans, gates, consent, status, logbook tools and a visual dashboard. Bilingual EN/ES.",
