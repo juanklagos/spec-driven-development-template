@@ -78,6 +78,13 @@ export const api = {
       body: JSON.stringify(evidence ? { approver, evidence } : { approver })
     }),
 
+  /** Record consent for one spec. Approval and consent stay two acts. */
+  recordConsent: (id: string, summary: string): Promise<{ logFile: string; summary: string; timestamp: string }> =>
+    request(`/api/spec/${encodeURIComponent(id)}/consent`, {
+      method: "POST",
+      body: JSON.stringify({ summary })
+    }),
+
   putSections: (id: string, sections: SpecSectionsInput): Promise<UpdateSpecSectionsResult> =>
     request(`/api/spec/${encodeURIComponent(id)}/sections`, {
       method: "PUT",

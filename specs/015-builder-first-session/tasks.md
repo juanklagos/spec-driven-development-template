@@ -10,10 +10,10 @@
 
 ## H2 — Una aprobación se completa sin terminal
 
-- [ ] **T2a** `POST /api/spec/:id/consent` en la API, con identificador explícito.
-- [ ] **T2b** Cliente en `builder/src/api.ts`.
-- [ ] **T2c** Acción en el drawer tras aprobar, con refresco de la compuerta.
-- [ ] **T2d** Textos ES/EN.
+- [x] **T2a** `POST /api/spec/:id/consent` en la API, con identificador explícito.
+- [x] **T2b** Cliente en `builder/src/api.ts`.
+- [x] **T2c** Acción en el drawer tras aprobar, con refresco de la compuerta.
+- [x] **T2d** Textos ES/EN.
 
 ## H3 — Llegar a una spec cuesta tres teclas
 

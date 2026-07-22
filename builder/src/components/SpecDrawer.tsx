@@ -83,6 +83,35 @@ function ApprovalPanel({
     }
   };
 
+  // Consent is a SECOND act, and until now the builder could not perform it:
+  // there was no route. You approved here, the card went green, and the gate
+  // still refused — repairable only from a terminal, which is a dead end for
+  // the audience this canvas exists for.
+  //
+  // Shown only when the gate says this spec is missing it, so it never becomes
+  // a button people click by reflex.
+  const gateIssues = useBuilderStore((s) => s.gate?.specIssues[specId]);
+  const needsConsent = (gateIssues ?? []).some(
+    (issue) => issue.code === "missing-spec-consent" || issue.code === "missing-consent-log"
+  );
+  const [consentBusy, setConsentBusy] = useState(false);
+  const [consentDone, setConsentDone] = useState(false);
+
+  const giveConsent = async () => {
+    if (consentBusy) return;
+    setConsentBusy(true);
+    setError(null);
+    try {
+      await api.recordConsent(specId, t("consent.summary", { spec: specId }));
+      setConsentDone(true);
+      onDone();
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setConsentBusy(false);
+    }
+  };
+
   const today = new Date().toISOString().slice(0, 10);
 
   return (
@@ -156,6 +185,23 @@ function ApprovalPanel({
       <Button onClick={() => void submit()} disabled={busy || !approver.trim()}>
         {busy ? t("approval.busy") : isApproved ? t("approval.update") : t("approval.submit")}
       </Button>
+
+      {needsConsent && !consentDone ? (
+        <div className="flex flex-col gap-2 rounded-md border border-border bg-[var(--muted)] px-3 py-2.5">
+          <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+            {t("consent.title")}
+          </span>
+          <p className="m-0 text-xs text-muted-foreground">{t("consent.why")}</p>
+          <Button variant="secondary" onClick={() => void giveConsent()} disabled={consentBusy}>
+            {consentBusy ? t("consent.busy") : t("consent.submit")}
+          </Button>
+        </div>
+      ) : null}
+      {consentDone ? (
+        <p className="m-0 rounded-md bg-[var(--primary-soft)] px-3 py-2 text-sm text-primary">
+          ✓ {t("consent.done")}
+        </p>
+      ) : null}
     </div>
   );
 }

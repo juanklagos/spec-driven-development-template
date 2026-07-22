@@ -5,6 +5,7 @@
 import http from "node:http";
 import {
   approveSpec,
+  recordUserConsent,
   createSpec,
   getBoardView,
   getGateSummary,
@@ -59,6 +60,24 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
         // Optional evidence overrides the line in spec.md (spec 010, R2).
         const evidence = typeof body.evidence === "string" ? body.evidence : undefined;
         json(res, 200, await approveSpec(projectRoot, approveMatch[1], body.approver, evidence));
+        return true;
+      }
+      // Consent, per spec. There was no route at all: the builder could approve
+      // a spec and then had no way to record consent, so the gate stayed closed
+      // and the only repair was a terminal — a dead end for exactly the
+      // audience the canvas exists for.
+      //
+      // Never inferred and never automatic: the spec id comes from the URL and
+      // the summary from the caller, because approval and consent are two
+      // separate decisions on purpose.
+      const consentMatch = route.match(/^\/api\/spec\/([^/]+)\/consent$/);
+      if (req.method === "POST" && consentMatch) {
+        const body = (await readBody(req)) as { summary?: string };
+        if (typeof body?.summary !== "string" || !body.summary.trim()) {
+          json(res, 400, { error: "Expected { summary: string }" });
+          return true;
+        }
+        json(res, 200, await recordUserConsent(projectRoot, body.summary.trim(), consentMatch[1]));
         return true;
       }
       const sectionsMatch = route.match(/^\/api\/spec\/([^/]+)\/sections$/);
