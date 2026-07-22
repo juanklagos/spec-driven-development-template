@@ -21,3 +21,4 @@
 | 017 | docs-navigation | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 018 | brand-logo | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 019 | docs-links | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
+| 020 | front-door-two-commands | In Progress / En progreso | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |

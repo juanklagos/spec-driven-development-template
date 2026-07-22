@@ -1,0 +1,6 @@
+# Change history / Historial de cambios
+
+| Date / Fecha | Change type / Tipo de cambio | Summary / Resumen | Files impacted / Archivos impactados | Owner / Responsable |
+|---|---|---|---|---|
+| 2026-07-22 | Implementation / Implementación | T1-T3, commiteadas y verificadas ejecutando. Andamiador con stdin cerrado: usa `target=mi-proyecto, mode=sidecar, profile=recommended`, los anuncia en las dos lenguas y crea el sidecar (salida 0). `node dist/index.js --http` arranca el servidor desde el binario principal y anuncia las tres direcciones por su nombre; comprobadas contra el puerto real: `/builder` 200, `/dashboard` 200, `/mcp` 405 —correcto, solo acepta POST—. `npm run build` y `npm run mcp:test` en verde. **T4 y T5 siguen abiertas**: la documentación (QUICKSTART y START_HERE) no se ha tocado, así que el camino que se anuncia por escrito todavía es el viejo. | `packages/create-sdd-project/index.mjs`, `packages/sdd-mcp/src/{http,index}.ts` | Claude |
+| 2026-07-22 | Scope / Alcance | Borrador tras publicar la 2.2.0 y revisar la puerta de entrada ejecutando los comandos, no leyéndolos. Cuatro tropiezos verificados; el más grave es que el primer comando de la puerta no técnica falla justo cuando lo ejecuta un agente, que es a quien esa puerta se lo manda ejecutar. | `spec.md` | Juan Carlos Alvarez Lagos |
