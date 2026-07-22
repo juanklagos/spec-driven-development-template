@@ -19,14 +19,14 @@ One command. It installs the compact `spec/` sidecar and leaves your code where 
 Un comando. Instala el sidecar compacto `spec/` y deja tu código donde está.
 
 ```bash
-npx @juanklagos/create-sdd-project my-project
+npx @juanklagos/create-sdd-project@latest my-project
 cd my-project
 ```
 
-EN: run it inside an existing project (`npx @juanklagos/create-sdd-project .`) and it adds
+EN: run it inside an existing project (`npx @juanklagos/create-sdd-project@latest .`) and it adds
 SDD without moving a single file of yours. It prints the exact next steps for what it did.
 
-ES: ejecútalo dentro de un proyecto que ya existe (`npx @juanklagos/create-sdd-project .`)
+ES: ejecútalo dentro de un proyecto que ya existe (`npx @juanklagos/create-sdd-project@latest .`)
 y añade SDD sin mover ni uno de tus archivos. Al terminar imprime los pasos exactos.
 
 > [!NOTE]

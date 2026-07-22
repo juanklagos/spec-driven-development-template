@@ -150,7 +150,7 @@ Full walkthrough example: [examples/002-mcp-end-to-end](./examples/002-mcp-end-t
 **Fastest start (no clone needed):**
 
 ```bash
-npx @juanklagos/create-sdd-project my-app
+npx @juanklagos/create-sdd-project@latest my-app
 ```
 
 It asks a few questions and scaffolds the recommended `spec/` sidecar, or a full workspace, from the latest template.

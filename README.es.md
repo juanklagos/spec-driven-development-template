@@ -150,7 +150,7 @@ Ejemplo completo de inicio a fin: [examples/002-mcp-end-to-end](./examples/002-m
 **El inicio más rápido (sin clonar nada):**
 
 ```bash
-npx @juanklagos/create-sdd-project mi-app
+npx @juanklagos/create-sdd-project@latest mi-app
 ```
 
 Te hace unas preguntas y crea el sidecar `spec/` recomendado, o un workspace completo, desde la última versión del template.

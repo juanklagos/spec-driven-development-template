@@ -17,7 +17,7 @@ Pick the case that is yours. Both use the same command and both leave your code 
 **New project** (the folder does not exist yet):
 
 ```bash
-npx @juanklagos/create-sdd-project my-app
+npx @juanklagos/create-sdd-project@latest my-app
 cd my-app
 ```
 
@@ -25,7 +25,7 @@ cd my-app
 
 ```bash
 cd /path/to/my-project
-npx @juanklagos/create-sdd-project .
+npx @juanklagos/create-sdd-project@latest .
 ```
 
 The dot means "right here". It does not move, rename or overwrite a single file of yours: it only adds a `spec/` folder next to what you already have. Everything SDD lives in there — `spec/idea/`, `spec/specs/`, `spec/bitacora/` and the scripts in `spec/scripts/` — and when it finishes the command prints your exact next steps.
@@ -37,7 +37,7 @@ The dot means "right here". It does not move, rename or overwrite a single file 
 From the project folder (this matters: the server discovers the workspace from the directory you launch it in):
 
 ```bash
-npx @juanklagos/sdd-mcp --http
+npx @juanklagos/sdd-mcp@latest --http
 ```
 
 You will see exactly this:
@@ -53,13 +53,13 @@ Open the **first** URL, `http://127.0.0.1:3334/builder`, in your browser. That i
 The server keeps running in that terminal for as long as you use it; stop it with `Ctrl+C`. If port 3334 is already taken, change it:
 
 ```bash
-SDD_MCP_HTTP_PORT=4000 npx @juanklagos/sdd-mcp --http
+SDD_MCP_HTTP_PORT=4000 npx @juanklagos/sdd-mcp@latest --http
 ```
 
 And if you would rather launch it from somewhere else instead of `cd`-ing into the folder, tell it where the project is:
 
 ```bash
-SDD_PROJECT_ROOT=/path/to/my-project npx @juanklagos/sdd-mcp --http
+SDD_PROJECT_ROOT=/path/to/my-project npx @juanklagos/sdd-mcp@latest --http
 ```
 
 ### Step 3 — What you will see the first time
@@ -172,7 +172,7 @@ The exact command per client — run each one from (or pointing at) the project 
 **Claude Code** (one command, from your project directory):
 
 ```bash
-claude mcp add sdd --env SDD_PROJECT_ROOT=$(pwd) -- npx -y @juanklagos/sdd-mcp
+claude mcp add sdd --env SDD_PROJECT_ROOT=$(pwd) -- npx -y @juanklagos/sdd-mcp@latest
 ```
 
 **Codex** (add to `~/.codex/config.toml`):
@@ -180,7 +180,7 @@ claude mcp add sdd --env SDD_PROJECT_ROOT=$(pwd) -- npx -y @juanklagos/sdd-mcp
 ```toml
 [mcp_servers.sdd]
 command = "npx"
-args = ["-y", "@juanklagos/sdd-mcp"]
+args = ["-y", "@juanklagos/sdd-mcp@latest"]
 env = { SDD_PROJECT_ROOT = "/absolute/path/to/your/project" }
 ```
 
@@ -191,7 +191,7 @@ env = { SDD_PROJECT_ROOT = "/absolute/path/to/your/project" }
   "mcpServers": {
     "sdd": {
       "command": "npx",
-      "args": ["-y", "@juanklagos/sdd-mcp"],
+      "args": ["-y", "@juanklagos/sdd-mcp@latest"],
       "env": { "SDD_PROJECT_ROOT": "/absolute/path/to/your/project" }
     }
   }
@@ -201,7 +201,7 @@ env = { SDD_PROJECT_ROOT = "/absolute/path/to/your/project" }
 **Claude Desktop / ChatGPT (HTTP connector)**: start the HTTP server and point a custom connector at the Streamable HTTP endpoint:
 
 ```bash
-SDD_PROJECT_ROOT=/absolute/path/to/your/project npm run mcp:http:start
+SDD_PROJECT_ROOT=/absolute/path/to/your/project npx @juanklagos/sdd-mcp@latest --http
 # connector URL: http://127.0.0.1:3334/mcp   (SDD_MCP_HTTP_PORT changes the port)
 ```
 

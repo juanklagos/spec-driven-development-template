@@ -18,7 +18,7 @@ EN:
 Using https://github.com/juanklagos/spec-driven-development-template, guide me step by step with SDD for my project.
 My project is: [describe your project in plain language].
 
-If my project is new, scaffold it for me with `npx @juanklagos/create-sdd-project`.
+If my project is new, scaffold it for me with `npx @juanklagos/create-sdd-project@latest`.
 If my project already exists, install the compact `spec/` sidecar into it and do not move my code.
 
 Explain every step in plain language, and tell me which files you created or changed.
@@ -28,7 +28,7 @@ ES:
 Usando https://github.com/juanklagos/spec-driven-development-template, guíame paso a paso con SDD para mi proyecto.
 Mi proyecto es: [explica tu proyecto en lenguaje simple].
 
-Si mi proyecto es nuevo, créalo con `npx @juanklagos/create-sdd-project`.
+Si mi proyecto es nuevo, créalo con `npx @juanklagos/create-sdd-project@latest`.
 Si mi proyecto ya existe, instálale el sidecar compacto `spec/` y no muevas mi código.
 
 Explícame cada paso en lenguaje simple, y dime qué archivos creaste o cambiaste.

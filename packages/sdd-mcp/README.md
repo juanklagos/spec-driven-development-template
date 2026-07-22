@@ -25,10 +25,10 @@ build step is required.
 
 ```bash
 # 1. stdio transport - what MCP clients (Claude, Cursor, Codex...) launch
-npx -y @juanklagos/sdd-mcp
+npx -y @juanklagos/sdd-mcp@latest
 
 # 2. Streamable HTTP transport - the visual board, the dashboard, and MCP at /mcp
-npx -y @juanklagos/sdd-mcp --http
+npx -y @juanklagos/sdd-mcp@latest --http
 # -> http://127.0.0.1:3334/builder    the SDD Builder canvas
 #    http://127.0.0.1:3334/dashboard  read-only status
 #    http://127.0.0.1:3334/mcp        the MCP endpoint itself
