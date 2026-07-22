@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-22`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — el autor pidió un logo, descartó dos rondas de conceptos, y sobre la tercera eligió *monograma → tratamiento «recortada» → color monocromo*, con alcance *«logo + conectarlo al sitio»*.
+- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — el autor pidió un logo, descartó dos rondas de conceptos, y sobre la tercera eligió *monograma → tratamiento «recortada» → color monocromo*, con alcance *«logo + conectarlo al sitio»*. Ampliación el mismo día: *«ahora el logo necesito que lo ponga en el builder»*.
 
 ## Contexto
 
@@ -38,6 +38,9 @@ confundirlo con cualquier sitio hecho con Astro.
    ve en ambos, sin depender del tema del sistema operativo.
 3. Dado el logo a 16 px, cuando lo miro, entonces la letra sigue siendo legible y no se cierra.
 4. Dado el logo, cuando lo pongo sobre un fondo cualquiera, entonces conserva su silueta.
+5. Dada la cabecera del builder, cuando la miro, entonces lleva el logo del proyecto y no un emoji.
+6. Dado el builder en claro y en oscuro, cuando cambio el tema del sistema, entonces el logo se ve
+   en los dos sin que haya que mantener dos copias del dibujo.
 
 ## Requisitos funcionales
 
@@ -50,6 +53,9 @@ confundirlo con cualquier sitio hecho con Astro.
   imagen no ve el `data-theme` del documento, así que ahí `prefers-color-scheme` seguiría al sistema
   operativo y no al interruptor del sitio.
 - **RF5** — El símbolo queda también en `docs/assets/`, disponible para README y materiales.
+- **RF6** — El builder muestra el símbolo en su cabecera, en lugar del emoji 🌱, y en su favicon.
+- **RF7** — En el builder el símbolo es SVG en línea con `currentColor`. Ahí sí está en el mismo
+  documento, así que hereda el color del texto y no necesita las dos copias que sí necesita el sitio.
 
 ## Fuera de alcance
 
@@ -57,3 +63,5 @@ confundirlo con cualquier sitio hecho con Astro.
   tipografía; un archivo con texto exigiría convertir la letra a trazos para ser portable.
 - Rehacer `docs/assets/social-preview.svg`, que sigue en naranja.
 - Cambiar el verde del builder, que se queda como color de estado.
+- El panel del servidor MCP (`packages/sdd-mcp/src/dashboard.ts`), que también lleva el 🌱 en su
+  título y en su marca. Es otra superficie y va aparte.

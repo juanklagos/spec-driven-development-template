@@ -5,6 +5,7 @@ import { exportBoardPng } from "../exportPng";
 import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import { HelpHint } from "./HelpHint";
+import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -268,7 +269,10 @@ export function TopBar() {
 
   return (
     <header className="z-20 flex items-center gap-3.5 border-b bg-card px-4 py-2">
-      <h1 className="m-0 text-base font-bold whitespace-nowrap">🌱 SDD Builder</h1>
+      <h1 className="m-0 flex items-center gap-2 text-base font-bold whitespace-nowrap">
+        <Logo />
+        SDD Builder
+      </h1>
       {projectRoot ? (
         // The path is truncated by CSS; the title shows the full workspace.
         <code className="workspace" title={`${t("topbar.workspace")}: ${projectRoot}`}>
