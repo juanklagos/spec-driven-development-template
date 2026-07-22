@@ -50,6 +50,7 @@ function KanbanCardBody({ spec, column }: { spec: SpecSummary; column: ColumnKey
   const gateErrors = gateIssues?.filter((issue) => issue.level === "error") ?? [];
   const myDeps = (depWarnings ?? []).filter((w) => w.dependent === spec.id);
   const { num, name } = splitSpecId(spec.id);
+  const label = spec.title || name;
   const { done, total } = spec.tasks;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const tone = column === "done" ? "done" : column === "approved" ? "ok" : "pending";
@@ -77,7 +78,7 @@ function KanbanCardBody({ spec, column }: { spec: SpecSummary; column: ColumnKey
           ) : null}
         </span>
       </div>
-      <h3 className="mt-2 mb-2.5 text-base leading-snug font-semibold capitalize">{name}</h3>
+      <h3 className="mt-2 mb-2.5 text-base leading-snug font-semibold" title={label}>{label}</h3>
       <div
         className="progress-track"
         role="progressbar"

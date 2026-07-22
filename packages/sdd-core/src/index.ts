@@ -900,6 +900,7 @@ export {
   // diverged silently once: bash read "approved" where this read "Pendiente".
   extractApprovalStatus,
   extractFileScope,
+  extractSpecTitle,
   frameworkAssetError,
   getFrameworkLayout,
   getFrameworkRoot,

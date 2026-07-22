@@ -36,6 +36,8 @@ export interface BoardCanvas {
 export type SpecTone = "pending" | "ok" | "done";
 
 export interface SpecSummary {
+  /** Human title from line 1 of spec.md. Never empty. */
+  title: string;
   id: string;
   dir: string;
   status: string;

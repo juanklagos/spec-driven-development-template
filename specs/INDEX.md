@@ -16,3 +16,4 @@
 | 012 | gate-verdict | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |
 | 013 | gate-integrity | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |
 | 014 | builder-first-five-minutes | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |
+| 015 | builder-first-session | In Progress / En progreso | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |

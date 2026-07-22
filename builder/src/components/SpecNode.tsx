@@ -23,6 +23,10 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
   const badgeText = t(tone === "done" ? "status.done" : tone === "ok" ? "status.approved" : "status.pending");
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const { num, name } = splitSpecId(data.specId);
+  // The human title from line 1 of spec.md. `name` (the directory slug) is the
+  // fallback: "builder-v5-pro-ux" and "builder-v4-teams" are indistinguishable
+  // at a glance, and the title was already being read and thrown away.
+  const label = spec?.title || name;
 
   return (
     <div className={`card spec-card${selected ? " selected" : ""}`} style={{ width: data.width }}>
@@ -50,7 +54,7 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
           <span className={`badge-tone ${tone}`}>{badgeText}</span>
         </span>
       </div>
-      <h3 className="mt-2 mb-2.5 text-base leading-snug font-semibold capitalize">{name}</h3>
+      <h3 className="mt-2 mb-2.5 text-base leading-snug font-semibold" title={label}>{label}</h3>
       <div
         className="progress-track"
         role="progressbar"

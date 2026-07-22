@@ -12,6 +12,11 @@ export interface SpecSummary {
   dir: string;
   status: string;
   /**
+   * Human title from line 1 of spec.md. Never empty: falls back to a label
+   * derived from the id, because a nameless card is worse than a slug.
+   */
+  title: string;
+  /**
    * Paths declared under "## Ámbito de archivos / File scope". Empty when the
    * section is absent or has no backticked entries.
    *
@@ -198,6 +203,7 @@ export async function listSpecs(projectRoot: string): Promise<SpecSummary[]> {
     items.push({
       id: entry.name,
       dir: path.join(specsRoot, entry.name),
+      title: extractSpecTitle(content, entry.name),
       status: extractApprovalStatus(content),
       fileScope: extractFileScope(content)
     });
@@ -277,6 +283,33 @@ export function extractFileScope(content: string): string[] {
     if (token) paths.push(token);
   }
   return paths;
+}
+
+/**
+ * The human title, from the first heading of spec.md.
+ *
+ * The template writes "# Especificación NNN - Title" / "# Specification NNN -
+ * Title", but specs written before that convention exist, so this degrades
+ * rather than failing: heading with a dash, then any first heading, then a
+ * label derived from the id. A card with no name reads as broken.
+ *
+ * The id stays visible next to it in the UI: it is what the user types in the
+ * terminal and in commit messages.
+ */
+export function extractSpecTitle(content: string, specId: string): string {
+  const heading = content.split(/\r?\n/).find((line) => /^#\s+\S/.test(line));
+  if (heading) {
+    const withoutHash = heading.replace(/^#\s+/, "").trim();
+    // "Especificación 012 - Título" -> "Título". Any dash the template may use.
+    const afterDash = withoutHash.match(/^(?:especificaci[oó]n|specification)\s+\S+\s*[-–—]\s*(.+)$/i)?.[1];
+    const title = (afterDash ?? withoutHash).trim();
+    // An unfilled template still has its placeholders ("[Spec Number]",
+    // "[Feature Name]"). Showing those verbatim is worse than the slug.
+    if (title && !/\[[^\]]+\]/.test(title)) return title;
+  }
+  // Fallback: "013-gate-integrity" -> "gate integrity".
+  const fromId = specId.replace(/^\d{3}-/, "").replace(/-/g, " ").trim();
+  return fromId || specId;
 }
 
 export function extractApprovalStatus(content: string): string {

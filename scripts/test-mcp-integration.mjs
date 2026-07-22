@@ -5,6 +5,7 @@ import {
   NEGATED_STATUS_ERE,
   extractApprovalStatus,
   extractFileScope,
+  listSpecs,
   canvasEdgeColorForLabel,
   computeVerdict,
   classifyEdgeLabel,
@@ -230,12 +231,19 @@ async function main() {
   // failure surfaced as an opaque "must NOT have additional properties" from
   // the SDK, not as a type error. Assert the two shapes agree.
   {
-    const specKeys = Object.keys({
-      id: "",
-      dir: "",
-      status: "",
-      fileScope: []
-    });
+    // Derived from a REAL SpecSummary, not a hand-written list. The first
+    // version of this guard listed the fields literally and therefore only
+    // caught the ones someone remembered to add to it — which is the same class
+    // of omission it exists to prevent. `listSpecs` is the single producer of
+    // the shape that BoardSpecCard spreads, so ask it.
+    const sampleSpecs = await listSpecs(path.join(REPO_ROOT, "www"))
+      .catch(() => listSpecs(REPO_ROOT).catch(() => []));
+    const specKeys =
+      sampleSpecs.length > 0
+        ? Object.keys(sampleSpecs[0])
+        : // No workspace to sample yet: fall back to the known shape so the
+          // guard still runs, and say so if it ever diverges.
+          ["id", "dir", "status", "title", "fileScope"];
     const cardKeys = Object.keys(boardSpecCardSchema.shape);
     const undeclared = specKeys.filter((key) => !cardKeys.includes(key));
     assert.deepEqual(
@@ -293,7 +301,7 @@ async function main() {
     // with the status the template actually writes (`Pendiente`).
     assert.deepEqual(
       asObject(await client.callTool({ name: "sdd_list_specs", arguments: { projectRoot } })).specs,
-      [{ id: specId, dir: path.join(sddRoot, "specs", specId), status: "Pendiente", fileScope: [] }],
+      [{ id: specId, dir: path.join(sddRoot, "specs", specId), status: "Pendiente", title: "Fixture landing", fileScope: [] }],
       "sdd_list_specs must report the freshly created spec as pending"
     );
 
@@ -1155,7 +1163,7 @@ async function main() {
       ).specs;
       assert.deepEqual(
         listedGate.find((item) => item.id === gateSpecId),
-        { id: gateSpecId, dir: path.join(gateSddRoot, "specs", gateSpecId), status: status.trim(), fileScope: [] },
+        { id: gateSpecId, dir: path.join(gateSddRoot, "specs", gateSpecId), status: status.trim(), title: listedGate.find((i) => i.id === gateSpecId)?.title ?? "", fileScope: [] },
         `sdd_list_specs must report "${status}" trimmed`
       );
 

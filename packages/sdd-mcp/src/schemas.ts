@@ -76,6 +76,8 @@ export const boardSpecCardSchema = z.object({
   id: z.string(),
   dir: z.string(),
   status: z.string(),
+  /** Human title from line 1 of spec.md; defaulted for older servers. */
+  title: z.string().default(""),
   tasks: z.object({ done: z.number(), total: z.number() }),
   /** Computed by sdd-core specTone: the one state every surface renders. */
   tone: z.enum(["pending", "ok", "done"]),
