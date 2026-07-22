@@ -1,12 +1,75 @@
 # 🎨 SDD Builder: construye tus specs visualmente
 
-El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas, y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad: aprobar, editar y marcar tareas son operaciones que tocan solo lo justo dentro de tus archivos `.md`, mientras el lienzo no guarda más que posiciones y uniones en `specs/board.canvas` (el formato abierto JSON Canvas). Esta guía recorre el producto completo, desde el primer comando `npm` hasta usarlo desde un agente IA, con capturas reales de un proyecto demo pequeño: una tienda online de plantas.
+El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas, y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad: aprobar, editar y marcar tareas son operaciones que tocan solo lo justo dentro de tus archivos `.md`, mientras el lienzo no guarda más que posiciones y uniones en `specs/board.canvas` (el formato abierto JSON Canvas). Esta guía recorre el producto completo, desde los dos comandos que lo abren hasta usarlo desde un agente IA, con capturas reales de un proyecto demo pequeño: una tienda online de plantas.
 
 ![El lienzo del SDD Builder: notas de idea y épicas a la izquierda, tarjetas de spec con badges de estado y barras de progreso, una unión roja «bloquea» y una ámbar «depende de», y el semáforo del gate con un aviso de dependencia en la barra superior](../assets/builder/canvas.png)
 
 *Un board, toda la verdad: gate abierto (🟢), un aviso ámbar `⚠ 1 dep`, uniones tipadas entre specs reales y el progreso de cada tarjeta leído en vivo de `tasks.md`.*
 
 ## Inicio rápido
+
+**Lo único que necesitas instalado es Node.js 20 o superior.** `npx` viene con Node, así que no hay nada que instalar globalmente, no hay que clonar este repositorio y no hay que compilar nada: el lienzo viaja dentro del paquete publicado. Son dos comandos.
+
+### Paso 1 — Pon SDD dentro de tu proyecto
+
+Elige el caso que sea el tuyo. Los dos usan el mismo comando y los dos dejan tu código donde está.
+
+**Proyecto nuevo** (aún no existe la carpeta):
+
+```bash
+npx @juanklagos/create-sdd-project mi-app
+cd mi-app
+```
+
+**Proyecto que ya existe** (tiene código, git, dependencias — da igual el lenguaje):
+
+```bash
+cd /ruta/a/mi-proyecto
+npx @juanklagos/create-sdd-project .
+```
+
+El punto significa «aquí mismo». No mueve, renombra ni sobrescribe ni uno de tus archivos: solo añade una carpeta `spec/` al lado de lo que ya tienes. Dentro va todo lo de SDD — `spec/idea/`, `spec/specs/`, `spec/bitacora/` y los scripts en `spec/scripts/` — y al terminar el comando imprime tus siguientes pasos exactos.
+
+> Si te lo ejecuta un agente IA en vez de escribirlo tú, funciona igual: el andamiador detecta que no hay nadie que pueda responder una pregunta interactiva, toma los valores por defecto del sidecar y dice en su salida qué asumió.
+
+### Paso 2 — Abre el lienzo
+
+Desde la carpeta del proyecto (importa: el servidor descubre el workspace a partir del directorio en el que lo lanzas):
+
+```bash
+npx @juanklagos/sdd-mcp --http
+```
+
+Verás exactamente esto:
+
+```
+SDD Builder — el lienzo / the board:  http://127.0.0.1:3334/builder
+Dashboard:                            http://127.0.0.1:3334/dashboard
+MCP endpoint (para tu agente / for your agent):  http://127.0.0.1:3334/mcp
+```
+
+Abre la **primera** URL, `http://127.0.0.1:3334/builder`, en tu navegador. Esa es el lienzo. La tercera (`/mcp`) no es una página: es el endpoint por el que se conecta tu agente IA, y si la abres en el navegador verás texto de protocolo, no un tablero.
+
+El servidor se queda corriendo en esa terminal mientras lo uses; párralo con `Ctrl+C`. Si el puerto 3334 ya está ocupado, cámbialo:
+
+```bash
+SDD_MCP_HTTP_PORT=4000 npx @juanklagos/sdd-mcp --http
+```
+
+Y si prefieres lanzarlo desde otro sitio en lugar de entrar a la carpeta, dile dónde está el proyecto:
+
+```bash
+SDD_PROJECT_ROOT=/ruta/a/mi-proyecto npx @juanklagos/sdd-mcp --http
+```
+
+### Paso 3 — Lo que verás la primera vez
+
+El lienzo abre vacío si el proyecto aún no tiene specs, y eso es lo correcto: en SDD todavía no hay contrato en disco. Un **tour de bienvenida** te ofrece cinco pasos anclados (paleta → crear → conectar → tareas → gate); descártalo con «No mostrar de nuevo» y relánzalo cuando quieras desde el botón «?» de la barra superior. Para llenar el board de un tirón, usa el **✨ Asistente** de la barra superior, que se explica más abajo.
+
+<details>
+<summary>Ruta larga: trabajar dentro de un clon de este repositorio (contribuyentes al template)</summary>
+
+Solo si vas a modificar el propio builder o el template. Aquí sí hay que compilar el frontend, y el builder está bloqueado a propósito contra la raíz del template (no se ejecuta trabajo de proyecto destino ahí dentro), así que `SDD_PROJECT_ROOT` tiene que apuntar a otro workspace:
 
 ```bash
 # una sola vez: compila el frontend
@@ -15,15 +78,11 @@ npm run builder:build
 # crea un workspace de juego (o usa cualquier proyecto con sidecar spec/)
 ./scripts/install-spec-sidecar.sh ~/sdd-playground --profile=recommended
 
-# arranca el servidor apuntando a tu workspace
+# arranca el servidor apuntando a ese workspace
 SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
-# abre http://127.0.0.1:3334/builder   (usa SDD_MCP_HTTP_PORT para cambiar el puerto)
 ```
 
-Dos notas antes de empezar:
-
-- Dentro de este repositorio template el builder está bloqueado a propósito (no se ejecuta trabajo de proyecto destino en la raíz del template). Apunta siempre `SDD_PROJECT_ROOT` a un workspace real.
-- La primera vez que abras `/builder`, un **tour de bienvenida** ofrece cinco pasos anclados (paleta → crear → conectar → tareas → gate). Descártalo con «No mostrar de nuevo» y relánzalo cuando quieras desde el botón «?» de la barra superior.
+</details>
 
 ## Aprender mientras construyes: la ayuda dentro del producto
 
