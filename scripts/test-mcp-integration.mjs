@@ -1838,6 +1838,60 @@ async function main() {
       "if specs/_template/spec.md gains an out-of-scope heading, update this guard and docs/*/41 (the section would move from `created` to `updated`)"
     );
 
+    // The framework must never indict its own scaffolder.
+    //
+    // A gate design was killed in review precisely because it would have: the
+    // very next documented command after a reset writes .sh files that the
+    // design's own rules called unauthorised code. That was caught by an
+    // adversarial reviewer, not by any test, because no test ever ran the
+    // scaffolder and then the gate. This is that test.
+    {
+      const scaffoldRoot = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-scaffold-gate-"));
+      await fs.mkdir(path.join(scaffoldRoot, "src"), { recursive: true });
+      // Pre-existing project code: the brownfield case, which is the one that
+      // decides whether a real user keeps the tool installed.
+      await fs.writeFile(path.join(scaffoldRoot, "src/app.js"), "export const run = () => 1;\n", "utf8");
+
+      const install = await runSddScript("install-spec-sidecar.sh", scaffoldRoot);
+      assert.equal(install.code, 0, `install-spec-sidecar.sh must succeed on a project with existing code:\n${install.output}`);
+
+      const { stdout: gateOut } = await execFileAsync("bash", [
+        path.join(scaffoldRoot, "spec/scripts/check-sdd-gate.sh"),
+        scaffoldRoot
+      ]);
+
+      assert.match(
+        gateOut,
+        /SDD Gate summary: 0 error\(s\)/,
+        `the gate must report zero errors immediately after the documented install, on a project that already had code:\n${gateOut}`
+      );
+      assert.match(
+        gateOut,
+        /Compuerta \/ Gate: CERRADA \/ closed/,
+        "a freshly installed workspace has nothing approved, so the verdict is closed — not open, and not blocked"
+      );
+      assert.match(
+        gateOut,
+        /NO comprobado \/ NOT checked/,
+        "the posture line must print even on a clean run: a green result must never be able to mean 'we did not look'"
+      );
+      assert.doesNotMatch(
+        gateOut,
+        /Consent log records/,
+        "a fresh install inherits no consent, so the inherited-approvals warning must stay quiet"
+      );
+
+      // Nothing approved, so --require-open must refuse: exit 2, never 0 or 1.
+      const strict = await execFileAsync("bash", [
+        path.join(scaffoldRoot, "spec/scripts/check-sdd-gate.sh"),
+        scaffoldRoot,
+        "--require-open"
+      ]).then(() => 0).catch((error) => error.code ?? 1);
+      assert.equal(strict, 2, "--require-open must exit 2 on a closed gate, distinguishable from the 1 that means errors");
+
+      await fs.rm(scaffoldRoot, { recursive: true, force: true });
+    }
+
     console.log("MCP integration test passed");
     console.log(`Project: ${projectName}`);
     console.log(`Spec: ${specId}`);

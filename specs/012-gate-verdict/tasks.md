@@ -27,7 +27,7 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
 - [x] **T2e** Bucle de argumentos real en `check-sdd-gate.sh` y `--require-open` con salida 2 cuando
       el veredicto sea `closed`. Hoy `./scripts/check-sdd-gate.sh --require-open` falla con «not an
       SDD workspace» porque parsea por posición. Replicar en el sidecar.
-- [ ] **T2f** Actualizar `.claude/commands/sdd/gate.md:9` y `.github/prompts/sdd-gate.prompt.md:8`.
+- [x] **T2f** Actualizar `.claude/commands/sdd/gate.md:9` y `.github/prompts/sdd-gate.prompt.md:8`.
 - [x] **T2g** Chip y tarjeta de tres estados con etiqueta de postura: cuatro claves de i18n en cada
       idioma en `builder/src/i18n.ts` y `packages/sdd-mcp/src/dashboard.ts`, que se reflejan entre sí.
       Estilos para el estado «cerrada pero no bloqueada».
@@ -57,18 +57,18 @@ Orden vinculante: T1 va primera. El veredicto se calcula sobre lo que devuelve e
       el dashboard. Editar `scripts/generate-llms-txt.sh:18`, no `llms.txt`.
 - [x] **T4b** No tocar las 47 apariciones de la frase de hard stop. Enuncian la regla como instrucción
       a un agente, lo cual es cierto, y `check-sdd-policy.sh:112-116` verifica su redacción exacta.
-- [ ] **T4c** Fixtures: constructor de workspace de layout completo junto al de sidecar; casos de cero
+- [x] **T4c** Fixtures: constructor de workspace de layout completo junto al de sidecar; casos de cero
       specs, spec sin aprobar, aprobada y consentida, y una secuencia andamiador→compuerta que debe
       salir verde.
-- [ ] **T4d** Regenerar `demo.gif` (`demo.tape:25` mete la salida de la compuerta en la portada del
+- [x] **T4d** Regenerar `demo.gif` (`demo.tape:25` mete la salida de la compuerta en la portada del
       README) y refrescar las capturas de la guía 51.
-- [ ] **T4e** Registro de decisión en `bitacora/decisiones/`, dejando explícito que el detector de
+- [x] **T4e** Registro de decisión en `bitacora/decisiones/`, dejando explícito que el detector de
       código se aplazó a la 013 y por qué.
 
 ## Verificación de cierre
 
-- [ ] Los cuatro scripts SDD en 0 errores.
-- [ ] `npm run mcp:test` y `npm run mcp:pack:smoke` en verde.
-- [ ] El escenario original reproducido: workspace sin specs aprobadas, ninguna superficie afirma que
+- [x] Los cuatro scripts SDD en 0 errores.
+- [x] `npm run mcp:test` y `npm run mcp:pack:smoke` en verde.
+- [x] El escenario original reproducido: workspace sin specs aprobadas, ninguna superficie afirma que
       se puede implementar.
-- [ ] Build del sitio y typecheck del builder en verde.
+- [x] Build del sitio y typecheck del builder en verde.

@@ -111,3 +111,8 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 
 - **ES:** Se vuelve a MIT en todo el repositorio. PolyForm hacía que GitHub reportara `NOASSERTION` y prohibía el uso interno en empresas, que era justo el requisito. La propiedad pasa a apoyarse en el scope de npm, el namespace MCP y la línea de copyright, no en la licencia.
 - **EN:** Back to MIT repo-wide. PolyForm made GitHub report `NOASSERTION` and barred the internal company use that was the actual requirement. Ownership now rests on the npm scope, the MCP namespace and the copyright line rather than on the license.
+
+### 2026-07-21 — [Veredicto de tres estados, detector aparte](2026-07-21-veredicto-de-tres-estados-y-detector-aparte.md)
+
+- **ES:** La compuerta pasa de un booleano a `open`/`closed`/`blocked` y declara en cada ejecución qué comprobó y qué no, para que un verde no pueda significar «no miramos». El detector de código sale a una spec posterior tras romperse en revisión adversarial; el mecanismo elegido juzga el diff del PR contra las rutas que cada spec declara.
+- **EN:** The gate moves from a boolean to `open`/`closed`/`blocked` and states its own scope on every run, so a green result can never mean "we did not look". The code detector moves to a later spec after adversarial review broke it; the chosen mechanism judges the PR diff against the paths each spec declares.

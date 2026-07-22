@@ -1,6 +1,6 @@
 ---
 name: sdd-workflow
-description: Guide a project with Spec-Driven Development (SDD) discipline - idea, approved spec, consistent plan, tasks, machine-checked gate, implementation, validation, and logbook. Bilingual EN/ES. Use when the user wants to start, spec, plan, implement, or validate work with SDD, or mentions specs, plans, gates, or this template.
+description: Guide a project with Spec-Driven Development (SDD) discipline - idea, approved spec, consistent plan, tasks, a gate that verifies approval and consent, implementation, validation, and logbook. Bilingual EN/ES. Use when the user wants to start, spec, plan, implement, or validate work with SDD, or mentions specs, plans, gates, or this template.
 ---
 
 # SDD Workflow / Flujo SDD
