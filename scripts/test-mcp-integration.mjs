@@ -1892,6 +1892,70 @@ async function main() {
       await fs.rm(scaffoldRoot, { recursive: true, force: true });
     }
 
+    // Spec 013 — what the scaffolders leave in somebody else's project, and
+    // whether the framework can find its own root in a non-plain checkout.
+    {
+      const bash = (script, ...args) =>
+        execFileAsync("bash", ["-c", script, "bash", REPO_ROOT, ...args]).then((r) => r.stdout.trim());
+
+      // `.git` is a FILE in a worktree and in a submodule, not a directory. The
+      // `-d` test this replaced returned false there and sdd_project_root
+      // silently answered with the wrong directory.
+      const wt = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-wt-"));
+      await execFileAsync("git", ["init", "-q", path.join(wt, "repo")]);
+      await execFileAsync("git", ["-C", path.join(wt, "repo"), "commit", "-q", "--allow-empty", "-m", "init"]);
+      await execFileAsync("git", ["-C", path.join(wt, "repo"), "worktree", "add", "-q", path.join(wt, "linked")]);
+
+      const gitFileIsAFile = await fs.stat(path.join(wt, "linked", ".git")).then((s) => s.isFile());
+      assert.equal(gitFileIsAFile, true, "precondition: a git worktree's .git is a file, which is what broke the old check");
+
+      for (const layout of ["repo", "linked"]) {
+        await fs.mkdir(path.join(wt, layout, "spec"), { recursive: true });
+        const resolved = await bash(
+          '. "$1"/scripts/lib/sdd-root.sh; sdd_project_root "$2"',
+          path.join(wt, layout, "spec")
+        );
+        assert.equal(
+          resolved,
+          path.join(wt, layout),
+          `sdd_project_root must resolve a sidecar to its project root in a ${layout === "linked" ? "worktree" : "plain clone"}`
+        );
+      }
+
+      // The scaffolders write into a .gitignore the user owns.
+      const gi = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-gi-"));
+      await fs.writeFile(path.join(gi, ".gitignore"), "node_modules/\n.env\n", "utf8");
+      const ensure = '. "$1"/scripts/lib/sdd-scaffold.sh; sdd_ensure_gitignore "$2" "spec/"';
+      await bash(ensure, gi);
+      const afterFirst = await fs.readFile(path.join(gi, ".gitignore"), "utf8");
+      await bash(ensure, gi);
+      const afterSecond = await fs.readFile(path.join(gi, ".gitignore"), "utf8");
+
+      assert.equal(afterFirst, afterSecond, "sdd_ensure_gitignore must be idempotent — running an installer twice cannot duplicate rules");
+      for (const kept of ["node_modules/", ".env"]) {
+        assert.match(afterFirst, new RegExp(`^${kept.replace(".", "\\.")}$`, "m"), `the user's own rule "${kept}" must survive`);
+      }
+      for (const added of ["spec/.sdd/*", "!spec/.sdd/user-consent.log"]) {
+        assert.ok(afterFirst.split("\n").includes(added), `the workspace rule "${added}" must be present`);
+      }
+      // The consent log is evidence and must stay tracked; everything else under
+      // .sdd/ is machine state. Order matters: the negation has to come after.
+      assert.ok(
+        afterFirst.indexOf("spec/.sdd/*") < afterFirst.indexOf("!spec/.sdd/user-consent.log"),
+        "the ignore rule must precede its exception, or git keeps ignoring the consent log"
+      );
+
+      // A fresh project must never receive an index describing someone else's specs.
+      const idx = await fs.mkdtemp(path.join(os.tmpdir(), "sdd-idx-"));
+      await fs.mkdir(path.join(idx, "specs"), { recursive: true });
+      await bash('. "$1"/scripts/lib/sdd-scaffold.sh; sdd_write_empty_spec_index "$2/specs"', idx);
+      const written = await fs.readFile(path.join(idx, "specs/INDEX.md"), "utf8");
+      assert.doesNotMatch(written, /^\|\s*\d{3}\s*\|/m, "a scaffolded spec index must contain no spec rows");
+      assert.match(written, /Number \/ Número/, "…but it must still be a usable table");
+
+      await Promise.all([wt, gi, idx].map((d) => fs.rm(d, { recursive: true, force: true })));
+    }
+
     console.log("MCP integration test passed");
     console.log(`Project: ${projectName}`);
     console.log(`Spec: ${specId}`);

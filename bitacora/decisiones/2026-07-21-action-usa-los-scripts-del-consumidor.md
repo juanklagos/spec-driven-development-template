@@ -20,6 +20,8 @@ Razón: el sidecar es *del proyecto*, y su versión de la compuerta es la que su
 
 Mitigación aceptada: el instalador ahora estampa `spec/.sdd/TEMPLATE_VERSION`, así que un sidecar viejo es *detectable* aunque no se refresque solo.
 
+> **Actualización 2026-07-21 (spec 013).** Esa mitigación estaba enunciada y no implementada: `grep -rn TEMPLATE_VERSION` solo devolvía un test comprobando que el archivo existe. Detectable, sí; detectado, no. Además se cumplió el disparador de revisión de abajo —la spec 012 corrigió un fallo abierto de **corrección**, no de política: un `sed` codicioso que leía `approved` donde el archivo decía `Pendiente`— y la respuesta que este mismo registro nombra para ese caso es *«o al menos avise»*. `action.yml` ahora lee el sello y avisa cuando el workspace es anterior a la Action, sin tocar el código de salida y sin cambiar qué scripts se ejecutan. **La decisión no se revierte: se completa.**
+
 ## Alternatives considered / Alternativas consideradas
 
 | Alternativa | Por qué no |

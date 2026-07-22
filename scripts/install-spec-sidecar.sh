@@ -25,6 +25,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 source "$SCRIPT_DIR/lib/sdd-attribution.sh"
+source "$SCRIPT_DIR/lib/sdd-scaffold.sh"
 
 TARGET_PARENT="$(dirname "$TARGET")"
 mkdir -p "$TARGET_PARENT"
@@ -94,14 +95,7 @@ copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$SPEC_ROOT/idea/IDEA_GENERAL.md
 copy_if_absent "$ROOT_DIR/specs/README.md" "$SPEC_ROOT/specs/README.md"
 # Write a clean spec index for the new workspace instead of copying the
 # framework repo index (which carries this template's own spec rows).
-if [ ! -f "$SPEC_ROOT/specs/INDEX.md" ]; then
-  cat > "$SPEC_ROOT/specs/INDEX.md" << 'INDEXEOF'
-# Specification Index / Índice de especificaciones
-
-| Number / Número | Name / Nombre | Status / Estado | Priority / Prioridad | Owner / Responsable | Updated / Actualización |
-|---|---|---|---|---|---|
-INDEXEOF
-fi
+sdd_write_empty_spec_index "$SPEC_ROOT/specs"
 copy_if_absent "$ROOT_DIR/specs/_template/spec.md" "$SPEC_ROOT/specs/_template/spec.md"
 copy_if_absent "$ROOT_DIR/specs/_template/plan.md" "$SPEC_ROOT/specs/_template/plan.md"
 copy_if_absent "$ROOT_DIR/specs/_template/tasks.md" "$SPEC_ROOT/specs/_template/tasks.md"
@@ -152,6 +146,7 @@ copy_if_absent "$ROOT_DIR/.sdd.README.template.md" "$SPEC_ROOT/.sdd/README.md"
 # they are the enforcement machinery, not user content.
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$SPEC_ROOT/scripts/lib/sdd-root.sh"
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-attribution.sh" "$SPEC_ROOT/scripts/lib/sdd-attribution.sh"
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-scaffold.sh" "$SPEC_ROOT/scripts/lib/sdd-scaffold.sh"
 copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$SPEC_ROOT/scripts/validate-sdd.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$SPEC_ROOT/scripts/check-sdd-policy.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$SPEC_ROOT/scripts/check-sdd-gate.sh"
@@ -301,6 +296,8 @@ write_root_text_stub "$TARGET_ABS/.clauderules"
 write_root_text_stub "$TARGET_ABS/.github/copilot-instructions.md"
 
 sdd_write_attribution "$SPEC_ROOT" "$ROOT_DIR"
+# The host project owns .gitignore; this only adds the rules the workspace needs.
+sdd_ensure_gitignore "$TARGET_ABS" "spec/"
 
 if [ -n "$STUB_CONFLICTS" ]; then
   cat > "$SPEC_ROOT/ROOT_AI_STUB_CONFLICTS.md" <<EOF

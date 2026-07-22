@@ -8,7 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-Nothing yet.
+### Fixed
+- **A recorded mitigation existed only on paper.** [The decision to run the consumer's scripts](bitacora/decisiones/2026-07-21-action-usa-los-scripts-del-consumidor.md) rests on `.sdd/TEMPLATE_VERSION` making a stale sidecar "detectable". The installer stamped it; nothing ever read it. `action.yml` now reads it and warns when the workspace predates the action — naming both versions and the refresh command. The decision itself is not reversed: which scripts run is unchanged, and the warning never touches the exit code. Its own revisit trigger had fired, because spec 012 fixed a *correctness* fail-open rather than a policy preference.
+- **`sdd_project_root` returned the wrong directory in git worktrees and submodules**, where `.git` is a file holding a pointer rather than a directory, so the `-d` test silently failed.
+- **No scaffolder wrote a `.gitignore` into the target project.** Every "that file is ignored" assumption in this framework was true in this repository and false in every project it installs into — including the one that matters: the consent log is evidence and must be tracked, while the rest of `.sdd/` is machine state that must not be.
+- **`init-project.sh` copied the framework's own `specs/INDEX.md`**, handing a brand-new project a table of specs belonging to somebody else. `install-spec-sidecar.sh` had been fixed; this one had not.
+
+### Changed
+- `scripts/lib/sdd-scaffold.sh` — one place for what a scaffolder writes into the project it installs into. Both scaffolders source it instead of each carrying its own copy.
+
+### Verified
+- Each fix verified by reverting it and watching its test fail · version comparison across five cases including `2.10.0` vs `2.9.0`, which a lexicographic sort inverts · scaffolders exercised against a project with its own `.gitignore` · four SDD scripts at 0 errors · `mcp:test` · `mcp:pack:smoke`
 
 ---
 

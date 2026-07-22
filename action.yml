@@ -48,8 +48,43 @@ runs:
 
         # Prefer the scripts shipped with the workspace so a project pinned to
         # an older template keeps validating against its own rules.
+        #
+        # That choice is recorded in bitacora/decisiones/2026-07-21-action-usa-
+        # los-scripts-del-consumidor.md and it stands: whoever can edit the CI
+        # can delete this action, so it was never a security boundary, and
+        # imposing our scripts would change a third party's validation rules
+        # between two commits of `uses: ...@main`.
+        #
+        # What follows is the mitigation that decision DECLARES — "a stale
+        # sidecar is detectable" — and which, until now, nothing implemented:
+        # install-spec-sidecar.sh stamped .sdd/TEMPLATE_VERSION and no code ever
+        # read it. Its own revisit trigger fired when spec 012 fixed a
+        # CORRECTNESS fail-open (a greedy regex read `Pendiente` as approved), so
+        # a workspace pinned below 2.1.0 reports green on specs nobody approved.
+        #
+        # Advisory only. Never touches the exit code: turning a version gap into
+        # a broken build punishes the consumer for not upgrading, which is the
+        # friction the sidecar exists to avoid.
         if [ -f "$SDD_ROOT/scripts/validate-sdd.sh" ]; then
           SCRIPTS="$SDD_ROOT/scripts"
+
+          read_version_field() {
+            [ -f "$1" ] || return 1
+            sed -n 's/^template_version=\(.*\)$/\1/p' "$1" | head -n 1
+          }
+          ACTION_VERSION="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "${{ github.action_path }}/package.json" 2>/dev/null | head -n 1)"
+          WORKSPACE_VERSION="$(read_version_field "$SDD_ROOT/.sdd/TEMPLATE_VERSION" || true)"
+
+          if [ -z "$WORKSPACE_VERSION" ] || [ "$WORKSPACE_VERSION" = "unknown" ]; then
+            echo "::warning::This workspace has no readable .sdd/TEMPLATE_VERSION, so its template version cannot be determined. It is running its own copy of the SDD scripts, which may predate fixes in this action. Refresh with: ./scripts/install-spec-sidecar.sh ."
+          elif [ -n "$ACTION_VERSION" ] && [ "$WORKSPACE_VERSION" != "$ACTION_VERSION" ]; then
+            # Portable numeric compare. `sort -V` is GNU-only and absent on macOS,
+            # where contributors run these scripts locally.
+            OLDEST="$(printf '%s\n%s\n' "$WORKSPACE_VERSION" "$ACTION_VERSION" | sort -t. -k1,1n -k2,2n -k3,3n | head -n 1)"
+            if [ "$OLDEST" = "$WORKSPACE_VERSION" ]; then
+              echo "::warning::This workspace runs SDD scripts from template $WORKSPACE_VERSION while this action is $ACTION_VERSION. Your gate is validating against older rules, and versions before 2.1.0 contain a fail-open where an unapproved spec could read as approved. Your scripts are used on purpose (you choose when to upgrade) — refresh them with: ./scripts/install-spec-sidecar.sh ."
+            fi
+          fi
         else
           SCRIPTS="${{ github.action_path }}/scripts"
           echo "No SDD scripts in the workspace; using the scripts bundled with the action."

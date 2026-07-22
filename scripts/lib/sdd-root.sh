@@ -133,15 +133,28 @@ sdd_require_local_root() {
   sdd_require_root "" "$fallback"
 }
 
+# Is this directory the root of a git checkout?
+#
+# `.git` is a DIRECTORY only in a plain clone. In a git worktree and in a
+# submodule it is a FILE holding a `gitdir: ...` pointer, so the `-d` test this
+# replaced returned false there and sdd_project_root silently answered with the
+# wrong directory. Verified: `git worktree add` produces a .git file, not a dir.
+#
+# `-e` covers both without asking git anything, which keeps this usable in a
+# directory that is not a repository at all — the case the callers also rely on.
+sdd_is_git_root() {
+  [ -e "${1:-}/.git" ]
+}
+
 sdd_project_root() {
   local sdd_root="$1"
 
-  if [ -d "$sdd_root/.git" ]; then
+  if sdd_is_git_root "$sdd_root"; then
     printf "%s\n" "$sdd_root"
     return 0
   fi
 
-  if [ "$(basename "$sdd_root")" = "spec" ] && [ -d "$sdd_root/../.git" ]; then
+  if [ "$(basename "$sdd_root")" = "spec" ] && sdd_is_git_root "$sdd_root/.."; then
     (cd "$sdd_root/.." && pwd)
     return 0
   fi

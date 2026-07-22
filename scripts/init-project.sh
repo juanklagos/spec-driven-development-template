@@ -27,6 +27,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 source "$SCRIPT_DIR/lib/sdd-attribution.sh"
+source "$SCRIPT_DIR/lib/sdd-scaffold.sh"
 
 TARGET_PARENT="$(dirname "$TARGET")"
 mkdir -p "$TARGET_PARENT"
@@ -87,7 +88,8 @@ copy_if_absent "$ROOT_DIR/sdd.policy.yaml" "$TARGET/sdd.policy.yaml"
 copy_if_absent "$ROOT_DIR/INSTRUCTIONS.md" "$TARGET/INSTRUCTIONS.md"
 copy_if_absent "$ROOT_DIR/idea/IDEA_GENERAL.md" "$TARGET/idea/IDEA_GENERAL.md"
 copy_if_absent "$ROOT_DIR/specs/README.md" "$TARGET/specs/README.md"
-copy_if_absent "$ROOT_DIR/specs/INDEX.md" "$TARGET/specs/INDEX.md"
+# NOT a copy of the framework's own index: that listed specs the user does not have.
+sdd_write_empty_spec_index "$TARGET/specs"
 copy_if_absent "$ROOT_DIR/specs/_template/spec.md" "$TARGET/specs/_template/spec.md"
 copy_if_absent "$ROOT_DIR/specs/_template/plan.md" "$TARGET/specs/_template/plan.md"
 copy_if_absent "$ROOT_DIR/specs/_template/tasks.md" "$TARGET/specs/_template/tasks.md"
@@ -125,6 +127,7 @@ copy_if_absent "$ROOT_DIR/.github/copilot-instructions.md" "$TARGET/.github/copi
 mkdir -p "$TARGET/scripts/lib"
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-root.sh" "$TARGET/scripts/lib/sdd-root.sh"
 copy_framework_file "$ROOT_DIR/scripts/lib/sdd-attribution.sh" "$TARGET/scripts/lib/sdd-attribution.sh"
+copy_framework_file "$ROOT_DIR/scripts/lib/sdd-scaffold.sh" "$TARGET/scripts/lib/sdd-scaffold.sh"
 copy_framework_file "$ROOT_DIR/scripts/validate-sdd.sh" "$TARGET/scripts/validate-sdd.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-policy.sh" "$TARGET/scripts/check-sdd-policy.sh"
 copy_framework_file "$ROOT_DIR/scripts/check-sdd-gate.sh" "$TARGET/scripts/check-sdd-gate.sh"
@@ -162,6 +165,7 @@ fi
 # project's CLA and trademark policy as if they were their own. What a scaffolded
 # project needs is a record of what it received and under what terms.
 sdd_write_attribution "$TARGET" "$ROOT_DIR"
+sdd_ensure_gitignore "$TARGET" ""
 
 cat <<MSG
 🎉 Project initialized at / Proyecto inicializado en: $TARGET

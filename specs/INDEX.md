@@ -14,3 +14,4 @@
 | 010 | builder-v5-pro-ux | Done / Completada | High / Alta | Juan Klagos / Claude | 2026-07-21 |
 | 011 | one-command-launcher | Draft / Borrador | High / Alta | Juan Klagos / Claude | 2026-07-21 |
 | 012 | gate-verdict | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |
+| 013 | gate-integrity | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-21 |
