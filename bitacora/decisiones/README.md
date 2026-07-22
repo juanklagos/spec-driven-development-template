@@ -116,3 +116,8 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 
 - **ES:** La compuerta pasa de un booleano a `open`/`closed`/`blocked` y declara en cada ejecución qué comprobó y qué no, para que un verde no pueda significar «no miramos». El detector de código sale a una spec posterior tras romperse en revisión adversarial; el mecanismo elegido juzga el diff del PR contra las rutas que cada spec declara.
 - **EN:** The gate moves from a boolean to `open`/`closed`/`blocked` and states its own scope on every run, so a green result can never mean "we did not look". The code detector moves to a later spec after adversarial review broke it; the chosen mechanism judges the PR diff against the paths each spec declares.
+
+### 2026-07-22 — [`--http` como bandera, y el bin se conserva](2026-07-22-http-como-bandera-y-el-bin-se-conserva.md)
+
+- **ES:** `npx @juanklagos/sdd-mcp --http` llega al lienzo desde el binario que lleva el nombre del paquete, para que no dependa de que npx resuelva un segundo ejecutable. `sdd-mcp-http` se conserva porque está documentado fuera del repositorio. La intermitencia de npx (3 fallos, 6 éxitos, misma máquina) se rodea por diseño, no se diagnostica: se descartaron por experimento la bandera `-y`, el caché y el `node_modules` cercano, y no se afirma ninguna causa.
+- **EN:** `npx @juanklagos/sdd-mcp --http` reaches the board from the bin that carries the package name, so it no longer depends on npx resolving a second executable. `sdd-mcp-http` stays because it is documented outside this repo. The npx flakiness (3 failures, 6 successes, same machine) is designed around rather than diagnosed: the `-y` flag, the cache and a nearby `node_modules` were ruled out by experiment, and no cause is claimed.

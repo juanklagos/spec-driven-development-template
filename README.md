@@ -241,6 +241,7 @@ Note: `GitMCP` (free, remote) helps an AI *read* this public repo; the local `sd
 - License: **MIT** — use it anywhere, including commercially and inside a company, free and without
   asking. Keep the copyright notice. [Legal guide](./docs/en/31-legal-framework-and-commercial-use.md)
 - What you write with the templates is yours: [TEMPLATE-OUTPUT.md](./TEMPLATE-OUTPUT.md)
+- Publishing a release / Publicar una versión: [RELEASING.md](./RELEASING.md)
 - Changelog: [CHANGELOG.md](./CHANGELOG.md) · Latest release: [v2.2.1](https://github.com/juanklagos/spec-driven-development-template/releases/tag/v2.2.1)
 - Copyright (c) 2026 Juan Carlos Alvarez Lagos ([AUTHORS.md](./AUTHORS.md))
 
