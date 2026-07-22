@@ -108,7 +108,7 @@ Si usas **Claude Code**, este repo trae slash commands listos. Empieza con `/sdd
 ```bash
 ./scripts/check-sdd-policy.sh .   # los archivos de política multi-agente están alineados
 ./scripts/check-sdd-gate.sh .     # spec aprobada + plan consistente + consentimiento registrado
-./scripts/confirm-user-consent.sh "Usuario aprobó alcance X"
+./scripts/confirm-user-consent.sh --spec 001-<slug> "Usuario aprobó alcance X"
 ```
 
 (En proyectos sidecar los mismos scripts viven bajo `./spec/scripts/`.)

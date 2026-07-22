@@ -109,7 +109,7 @@ Resultado exitoso:
 - imprime `Created: specs/NNN-feature-name`
 - imprime `Added row to specs/INDEX.md`
 
-### `./scripts/confirm-user-consent.sh "User approved scope X"`
+### `./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"`
 
 Crea o actualiza:
 - `.sdd/user-consent.log`

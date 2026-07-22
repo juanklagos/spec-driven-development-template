@@ -106,9 +106,18 @@ One-shot / Uso puntual:
 uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
+> [!NOTE]
+> Step 2 installed the compact sidecar, so SDD lives in `spec/` and its scripts in
+> `spec/scripts/`. If you used `--full-template`, drop the `spec/` prefix everywhere below —
+> the scaffolder prints the right paths for your profile when it finishes.
+>
+> El paso 2 instaló el sidecar compacto, así que SDD vive en `spec/` y sus scripts en
+> `spec/scripts/`. Si usaste `--full-template`, quita el prefijo `spec/` en todo lo de abajo —
+> el andamiador imprime las rutas correctas para tu perfil al terminar.
+
 ### 4) Define idea / Define idea
 
-Complete `idea/IDEA_GENERAL.md` with:
+Complete `spec/idea/IDEA_GENERAL.md` with:
 - Project name / Nombre
 - Problem / Problema
 - Main goal / Objetivo principal
@@ -117,14 +126,14 @@ Complete `idea/IDEA_GENERAL.md` with:
 ### 5) Create first spec / Crea primera spec
 
 ```bash
-./scripts/new-spec.sh "my-feature" "Owner"
+./spec/scripts/new-spec.sh "my-feature" "Owner"
 ```
 
 Fill:
-- `specs/001-.../spec.md`
-- `specs/001-.../plan.md`
-- `specs/001-.../tasks.md`
-- `specs/001-.../history.md`
+- `spec/specs/001-.../spec.md`
+- `spec/specs/001-.../plan.md`
+- `spec/specs/001-.../tasks.md`
+- `spec/specs/001-.../history.md`
 
 ### 6) Apply SDD gate / Aplica compuerta SDD
 
@@ -134,21 +143,24 @@ No code before:
 - explicit user consent recorded right before execution/implementation:
 
 ```bash
-./scripts/confirm-user-consent.sh "User approved implementation for spec 001"
+./spec/scripts/confirm-user-consent.sh --spec 001-my-feature "User approved implementation for spec 001-my-feature"
 ```
+
+The `--spec` id must be the full folder name. A bare number is not auto-detected.
+El id de `--spec` es el nombre completo de la carpeta. Un número suelto no se detecta.
 
 ### 7) Validate + close session / Valida + cierra sesión
 
 ```bash
-./scripts/validate-sdd.sh . --strict
-./scripts/check-sdd-policy.sh .
-./scripts/check-sdd-gate.sh .
+./spec/scripts/validate-sdd.sh . --strict
+./spec/scripts/check-sdd-policy.sh .
+./spec/scripts/check-sdd-gate.sh .
 ```
 
 Update:
-- `bitacora/global/PROJECT_LOG.md`
-- `bitacora/diaria/AAAA-MM-DD.md`
-- `bitacora/handoffs/` (if pending work)
+- `spec/bitacora/global/PROJECT_LOG.md`
+- `spec/bitacora/diaria/AAAA-MM-DD.md`
+- `spec/bitacora/handoffs/` (if pending work)
 
 ## Next / Siguiente
 

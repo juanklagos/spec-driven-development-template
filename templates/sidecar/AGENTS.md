@@ -26,7 +26,7 @@ Recommended flow:
 
 Useful commands:
 - `./scripts/new-spec.sh "feature-name" "Owner"`
-- `./scripts/confirm-user-consent.sh "User approved implementation for spec 001"`
+- `./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved implementation for spec 001-<slug>"`
 - `./scripts/validate-sdd.sh . --strict`
 - `./scripts/check-sdd-policy.sh .`
 - `./scripts/check-sdd-gate.sh .`

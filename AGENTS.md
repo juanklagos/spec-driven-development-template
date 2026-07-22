@@ -60,8 +60,8 @@ Before implementation tasks, explicitly determine:
    - full standalone workspace only when explicitly requested: `./scripts/init-project.sh /absolute/path/to/project --profile=full`
 2. Work from one active specification.
 3. Record explicit user consent before execution/implementation starts on an approved spec:
-   - sidecar mode: `./spec/scripts/confirm-user-consent.sh "User approved scope X"`
-   - standalone full mode: `./scripts/confirm-user-consent.sh "User approved scope X"`
+   - sidecar mode: `./spec/scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"`
+   - standalone full mode: `./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"`
 4. If GitHub Spec Kit is available, use:
    - `/speckit.constitution`
    - `/speckit.specify`

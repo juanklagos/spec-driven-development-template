@@ -377,6 +377,22 @@ export async function checkGate(projectRoot: string): Promise<GateResult> {
           "Missing or empty user consent log (.sdd/user-consent.log) for approved spec execution",
         path: ".sdd/user-consent.log"
       });
+      // ALSO one per approved spec.
+      //
+      // The message above carries `path: ".sdd/user-consent.log"`, which cannot
+      // match SPEC_PATH_RE, so getGateSummary files it under generalIssues —
+      // and the builder renders generalIssues nowhere. The result was the worst
+      // possible: for the FIRST approved spec of a new project, where the log
+      // does not exist yet, the card went red with no message and no way
+      // forward. That is exactly the case the drawer's consent panel exists for.
+      for (const specId of approvedIds) {
+        messages.push({
+          level: "error",
+          code: "missing-spec-consent",
+          message: `${specId} approved but no user consent recorded for it. Run: confirm-user-consent.sh --spec ${specId} "User approved implementation for spec ${specId}"`,
+          path: `specs/${specId}/spec.md`
+        });
+      }
     } else {
       // Consent is PER SPEC. KEEP IN SYNC with the consent block in
       // scripts/check-sdd-gate.sh — all three rules.

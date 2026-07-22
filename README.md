@@ -108,7 +108,7 @@ If you use **Claude Code**, this repo ships slash commands out of the box. Start
 ```bash
 ./scripts/check-sdd-policy.sh .   # multi-agent policy files are aligned
 ./scripts/check-sdd-gate.sh .     # spec approved + plan consistent + consent recorded
-./scripts/confirm-user-consent.sh "User approved scope X"
+./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"
 ```
 
 (In sidecar projects the same scripts live under `./spec/scripts/`.)

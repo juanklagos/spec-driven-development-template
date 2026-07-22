@@ -12,8 +12,8 @@ User consent (mandatory):
 - Record explicit user consent before starting execution/implementation for an approved spec.
 - Registra consentimiento explícito del usuario antes de iniciar ejecución/implementación sobre una spec aprobada.
 - Command / Comando:
-  sidecar: `./spec/scripts/confirm-user-consent.sh "User approved scope X"`
-  standalone: `./scripts/confirm-user-consent.sh "User approved scope X"`
+  sidecar: `./spec/scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"`
+  standalone: `./scripts/confirm-user-consent.sh --spec 001-<slug> "User approved scope X"`
 
 Execution workspace (recommended default):
 - Use `spec/` as the recommended compact sidecar inside real projects.
