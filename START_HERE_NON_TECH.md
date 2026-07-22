@@ -74,16 +74,16 @@ You do not have to read markdown files. There is a visual canvas:
 No tienes que leer archivos markdown. Hay un lienzo visual:
 
 ```bash
-npx -p @juanklagos/sdd-mcp sdd-mcp-http
+npx @juanklagos/sdd-mcp@latest --http
 ```
 
-It opens at `http://127.0.0.1:3334/builder`. Cards are your specs, and you can
-approve one from there. Needs version 2.2.0 or newer — if you see "503", the package is older than that:
-add `@latest` to the package name above.
+The command prints three addresses. The one you want is the first, the board:
+`http://127.0.0.1:3334/builder`. Cards are your specs, and you can approve one
+from there. Leave that terminal open — closing it closes the board.
 
-Se abre en `http://127.0.0.1:3334/builder`. Las tarjetas son tus specs, y puedes
-aprobar una desde ahí. Necesita la versión 2.2.0 o posterior — si ves «503», tu
-copia es anterior: añade `@latest` al nombre del paquete de arriba.
+El comando imprime tres direcciones. La que quieres es la primera, el lienzo:
+`http://127.0.0.1:3334/builder`. Las tarjetas son tus specs, y puedes aprobar
+una desde ahí. Deja esa terminal abierta: si la cierras, se cierra el lienzo.
 
 ## 6) If you get stuck / Si te atoras
 

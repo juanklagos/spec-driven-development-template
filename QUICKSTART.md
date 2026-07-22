@@ -12,7 +12,41 @@ Goal / Objetivo:
 
 ## Route B: Technical / Ruta B: Técnica
 
-### 1) Get the template / Obtén el template
+### 1) Scaffold / Andamia
+
+One command. It installs the compact `spec/` sidecar and leaves your code where it is.
+
+Un comando. Instala el sidecar compacto `spec/` y deja tu código donde está.
+
+```bash
+npx @juanklagos/create-sdd-project my-project
+cd my-project
+```
+
+EN: run it inside an existing project (`npx @juanklagos/create-sdd-project .`) and it adds
+SDD without moving a single file of yours. It prints the exact next steps for what it did.
+
+ES: ejecútalo dentro de un proyecto que ya existe (`npx @juanklagos/create-sdd-project .`)
+y añade SDD sin mover ni uno de tus archivos. Al terminar imprime los pasos exactos.
+
+> [!NOTE]
+> No terminal? An AI agent can run this for you — it detects that nobody can answer a
+> prompt, picks the sidecar defaults, and prints what it assumed.
+>
+> ¿Sin terminal? Una IA puede ejecutarlo por ti: detecta que nadie puede responder,
+> toma los valores por defecto del sidecar, y dice qué asumió.
+
+Then skip to step 4. Steps 2 and 3 are for the longer route.
+
+Luego salta al paso 4. Los pasos 2 y 3 son para la ruta larga.
+
+### 2) Longer route: work inside a clone of the template / Ruta larga: trabajar dentro de un clon del template
+
+EN: only if you want the full teaching workspace — the 32 guides, the course, the examples —
+in the same repository as your code. Most people do not need this.
+
+ES: solo si quieres el espacio de enseñanza completo —las 32 guías, el curso, los ejemplos—
+en el mismo repositorio que tu código. La mayoría no lo necesita.
 
 ```bash
 npx degit juanklagos/spec-driven-development-template my-project
@@ -26,7 +60,7 @@ git clone https://github.com/juanklagos/spec-driven-development-template.git my-
 cd my-project
 ```
 
-### 1b) Clear the template's own work / Limpia el trabajo del propio template
+#### 2b) Clear the template's own work / Limpia el trabajo del propio template
 
 Run this first, before anything else:
 
@@ -48,7 +82,7 @@ y archiva el registro de consentimiento heredado en `.sdd/inherited/`.
 
 The gate warns you if you skip it. / La compuerta te avisa si te lo saltas.
 
-### 2) Create execution workspace / Crea espacio de ejecución
+#### 2c) Create execution workspace / Crea espacio de ejecución
 
 ```bash
 ./scripts/create-www-project.sh my-project codex
@@ -107,13 +141,15 @@ uvx --from git+https://github.com/github/spec-kit.git specify init . --ai codex
 ```
 
 > [!NOTE]
-> Step 2 installed the compact sidecar, so SDD lives in `spec/` and its scripts in
-> `spec/scripts/`. If you used `--full-template`, drop the `spec/` prefix everywhere below —
-> the scaffolder prints the right paths for your profile when it finishes.
+> Step 1 installed the compact sidecar, so SDD lives in `spec/` and its scripts in
+> `spec/scripts/`. If you took the longer route with `--full-template`, drop the `spec/`
+> prefix everywhere below — the scaffolder prints the right paths for your profile when
+> it finishes.
 >
-> El paso 2 instaló el sidecar compacto, así que SDD vive en `spec/` y sus scripts en
-> `spec/scripts/`. Si usaste `--full-template`, quita el prefijo `spec/` en todo lo de abajo —
-> el andamiador imprime las rutas correctas para tu perfil al terminar.
+> El paso 1 instaló el sidecar compacto, así que SDD vive en `spec/` y sus scripts en
+> `spec/scripts/`. Si tomaste la ruta larga con `--full-template`, quita el prefijo `spec/`
+> en todo lo de abajo — el andamiador imprime las rutas correctas para tu perfil al
+> terminar.
 
 ### 4) Define idea / Define idea
 

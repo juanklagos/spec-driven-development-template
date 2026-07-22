@@ -27,10 +27,15 @@ build step is required.
 # 1. stdio transport - what MCP clients (Claude, Cursor, Codex...) launch
 npx -y @juanklagos/sdd-mcp
 
-# 2. Streamable HTTP transport - MCP at /mcp plus the read-only /dashboard
-npx -y -p @juanklagos/sdd-mcp sdd-mcp-http
-# -> http://127.0.0.1:3334/mcp   and   http://127.0.0.1:3334/dashboard
+# 2. Streamable HTTP transport - the visual board, the dashboard, and MCP at /mcp
+npx -y @juanklagos/sdd-mcp --http
+# -> http://127.0.0.1:3334/builder    the SDD Builder canvas
+#    http://127.0.0.1:3334/dashboard  read-only status
+#    http://127.0.0.1:3334/mcp        the MCP endpoint itself
 ```
+
+The `sdd-mcp-http` bin still exists and does the same thing — `--http` on the main bin
+is there so reaching the board never depends on npx resolving a second executable.
 
 Environment variables:
 
