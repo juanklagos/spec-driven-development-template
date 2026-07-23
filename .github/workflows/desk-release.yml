@@ -1,0 +1,98 @@
+# Builds SDD Desk for the three platforms and publishes them to a GitHub Release.
+# Spec 023 R10.
+#
+# Triggered by a `desk-v*` tag, NOT by the repository's own version tags: the
+# desktop app has its own version in desk/package.json and its own cadence. A
+# release of @juanklagos/sdd-mcp should not force a 100 MB desktop build, and a
+# desktop fix should not need an npm release to ship.
+#
+# Signing is wired but not yet possible: the Apple and Windows credentials do
+# not exist. Until they do, this publishes UNSIGNED artifacts as a draft, so a
+# release is never made public by accident with the Gatekeeper and SmartScreen
+# warnings that unsigned downloads put on the user.
+
+name: desk-release
+
+on:
+  push:
+    tags:
+      - "desk-v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build the artifacts without creating a release"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      # One platform failing must not throw away the two that worked: the
+      # artifacts are independent, and a partial release is still inspectable.
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: macOS
+          - os: windows-latest
+            name: Windows
+          - os: ubuntu-latest
+            name: Linux
+
+    runs-on: ${{ matrix.os }}
+    name: build (${{ matrix.name }})
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # desk/ depends on the workspace packages through `file:` links, so their
+      # dist/ must exist before electron-builder walks the dependency tree.
+      - name: Build the SDD packages
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build the builder frontend
+        run: |
+          npm ci
+          npm run build
+        working-directory: builder
+
+      - name: Install desk dependencies
+        run: npm install
+        working-directory: desk
+
+      # The committed icon is packaging input; regenerating it here would need a
+      # display and would produce bytes nobody reviewed. It is verified instead.
+      - name: Check the app icon is present
+        shell: bash
+        run: test -s desk/build/icon.png || (echo "desk/build/icon.png is missing or empty; run npm run icon in desk/" && exit 1)
+
+      - name: Build and publish
+        working-directory: desk
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Without this, electron-builder searches the macOS keychain for a
+          # Developer ID and fails the job when it finds none. Remove it the day
+          # the certificate exists.
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: npx electron-builder --config electron-builder.yml --publish ${{ startsWith(github.ref, 'refs/tags/desk-v') && 'always' || 'never' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdd-desk-${{ matrix.name }}
+          path: |
+            desk/release/*.dmg
+            desk/release/*.exe
+            desk/release/*.AppImage
+            desk/release/*.deb
+            desk/release/*.yml
+          if-no-files-found: error
+          retention-days: 14

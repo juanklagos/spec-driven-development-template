@@ -43,27 +43,46 @@ mac:
   entitlementsInherit: build/entitlements.mac.plist
   # notarize: set by CI once the Apple credentials exist.
 
+# Artifact names carry no version and no spaces, on purpose.
+#
+# GitHub serves `releases/latest/download/<name>`, which redirects to the newest
+# release — but only if <name> is spelled the same in every release. Putting
+# ${version} in the file name makes every download button on the site expire on
+# the next tag, and a space makes the URL need escaping in every link that
+# points at it. The version belongs on the release page, which shows it anyway.
 dmg:
-  artifactName: ${productName}-${version}-${arch}.${ext}
+  artifactName: SDD-Desk-mac-${arch}.${ext}
 
 win:
   icon: build/icon.png
+  # x64 only. Windows on ARM runs x64 binaries through emulation, so a separate
+  # arm64 installer buys very little here and costs a second artifact whose
+  # exact file name cannot be verified from a Mac — and an unverified file name
+  # is a 404 behind a download button. One arch means one knowable URL.
   target:
     - target: nsis
-      arch: [x64, arm64]
+      arch: [x64]
 
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  artifactName: SDD-Desk-windows-setup.${ext}
 
 linux:
   icon: build/icons
   category: Development
   synopsis: The SDD Builder in its own window
+  # No ${arch} here, and a single architecture on purpose. electron-builder
+  # spells x64 as "x86_64" for AppImage and as "amd64" for .deb, following each
+  # format's own convention — so a templated name produces a file whose URL the
+  # download page cannot predict, and a wrong guess is a 404 on a download
+  # button. Pinning the name makes the published URL knowable.
+  artifactName: SDD-Desk-linux.${ext}
   target:
-    - AppImage
-    - deb
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
   # Flathub has banned AI-assisted code since 2026-05-29, so the store channel
   # with the widest Linux reach is closed to this project. AppImage and .deb are
   # the whole Linux story here, deliberately.
@@ -72,3 +91,9 @@ publish:
   provider: github
   owner: juanklagos
   repo: spec-driven-development-template
+  # Draft until a human looks at it. While the builds are unsigned, publishing
+  # straight to a public release would hand every downloader a Gatekeeper or
+  # SmartScreen warning they cannot diagnose — the exact support cost the
+  # 2026-07-21 decision predicted. Reviewing before publishing is what keeps
+  # that a choice instead of an accident.
+  releaseType: draft
