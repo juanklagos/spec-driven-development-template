@@ -1,0 +1,111 @@
+---
+title: Descargar SDD Desk
+description: El SDD Builder como app de escritorio — ventana propia, ícono propio, sin terminal y sin necesitar Node.
+---
+
+import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**SDD Desk** es el builder visual en su propia ventana. Trae su propio Node adentro, así que no
+hay que instalar nada antes, y hospeda el servidor SDD él mismo — incluido el endpoint MCP al
+que se conectan tus agentes.
+
+<Aside type="caution" title="Todavía no están firmadas">
+Los certificados de firma de Apple y Windows cuestan dinero que el proyecto aún no ha gastado,
+así que tu sistema operativo **te va a advertir** la primera vez que abras la app. La
+advertencia es cierta: significa que la descarga no está verificada, no que sea segura. Si
+prefieres no sortearla, [usa el builder en el navegador](../guides/51-sdd-builder-visual-guide/)
+— las mismas funciones, un comando, sin advertencia.
+</Aside>
+
+## Descargar
+
+<CardGrid>
+  <Card title="macOS · Apple Silicon" icon="apple">
+    M1 en adelante.
+
+    <LinkButton href="https://github.com/juanklagos/spec-driven-development-template/releases/latest/download/SDD-Desk-mac-arm64.dmg" icon="down-caret">Descargar .dmg</LinkButton>
+  </Card>
+  <Card title="macOS · Intel" icon="apple">
+    Macs anteriores a 2021.
+
+    <LinkButton href="https://github.com/juanklagos/spec-driven-development-template/releases/latest/download/SDD-Desk-mac-x64.dmg" icon="down-caret">Descargar .dmg</LinkButton>
+  </Card>
+  <Card title="Windows" icon="seti:windows">
+    Instalador, 64 bits.
+
+    <LinkButton href="https://github.com/juanklagos/spec-driven-development-template/releases/latest/download/SDD-Desk-windows-setup.exe" icon="down-caret">Descargar .exe</LinkButton>
+  </Card>
+  <Card title="Linux" icon="linux">
+    AppImage — sin instalación.
+
+    <LinkButton href="https://github.com/juanklagos/spec-driven-development-template/releases/latest/download/SDD-Desk-linux.AppImage" icon="down-caret">Descargar AppImage</LinkButton>
+  </Card>
+</CardGrid>
+
+Todas las versiones, con su número y sus cambios, están en la
+[página de releases](https://github.com/juanklagos/spec-driven-development-template/releases).
+
+## Abrirla la primera vez
+
+<Tabs syncKey="os">
+  <TabItem label="macOS" icon="apple">
+    macOS se niega a abrir apps sin firmar descargadas de internet. Abre el `.dmg`, arrastra
+    **SDD Desk** a Aplicaciones, y después **haz clic derecho sobre la app y elige Abrir** — ese
+    diálogo trae un botón de Abrir que el del doble clic no tiene.
+
+    Si macOS dice que la app "está dañada", es la marca de cuarentena y no un daño real:
+
+    ```bash
+    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
+    ```
+
+    Ejecútalo solo sobre una descarga en la que confíes. Quita la comprobación que macOS
+    acaba de hacer por ti.
+  </TabItem>
+  <TabItem label="Windows" icon="seti:windows">
+    SmartScreen mostrará "Windows protegió tu PC". Haz clic en **Más información** y luego en
+    **Ejecutar de todas formas**. El aviso sale porque el instalador no está firmado, y seguirá
+    saliendo hasta que el proyecto tenga certificado.
+  </TabItem>
+  <TabItem label="Linux" icon="linux">
+    Dale permiso de ejecución y ábrela:
+
+    ```bash
+    chmod +x SDD-Desk-linux.AppImage
+    ./SDD-Desk-linux.AppImage
+    ```
+
+    Al lado se publica un `.deb` para Debian y Ubuntu. No hay Flatpak: Flathub prohíbe el
+    código asistido por IA desde el 2026-05-29.
+  </TabItem>
+</Tabs>
+
+## Qué pasa cuando la abres
+
+1. Te pide la carpeta de tu proyecto — una que tenga `specs/` o el sidecar `spec/`. ¿No tienes
+   ninguna? Créala con `npx @juanklagos/create-sdd-project@latest .`
+2. Se abre el lienzo sobre ese proyecto. Tus archivos en disco siguen siendo la fuente de
+   verdad; la app no los copia a ningún lado.
+3. Recuerda la carpeta. **Archivo → Abrir proyecto…** cambia a otra sin reiniciar.
+
+## Conectar un agente
+
+Mientras está abierta, la app **es** el servidor MCP de tu proyecto. En
+**Archivo → Conectar un agente…** ves la URL y un fragmento listo para copiar:
+
+```json
+{ "mcpServers": { "sdd": { "url": "http://127.0.0.1:3334/mcp" } } }
+```
+
+El puerto es el que la app realmente tomó — se corre al siguiente libre si 3334 está ocupado,
+y por eso el diálogo te enseña el número real en vez de que lo supongas.
+
+Todo lo que tu agente escriba por ese endpoint aparece en la ventana al instante, sin recargar.
+
+## Qué no hace
+
+Corre entera en tu máquina. No hay cuenta, ni sincronización, ni un servidor nuestro de por
+medio — la app abre un puerto en `127.0.0.1` que nada fuera de tu computadora alcanza.
+
+Tampoco reemplaza la ruta de terminal. `npx @juanklagos/sdd-mcp@latest --http` sigue abriendo
+el mismo builder en tu navegador, y sigue funcionando igual que antes.

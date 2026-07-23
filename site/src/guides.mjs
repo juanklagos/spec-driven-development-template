@@ -117,16 +117,31 @@ export function assertGuidesAreCovered() {
 	return numbers.size;
 }
 
+/**
+ * Standalone pages: authored directly under site/src/content/docs/<locale>/,
+ * not synced from docs/. They sit above the guide groups because they are
+ * destinations rather than reading, and scripts/sync-docs.mjs only ever wipes
+ * <locale>/guides/, so hand-authored siblings survive a sync.
+ */
+const PAGES = [{ slug: 'download', label: 'Download SDD Desk', es: 'Descargar SDD Desk' }];
+
 /** Starlight sidebar: curated groups, labels translated, guides resolved per locale by slug. */
 export function buildSidebar() {
 	assertGuidesAreCovered();
 	const { en } = readGuideSlugs();
-	return GROUPS.map((group) => ({
-		label: group.label,
-		translations: { es: group.es },
-		collapsed: group.collapsed !== false,
-		items: group.guides.map((n) => `guides/${urlSlugOf(en[n])}`),
-	}));
+	return [
+		...PAGES.map((page) => ({
+			label: page.label,
+			translations: { es: page.es },
+			link: page.slug,
+		})),
+		...GROUPS.map((group) => ({
+			label: group.label,
+			translations: { es: group.es },
+			collapsed: group.collapsed !== false,
+			items: group.guides.map((n) => `guides/${urlSlugOf(en[n])}`),
+		})),
+	];
 }
 
 /**
