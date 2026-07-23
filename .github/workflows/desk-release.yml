@@ -69,6 +69,13 @@ jobs:
         run: npm install
         working-directory: desk
 
+      # electron-builder packages dist/, it does not produce it. Calling the
+      # packager without this step yields an asar with no entry file and a
+      # "corrupted archive" error that names the symptom, not the cause.
+      - name: Compile the main process
+        run: npm run build
+        working-directory: desk
+
       # The committed icon is packaging input; regenerating it here would need a
       # display and would produce bytes nobody reviewed. It is verified instead.
       - name: Check the app icon is present
