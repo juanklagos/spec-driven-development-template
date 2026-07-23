@@ -1,7 +1,7 @@
 {
   "name": "sdd-desk",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "license": "MIT",
   "description": "SDD Desk: the SDD Builder in its own window, hosting the SDD server and its MCP endpoint.",

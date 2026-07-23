@@ -70,17 +70,29 @@ signature at all.
 
 <Tabs syncKey="os">
   <TabItem label="macOS" icon="apple">
-    macOS refuses to open unsigned apps downloaded from the internet. Open the `.dmg`, drag
-    **SDD Desk** to Applications, then **right-click the app and choose Open** — the dialog you
-    get that way has an Open button, which the one from a double click does not.
+    Open the `.dmg` and drag **SDD Desk** to Applications. Then, in the Applications folder,
+    **right-click the app and choose Open** — that dialog has an Open button, which the one from
+    a double click does not. Only needed the first time.
 
-    If macOS says the app "is damaged", that is the quarantine flag rather than a real problem:
+    <Aside type="danger" title="If it says “is damaged and can’t be opened”">
+    That is **not** the normal warning, and it does not mean the download arrived corrupted. It
+    was a packaging bug in 0.1.1: the bundle shipped without a valid code signature seal, and
+    Apple Silicon rejects that outright instead of asking for confirmation. Fixed in 0.1.2 —
+    download again and it will not happen. To rescue the copy you already have:
+
+    ```bash
+    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
+    codesign --force --deep --sign - "/Applications/SDD Desk.app"
+    ```
+    </Aside>
+
+    If instead you see that the developer "cannot be verified", that one is the expected warning
+    and right-click → Open resolves it. You can also clear the quarantine flag by hand, only on
+    a download you trust:
 
     ```bash
     xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
     ```
-
-    Only run that on a download you trust. It removes the check macOS just made for you.
   </TabItem>
   <TabItem label="Windows" icon="seti:windows">
     SmartScreen will show "Windows protected your PC". Click **More info**, then

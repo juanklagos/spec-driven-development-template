@@ -69,18 +69,29 @@ diálogo. Y Linux no pide firma de nada.
 
 <Tabs syncKey="os">
   <TabItem label="macOS" icon="apple">
-    macOS se niega a abrir apps sin firmar descargadas de internet. Abre el `.dmg`, arrastra
-    **SDD Desk** a Aplicaciones, y después **haz clic derecho sobre la app y elige Abrir** — ese
-    diálogo trae un botón de Abrir que el del doble clic no tiene.
+    Abre el `.dmg` y arrastra **SDD Desk** a Aplicaciones. Después, en la carpeta Aplicaciones,
+    **haz clic derecho sobre la app y elige Abrir** — ese diálogo trae un botón de Abrir que el
+    del doble clic no tiene. Solo hace falta la primera vez.
 
-    Si macOS dice que la app "está dañada", es la marca de cuarentena y no un daño real:
+    <Aside type="danger" title="Si dice «está dañado y no puede abrirse»">
+    Eso **no** es el aviso normal, y no significa que la descarga viniera mal. Fue un fallo de
+    empaquetado en la versión 0.1.1: el bundle salió sin un sello de firma válido, y Apple
+    Silicon rechaza eso de plano en vez de pedir confirmación. Está arreglado desde la 0.1.2 —
+    vuelve a descargar y no volverá a pasar. Si prefieres rescatar la copia que ya bajaste:
+
+    ```bash
+    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
+    codesign --force --deep --sign - "/Applications/SDD Desk.app"
+    ```
+    </Aside>
+
+    Si en vez de eso ves que el desarrollador "no está verificado", ese sí es el aviso esperado
+    y el clic derecho → Abrir lo resuelve. También puedes quitar la marca de cuarentena a mano,
+    solo sobre una descarga en la que confíes:
 
     ```bash
     xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
     ```
-
-    Ejecútalo solo sobre una descarga en la que confíes. Quita la comprobación que macOS
-    acaba de hacer por ti.
   </TabItem>
   <TabItem label="Windows" icon="seti:windows">
     SmartScreen mostrará "Windows protegió tu PC". Haz clic en **Más información** y luego en

@@ -19,6 +19,12 @@ directories:
   output: release
   buildResources: build
 
+# Apple Silicon refuses a bundle with no valid seal and calls it "damaged".
+# Without a Developer ID this hook ad-hoc signs it, which is the difference
+# between macOS asking the user to confirm and macOS telling them the download
+# is broken. See the file for what shipped in 0.1.1 without it.
+afterPack: scripts/adhoc-sign.cjs
+
 # The app is the compiled main process plus its runtime dependencies. Source,
 # the icon working files and the packager's own output stay out.
 files:
