@@ -35,3 +35,6 @@
 [2026-07-22 11:24:29 -0500] [spec:020-front-door-two-commands] Juan Carlos Alvarez Lagos aprobo la spec 020 y autorizo la implementacion: 'arreglalo'
 [2026-07-23T01:24:53.516Z] [spec:022-drawer-tareas-colapsables] El autor aprueba la spec 022 y autoriza implementarla: lista de tareas plegable en el panel del builder, con recuento hecho/total en la cabecera y preferencia global persistida en localStorage.
 [2026-07-23T01:50:14.845Z] [spec:023-desk-electron] User approved implementation for spec 023-desk-electron: "aprobada y hazle con todo nivel senior con solid" (2026-07-22)
+[2026-07-23 12:42:57 -0500] [spec:024-nucleo-con-pruebas] Juan Carlos Alvarez Lagos autorizo implementar la spec 024 (nucleo con pruebas, Vitest) con 'arranca' (2026-07-23)
+[2026-07-23 13:02:05 -0500] [spec:026-tema-docs] Juan Carlos Alvarez Lagos autorizo implementar la spec 026 (tema docs estilo delphitools con colores SDD, verde primario): eligio 'verde primario' + 'crear spec 026 y construir' (2026-07-23)
+[2026-07-23 13:11:56 -0500] [spec:025-semaforo-de-deriva] Juan Carlos Alvarez Lagos autorizo implementar la spec 025 (semaforo de deriva spec-codigo) con 'continue' a la pregunta de seguir con la 025 (2026-07-23)

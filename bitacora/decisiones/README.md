@@ -121,3 +121,23 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 
 - **ES:** `npx @juanklagos/sdd-mcp --http` llega al lienzo desde el binario que lleva el nombre del paquete, para que no dependa de que npx resuelva un segundo ejecutable. `sdd-mcp-http` se conserva porque está documentado fuera del repositorio. La intermitencia de npx (3 fallos, 6 éxitos, misma máquina) se rodea por diseño, no se diagnostica: se descartaron por experimento la bandera `-y`, el caché y el `node_modules` cercano, y no se afirma ninguna causa.
 - **EN:** `npx @juanklagos/sdd-mcp --http` reaches the board from the bin that carries the package name, so it no longer depends on npx resolving a second executable. `sdd-mcp-http` stays because it is documented outside this repo. The npx flakiness (3 failures, 6 successes, same machine) is designed around rather than diagnosed: the `-y` flag, the cache and a nearby `node_modules` were ruled out by experiment, and no cause is claimed.
+
+### 2026-07-22 — [App de escritorio (Electron), revertida la negativa](2026-07-22-app-escritorio-electron.md)
+
+- **ES:** Se revierte la negativa del 2026-07-21 y se construye SDD Desk en Electron: el builder en su propia ventana, hospedando su MCP. El escritorio es un canal más, no un reemplazo de `npx` ni del `.mcpb`.
+- **EN:** The 2026-07-21 refusal is reversed and SDD Desk is built in Electron: the builder in its own window, hosting its MCP. Desktop is one more channel, not a replacement for `npx` or the `.mcpb`.
+
+### 2026-07-23 — [No firmar la app de escritorio en macOS](2026-07-23-no-firmar-la-app-de-escritorio.md)
+
+- **ES:** macOS queda fuera de alcance para firma/notarización: Apple cobra 99 USD/año sin excepción para código abierto. El bundle se firma ad-hoc (evita «está dañado» en Apple Silicon) y la página de descarga avisa de antemano que hará falta autorizar la app.
+- **EN:** macOS signing/notarization is out of scope: Apple charges 99 USD/yr with no open-source exception. The bundle is ad-hoc signed (avoids the "is damaged" error on Apple Silicon) and the download page warns up front that the app must be authorized.
+
+### 2026-07-23 — [Alcance restante de la 011 tras el escritorio](2026-07-23-alcance-restante-de-011-tras-el-escritorio.md)
+
+- **ES:** La 011 no se cierra ni se deja igual: T2 y T7 estaban hechas por otras specs y se marcan; el resto (T3-T6, T8) pasa a ser explícitamente la ruta `npx` y baja a prioridad Media. Se corrige la contabilidad en `tasks.md`, `INDEX.md` y `STATUS.md`.
+- **EN:** Spec 011 is neither closed nor left as-is: T2 and T7 were done by other specs and get marked; the rest (T3-T6, T8) is explicitly re-scoped to the `npx` route and drops to Medium priority. The bookkeeping is corrected in `tasks.md`, `INDEX.md` and `STATUS.md`.
+
+### 2026-07-23 — [Sampling deprecado confirma el copy-first](2026-07-23-sampling-deprecado-confirma-el-copy-first.md)
+
+- **ES:** MCP deprecó sampling (SEP-2577, versión 2026-07-28) con ruta de migración «integra directamente con APIs de LLM» — justo lo que el builder rechazó. La condición de revisión del copy-first que dejó la decisión del 2026-07-20 se cierra con evidencia: no se hace el spike y no se toca el copy-first. Confirma, no reemplaza, la de «sin API keys».
+- **EN:** MCP deprecated sampling (SEP-2577, version 2026-07-28) with migration path "integrate directly with LLM provider APIs" — exactly what the builder rejected. The copy-first revisit condition left open on 2026-07-20 closes on evidence: no spike, no change to copy-first. It confirms, not replaces, the "no API keys" record.
