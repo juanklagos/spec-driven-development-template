@@ -87,13 +87,18 @@ linux:
   # with the widest Linux reach is closed to this project. AppImage and .deb are
   # the whole Linux story here, deliberately.
 
+# Kept for electron-updater's benefit, NOT to publish with.
+#
+# The workflow always runs `--publish never` and uploads with `gh` instead,
+# because this publisher derives the release tag from `version` (`v${version}`)
+# and ignores the git tag that triggered the build — which put a `v0.1.0`
+# release next to the template's own v2.x history and read like a downgrade of
+# the whole project.
+#
+# When auto-update lands (R9), it will need to be pointed at the fixed
+# `desk-latest` tag rather than GitHub's "latest" pointer, which the desktop app
+# deliberately does not own.
 publish:
   provider: github
   owner: juanklagos
   repo: spec-driven-development-template
-  # Draft until a human looks at it. While the builds are unsigned, publishing
-  # straight to a public release would hand every downloader a Gatekeeper or
-  # SmartScreen warning they cannot diagnose — the exact support cost the
-  # 2026-07-21 decision predicted. Reviewing before publishing is what keeps
-  # that a choice instead of an accident.
-  releaseType: draft

@@ -2,14 +2,25 @@
 # Spec 023 R10.
 #
 # Triggered by a `desk-v*` tag, NOT by the repository's own version tags: the
-# desktop app has its own version in desk/package.json and its own cadence. A
-# release of @juanklagos/sdd-mcp should not force a 100 MB desktop build, and a
-# desktop fix should not need an npm release to ship.
+# desktop app has its own version in desk/package.json and its own cadence.
 #
-# Signing is wired but not yet possible: the Apple and Windows credentials do
-# not exist. Until they do, this publishes UNSIGNED artifacts as a draft, so a
-# release is never made public by accident with the Gatekeeper and SmartScreen
-# warnings that unsigned downloads put on the user.
+# Two things this deliberately does NOT do, both learned the hard way:
+#
+#   1. It does not let electron-builder publish. Its GitHub publisher derives
+#      the release tag from package.json (`v${version}`), ignoring the git tag
+#      that triggered the run — so `desk-v0.1.0` produced a release tagged
+#      `v0.1.0`, sitting in the same namespace as the template's own v2.x
+#      releases and reading like a downgrade of the whole project.
+#
+#   2. It does not let the desktop app become the repository's "Latest"
+#      release. The template's releases are the headline; a desktop build
+#      taking that slot buries them.
+#
+# Instead the artifacts land on ONE long-lived release under the fixed tag
+# `desk-latest`, whose assets are replaced on every version. That is what makes
+# `releases/download/desk-latest/<file>` a permanent URL the download page can
+# hardcode without GitHub's "latest" pointer — which desk must never own. The
+# per-version `desk-v*` git tags stay in history for provenance.
 
 name: desk-release
 
@@ -19,10 +30,10 @@ on:
       - "desk-v*"
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: "Build the artifacts without creating a release"
+      publish:
+        description: "Update the desk-latest draft release with these builds"
         type: boolean
-        default: true
+        default: false
 
 permissions:
   contents: write
@@ -31,7 +42,7 @@ jobs:
   build:
     strategy:
       # One platform failing must not throw away the two that worked: the
-      # artifacts are independent, and a partial release is still inspectable.
+      # artifacts are independent, and a partial build is still inspectable.
       fail-fast: false
       matrix:
         include:
@@ -69,6 +80,12 @@ jobs:
         run: npm install
         working-directory: desk
 
+      # The committed icon is packaging input; regenerating it here would need a
+      # display and would produce bytes nobody reviewed. It is verified instead.
+      - name: Check the app icon is present
+        shell: bash
+        run: test -s desk/build/icon.png || (echo "desk/build/icon.png is missing or empty; run npm run icon in desk/" && exit 1)
+
       # electron-builder packages dist/, it does not produce it. Calling the
       # packager without this step yields an asar with no entry file and a
       # "corrupted archive" error that names the symptom, not the cause.
@@ -76,21 +93,14 @@ jobs:
         run: npm run build
         working-directory: desk
 
-      # The committed icon is packaging input; regenerating it here would need a
-      # display and would produce bytes nobody reviewed. It is verified instead.
-      - name: Check the app icon is present
-        shell: bash
-        run: test -s desk/build/icon.png || (echo "desk/build/icon.png is missing or empty; run npm run icon in desk/" && exit 1)
-
-      - name: Build and publish
+      - name: Package
         working-directory: desk
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Without this, electron-builder searches the macOS keychain for a
           # Developer ID and fails the job when it finds none. Remove it the day
           # the certificate exists.
           CSC_IDENTITY_AUTO_DISCOVERY: false
-        run: npx electron-builder --config electron-builder.yml --publish ${{ startsWith(github.ref, 'refs/tags/desk-v') && 'always' || 'never' }}
+        run: npx electron-builder --config electron-builder.yml --publish never
 
       - uses: actions/upload-artifact@v4
         with:
@@ -103,3 +113,49 @@ jobs:
             desk/release/*.yml
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/desk-v') || inputs.publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Read the desk version
+        id: meta
+        run: echo "version=$(node -p "require('./desk/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      # The tag has to follow the commit being released, or the release page
+      # would keep pointing at whatever the first version shipped from.
+      - name: Move the desk-latest tag
+        run: |
+          git tag -f desk-latest "${GITHUB_SHA}"
+          git push -f origin desk-latest
+
+      - name: Publish to the desk-latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+          NOTES="SDD Desk ${VERSION}. Downloads and first-run instructions: https://juanklagos.github.io/spec-driven-development-template/en/download/
+
+          These builds are NOT code-signed: macOS and Windows will warn on first launch."
+
+          # --latest=false on both paths: this release must never become the
+          # repository's headline, no matter which path created it.
+          if gh release view desk-latest >/dev/null 2>&1; then
+            gh release edit desk-latest --title "SDD Desk ${VERSION}" --notes "${NOTES}" --latest=false
+            gh release upload desk-latest artifacts/* --clobber
+          else
+            gh release create desk-latest artifacts/* \
+              --draft --latest=false \
+              --title "SDD Desk ${VERSION}" --notes "${NOTES}"
+          fi
