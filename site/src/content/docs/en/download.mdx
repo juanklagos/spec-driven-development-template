@@ -9,12 +9,10 @@ import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starl
 nothing needs to be installed first, and it hosts the SDD server itself — including the MCP
 endpoint your agents connect to.
 
-<Aside type="caution" title="The builds are not signed yet">
-Apple and Windows code-signing certificates cost money the project has not spent yet, so your
-operating system **will warn you** the first time you open the app. The warning is real: it
-means the download is unverified, not that it is safe. If you would rather not work around it,
-[run the builder in your browser](../guides/51-sdd-builder-visual-guide/) instead — same
-features, one command, no warning.
+<Aside type="caution" title="Your system will warn you the first time">
+The app is not code-signed, so macOS and Windows will show a warning when you open it. Below:
+[what that actually means](#why-that-warning-appears) and
+[how to open it](#opening-it-the-first-time) on each system.
 </Aside>
 
 ## Get it
@@ -44,6 +42,29 @@ features, one command, no warning.
 
 Every build, with its version and changelog, is on the
 [releases page](https://github.com/juanklagos/spec-driven-development-template/releases).
+
+## Why that warning appears
+
+Signing a program and publishing it under an open licence are two different things, and they
+are easy to confuse.
+
+**The licence says what you may do with the code.** SDD Desk is MIT: use it, read it, modify
+it, redistribute it, sell it. All of the code is in the repository, including the code that
+builds these downloads.
+
+**The signature says who assembled the file you downloaded.** macOS and Windows do not read
+licences: they check whether a paid certificate vouches for the identity of whoever signed the
+binary. An unsigned MIT `.dmg` and an unsigned proprietary one get exactly the same warning.
+
+So the warning is **not** telling you the app is broken, or dangerous, or that your system
+detected something. It says, literally, that the system cannot verify who published it. Whether
+it is reasonable to go ahead depends on whether you trust the source — which is what having the
+code in the open is for.
+
+Why it is not signed yet: Apple charges USD 99 a year with no exception for open source.
+Windows does have a free route for OSI-approved licences, which MIT satisfies. Neither changes
+what the app does or who may use it — only whether the dialog appears. Linux asks for no
+signature at all.
 
 ## Opening it the first time
 

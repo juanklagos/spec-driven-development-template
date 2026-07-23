@@ -9,12 +9,10 @@ import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starl
 hay que instalar nada antes, y hospeda el servidor SDD él mismo — incluido el endpoint MCP al
 que se conectan tus agentes.
 
-<Aside type="caution" title="Todavía no están firmadas">
-Los certificados de firma de Apple y Windows cuestan dinero que el proyecto aún no ha gastado,
-así que tu sistema operativo **te va a advertir** la primera vez que abras la app. La
-advertencia es cierta: significa que la descarga no está verificada, no que sea segura. Si
-prefieres no sortearla, [usa el builder en el navegador](../guides/51-sdd-builder-visual-guide/)
-— las mismas funciones, un comando, sin advertencia.
+<Aside type="caution" title="Tu sistema te va a advertir la primera vez">
+La app no está firmada, así que macOS y Windows mostrarán un aviso al abrirla. Abajo está
+[qué significa exactamente](#por-qué-aparece-ese-aviso) y [cómo abrirla](#abrirla-la-primera-vez)
+en cada sistema.
 </Aside>
 
 ## Descargar
@@ -44,6 +42,28 @@ prefieres no sortearla, [usa el builder en el navegador](../guides/51-sdd-builde
 
 Todas las versiones, con su número y sus cambios, están en la
 [página de releases](https://github.com/juanklagos/spec-driven-development-template/releases).
+
+## Por qué aparece ese aviso
+
+Firmar un programa y publicarlo con licencia abierta son dos cosas distintas, y es fácil
+confundirlas.
+
+**La licencia dice qué puedes hacer con el código.** SDD Desk es MIT: puedes usarlo, leerlo,
+modificarlo, redistribuirlo y venderlo. El código está entero en el repositorio, incluido el
+que construye estas descargas.
+
+**La firma dice quién armó el archivo que descargaste.** macOS y Windows no leen licencias:
+comprueban si un certificado de pago acredita la identidad de quien firmó el binario. Un `.dmg`
+MIT sin firmar y uno propietario sin firmar reciben exactamente el mismo aviso.
+
+Así que el aviso **no dice** que la app esté rota, ni que sea peligrosa, ni que tu sistema haya
+detectado algo. Dice, literalmente, que el sistema no puede verificar quién la publicó. Que sea
+correcto sortearlo depende de si confías en la fuente, y para eso está el código a la vista.
+
+Por qué no está firmada todavía: Apple cobra 99 USD al año y no tiene excepción para proyectos
+abiertos. Windows sí tiene una vía gratuita para licencias aprobadas por OSI, que MIT cumple.
+Ninguna de las dos cambia lo que la app hace ni quién puede usarla — solo si aparece el
+diálogo. Y Linux no pide firma de nada.
 
 ## Abrirla la primera vez
 
