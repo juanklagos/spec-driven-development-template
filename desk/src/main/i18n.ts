@@ -77,6 +77,29 @@ const STRINGS = {
   "connection.copyConfig": { es: "Copiar la configuración", en: "Copy the config" },
   "connection.close": { es: "Cerrar", en: "Close" },
 
+  "update.title": { es: "Hay una versión nueva", en: "A new version is available" },
+  "update.body": {
+    es: "Puedes actualizar cuando quieras. La versión que tienes ahora sigue funcionando igual.",
+    en: "You can update whenever you like. The version you have keeps working exactly as it does now."
+  },
+  "update.macNote": {
+    es:
+      "En macOS la actualización se instala descargando la versión nueva, porque la app todavía " +
+      "no está firmada y el sistema no permite reemplazarla desde dentro.",
+    en:
+      "On macOS the update is applied by downloading the new version: the app is not signed yet, " +
+      "and the system will not let it replace itself from the inside."
+  },
+  "update.install": { es: "Descargar e instalar", en: "Download and install" },
+  "update.open": { es: "Ir a la descarga", en: "Go to the download" },
+  "update.later": { es: "Ahora no", en: "Not now" },
+  "update.readyTitle": { es: "La actualización está lista", en: "The update is ready" },
+  "update.readyBody": {
+    es: "Se aplica al reiniciar la aplicación. Puedes hacerlo cuando te venga bien.",
+    en: "It is applied when the application restarts. Do it whenever it suits you."
+  },
+  "update.restart": { es: "Reiniciar ahora", en: "Restart now" },
+
   "startup.failed.title": { es: "No se pudo iniciar el servidor SDD", en: "Could not start the SDD server" },
 
   "window.title": { es: "SDD Desk", en: "SDD Desk" }

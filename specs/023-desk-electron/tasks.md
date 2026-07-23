@@ -7,9 +7,9 @@
 - [x] T5 (R4): selector de workspace nativo, persistencia entre sesiones, y cambio en caliente reiniciando el servidor contra la nueva raíz.
 - [x] T6 (R5): panel de conexión MCP con la URL efectiva y el fragmento de configuración copiable.
 - [x] T7 (R7): menús nativos bilingües y atajos.
-- [ ] T8 (H3, H4): verificar paridad con el builder en el navegador sobre el mismo proyecto, y un agente externo escribiendo por la URL MCP con la ventana reflejándolo sin recarga.
+- [x] T8 (H3, H4): verificar paridad con el builder en el navegador sobre el mismo proyecto, y un agente externo escribiendo por la URL MCP con la ventana reflejándolo sin recarga.
 - [ ] T9 (R8): `electron-builder` para macOS (`.dmg` universal, firmado y notarizado), Windows (NSIS firmado) y Linux (AppImage, `.deb`).
-- [ ] T10 (R9): auto-actualización con `electron-updater` contra GitHub Releases, con aviso y sin forzar.
+- [x] T10 (R9): auto-actualización con `electron-updater` contra GitHub Releases, con aviso y sin forzar.
 - [x] T11 (R10): workflow de CI por tag para las tres plataformas, con los secretos de firma.
 - [x] T12 (R11): documentación EN/ES — instalación, conexión de agentes al MCP de la app, y diferencia con `npx @juanklagos/sdd-mcp --http`.
-- [ ] T13 (H5): verificación end-to-end en una máquina limpia sin Node, y registro del resultado en `history.md`.
+- [x] T13 (H5): verificación end-to-end en una máquina limpia sin Node, y registro del resultado en `history.md`.

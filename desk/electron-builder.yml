@@ -87,18 +87,19 @@ linux:
   # with the widest Linux reach is closed to this project. AppImage and .deb are
   # the whole Linux story here, deliberately.
 
-# Kept for electron-updater's benefit, NOT to publish with.
+# This block configures the UPDATER, not the publisher.
 #
 # The workflow always runs `--publish never` and uploads with `gh` instead,
-# because this publisher derives the release tag from `version` (`v${version}`)
-# and ignores the git tag that triggered the build — which put a `v0.1.0`
-# release next to the template's own v2.x history and read like a downgrade of
-# the whole project.
+# because electron-builder's GitHub publisher derives the release tag from
+# `version` (`v${version}`) and ignores the git tag that triggered the build —
+# which put a `v0.1.0` release next to the template's own v2.x history and read
+# like a downgrade of the whole project.
 #
-# When auto-update lands (R9), it will need to be pointed at the fixed
-# `desk-latest` tag rather than GitHub's "latest" pointer, which the desktop app
-# deliberately does not own.
+# `generic` rather than `github` for the same reason (R9): the GitHub provider
+# looks up the repository's "latest" release, and the desktop app deliberately
+# does not own that pointer. Pointing straight at the fixed `desk-latest` tag is
+# what lets the updater find `latest-mac.yml` without desk having to become the
+# headline release.
 publish:
-  provider: github
-  owner: juanklagos
-  repo: spec-driven-development-template
+  provider: generic
+  url: https://github.com/juanklagos/spec-driven-development-template/releases/download/desk-latest

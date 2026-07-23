@@ -13,6 +13,7 @@ import { createTranslator, detectLang, type Lang, type Translator } from "./i18n
 import { applyMenu } from "./menu.js";
 import { createServerHost } from "./server-host.js";
 import { createSettingsStore } from "./settings.js";
+import { initUpdates } from "./updater.js";
 import { isUsableWorkspace, workspaceLabel } from "./workspace.js";
 import { createBuilderWindow, showWorkspace } from "./window.js";
 
@@ -23,10 +24,18 @@ import { createBuilderWindow, showWorkspace } from "./window.js";
 // exists to prevent.
 const IS_PRIMARY_INSTANCE = app.requestSingleInstanceLock();
 
-// Before anything reads it: the app menu, the userData folder and the About
-// panel all derive from this, and in development it would otherwise be
-// "Electron" — including the path where settings are written.
+// The app menu and the About panel derive from this; in development it would
+// otherwise say "Electron".
 app.setName("SDD Desk");
+
+// And the settings folder is pinned explicitly, because setName does NOT move
+// it. Electron resolves userData from the package name before this line runs,
+// so a packaged build wrote to "sdd-desk" while the development build — where
+// setName lands earlier in the startup order — wrote to "SDD Desk". Two
+// locations for one file: the app remembered a different project depending on
+// how it was launched, and only the packaged build showed it. Naming the path
+// makes both builds agree by construction.
+app.setPath("userData", path.join(app.getPath("appData"), "SDD Desk"));
 
 const serverHost = createServerHost();
 let window: BrowserWindow | null = null;
@@ -127,6 +136,10 @@ async function main(): Promise<void> {
   }
 
   await openWorkspace(projectRoot);
+
+  // Last, and never blocking: the board is open before the app asks the network
+  // anything. An update prompt is not worth a second of delay on startup.
+  initUpdates(translator);
 }
 
 // The server outlives the window by design, so it is closed here rather than in
