@@ -18,6 +18,8 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'SDD Template',
+			// Tema propio (spec 026): estilo delphitools + colores SDD.
+			customCss: ['./src/styles/theme.css'],
 			// Two fixed files instead of one adaptive SVG: embedded as an image, the logo
 			// cannot see the site's data-theme, so prefers-color-scheme inside it would
 			// follow the operating system and vanish against the opposite site theme.

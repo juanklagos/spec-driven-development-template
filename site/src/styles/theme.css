@@ -1,0 +1,156 @@
+/* SDD docs theme — estilo delphitools (tools.rmv.fyi), colores SDD.
+ * Spec 026. Tokens oklch tomados de builder/src/styles.css (una sola fuente de
+ * color entre el builder y la docs). Verde 🌱 como acento primario; logo
+ * monocromo intacto (spec 018 RF2). Diseñado contra Starlight 0.41
+ * (variables --sl-*). Fuente iA Writer Quattro auto-hospedada (SIL OFL). */
+
+/* ---- iA Writer Quattro (auto-hospedada, sin peticiones externas) ---- */
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-weight: 400; font-style: normal; font-display: swap;
+  src: url("../fonts/iAWriterQuattroS-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-weight: 700; font-style: normal; font-display: swap;
+  src: url("../fonts/iAWriterQuattroS-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-weight: 400; font-style: italic; font-display: swap;
+  src: url("../fonts/iAWriterQuattroS-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-weight: 700; font-style: italic; font-display: swap;
+  src: url("../fonts/iAWriterQuattroS-BoldItalic.woff2") format("woff2");
+}
+
+/* ---- Fuente en todo el sitio ---- */
+:root {
+  --sl-font: "iA Writer Quattro", ui-monospace, "SF Mono", Menlo, monospace;
+  --sl-font-mono: "iA Writer Quattro", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---- Paleta oscura (Starlight usa oscuro por defecto en :root) ---- */
+:root {
+  /* Acento verde 🌱 (builder dark --primary #22c55e) */
+  --sl-color-accent-low: oklch(0.28 0.06 150);
+  --sl-color-accent: oklch(0.723 0.192 149.6);
+  --sl-color-accent-high: oklch(0.86 0.14 150);
+
+  /* Escala de grises slate (builder dark) */
+  --sl-color-white: oklch(0.985 0.002 255.5);
+  --sl-color-gray-1: oklch(0.925 0.008 255.5);
+  --sl-color-gray-2: oklch(0.83 0.012 256);
+  --sl-color-gray-3: oklch(0.69 0.02 256.8);
+  --sl-color-gray-4: oklch(0.5 0.02 258);
+  --sl-color-gray-5: oklch(0.32 0.02 260);
+  --sl-color-gray-6: oklch(0.245 0.017 261);
+  --sl-color-black: oklch(0.172 0.014 261.7);
+
+  --sl-color-bg: oklch(0.172 0.014 261.7);
+  --sl-color-bg-nav: oklch(0.198 0.015 261.7);
+  --sl-color-bg-sidebar: oklch(0.198 0.015 261.7);
+  --sl-color-bg-inline-code: oklch(0.268 0.018 260);
+  --sl-color-text: oklch(0.925 0.008 255.5);
+  --sl-color-text-accent: oklch(0.723 0.192 149.6);
+  --sl-color-hairline: oklch(0.32 0.02 260);
+  --sl-color-hairline-light: oklch(0.32 0.02 260);
+  --sl-color-hairline-shade: oklch(0.245 0.017 261);
+
+  /* Semánticos SDD para asides/badges */
+  --sdd-amber: oklch(0.795 0.161 86.1);
+  --sdd-blue: oklch(0.707 0.143 254.6);
+  --sdd-green: oklch(0.723 0.192 149.6);
+  --sdd-red: oklch(0.704 0.191 22.2);
+  --sdd-card: oklch(0.225 0.016 261.7);
+}
+
+/* ---- Paleta clara ---- */
+:root[data-theme="light"] {
+  --sl-color-accent-low: oklch(0.9 0.06 150);
+  --sl-color-accent: oklch(0.627 0.17 149.2);
+  --sl-color-accent-high: oklch(0.38 0.11 150);
+
+  --sl-color-white: oklch(0.172 0.014 261.7);   /* invertido: "white" = texto más fuerte */
+  --sl-color-gray-1: oklch(0.235 0.02 257.3);
+  --sl-color-gray-2: oklch(0.33 0.02 258);
+  --sl-color-gray-3: oklch(0.5 0.025 257.3);
+  --sl-color-gray-4: oklch(0.62 0.02 256);
+  --sl-color-gray-5: oklch(0.86 0.012 255.5);
+  --sl-color-gray-6: oklch(0.945 0.007 255.5);
+  --sl-color-gray-7: oklch(0.965 0.004 255.5);
+  --sl-color-black: oklch(0.977 0.003 247.9);
+
+  --sl-color-bg: oklch(0.977 0.003 247.9);
+  --sl-color-bg-nav: oklch(1 0 0);
+  --sl-color-bg-sidebar: oklch(1 0 0);
+  --sl-color-bg-inline-code: oklch(0.945 0.007 255.5);
+  --sl-color-text: oklch(0.235 0.02 257.3);
+  --sl-color-text-accent: oklch(0.627 0.17 149.2);
+  --sl-color-hairline: oklch(0.906 0.01 255.5);
+  --sl-color-hairline-light: oklch(0.906 0.01 255.5);
+  --sl-color-hairline-shade: oklch(0.906 0.01 255.5);
+
+  --sdd-amber: oklch(0.681 0.143 75.8);
+  --sdd-blue: oklch(0.546 0.215 262.9);
+  --sdd-green: oklch(0.627 0.17 149.2);
+  --sdd-red: oklch(0.577 0.245 27.3);
+  --sdd-card: oklch(1 0 0);
+}
+
+/* ---- Esquinas rectas (delphitools --radius: 0) ---- */
+:root {
+  --sl-radius: 0;
+}
+.sl-markdown-content pre,
+.sl-markdown-content img,
+.card,
+.sl-link-card,
+input, button, .sl-flex > kbd, details, blockquote,
+[class*="rounded"] {
+  border-radius: 0 !important;
+}
+
+/* ---- Bordes 1px por todas partes (el look "hecho a mano") ---- */
+.sl-markdown-content :is(th, td) { border-color: var(--sl-color-hairline); }
+
+/* ---- Asides: borde izquierdo 4px + fondo card (mockup) ---- */
+.starlight-aside {
+  border: 1px solid var(--sl-color-hairline);
+  border-left-width: 4px;
+  background: var(--sdd-card);
+  border-radius: 0;
+}
+.starlight-aside--note    { border-left-color: var(--sdd-blue); }
+.starlight-aside--tip     { border-left-color: var(--sdd-green); }
+.starlight-aside--caution { border-left-color: var(--sdd-amber); }
+.starlight-aside--danger  { border-left-color: var(--sdd-red); }
+.starlight-aside--note .starlight-aside__title    { color: var(--sdd-blue); }
+.starlight-aside--tip .starlight-aside__title     { color: var(--sdd-green); }
+.starlight-aside--caution .starlight-aside__title { color: var(--sdd-amber); }
+.starlight-aside--danger .starlight-aside__title  { color: var(--sdd-red); }
+
+/* ---- Nav activo con barra verde (como el mockup) ---- */
+.sidebar-content a[aria-current="page"] {
+  color: var(--sl-color-text);
+  background: color-mix(in oklab, var(--sl-color-accent) 14%, transparent);
+  box-shadow: inset 3px 0 0 var(--sl-color-accent);
+  font-weight: 700;
+}
+
+/* ---- Encabezados de grupo del sidebar en mayúsculas discretas ---- */
+.sidebar-content summary .group-label,
+.sidebar-content > ul > li > details > summary {
+  letter-spacing: 0.03em;
+}
+
+/* ---- Bloques de código con borde ---- */
+.sl-markdown-content pre {
+  border: 1px solid var(--sl-color-hairline);
+}
+.sl-markdown-content :not(pre) > code {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0;
+}
