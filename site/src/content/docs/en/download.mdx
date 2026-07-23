@@ -79,6 +79,34 @@ Every build, with its version and changelog, is on the
   </TabItem>
 </Tabs>
 
+## Two routes with no warning at all
+
+The app is MIT, like the rest of the project. If you would rather not deal with Gatekeeper or
+SmartScreen, there are two ways to use exactly the same thing without any system warning you
+about anything.
+
+**The builder in your browser.** One command, nothing to download:
+
+```bash
+npx @juanklagos/sdd-mcp@latest --http
+```
+
+Same canvas, same server, same MCP endpoint. The only things it does not give you are the
+window of its own and the Dock icon — and it needs Node installed, which is precisely what the
+desktop app exists to avoid.
+
+**Build the app yourself.** A binary you compiled on your own machine did not come from the
+internet, so nothing quarantines it:
+
+```bash
+git clone https://github.com/juanklagos/spec-driven-development-template.git
+cd spec-driven-development-template && npm ci && npm run build
+cd builder && npm ci && npm run build && cd ../desk
+npm install && npm run dist
+```
+
+The result lands in `desk/release/`. Node is needed only to build it; the resulting app is not.
+
 ## What happens when you open it
 
 1. It asks for your project folder — one that has a `specs/` directory or a `spec/` sidecar.

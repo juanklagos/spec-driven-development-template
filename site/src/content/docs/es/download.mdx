@@ -80,6 +80,33 @@ Todas las versiones, con su número y sus cambios, están en la
   </TabItem>
 </Tabs>
 
+## Dos caminos sin ningún aviso
+
+La app es MIT, como todo el proyecto. Si prefieres no lidiar con Gatekeeper ni SmartScreen,
+hay dos formas de usar exactamente lo mismo sin que ningún sistema te advierta nada.
+
+**El builder en el navegador.** Un comando, sin descargar nada:
+
+```bash
+npx @juanklagos/sdd-mcp@latest --http
+```
+
+Es el mismo lienzo, el mismo servidor y el mismo endpoint MCP. Lo único que no te da es la
+ventana propia y el ícono en el Dock — y necesita Node instalado, que es justamente lo que la
+app de escritorio viene a evitar.
+
+**Compilar la app tú mismo.** Un binario que compilas en tu máquina no viene de internet, así
+que ningún sistema lo pone en cuarentena:
+
+```bash
+git clone https://github.com/juanklagos/spec-driven-development-template.git
+cd spec-driven-development-template && npm ci && npm run build
+cd builder && npm ci && npm run build && cd ../desk
+npm install && npm run dist
+```
+
+El resultado queda en `desk/release/`. Necesita Node solo para compilar; la app resultante no.
+
 ## Qué pasa cuando la abres
 
 1. Te pide la carpeta de tu proyecto — una que tenga `specs/` o el sidecar `spec/`. ¿No tienes
