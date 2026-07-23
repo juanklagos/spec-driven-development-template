@@ -5,6 +5,14 @@
   "type": "module",
   "license": "MIT",
   "description": "SDD Desk: the SDD Builder in its own window, hosting the SDD server and its MCP endpoint.",
+  "// packaging metadata": "author and homepage are not decoration: electron-builder refuses to build the Linux targets without them, and .deb takes its Maintainer field from author.",
+  "author": "Juan Carlos Alvarez Lagos <praxisstudio.co@gmail.com>",
+  "homepage": "https://github.com/juanklagos/spec-driven-development-template",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanklagos/spec-driven-development-template.git",
+    "directory": "desk"
+  },
   "main": "dist/main/main.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
