@@ -8,7 +8,7 @@
 - [x] T6 (R5): panel de conexión MCP con la URL efectiva y el fragmento de configuración copiable.
 - [x] T7 (R7): menús nativos bilingües y atajos.
 - [x] T8 (H3, H4): verificar paridad con el builder en el navegador sobre el mismo proyecto, y un agente externo escribiendo por la URL MCP con la ventana reflejándolo sin recarga.
-- [ ] T9 (R8): `electron-builder` para macOS (`.dmg` universal, firmado y notarizado), Windows (NSIS firmado) y Linux (AppImage, `.deb`).
+- [x] T9 (R8): empaquetado para las tres plataformas con firma ad-hoc en macOS. La firma con Developer ID queda **fuera de alcance** por decisión del 2026-07-23; Windows pendiente por la vía gratuita de SignPath.
 - [x] T10 (R9): auto-actualización con `electron-updater` contra GitHub Releases, con aviso y sin forzar.
 - [x] T11 (R10): workflow de CI por tag para las tres plataformas, con los secretos de firma.
 - [x] T12 (R11): documentación EN/ES — instalación, conexión de agentes al MCP de la app, y diferencia con `npx @juanklagos/sdd-mcp --http`.

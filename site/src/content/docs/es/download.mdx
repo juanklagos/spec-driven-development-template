@@ -5,14 +5,37 @@ description: El SDD Builder como app de escritorio — ventana propia, ícono pr
 
 import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**SDD Desk** es el builder visual en su propia ventana. Trae su propio Node adentro, así que no
-hay que instalar nada antes, y hospeda el servidor SDD él mismo — incluido el endpoint MCP al
-que se conectan tus agentes.
+**SDD Desk** es el builder visual en su propia ventana. Trae su propio Node adentro, hospeda el
+servidor SDD él mismo, e incluye el endpoint MCP al que se conectan tus agentes.
 
-<Aside type="caution" title="Tu sistema te va a advertir la primera vez">
-La app no está firmada, así que macOS y Windows mostrarán un aviso al abrirla. Abajo está
-[qué significa exactamente](#por-qué-aparece-ese-aviso) y [cómo abrirla](#abrirla-la-primera-vez)
-en cada sistema.
+## Antes de descargar: cuál te conviene
+
+Hay dos formas de usar el mismo builder, y la mejor depende de una sola cosa — si te molesta
+autorizar una app la primera vez que la abres.
+
+<CardGrid>
+  <Card title="El builder en el navegador" icon="laptop">
+    **Sin ningún aviso, y sin descargar nada.** Un comando y se abre:
+
+    ```bash
+    npx @juanklagos/sdd-mcp@latest --http
+    ```
+
+    Mismo lienzo, mismo servidor, mismo endpoint MCP. **Necesita Node instalado.**
+  </Card>
+  <Card title="SDD Desk" icon="rocket">
+    **Ventana propia, ícono propio, y trae Node adentro** — no hay que instalar nada antes.
+
+    A cambio: macOS y Windows **te pedirán autorizarla la primera vez**, con un aviso que suena
+    alarmante. Son tres clics, una sola vez, y aquí abajo está el paso a paso.
+  </Card>
+</CardGrid>
+
+<Aside type="caution" title="Si nunca has autorizado una app a mano, empieza por el navegador">
+La app de escritorio no está firmada con un certificado de Apple ni de Microsoft, así que tu
+sistema mostrará un aviso al abrirla y te sugerirá mover el archivo a la papelera. No es que la
+descarga esté rota — [aquí está qué significa](#por-qué-aparece-ese-aviso) — pero si esa
+frase te pone nervioso, el builder en el navegador hace exactamente lo mismo sin pedirte nada.
 </Aside>
 
 ## Descargar
@@ -60,10 +83,13 @@ Así que el aviso **no dice** que la app esté rota, ni que sea peligrosa, ni qu
 detectado algo. Dice, literalmente, que el sistema no puede verificar quién la publicó. Que sea
 correcto sortearlo depende de si confías en la fuente, y para eso está el código a la vista.
 
-Por qué no está firmada todavía: Apple cobra 99 USD al año y no tiene excepción para proyectos
-abiertos. Windows sí tiene una vía gratuita para licencias aprobadas por OSI, que MIT cumple.
-Ninguna de las dos cambia lo que la app hace ni quién puede usarla — solo si aparece el
-diálogo. Y Linux no pide firma de nada.
+**Y no está firmada por decisión, no por olvido.** Apple cobra 99 USD al año por el certificado
+que quita el aviso, sin excepción para proyectos abiertos. El proyecto lo mantiene una sola
+persona y prefirió no atar la herramienta a una cuota anual: el builder en el navegador ya
+cubre sin fricción a quien no quiera lidiar con esto, y el código está ahí para compilarlo.
+
+Windows sí tiene una vía gratuita para licencias aprobadas por OSI, que MIT cumple, y está
+pendiente de solicitar. Linux no pide firma de nada.
 
 ## Abrirla la primera vez
 
@@ -123,23 +149,10 @@ diálogo. Y Linux no pide firma de nada.
   </TabItem>
 </Tabs>
 
-## Dos caminos sin ningún aviso
+## Compilarla tú mismo
 
-La app es MIT, como todo el proyecto. Si prefieres no lidiar con Gatekeeper ni SmartScreen,
-hay dos formas de usar exactamente lo mismo sin que ningún sistema te advierta nada.
-
-**El builder en el navegador.** Un comando, sin descargar nada:
-
-```bash
-npx @juanklagos/sdd-mcp@latest --http
-```
-
-Es el mismo lienzo, el mismo servidor y el mismo endpoint MCP. Lo único que no te da es la
-ventana propia y el ícono en el Dock — y necesita Node instalado, que es justamente lo que la
-app de escritorio viene a evitar.
-
-**Compilar la app tú mismo.** Un binario que compilas en tu máquina no viene de internet, así
-que ningún sistema lo pone en cuarentena:
+La app es MIT, como todo el proyecto. Un binario que compilas en tu máquina no viene de
+internet, así que ningún sistema lo pone en cuarentena y no verás ningún aviso:
 
 ```bash
 git clone https://github.com/juanklagos/spec-driven-development-template.git

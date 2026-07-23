@@ -5,14 +5,37 @@ description: The SDD Builder as a desktop app — its own window, its own icon, 
 
 import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**SDD Desk** is the visual builder in its own window. It carries its own Node runtime, so
-nothing needs to be installed first, and it hosts the SDD server itself — including the MCP
-endpoint your agents connect to.
+**SDD Desk** is the visual builder in its own window. It carries its own Node runtime, hosts the
+SDD server itself, and includes the MCP endpoint your agents connect to.
 
-<Aside type="caution" title="Your system will warn you the first time">
-The app is not code-signed, so macOS and Windows will show a warning when you open it. Below:
-[what that actually means](#why-that-warning-appears) and
-[how to open it](#opening-it-the-first-time) on each system.
+## Before you download: which one suits you
+
+There are two ways to use the same builder, and the right one depends on a single question — do
+you mind authorising an app the first time you open it?
+
+<CardGrid>
+  <Card title="The builder in your browser" icon="laptop">
+    **No warning at all, nothing to download.** One command and it opens:
+
+    ```bash
+    npx @juanklagos/sdd-mcp@latest --http
+    ```
+
+    Same canvas, same server, same MCP endpoint. **Needs Node installed.**
+  </Card>
+  <Card title="SDD Desk" icon="rocket">
+    **Its own window, its own icon, and Node inside it** — nothing to install first.
+
+    In exchange: macOS and Windows **will ask you to authorise it once**, with a warning that
+    sounds alarming. Three clicks, one time, and the steps are right below.
+  </Card>
+</CardGrid>
+
+<Aside type="caution" title="If you have never authorised an app by hand, start with the browser">
+The desktop app is not signed with an Apple or Microsoft certificate, so your system will show a
+warning when you open it and suggest moving the file to the Trash. The download is not broken —
+[here is what it means](#why-that-warning-appears) — but if that sentence makes you uneasy, the
+browser builder does exactly the same thing and asks you for nothing.
 </Aside>
 
 ## Get it
@@ -61,10 +84,13 @@ detected something. It says, literally, that the system cannot verify who publis
 it is reasonable to go ahead depends on whether you trust the source — which is what having the
 code in the open is for.
 
-Why it is not signed yet: Apple charges USD 99 a year with no exception for open source.
-Windows does have a free route for OSI-approved licences, which MIT satisfies. Neither changes
-what the app does or who may use it — only whether the dialog appears. Linux asks for no
-signature at all.
+**And it is unsigned by decision, not by oversight.** Apple charges USD 99 a year for the
+certificate that removes the warning, with no exception for open source. This project is
+maintained by one person, who chose not to tie the tool to an annual fee: the browser builder
+already serves anyone who would rather not deal with this, and the code is there to compile.
+
+Windows does have a free route for OSI-approved licences, which MIT satisfies, and it is still
+to be applied for. Linux asks for no signature at all.
 
 ## Opening it the first time
 
@@ -123,24 +149,10 @@ signature at all.
   </TabItem>
 </Tabs>
 
-## Two routes with no warning at all
+## Build it yourself
 
-The app is MIT, like the rest of the project. If you would rather not deal with Gatekeeper or
-SmartScreen, there are two ways to use exactly the same thing without any system warning you
-about anything.
-
-**The builder in your browser.** One command, nothing to download:
-
-```bash
-npx @juanklagos/sdd-mcp@latest --http
-```
-
-Same canvas, same server, same MCP endpoint. The only things it does not give you are the
-window of its own and the Dock icon — and it needs Node installed, which is precisely what the
-desktop app exists to avoid.
-
-**Build the app yourself.** A binary you compiled on your own machine did not come from the
-internet, so nothing quarantines it:
+The app is MIT, like the rest of the project. A binary you compiled on your own machine did not
+come from the internet, so nothing quarantines it and no warning appears:
 
 ```bash
 git clone https://github.com/juanklagos/spec-driven-development-template.git
