@@ -1,105 +1,74 @@
 #!/usr/bin/env node
-// HTTP entrypoint: thin composition of the transport's cohesive modules.
-//   workspace.ts  -> which target project we operate on
-//   events.ts     -> SSE live events (GET /api/events)
-//   api.ts        -> REST API for the SDD Builder (/api/*)
-//   static.ts     -> built builder frontend (/builder)
-//   dashboard.ts  -> read-only HTML dashboard (/dashboard)
-//   transport.ts  -> MCP Streamable HTTP sessions (/mcp)
-//   security.ts   -> bind host + origin/content-type guard (applied once, here)
-// All SDD logic lives in @juanklagos/sdd-core; nothing here duplicates it.
+// HTTP entrypoint: the CLI that owns a process and runs one server in it.
+//
+// Everything about *serving* moved to http-server.ts (spec 023 R1), so that the
+// desktop shell and the tests can start, hold and close servers without
+// inheriting a CLI's opinions. What stays here is exactly what a CLI owns and a
+// library must not touch:
+//   - reading configuration from the environment
+//   - the startup banner
+//   - process-wide signal and crash handlers
+//
+// Starting this module still starts a server, because `dist/http.js` is a
+// declared bin (`sdd-mcp-http`) and `index.ts` reaches it with `await import`.
 
-import http from "node:http";
-import { createApiHandler } from "./api.js";
-import { renderDashboard, resolveDashboardLang } from "./dashboard.js";
-import { createEventHub } from "./events.js";
-import { guardRequest, hostForUrl, isLoopbackHost, resolveBindHost } from "./security.js";
-import { serveBuilder } from "./static.js";
-import { createMcpTransportHandler } from "./transport.js";
+import {
+  DEFAULT_HTTP_PORT,
+  startSddHttpServer,
+  type SddHttpServer
+} from "./http-server.js";
+import { isLoopbackHost, resolveBindHost } from "./security.js";
 import { resolveProjectRoot } from "./workspace.js";
 
-const port = Number(process.env.SDD_MCP_HTTP_PORT ?? "3334");
-const host = resolveBindHost();
-const projectRoot = resolveProjectRoot();
+/** `SDD_MCP_HTTP_PORT` wins; a malformed value falls back to the default. */
+function resolvePort(): number {
+  const raw = process.env.SDD_MCP_HTTP_PORT;
+  if (raw === undefined || raw.trim() === "") return DEFAULT_HTTP_PORT;
+  const parsed = Number(raw);
+  // 0 is meaningful ("any free port"), so the guard is >= 0, not > 0.
+  return Number.isInteger(parsed) && parsed >= 0 && parsed <= 65535 ? parsed : DEFAULT_HTTP_PORT;
+}
 
-const eventHub = createEventHub(projectRoot);
-const handleApi = createApiHandler({ projectRoot, handleEvents: eventHub.handleConnection });
-const mcpTransport = createMcpTransportHandler();
-
-const server = http.createServer(async (req, res) => {
-  const parsedUrl = req.url ? new URL(req.url, "http://localhost") : null;
-
-  // One guard, before any route: nothing mutating runs until it passes.
-  const rejection = guardRequest(req, host);
-  if (rejection) {
-    res.writeHead(rejection.status, { "content-type": "text/plain; charset=utf-8" });
-    res.end(rejection.message);
-    // 413 means the client announced more than we will ever read: hang up
-    // instead of draining it. Smaller rejected bodies are drained so the
-    // connection can be reused cleanly.
-    if (rejection.status === 413) req.destroy();
-    else req.resume();
-    return;
-  }
-
-  if (parsedUrl?.pathname.startsWith("/api/")) {
-    if (await handleApi(req, res, parsedUrl)) return;
-    res.writeHead(404).end("Unknown API route");
-    return;
-  }
-
-  if (req.method === "GET" && parsedUrl && (parsedUrl.pathname === "/builder" || parsedUrl.pathname.startsWith("/builder/"))) {
-    await serveBuilder(res, parsedUrl.pathname);
-    return;
-  }
-
-  if (req.method === "GET" && req.url && (req.url === "/dashboard" || req.url.startsWith("/dashboard?"))) {
-    try {
-      // One language at a time: ?lang=es|en wins, then Accept-Language, then es.
-      const lang = resolveDashboardLang(parsedUrl, req.headers["accept-language"]);
-      const html = await renderDashboard(projectRoot, { lang });
-      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-      res.end(html);
-    } catch (error) {
-      console.error(error);
-      if (!res.headersSent) {
-        res.writeHead(500, { "content-type": "text/plain" }).end("Dashboard error");
-      }
-    }
-    return;
-  }
-
-  if (!req.url || !req.url.startsWith("/mcp")) {
-    res.writeHead(404).end("Not Found");
-    return;
-  }
-
-  await mcpTransport.handleRequest(req, res);
-});
-
-// The printed URL is the address we actually bound to, not an assumption.
-server.listen(port, host, () => {
+function announce(server: SddHttpServer, requestedPort: number): void {
   // The board first, and by name. This used to print the /mcp URL alone, so somebody
   // following START_HERE opened a protocol endpoint and concluded it was broken.
-  const base = `http://${hostForUrl(host)}:${port}`;
-  console.error(
-    [
-      `SDD Builder — el lienzo / the board:  ${base}/builder`,
-      `Dashboard:                            ${base}/dashboard`,
-      `MCP endpoint (para tu agente / for your agent):  ${base}/mcp`
-    ].join("\n")
-  );
-  if (!isLoopbackHost(host)) {
+  const lines = [
+    `SDD Builder — el lienzo / the board:  ${server.builderUrl}`,
+    `Dashboard:                            ${server.dashboardUrl}`,
+    `MCP endpoint (para tu agente / for your agent):  ${server.mcpUrl}`
+  ];
+
+  // Silence about a port change would send people to a URL nobody is serving.
+  if (requestedPort !== 0 && server.port !== requestedPort) {
+    lines.unshift(
+      `Puerto ${requestedPort} ocupado; usando ${server.port}. / Port ${requestedPort} was busy; using ${server.port}.`,
+      ""
+    );
+  }
+
+  console.error(lines.join("\n"));
+
+  if (!isLoopbackHost(server.host)) {
     console.error(
       [
-        `WARNING: bound to a non-loopback address (${host}). This server has NO authentication:`,
+        `WARNING: bound to a non-loopback address (${server.host}). This server has NO authentication:`,
         "anyone who can reach this port can read, create and approve specs, and run gh as you.",
-        `ADVERTENCIA: escuchando en una dirección no-loopback (${host}). Este servidor NO tiene autenticación:`,
+        `ADVERTENCIA: escuchando en una dirección no-loopback (${server.host}). Este servidor NO tiene autenticación:`,
         "cualquiera que alcance este puerto puede leer, crear y aprobar specs, y ejecutar gh como tú."
       ].join("\n")
     );
   }
+}
+
+const requestedPort = resolvePort();
+
+const server = await startSddHttpServer({
+  projectRoot: resolveProjectRoot(),
+  host: resolveBindHost(),
+  port: requestedPort
 });
+
+announce(server, requestedPort);
 
 // A single malformed request must never take the server down. Both handlers log
 // and keep serving; the request that caused it has already failed on its own.
@@ -111,9 +80,7 @@ process.on("unhandledRejection", (reason) => {
 });
 
 function shutdown(): void {
-  eventHub.dispose();
-  mcpTransport.dispose();
-  server.close();
+  void server.close();
 }
 
 process.on("SIGINT", shutdown);
