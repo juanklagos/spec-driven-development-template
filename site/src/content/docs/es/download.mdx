@@ -69,9 +69,28 @@ diálogo. Y Linux no pide firma de nada.
 
 <Tabs syncKey="os">
   <TabItem label="macOS" icon="apple">
-    Abre el `.dmg` y arrastra **SDD Desk** a Aplicaciones. Después, en la carpeta Aplicaciones,
-    **haz clic derecho sobre la app y elige Abrir** — ese diálogo trae un botón de Abrir que el
-    del doble clic no tiene. Solo hace falta la primera vez.
+    Abre el `.dmg` y arrastra **SDD Desk** a Aplicaciones. Al abrirla por primera vez, macOS
+    dirá que *"no pudo verificar que no contenga software malicioso"*: eso es lo que dice de
+    cualquier app sin notarizar. Solo hay que autorizarla una vez.
+
+    **En macOS 15 (Sequoia) o posterior** — incluido macOS 26:
+
+    1. Intenta abrirla con doble clic. Saldrá el aviso; pulsa **Listo**, no "Mover al basurero".
+    2. Ve a **Ajustes del Sistema → Privacidad y Seguridad** y baja hasta *Seguridad*.
+    3. Verás que SDD Desk fue bloqueada: pulsa **Abrir de todos modos** y confirma con tu
+       contraseña.
+
+    Apple [quitó el atajo de clic derecho → Abrir](https://appleinsider.com/articles/24/08/06/apple-removes-control-click-option-for-skipping-gatekeeper-in-macos-sequoia)
+    en Sequoia, así que en estas versiones ese camino ya no existe.
+
+    **En macOS 14 (Sonoma) o anterior:** clic derecho sobre la app → **Abrir**, y confirmar.
+
+    En cualquier versión, una sola orden hace lo mismo — úsala solo sobre descargas en las que
+    confíes, porque quita la comprobación que macOS acaba de hacer por ti:
+
+    ```bash
+    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
+    ```
 
     <Aside type="danger" title="Si dice «está dañado y no puede abrirse»">
     Eso **no** es el aviso normal, y no significa que la descarga viniera mal. Fue un fallo de
@@ -85,13 +104,6 @@ diálogo. Y Linux no pide firma de nada.
     ```
     </Aside>
 
-    Si en vez de eso ves que el desarrollador "no está verificado", ese sí es el aviso esperado
-    y el clic derecho → Abrir lo resuelve. También puedes quitar la marca de cuarentena a mano,
-    solo sobre una descarga en la que confíes:
-
-    ```bash
-    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
-    ```
   </TabItem>
   <TabItem label="Windows" icon="seti:windows">
     SmartScreen mostrará "Windows protegió tu PC". Haz clic en **Más información** y luego en

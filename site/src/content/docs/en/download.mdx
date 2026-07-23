@@ -70,9 +70,27 @@ signature at all.
 
 <Tabs syncKey="os">
   <TabItem label="macOS" icon="apple">
-    Open the `.dmg` and drag **SDD Desk** to Applications. Then, in the Applications folder,
-    **right-click the app and choose Open** — that dialog has an Open button, which the one from
-    a double click does not. Only needed the first time.
+    Open the `.dmg` and drag **SDD Desk** to Applications. The first time you open it, macOS
+    will say it *"could not verify it is free of malware"*: that is what it says about any
+    app that is not notarized. You only have to authorise it once.
+
+    **On macOS 15 (Sequoia) or later** — macOS 26 included:
+
+    1. Double-click it. The warning appears; click **Done**, not "Move to Trash".
+    2. Go to **System Settings → Privacy & Security** and scroll to *Security*.
+    3. SDD Desk will be listed as blocked: click **Open Anyway** and confirm with your password.
+
+    Apple [removed the right-click → Open shortcut](https://appleinsider.com/articles/24/08/06/apple-removes-control-click-option-for-skipping-gatekeeper-in-macos-sequoia)
+    in Sequoia, so on these versions that route no longer exists.
+
+    **On macOS 14 (Sonoma) or earlier:** right-click the app → **Open**, then confirm.
+
+    On any version, one command does the same — only use it on downloads you trust, because it
+    removes the check macOS just made for you:
+
+    ```bash
+    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
+    ```
 
     <Aside type="danger" title="If it says “is damaged and can’t be opened”">
     That is **not** the normal warning, and it does not mean the download arrived corrupted. It
@@ -86,13 +104,6 @@ signature at all.
     ```
     </Aside>
 
-    If instead you see that the developer "cannot be verified", that one is the expected warning
-    and right-click → Open resolves it. You can also clear the quarantine flag by hand, only on
-    a download you trust:
-
-    ```bash
-    xattr -dr com.apple.quarantine "/Applications/SDD Desk.app"
-    ```
   </TabItem>
   <TabItem label="Windows" icon="seti:windows">
     SmartScreen will show "Windows protected your PC". Click **More info**, then
