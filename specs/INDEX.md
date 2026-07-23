@@ -26,5 +26,5 @@
 | 022 | drawer-tareas-colapsables | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 023 | desk-electron | In Progress / En progreso (12 de 13; T9 firma fuera de alcance en macOS por decisión) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 024 | nucleo-con-pruebas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
-| 025 | semaforo-de-deriva | Done / Completada (T7 dashboard HTML diferido) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
+| 025 | semaforo-de-deriva | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 026 | tema-docs | Done / Completada (T6 ticker diferido a propósito) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |

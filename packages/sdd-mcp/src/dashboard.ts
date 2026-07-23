@@ -50,6 +50,7 @@ const ES = {
   "status.open": "Abrir →",
   "status.gateErrors": "Errores del gate:",
   "status.depWarn": "Dependencias sin aprobar:",
+  "status.drift": "Código cambiado tras la aprobación:",
   "sheet.tasks": "Tareas",
   "sheet.noTasks": "Sin tareas",
   "sheet.hardStop": "No hay código sin spec aprobada y plan consistente — aprueba la spec primero.",
@@ -135,6 +136,7 @@ const EN: Record<Key, string> = {
   "status.open": "Open →",
   "status.gateErrors": "Gate errors:",
   "status.depWarn": "Unapproved dependencies:",
+  "status.drift": "Code changed after approval:",
   "sheet.tasks": "Tasks",
   "sheet.noTasks": "No tasks",
   "sheet.hardStop": "No code before approved spec and consistent plan — approve the spec first.",
@@ -943,13 +945,22 @@ const specRow = (t: Translate, spec: BoardSpecCard, gate: GateSummary): string =
         depWarnings.map((warning) => t("dash.dep.line", depVars(warning)))
       )}">${escapeHtml(t("dash.dep.badge"))}</span>`
     : "";
+  // Spec 025: code under the spec's File scope changed after approval. Same
+  // amber "warn" tone as the builder chip; the tooltip lists the commits.
+  const driftCommits = spec.drift?.state === "drifted" ? spec.drift.commits : [];
+  const driftBadge = driftCommits.length
+    ? `<span class="badge-tone warn" title="${tooltip(
+        t("status.drift"),
+        driftCommits.map((commit) => `${commit.hash} ${commit.subject}`)
+      )}">🔀 ${driftCommits.length}</span>`
+    : "";
 
   return `
         <li class="specrow specrow-item">
           <div class="spec-id">
             <div class="spec-top">
               <span class="spec-num">📋 ${escapeHtml(num)}</span>
-              <span class="spec-badges">${errorBadge}${depBadge}<span class="badge-tone ${tone}" title="${escapeHtml(
+              <span class="spec-badges">${errorBadge}${depBadge}${driftBadge}<span class="badge-tone ${tone}" title="${escapeHtml(
                 `${t("dash.rawStatus")}: ${spec.status || "—"}`
               )}">${escapeHtml(t(toneKey[tone]))}</span></span>
             </div>
