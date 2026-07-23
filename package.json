@@ -11,7 +11,9 @@
     "prepare": "npm run build --workspaces --if-present",
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run mcp:test",
+    "test": "npm run test:unit && npm run mcp:test",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
     "mcp:start": "npm --workspace @juanklagos/sdd-mcp run start",
     "mcp:http:start": "npm --workspace @juanklagos/sdd-mcp run start:http",
     "mcp:build": "npm --workspace @juanklagos/sdd-mcp run build",
@@ -24,6 +26,10 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "tsx": "^4.20.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.7"
+  },
+  "allowScripts": {
+    "esbuild@0.27.4": true
   }
 }

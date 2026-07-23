@@ -52,3 +52,26 @@ Current exported operations:
 - `writeDailyLog`
 - `writeHandoff`
 - `writeDecision`
+
+## Pruebas / Tests
+
+[Vitest](https://vitest.dev). Las pruebas (`src/**/*.test.ts`) cubren la regla única de
+estado de spec —`isApprovedStatus` y `specTone`— y `getBoardView` sobre un workspace SDD
+temporal, verificando el invariante «la aprobación manda»: una spec con todas las tareas
+marcadas pero sin aprobar nunca es «hecha» (spec 024).
+
+Tests (`src/**/*.test.ts`) cover the one spec-state rule —`isApprovedStatus` and
+`specTone`— and `getBoardView` against a throwaway SDD workspace, verifying the
+"approval comes first" invariant: a spec with every task ticked but never approved is
+never "done" (spec 024).
+
+```bash
+npm test --workspace @juanklagos/sdd-core    # o / or: cd packages/sdd-core && npm test
+```
+
+`src/approval-cases.fixture.ts` es la tabla de verdad compartida contra la que se verifican
+**ambas** copias de la regla de aprobación: la de aquí y su espejo en `builder/src/sections.ts`.
+Si divergen, una de las dos suites se pone roja. El build excluye `*.test.ts` y `*.fixture.ts`
+de `dist`. / `src/approval-cases.fixture.ts` is the shared truth table both copies of the
+approval rule are checked against (this one and its `builder/src/sections.ts` mirror); if they
+diverge, one suite goes red. The build excludes `*.test.ts` and `*.fixture.ts` from `dist`.

@@ -50,3 +50,11 @@ jobs:
       - name: Builder typecheck + build
         working-directory: builder
         run: npm ci && npm run build
+
+      # Spec 024: unit tests for the domain logic that guards "the .md is the
+      # source of truth" — sdd-core's approval/state rule, the builder's
+      # board↔canvas converter, the EARS lint, and the sections.ts mirror.
+      # Runs last because the builder suite needs builder/node_modules, which
+      # the step above installs. Root devDeps (vitest) came from `npm ci`.
+      - name: Unit tests (Vitest — sdd-core + builder)
+        run: npm run test:unit

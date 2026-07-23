@@ -43,3 +43,28 @@ Vite + React 18 + TypeScript + [@xyflow/react](https://reactflow.dev) (canvas) +
 Dark/light por `prefers-color-scheme`; i18n propio ES/EN en `src/i18n.ts` (un idioma a la vez,
 switcher en la TopBar) / Dark/light via `prefers-color-scheme`; own ES/EN i18n in `src/i18n.ts`
 (one language at a time, TopBar switcher).
+
+## Pruebas / Tests
+
+[Vitest](https://vitest.dev). Las pruebas viven junto al código (`src/**/*.test.ts`) y
+cubren la lógica que custodia el invariante «el `.md` es la fuente de verdad» (spec 024):
+el convertidor `convert.ts` (round-trip board↔canvas), el lint EARS `ears.ts`, y el
+espejo `sections.ts` de la regla de aprobación de `sdd-core`.
+
+Tests live next to the code (`src/**/*.test.ts`) and cover the logic that guards the
+"the `.md` is the source of truth" invariant (spec 024): the `convert.ts` board↔canvas
+round-trip, the `ears.ts` EARS lint, and the `sections.ts` mirror of sdd-core's approval rule.
+
+```bash
+cd builder
+npm test          # vitest run (una vez / once)
+npm run test:watch 2>/dev/null || npx vitest   # modo watch / watch mode
+```
+
+Desde la raíz del repo, `npm run test:unit` corre estas pruebas **y** las de `sdd-core` en
+una sola pasada. / From the repo root, `npm run test:unit` runs these **and** the `sdd-core`
+suite in one pass. Para añadir una prueba, crea `src/<módulo>.test.ts` e importa desde el
+módulo vecino. / To add a test, create `src/<module>.test.ts` and import from the sibling module.
+
+> El build (`npm run build`) excluye los `.test.ts` del `tsc --noEmit`; Vitest los verifica
+> aparte. / The build excludes `.test.ts` from `tsc --noEmit`; Vitest checks them separately.
