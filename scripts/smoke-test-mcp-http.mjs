@@ -18,13 +18,35 @@ import os from "node:os";
 import path from "node:path";
 import packageJson from "../package.json" with { type: "json" };
 
-const port = 3334;
+/**
+ * Ports are reserved from the OS, not hardcoded.
+ *
+ * They used to be 3334-3337. Since spec 023 R2 the server falls back to the
+ * next free port instead of failing, so a developer with their own `sdd-mcp
+ * --http` already on 3334 no longer got a crash here — they got a server on
+ * 3335 and an assertion about a banner that named the port the test wanted
+ * rather than the one it had. The environment is not the test's to own.
+ */
+async function reservePort() {
+  const probe = http.createServer();
+  try {
+    await new Promise((resolve, reject) => {
+      probe.once("error", reject);
+      probe.listen(0, "127.0.0.1", resolve);
+    });
+    return probe.address().port;
+  } finally {
+    await new Promise((resolve) => probe.close(resolve));
+  }
+}
+
+const port = await reservePort();
 /** Short-lived server used only for the session-reclamation asserts. */
-const sessionPort = 3335;
+const sessionPort = await reservePort();
 /** Short-lived control server, proves the LAN probe below is not vacuous. */
-const exposedPort = 3336;
+const exposedPort = await reservePort();
 /** Short-lived server pointed at a throwaway SDD workspace (REST routes). */
-const restPort = 3337;
+const restPort = await reservePort();
 
 const children = new Set();
 
@@ -42,19 +64,44 @@ function startServer(serverPort, extraEnv = {}) {
     stderr += chunk;
   });
 
+  // Readiness is "the port answers", not "stderr contains a sentence".
+  //
+  // This used to poll for "SDD MCP Streamable HTTP server listening" — a string
+  // the server stopped printing when spec 020 rewrote the banner, and which
+  // `git grep` now finds only here. The test did not fail loudly at that point;
+  // it timed out after 15s, every run, on a green-looking refactor. A readiness
+  // check coupled to human-facing prose is a check that expires silently the
+  // first time somebody improves the wording.
   const ready = new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(`Timed out waiting for HTTP MCP server on ${serverPort}`)), 15000);
-    const poll = setInterval(() => {
-      if (stderr.includes("SDD MCP Streamable HTTP server listening")) {
-        clearTimeout(timer);
-        clearInterval(poll);
-        resolve(undefined);
-      }
-    }, 50);
-    child.on("exit", (code) => {
-      clearTimeout(timer);
+    const deadline = Date.now() + 15000;
+    let settled = false;
+    const finish = (fn, value) => {
+      if (settled) return;
+      settled = true;
       clearInterval(poll);
-      reject(new Error(`HTTP MCP server on ${serverPort} exited early with code ${code}\n${stderr}`));
+      fn(value);
+    };
+
+    const poll = setInterval(() => {
+      if (Date.now() > deadline) {
+        finish(reject, new Error(`Timed out waiting for HTTP MCP server on ${serverPort}\n${stderr}`));
+        return;
+      }
+      const probe = http.request(
+        { host: "127.0.0.1", port: serverPort, path: "/api/gate", method: "GET", timeout: 500 },
+        (res) => {
+          res.resume();
+          finish(resolve, undefined);
+        }
+      );
+      probe.on("timeout", () => probe.destroy());
+      // Connection refused while it is still binding: keep polling.
+      probe.on("error", () => {});
+      probe.end();
+    }, 100);
+
+    child.on("exit", (code) => {
+      finish(reject, new Error(`HTTP MCP server on ${serverPort} exited early with code ${code}\n${stderr}`));
     });
   });
 
@@ -594,6 +641,85 @@ async function checkSessionReclamation() {
   }
 }
 
+// --- 023 R2: port fallback --------------------------------------------------
+
+/**
+ * An occupied port must move the server, not kill it — and the banner must name
+ * where it actually landed.
+ *
+ * The interesting failure this guards against is not "it crashes": it is "it
+ * quietly serves on another port while telling the user to open the first one".
+ * So the assert is on the announced URL, verified against a live response from
+ * the port that was announced.
+ */
+async function checkPortFallback() {
+  const taken = await reservePort();
+
+  // A squatter that answers differently from the SDD server, so "something
+  // replied on this port" cannot be mistaken for "the SDD server is here".
+  const squatter = http.createServer((_req, res) => {
+    res.writeHead(418, { "content-type": "text/plain" }).end("squatter");
+  });
+  await new Promise((resolve) => squatter.listen(taken, "127.0.0.1", resolve));
+
+  const child = spawn("node", ["packages/sdd-mcp/dist/http.js"], {
+    cwd: process.cwd(),
+    env: { ...process.env, SDD_MCP_HTTP_PORT: String(taken) },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  children.add(child);
+
+  let stderr = "";
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", (chunk) => {
+    stderr += chunk;
+  });
+
+  try {
+    const deadline = Date.now() + 15000;
+    let announced;
+    while (Date.now() < deadline) {
+      // The banner is the contract under test here, so reading it is the point,
+      // not a shortcut around a readiness signal.
+      const match = /http:\/\/127\.0\.0\.1:(\d+)\/builder/.exec(stderr);
+      if (match) {
+        announced = Number(match[1]);
+        break;
+      }
+      if (child.exitCode !== null) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    assert(announced !== undefined, `server never announced a URL after the port was taken:\n${stderr}`);
+    assert(
+      announced !== taken,
+      `server announced the occupied port ${taken}; the fallback did not move it:\n${stderr}`
+    );
+    assert(
+      stderr.includes(`${taken}`) && /usando|using/.test(stderr),
+      `the port change must be announced, not silent:\n${stderr}`
+    );
+
+    // /dashboard, not /api/gate: the gate answers 4xx when a workspace has open
+    // findings, which is a property of this repo's specs rather than of the
+    // server being up. The dashboard is 200 whenever the server is really there.
+    const squatted = await rawRequest({ port: taken, path: "/dashboard" });
+    assert(squatted.status === 418, `the squatter must still own ${taken} (got HTTP ${squatted.status})`);
+
+    const moved = await rawRequest({ port: announced, path: "/dashboard" });
+    assert(
+      moved.status === 200 && moved.body.includes("<html"),
+      `the SDD server must answer on the announced port ${announced} (got HTTP ${moved.status})`
+    );
+
+    console.log(`  port ${taken} was taken; server moved to ${announced} and said so`);
+  } finally {
+    child.kill();
+    children.delete(child);
+    await new Promise((resolve) => squatter.close(resolve));
+  }
+}
+
 async function main() {
   const server = startServer(port);
   await server.ready;
@@ -618,6 +744,9 @@ async function main() {
 
   await checkSessionReclamation();
   console.log("MCP HTTP smoke test: session reclamation OK (I15)");
+
+  await checkPortFallback();
+  console.log("MCP HTTP smoke test: port fallback OK (023 R2)");
 
   console.log("MCP HTTP smoke test passed");
   console.log(`Tools: ${surface.toolNames.length}`);
