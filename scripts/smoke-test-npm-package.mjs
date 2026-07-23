@@ -15,6 +15,7 @@
 import assert from "node:assert/strict";
 import { execFile, spawn } from "node:child_process";
 import { promises as fs } from "node:fs";
+import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,11 +56,15 @@ async function exists(target) {
  * and the shell do. Without a shebang the kernel refuses it (ENOEXEC) and a
  * shell then reinterprets the JavaScript as sh ("import: command not found").
  */
-function runBinRaw(binPath, cwd, stdin) {
+function runBinRaw(binPath, cwd, stdin, { args = [], env } = {}) {
   return new Promise((resolve) => {
     let child;
     try {
-      child = spawn(binPath, [], { cwd, stdio: ["pipe", "pipe", "pipe"] });
+      child = spawn(binPath, args, {
+        cwd,
+        stdio: ["pipe", "pipe", "pipe"],
+        env: env ? { ...process.env, ...env } : process.env
+      });
     } catch (error) {
       resolve({ code: null, stdout: "", stderr: "", spawnError: error });
       return;
@@ -143,6 +148,68 @@ async function main() {
       !/import: command not found|syntax error near unexpected token/.test(raw.stderr),
       `Running the installed bin fell through to the shell (missing shebang):\n${raw.stderr.slice(0, 500)}`
     );
+
+    // --- the binary must never fail in silence again (spec 021) ------------
+    // No invocation may produce zero bytes and exit 0 without starting a
+    // transport. Each case checks the exit code AND that the output is where a
+    // human (stderr/stdout) or a protocol (nothing on stdout) expects it.
+
+    // stdio, no args: stdin is closed, so it connects and exits. stdout is the
+    // MCP protocol channel and must carry no human text (T8).
+    const stdio = await runBinRaw(stdioBin, projectDir, "");
+    assert.equal(stdio.code, 0, `stdio start should exit 0, got ${stdio.code}: ${stdio.stderr.slice(0, 300)}`);
+    assert.equal(stdio.stdout, "", `stdio stdout must stay clean (protocol channel), got: ${JSON.stringify(stdio.stdout.slice(0, 120))}`);
+
+    // --help: usage on stdout, exit 0, and it names --http (the flag whose
+    // absence in an old cached version started the whole report).
+    const help = await runBinRaw(stdioBin, projectDir, "", { args: ["--help"] });
+    assert.equal(help.code, 0, `--help should exit 0, got ${help.code}`);
+    assert.ok(help.stdout.includes("--http"), `--help must document --http, got:\n${help.stdout.slice(0, 300)}`);
+
+    // --version: a version on stdout, exit 0.
+    const version = await runBinRaw(stdioBin, projectDir, "", { args: ["--version"] });
+    assert.equal(version.code, 0, `--version should exit 0, got ${version.code}`);
+    assert.match(version.stdout.trim(), /\d+\.\d+\.\d+/, `--version must print a version, got: ${JSON.stringify(version.stdout)}`);
+
+    // Unknown flag: NON-zero exit, a message on stderr naming the argument and
+    // the running version, and NO transport (stdout stays empty). This is the
+    // exact shape of the original silent failure, now loud.
+    const unknown = await runBinRaw(stdioBin, projectDir, "", { args: ["--htp"] });
+    assert.notEqual(unknown.code, 0, "an unknown flag must exit non-zero, not 0");
+    assert.equal(unknown.stdout, "", `an unknown flag must not write to stdout, got: ${JSON.stringify(unknown.stdout.slice(0, 120))}`);
+    assert.ok(unknown.stderr.includes("--htp"), `the unknown-flag message must name the argument, got:\n${unknown.stderr.slice(0, 300)}`);
+
+    // --http with the whole fallback range occupied: it must NOT claim to keep
+    // running and must exit non-zero (T4). Hold base..base+9 so the 10-attempt
+    // fallback is exhausted, then ask for base.
+    const busyBase = 3500;
+    const holders = [];
+    await new Promise((resolve) => {
+      let up = 0;
+      for (let p = busyBase; p < busyBase + 10; p += 1) {
+        const s = net.createServer();
+        s.on("error", () => {}); // a port already taken by something else is fine
+        s.listen(p, "127.0.0.1", () => {
+          if ((up += 1) === 10) resolve();
+        });
+        holders.push(s);
+      }
+      // Do not hang the suite if the host already holds one of these ports.
+      setTimeout(resolve, 2000).unref();
+    });
+    try {
+      const busy = await runBinRaw(stdioBin, projectDir, "", {
+        args: ["--http"],
+        env: { SDD_MCP_HTTP_PORT: String(busyBase) }
+      });
+      assert.notEqual(busy.code, 0, `--http with the port range busy must exit non-zero, got ${busy.code}`);
+      assert.ok(
+        !/server keeps running/i.test(busy.stderr),
+        `a failed --http start must not claim the server keeps running, got:\n${busy.stderr.slice(0, 300)}`
+      );
+    } finally {
+      for (const s of holders) s.close();
+    }
   }
 
   // --- a real MCP handshake over the installed bin -------------------------

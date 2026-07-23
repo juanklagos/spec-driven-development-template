@@ -37,6 +37,22 @@ npx -y @juanklagos/sdd-mcp@latest --http
 The `sdd-mcp-http` bin still exists and does the same thing — `--http` on the main bin
 is there so reaching the board never depends on npx resolving a second executable.
 
+```bash
+sdd-mcp --help      # usage, including --http, and the env vars below (exit 0)
+sdd-mcp --version   # the running version (exit 0)
+```
+
+**The binary fails loud, never silent.** An argument it does not recognise — a
+typo, or a flag from a newer version reaching an older cached one — is written to
+stderr, names the argument and the running version, and exits non-zero **without
+starting any transport**. `--http` whose port range is fully taken exits non-zero
+too, naming `SDD_MCP_HTTP_PORT`, instead of claiming a server that never listened
+is "still running". With no arguments it starts the stdio transport exactly as
+before, and stdout stays clean because it is the MCP protocol channel. This is
+spec 021: `npx @juanklagos/sdd-mcp --http` once returned zero bytes and exit 0
+against a cached version that predated `--http`, and that silence is the bug the
+guarantee closes.
+
 Environment variables:
 
 | Variable | Default | Meaning |

@@ -62,16 +62,39 @@ function announce(server: SddHttpServer, requestedPort: number): void {
 
 const requestedPort = resolvePort();
 
-const server = await startSddHttpServer({
-  projectRoot: resolveProjectRoot(),
-  host: resolveBindHost(),
-  port: requestedPort
-});
+// Startup is a distinct failure from a hot-path crash (spec 021, D2). If binding
+// never succeeds, say so — naming the port and the env var that changes it — and
+// exit non-zero. The generic uncaughtException handler below MUST NOT be
+// installed until we are listening, or a bind failure would be logged as
+// "server keeps running" (a lie) and the process would exit 0.
+let server: SddHttpServer;
+try {
+  server = await startSddHttpServer({
+    projectRoot: resolveProjectRoot(),
+    host: resolveBindHost(),
+    port: requestedPort
+  });
+} catch (error) {
+  const detail = error instanceof Error ? error.message : String(error);
+  console.error(
+    [
+      `sdd-mcp: could not start the HTTP server on port ${requestedPort}.`,
+      `sdd-mcp: no se pudo arrancar el servidor HTTP en el puerto ${requestedPort}.`,
+      "Set SDD_MCP_HTTP_PORT to a free port and try again. / Fija SDD_MCP_HTTP_PORT a un puerto libre y reintenta.",
+      "",
+      detail
+    ].join("\n")
+  );
+  process.exit(1);
+}
 
 announce(server, requestedPort);
 
-// A single malformed request must never take the server down. Both handlers log
-// and keep serving; the request that caused it has already failed on its own.
+// Now that we are listening, "server keeps running" is true: a single malformed
+// request must never take the server down. Both handlers log and keep serving;
+// the request that caused it has already failed on its own. These are installed
+// AFTER a successful start on purpose (spec 021, T5): before listening, a
+// startup error must win, not be swallowed as a survivable hot-path crash.
 process.on("uncaughtException", (error) => {
   console.error("[sdd-mcp] uncaught exception (server keeps running):", error);
 });

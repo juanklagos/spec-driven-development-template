@@ -2,11 +2,11 @@
 
 ## Estado de aprobación / Approval status
 
-- Estado / Status: `Pendiente`
+- Estado / Status: `Aprobado`
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
-- Fecha de aprobación / Approval date: `YYYY-MM-DD`
+- Fecha de aprobación / Approval date: `2026-07-23`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote):
+- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-23 — «crea commits y sigue con lo que falte». La 021 era el borrador pendiente de mayor valor (bug reportado por el propietario: el binario del lienzo fallaba en silencio). Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 
