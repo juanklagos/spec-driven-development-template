@@ -24,3 +24,4 @@
 | 020 | front-door-two-commands | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 021 | silent-version-mismatch | Draft / Borrador | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 022 | drawer-tareas-colapsables | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
+| 023 | desk-electron | Draft / Borrador | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
