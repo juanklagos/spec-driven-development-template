@@ -13,11 +13,17 @@ import { api, errorMessage } from "../api";
 import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
 import { useT } from "../i18n";
 import { isApprovedStatusText, parseApproval } from "../sections";
-import { useBuilderStore } from "../store";
+import { readTasksCollapsed, useBuilderStore, writeTasksCollapsed } from "../store";
 import { HelpHint } from "./HelpHint";
 import { ImplementModal } from "./ImplementModal";
 import { EDGE_KIND_ICON } from "./LabeledEdge";
 import { SectionEditor } from "./SectionEditor";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -418,6 +424,9 @@ export function SpecDrawer() {
   const refreshGate = useBuilderStore((s) => s.refreshGate);
 
   const [tab, setTab] = useState("summary");
+  // Spec 022: folding the tasks list is a builder-wide preference, read once on
+  // mount so it already applies to the first spec opened after a reload.
+  const [tasksCollapsed, setTasksCollapsed] = useState(readTasksCollapsed);
   const [detail, setDetail] = useState<SpecDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -520,6 +529,10 @@ export function SpecDrawer() {
   // canvas, the kanban and the dashboard. Never re-derive it from the string.
   const isApproved = summary ? summary.tone !== "pending" : false;
   const excerpt = detail ? detail.docs.spec.split("\n").slice(0, EXCERPT_LINES).join("\n") : "";
+  // Derived from `detail.tasks`, which every toggle refreshes (see `toggle`),
+  // so the folded header's count moves without any extra state.
+  const doneCount = detail ? detail.tasks.filter((task) => task.done).length : 0;
+  const pendingCount = detail ? detail.tasks.length - doneCount : 0;
 
   return (
     <Sheet modal={false} open onOpenChange={(open) => !open && selectSpec(null)}>
@@ -579,41 +592,69 @@ export function SpecDrawer() {
                         {t("sheet.implement")}
                       </Button>
                     </span>
-                    <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
-                      {t("sheet.tasks")}
-                      <HelpHint topic="tasks" guide="builder" />
-                    </h3>
-                    <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
-                      {detail.tasks.length === 0 ? (
-                        // Educational empty state: what it means + the next action.
-                        <li className="rounded-md border border-dashed px-3 py-2.5 text-sm text-muted-foreground">
+                    {detail.tasks.length === 0 ? (
+                      <>
+                        <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                          {t("sheet.tasks")}
+                          <HelpHint topic="tasks" guide="builder" />
+                        </h3>
+                        {/* Educational empty state: what it means + the next action.
+                            Nothing to fold here, so it keeps no fold control. */}
+                        <div className="rounded-md border border-dashed px-3 py-2.5 text-sm text-muted-foreground">
                           <p className="m-0 font-medium">{t("sheet.noTasks")}</p>
                           <p className="m-0 mt-1 text-xs">{t("sheet.noTasks.hint")}</p>
-                        </li>
-                      ) : (
-                        detail.tasks.map((task) => (
-                          <li key={task.line}>
-                            <label className="flex cursor-pointer items-start gap-2 rounded-md px-1.5 py-1.5 text-sm hover:bg-accent">
-                              <input
-                                type="checkbox"
-                                className="mt-0.5 size-[15px] shrink-0 accent-[var(--primary)]"
-                                checked={task.done}
-                                disabled={pendingLine !== null}
-                                onChange={() => void toggle(task)}
-                              />
-                              <span className={task.done ? "text-muted-foreground line-through" : ""}>
-                                {task.text}
-                              </span>
-                            </label>
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                    <IssuesPanel
-                      key={specId}
-                      specId={specId}
-                      pendingCount={detail.tasks.filter((task) => !task.done).length}
-                    />
+                        </div>
+                      </>
+                    ) : (
+                      // Spec 022: the tasks list is the only section long enough to
+                      // push the issues panel and the excerpt out of reach, so it folds.
+                      <Accordion
+                        type="single"
+                        collapsible
+                        value={tasksCollapsed ? "" : "tasks"}
+                        onValueChange={(value) => {
+                          const collapsed = value !== "tasks";
+                          setTasksCollapsed(collapsed);
+                          writeTasksCollapsed(collapsed);
+                        }}
+                      >
+                        <AccordionItem value="tasks" className="border-b-0">
+                          {/* The count sits outside the trigger on purpose: folding must
+                              not hide how much it folded away, and the HelpHint popover
+                              is a button, which cannot nest inside the trigger button. */}
+                          <div className="mt-4 flex items-center gap-1.5">
+                            <AccordionTrigger className="flex-none items-center gap-1.5 py-2 text-xs font-bold tracking-wide text-muted-foreground uppercase hover:no-underline">
+                              {t("sheet.tasks")}
+                            </AccordionTrigger>
+                            <HelpHint topic="tasks" guide="builder" />
+                            <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+                              {t("sheet.tasks.count", { done: doneCount, total: detail.tasks.length })}
+                            </span>
+                          </div>
+                          <AccordionContent className="pt-0 pb-0">
+                            <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
+                              {detail.tasks.map((task) => (
+                                <li key={task.line}>
+                                  <label className="flex cursor-pointer items-start gap-2 rounded-md px-1.5 py-1.5 text-sm hover:bg-accent">
+                                    <input
+                                      type="checkbox"
+                                      className="mt-0.5 size-[15px] shrink-0 accent-[var(--primary)]"
+                                      checked={task.done}
+                                      disabled={pendingLine !== null}
+                                      onChange={() => void toggle(task)}
+                                    />
+                                    <span className={task.done ? "text-muted-foreground line-through" : ""}>
+                                      {task.text}
+                                    </span>
+                                  </label>
+                                </li>
+                              ))}
+                            </ul>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    )}
+                    <IssuesPanel key={specId} specId={specId} pendingCount={pendingCount} />
                     <Separator className="my-4" />
                     <h3 className="m-0 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
                       {t("sheet.excerpt")}

@@ -33,3 +33,4 @@
 [2026-07-22 07:34:16 -0500] [spec:018-brand-logo] El autor eligio monograma recortado en monocromo y pidio conectarlo al sitio
 [2026-07-22 07:47:20 -0500] [spec:019-docs-links] El autor aprobo atacar el defecto de enlaces con 'hazlo'
 [2026-07-22 11:24:29 -0500] [spec:020-front-door-two-commands] Juan Carlos Alvarez Lagos aprobo la spec 020 y autorizo la implementacion: 'arreglalo'
+[2026-07-23T01:24:53.516Z] [spec:022-drawer-tareas-colapsables] El autor aprueba la spec 022 y autoriza implementarla: lista de tareas plegable en el panel del builder, con recuento hecho/total en la cabecera y preferencia global persistida en localStorage.

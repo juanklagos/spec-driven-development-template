@@ -62,6 +62,32 @@ export const TOUR_DISMISSED_KEY = "sdd-builder-tour-dismissed";
 /** The tour auto-offers only once per page load (reloads re-trigger `load`). */
 let tourOffered = false;
 
+// --- Tasks section preference (spec 022) ----------------------------------
+// The tasks list is the longest and most variable section of the drawer, so it
+// folds. The choice is one preference for the whole builder, not one per spec:
+// it survives opening another spec and reloading the page.
+/** localStorage key for "keep the drawer's tasks list folded". */
+export const TASKS_COLLAPSED_KEY = "sdd-builder-tasks-collapsed";
+
+/** Unset means expanded: whoever never folded it sees exactly today's drawer. */
+export function readTasksCollapsed(): boolean {
+  try {
+    return localStorage.getItem(TASKS_COLLAPSED_KEY) === "1";
+  } catch {
+    // Private mode etc. — fall back to the default.
+    return false;
+  }
+}
+
+export function writeTasksCollapsed(collapsed: boolean): void {
+  try {
+    if (collapsed) localStorage.setItem(TASKS_COLLAPSED_KEY, "1");
+    else localStorage.removeItem(TASKS_COLLAPSED_KEY);
+  } catch {
+    // Non-fatal: the choice simply won't survive a reload.
+  }
+}
+
 const uid = (): string => crypto.randomUUID().slice(0, 8);
 
 interface BuilderStore {

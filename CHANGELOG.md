@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **A long task list took the spec drawer hostage.** The Summary tab painted every task of `tasks.md` with no ceiling, so on a spec with 52 of them the GitHub issues panel and the `spec.md` excerpt sat several screens below the fold. The list — the longest and most variable section of the drawer, and the only one that could not fold — now folds, with the done/total count in its header so folding never hides how much it folded away. The choice is one preference for the whole builder and survives opening another spec and reloading. Default is expanded: whoever never folds it sees exactly what they saw before. (spec 022)
+
 ---
 
 ## [v2.2.1] — 2026-07-22
