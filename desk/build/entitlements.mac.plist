@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hardened runtime entitlements for the macOS build.
+
+  Electron needs the JIT and unsigned-memory pair for V8; without them a
+  hardened-runtime app crashes on launch rather than degrading.
+
+  Nothing else is requested. The app opens a loopback HTTP server and reads the
+  folder the user picked, and both are things macOS grants without an
+  entitlement — no camera, no microphone, no network server entitlement, no
+  sandbox exceptions. Entitlements are permissions: an unused one is a
+  permission granted for no reason.
+-->
+<plist version="1.0">
+  <dict>
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+  </dict>
+</plist>

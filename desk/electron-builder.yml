@@ -1,0 +1,74 @@
+# Packaging for SDD Desk — spec 023 R8.
+#
+# The icon comes from build/icon.png, the single 1024px master that
+# scripts/build-icon.mjs renders from build/icon.svg. electron-builder derives
+# the .icns and .ico from it, so the brand mark has one source and never drifts
+# between platforms.
+#
+# Signing is configured here but its credentials are not: `mac.notarize` and the
+# Windows certificate come from the environment in CI (R10). A local build
+# without them produces a working, unsigned app — useful for development, and
+# NOT what gets published, because an unsigned build moves the cost onto users
+# in the form of Gatekeeper and SmartScreen warnings they cannot diagnose.
+
+appId: com.juanklagos.sdd-desk
+productName: SDD Desk
+copyright: Copyright © 2026 Juan Carlos Alvarez Lagos
+
+directories:
+  output: release
+  buildResources: build
+
+# The app is the compiled main process plus its runtime dependencies. Source,
+# the icon working files and the packager's own output stay out.
+files:
+  - dist/**/*
+  - package.json
+  - "!**/*.map"
+
+# The builder frontend is served by the embedded server from inside
+# @juanklagos/sdd-mcp (dist/builder-ui), so it needs no separate entry here:
+# packaging the dependency packages the UI with it.
+asar: true
+
+mac:
+  category: public.app-category.developer-tools
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  # notarize: set by CI once the Apple credentials exist.
+
+dmg:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+
+linux:
+  icon: build/icons
+  category: Development
+  synopsis: The SDD Builder in its own window
+  target:
+    - AppImage
+    - deb
+  # Flathub has banned AI-assisted code since 2026-05-29, so the store channel
+  # with the widest Linux reach is closed to this project. AppImage and .deb are
+  # the whole Linux story here, deliberately.
+
+publish:
+  provider: github
+  owner: juanklagos
+  repo: spec-driven-development-template

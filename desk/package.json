@@ -1,0 +1,28 @@
+{
+  "name": "sdd-desk",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "SDD Desk: the SDD Builder in its own window, hosting the SDD server and its MCP endpoint.",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "icon": "electron scripts/build-icon.mjs",
+    "start": "npm run build && electron .",
+    "dev": "npm run build && electron .",
+    "dist": "npm run build && electron-builder --config electron-builder.yml",
+    "dist:dir": "npm run build && electron-builder --config electron-builder.yml --dir"
+  },
+  "dependencies": {
+    "@juanklagos/sdd-core": "file:../packages/sdd-core",
+    "@juanklagos/sdd-mcp": "file:../packages/sdd-mcp"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3",
+    "typescript": "^5.9.3"
+  }
+}
