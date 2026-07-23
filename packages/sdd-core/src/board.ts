@@ -5,8 +5,9 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { computeSpecDrift, type SpecDrift } from "./drift.js";
 import { withFileLock } from "./file-lock.js";
-import { listSpecs, resolveSddRoot, type SpecSummary } from "./workspace.js";
+import { extractApprovalDate, listSpecs, resolveSddRoot, type SpecSummary } from "./workspace.js";
 
 export interface TaskItem {
   text: string;
@@ -26,6 +27,12 @@ export interface BoardSpecCard extends SpecSummary {
   tasks: TaskProgress;
   /** Computed once here so no client re-derives (and diverges from) the rule. */
   tone: SpecTone;
+  /**
+   * Spec 025: whether the code this spec governs changed after approval.
+   * Computed once here (git log × File scope × approval date), like `tone`,
+   * so every surface paints it without re-running git.
+   */
+  drift: SpecDrift;
 }
 
 export interface BoardView {
@@ -299,7 +306,21 @@ export async function getBoardView(projectRoot: string): Promise<BoardView> {
       } catch {
         // No readable tasks.md: the spec still exists, it just has no progress.
       }
-      return { ...spec, tasks, tone: specTone(spec.status, tasks) };
+      // The approval date is not on SpecSummary (that shape is asserted to be
+      // exactly five fields), so read it here where drift needs it.
+      let approvalDate = "";
+      try {
+        approvalDate = extractApprovalDate(await fs.readFile(path.join(spec.dir, "spec.md"), "utf8"));
+      } catch {
+        // No readable spec.md is impossible here (listSpecs required it), but
+        // stay defensive: an empty date makes drift "unknown", never wrong.
+      }
+      const drift = await computeSpecDrift(projectRoot, {
+        approved: isApprovedStatus(spec.status),
+        approvalDate,
+        fileScope: spec.fileScope
+      });
+      return { ...spec, tasks, tone: specTone(spec.status, tasks), drift };
     })
   );
   return { canvas, specs: cards };

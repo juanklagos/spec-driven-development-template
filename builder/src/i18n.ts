@@ -247,6 +247,11 @@ const es = {
   "status.open": "Abrir →",
   "status.gateErrors": "Errores del gate:",
   "status.depWarn": "Dependencias sin aprobar:",
+  "status.drift": "Código cambiado tras la aprobación:",
+  "status.driftTitle": "Deriva spec ↔ código",
+  "status.driftClean": "Sin deriva desde la aprobación",
+  "status.driftUnscoped": "Sin ámbito de archivos declarado",
+  "status.driftUnknown": "Deriva no calculable",
 
   // Guided section editor
   "editor.note":
@@ -593,6 +598,11 @@ const en: Record<keyof typeof es, string> = {
   "status.open": "Open →",
   "status.gateErrors": "Gate errors:",
   "status.depWarn": "Unapproved dependencies:",
+  "status.drift": "Code changed after approval:",
+  "status.driftTitle": "Spec ↔ code drift",
+  "status.driftClean": "No drift since approval",
+  "status.driftUnscoped": "No file scope declared",
+  "status.driftUnknown": "Drift not computable",
 
   // Guided section editor
   "editor.note":

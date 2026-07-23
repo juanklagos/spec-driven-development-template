@@ -592,6 +592,26 @@ export function SpecDrawer() {
                         {t("sheet.implement")}
                       </Button>
                     </span>
+                    {/* Spec 025: drift of the governed code vs. approval. Only the
+                        actionable "drifted" state gets a panel; the offending
+                        commits are the evidence. */}
+                    {summary?.drift?.state === "drifted" && summary.drift.commits.length > 0 ? (
+                      <div className="mt-3 border border-[var(--amber,#ca8a04)] bg-[var(--amber-soft,rgba(202,138,4,0.12))] px-3 py-2.5">
+                        <h3 className="m-0 mb-1.5 flex items-center gap-1.5 text-xs font-bold tracking-wide uppercase text-[var(--amber,#ca8a04)]">
+                          🔀 {t("status.driftTitle")}
+                        </h3>
+                        <p className="m-0 mb-2 text-xs text-muted-foreground">{t("status.drift")}</p>
+                        <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                          {summary.drift.commits.map((c) => (
+                            <li key={c.hash} className="flex gap-2 text-xs">
+                              <code className="flex-none text-[var(--amber,#ca8a04)]">{c.hash}</code>
+                              <span className="text-muted-foreground">{c.date.slice(0, 10)}</span>
+                              <span className="truncate" title={c.subject}>{c.subject}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
                     {detail.tasks.length === 0 ? (
                       <>
                         <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">

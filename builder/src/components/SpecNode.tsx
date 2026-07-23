@@ -21,6 +21,10 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
   // the dashboard can never disagree about what a spec's state is.
   const tone = spec?.tone ?? "pending";
   const badgeText = t(tone === "done" ? "status.done" : tone === "ok" ? "status.approved" : "status.pending");
+  // Spec 025: amber flag when the code this approved spec governs changed after
+  // approval. Only "drifted" earns a chip; clean/unscoped/unknown stay quiet.
+  const drift = spec?.drift;
+  const driftCount = drift?.state === "drifted" ? drift.commits.length : 0;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const { num, name } = splitSpecId(data.specId);
   // The human title from line 1 of spec.md. `name` (the directory slug) is the
@@ -49,6 +53,17 @@ export function SpecNode({ data, selected }: NodeProps<SpecFlowNode>) {
               title={`${t("status.depWarn")}\n${depWarnings.map((w) => `• ${w.message}`).join("\n")}`}
             >
               ⚠ dep
+            </span>
+          ) : null}
+          {driftCount > 0 ? (
+            // Code under this spec's File scope changed after approval (spec 025).
+            <span
+              className="badge-tone warn"
+              title={`${t("status.drift")}\n${(drift?.commits ?? [])
+                .map((c) => `• ${c.hash} ${c.subject}`)
+                .join("\n")}`}
+            >
+              🔀 {driftCount}
             </span>
           ) : null}
           <span className={`badge-tone ${tone}`}>{badgeText}</span>

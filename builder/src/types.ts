@@ -35,6 +35,20 @@ export interface BoardCanvas {
 /** Visual state computed once by sdd-core (specTone) and sent by the API. */
 export type SpecTone = "pending" | "ok" | "done";
 
+/** Spec 025: drift of the governed code vs. the spec's approval. */
+export type DriftState = "clean" | "drifted" | "unscoped" | "unknown";
+
+export interface DriftCommit {
+  hash: string;
+  date: string;
+  subject: string;
+}
+
+export interface SpecDrift {
+  state: DriftState;
+  commits: DriftCommit[];
+}
+
 export interface SpecSummary {
   /** Human title from line 1 of spec.md. Never empty. */
   title: string;
@@ -44,6 +58,11 @@ export interface SpecSummary {
   tasks: { done: number; total: number };
   /** Server-computed: never re-derive it here or surfaces drift apart. */
   tone: SpecTone;
+  /**
+   * Server-computed drift (sdd-core computeSpecDrift). Optional so an older
+   * server without the field still parses; treat a missing value as "unknown".
+   */
+  drift?: SpecDrift;
 }
 
 export interface BoardResponse {

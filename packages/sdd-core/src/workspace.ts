@@ -316,3 +316,19 @@ export function extractApprovalStatus(content: string): string {
   const match = content.match(/Estado \/ Status:\s*`([^`]+)`/i);
   return match?.[1].trim() ?? "Pendiente";
 }
+
+/**
+ * The backticked value of the "Approval date" line, trimmed. Empty when the
+ * line is absent. Matches the English half of the bilingual label so it does
+ * not depend on the accented "aprobación". The value may still be the template
+ * placeholder ("YYYY-MM-DD"); callers decide what to do with that — the drift
+ * check (spec 025) treats a non-ISO date as undeterminable rather than real.
+ *
+ * Kept off SpecSummary on purpose: sdd_list_specs asserts that shape has
+ * exactly five fields, and drift is the only consumer, so getBoardView reads
+ * the date where it needs it instead of widening the shared type.
+ */
+export function extractApprovalDate(content: string): string {
+  const match = content.match(/Approval date:\s*`([^`]+)`/i);
+  return match?.[1].trim() ?? "";
+}

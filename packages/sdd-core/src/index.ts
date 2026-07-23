@@ -915,6 +915,7 @@ export {
   // implementation (sdd_extract_status_value) over an adversarial table. The two
   // diverged silently once: bash read "approved" where this read "Pendiente".
   extractApprovalStatus,
+  extractApprovalDate,
   extractFileScope,
   extractSpecTitle,
   frameworkAssetError,
@@ -930,6 +931,7 @@ export {
 } from "./workspace.js";
 export type { SpecSummary } from "./workspace.js";
 export * from "./board.js";
+export * from "./drift.js";
 export * from "./docs.js";
 export * from "./policy.js";
 export * from "./spec-actions.js";

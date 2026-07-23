@@ -138,6 +138,10 @@ When the spec is ready, the **"Approval" tab** shows the real block as a form: s
 
 Approval unlocks **"🤖 Implement with agent"**: a modal preloads the exact implementation kickoff prompt (workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract) behind one "Copy prompt" button. Copy-first by design: no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop spelled out: *no code before approved spec and consistent plan*.
 
+### The drift semaphore (spec 025)
+
+Once a spec is approved, the builder watches whether the code it governs kept moving. If a spec declares an **"Ámbito de archivos / File scope"** section and any commit touched those paths **after** its approval date, the card shows an amber **🔀** chip, and the drawer lists the offending commits (hash, date, subject). It is a plain `git log` × file scope × approval date — **no LLM, no network**, computed once in `sdd-core` and painted like the status color, so the canvas, the MCP tool and any agent see the same signal. It is a *signal, not a verdict*: whether the code contradicts the spec, and which one should change, stays your call (or your agent's). A spec with no file scope reads as "unscoped" rather than a false "clean"; a workspace that is not a git repo degrades quietly.
+
 ## The team view
 
 The **"🗺️ Canvas ↔ 📋 Board" toggle** in the top bar shows the same specs as a kanban — three columns driven by the real state of your `.md` files: **Draft · Pending**, **Approved** (the `Estado / Status` line in `spec.md`), and **Done** (every task ticked). Cards keep their progress bar and open the same drawer.

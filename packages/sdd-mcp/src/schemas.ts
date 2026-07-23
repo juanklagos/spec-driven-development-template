@@ -72,6 +72,13 @@ export const taskItemSchema = z.object({
   line: z.number()
 });
 
+export const specDriftSchema = z.object({
+  state: z.enum(["clean", "drifted", "unscoped", "unknown"]),
+  commits: z
+    .array(z.object({ hash: z.string(), date: z.string(), subject: z.string() }))
+    .default([])
+});
+
 export const boardSpecCardSchema = z.object({
   id: z.string(),
   dir: z.string(),
@@ -90,7 +97,13 @@ export const boardSpecCardSchema = z.object({
    * `tone` broke once and `fileScope` broke again; test-mcp-integration.mjs now
    * asserts the two shapes round-trip.
    */
-  fileScope: z.array(z.string()).default([])
+  fileScope: z.array(z.string()).default([]),
+  /**
+   * Spec 025: drift of the code this spec governs vs. its approval. Computed by
+   * sdd-core computeSpecDrift. Optional-with-default so a workspace served by an
+   * older sdd-core (no drift field) still validates.
+   */
+  drift: specDriftSchema.default({ state: "unknown", commits: [] })
 });
 
 export const boardViewSchema = z.object({

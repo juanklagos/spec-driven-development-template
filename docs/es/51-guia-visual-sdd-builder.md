@@ -138,6 +138,10 @@ Cuando la spec está lista, la pestaña **«Aprobación»** muestra el bloque re
 
 La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) detrás de un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
 
+### El semáforo de deriva (spec 025)
+
+Una vez aprobada una spec, el builder vigila si el código que gobierna siguió moviéndose. Si la spec declara una sección **«Ámbito de archivos / File scope»** y algún commit tocó esas rutas **después** de su fecha de aprobación, la tarjeta muestra un chip ámbar **🔀**, y el drawer lista los commits responsables (hash, fecha, asunto). Es un simple `git log` × ámbito de archivos × fecha de aprobación — **sin LLM, sin red**, calculado una vez en `sdd-core` y pintado como el color de estado, así que el lienzo, la tool MCP y cualquier agente ven la misma señal. Es una *señal, no un veredicto*: decidir si el código contradice la spec, y cuál de los dos debe cambiar, sigue siendo tuyo (o de tu agente). Una spec sin ámbito declarado se lee como «sin ámbito» en vez de un falso «sin deriva»; un workspace que no es repo git degrada en silencio.
+
 ## La vista de equipo
 
 El toggle **«🗺️ Lienzo ↔ 📋 Tablero»** de la barra superior muestra las mismas specs como un kanban — tres columnas según el estado real de tus `.md`: **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel.
