@@ -38,3 +38,4 @@
 [2026-07-23 12:42:57 -0500] [spec:024-nucleo-con-pruebas] Juan Carlos Alvarez Lagos autorizo implementar la spec 024 (nucleo con pruebas, Vitest) con 'arranca' (2026-07-23)
 [2026-07-23 13:02:05 -0500] [spec:026-tema-docs] Juan Carlos Alvarez Lagos autorizo implementar la spec 026 (tema docs estilo delphitools con colores SDD, verde primario): eligio 'verde primario' + 'crear spec 026 y construir' (2026-07-23)
 [2026-07-23 13:11:56 -0500] [spec:025-semaforo-de-deriva] Juan Carlos Alvarez Lagos autorizo implementar la spec 025 (semaforo de deriva spec-codigo) con 'continue' a la pregunta de seguir con la 025 (2026-07-23)
+[2026-07-23 13:35:19 -0500] [spec:021-silent-version-mismatch] Juan Carlos Alvarez Lagos autorizo implementar la spec 021 (el binario no puede fallar en silencio) con 'crea commits y sigue con lo que falte' (2026-07-23)

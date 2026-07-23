@@ -22,7 +22,7 @@
 | 018 | brand-logo | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 019 | docs-links | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 020 | front-door-two-commands | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
-| 021 | silent-version-mismatch | Draft / Borrador | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
+| 021 | silent-version-mismatch | Done / Completada (T10 la verifica el propietario al publicar) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 022 | drawer-tareas-colapsables | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-07-22 |
 | 023 | desk-electron | In Progress / En progreso (12 de 13; T9 firma fuera de alcance en macOS por decisión) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 024 | nucleo-con-pruebas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
