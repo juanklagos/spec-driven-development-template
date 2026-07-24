@@ -1,6 +1,6 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-23 18:41 UTC
+Generated at / Generado en: 2026-07-24 00:23 UTC
 
 ## Active specs / Specs activas
 
@@ -40,11 +40,12 @@ Generated at / Generado en: 2026-07-23 18:41 UTC
 | 024 | nucleo-con-pruebas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 025 | semaforo-de-deriva | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 026 | tema-docs | Done / Completada (T6 ticker diferido a propósito) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
+| 027 | mcp-full-coverage | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 
 ## Task progress / Progreso de tareas
 
 - Pending / Pendientes: 11
-- Completed / Completadas: 278
+- Completed / Completadas: 286
 
 ## Recent log excerpt / Extracto reciente de bitácora
 

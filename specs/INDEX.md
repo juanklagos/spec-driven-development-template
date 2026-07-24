@@ -28,3 +28,4 @@
 | 024 | nucleo-con-pruebas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 025 | semaforo-de-deriva | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 026 | tema-docs | Done / Completada (T6 ticker diferido a propósito) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
+| 027 | mcp-full-coverage | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
