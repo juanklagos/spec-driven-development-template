@@ -521,6 +521,134 @@ Structured output:
 - `updated` (sections replaced in place)
 - `created` (sections appended because the file lacked them)
 
+### `sdd_read_spec_document`
+
+Purpose:
+- read one document of a spec bundle (`spec.md`, `plan.md`, `tasks.md`, `research.md` or `history.md`) as raw markdown
+
+When to use:
+- when the agent is connected over HTTP/Desk (no filesystem) and needs the actual spec content — the read counterpart of `sdd_approve_spec` and `sdd_update_spec_sections`
+
+Input:
+- `projectRoot`
+- `specId`
+- `document` (one of the five bundle documents)
+
+Structured output:
+- `specId`, `document`, `content`
+
+### `sdd_read_bitacora`
+
+Purpose:
+- read the logbook: without `fileName` it lists the `.md` files of one folder (`handoffs`, `decisiones`, `diaria`, `global`); with `fileName` it returns that file's content
+
+When to use:
+- when resuming a session (read the latest handoff — the list comes sorted, the last one is the newest) or reviewing prior decisions
+
+Rules:
+- `fileName` must be a plain `.md` basename (no path separators); any traversal attempt fails with a clear error
+
+Input:
+- `projectRoot`
+- `kind` (`handoffs` | `decisiones` | `diaria` | `global`)
+- `fileName` (optional)
+
+Structured output:
+- `kind`, `files`, and with `fileName`: `content`
+
+### `sdd_check_drift`
+
+Purpose:
+- answer whether the code a spec governs changed AFTER its approval date (drift semaphore, spec 025)
+
+When to use:
+- before touching code governed by an approved spec, or when auditing project state
+
+Rules:
+- states: `clean`, `drifted` (with the offending commits), `unscoped` (no File scope declared), `unknown` (not approved / no git)
+- the same `computeSpecDrift` rule the board and dashboard use — it never fakes a `clean`
+
+Input:
+- `projectRoot`
+- `specId` (optional; omitted, it reports every spec)
+
+Structured output:
+- `reports` (specId, status, drift)
+
+### `sdd_add_task`
+
+Purpose:
+- append one unchecked task (`- [ ] text`) to a spec's `tasks.md`
+
+When to use:
+- during planning, when new work shows up that must live in the spec
+
+Rules:
+- the task lands right after the last checkbox (or at the end when there is none); atomic write, same primitive as `sdd_set_task_done`
+
+Input:
+- `projectRoot`
+- `specId`
+- `text` (single line, without the checkbox)
+
+Structured output:
+- `specId`, updated `tasks` with line numbers
+
+### `sdd_lint_ears`
+
+Purpose:
+- lint acceptance criteria against the EARS skeleton (WHEN/IF/WHILE … THE SYSTEM SHALL …) plus vague words without a measurable number
+
+When to use:
+- while drafting criteria, before saving them with `sdd_update_spec_sections`
+
+Rules:
+- pure (no filesystem) and advisory: results are suggestions, never blockers
+- the same `validateEarsCriterion` the Builder uses
+
+Input:
+- `criteria` (list of lines)
+
+Structured output:
+- `results` (criterion, level, matchesPattern, vagueWords, hints)
+
+### `sdd_score_spec`
+
+Purpose:
+- score a spec bundle 0-100 with a grade (A/B/C/D) and improvement notes
+
+When to use:
+- to judge whether a spec is ready before asking for approval
+
+Rules:
+- same heuristics as `scripts/score-spec.sh` (files present, spec sections, plan signals, task breakdown, research rationale, dated history)
+
+Input:
+- `projectRoot`
+- `specId` (optional; omitted, it scores every spec)
+
+Structured output:
+- `scores` (specId, score, grade, notes)
+
+### `sdd_install_sidecar`
+
+Purpose:
+- install the compact `spec/` sidecar into an EXISTING external project (the recommended layout for real projects outside this template)
+
+When to use:
+- as the first step to adopt SDD in an existing project from Desk or `npx`, with no bash and no template clone
+
+Rules:
+- delegates to `scripts/install-spec-sidecar.sh` (the production-tested installer); refuses the template root like every tool
+- after it runs, every other tool works against that `projectRoot`
+
+Input:
+- `targetPath` (existing directory)
+- `profile` (`minimal` | `recommended`)
+
+Structured output:
+- `projectRoot`, `sddRoot`, `profile`
+
 ### `sdd_board_app`
 
 Purpose:

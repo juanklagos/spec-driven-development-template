@@ -4,6 +4,7 @@ import packageJson from "../package.json" with { type: "json" };
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
+  addSpecTask,
   appendProjectLogEntry,
   approveSpec,
   checkGate,
@@ -15,28 +16,39 @@ import {
   getBoardView,
   getFrameworkRoot,
   getGateSummary,
+  getSpecDriftReport,
   getWorkspacesRoot,
+  installSidecar,
+  listBitacoraFiles,
   listSpecs,
+  readBitacoraFile,
   readFrameworkFile,
+  readSpecDocument,
   readSpecTasks,
   recordUserConsent,
   resolveSddRoot,
+  scoreSpec,
   setSpecTaskDone,
   updateSpecSections,
+  validateEarsCriterion,
   validateProject,
   writeBoard,
   writeDailyLog,
   writeDecision,
   writeHandoff,
+  type BitacoraKind,
   type BoardCanvas
 } from "@juanklagos/sdd-core";
 import { registerSddBoardApp } from "./app.js";
 import {
   boardSpecCardSchema,
   canvasSchema,
+  earsLintResultSchema,
   gateSummaryShape,
   projectRootSchema,
+  specDriftReportSchema,
   specIdSchema,
+  specScoreSchema,
   taskItemSchema,
   validationMessageSchema,
   verdictSchema
@@ -594,6 +606,200 @@ export function createSddMcpServer(): McpServer {
         successCriteria,
         outOfScope
       });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  // --- Spec 027: full command coverage -------------------------------------
+  // The read counterparts (spec documents, bitácora, drift) plus add-task,
+  // EARS lint, spec score and the external-project sidecar installer. Every
+  // tool delegates to sdd-core; nothing here reimplements a rule.
+
+  server.registerTool(
+    "sdd_read_spec_document",
+    {
+      title: "Read spec document",
+      description:
+        "Read one document of a numbered spec bundle (spec.md, plan.md, tasks.md, research.md or history.md) as raw markdown. The read counterpart of sdd_approve_spec/sdd_update_spec_sections, for agents without filesystem access (HTTP/Desk).",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        document: z.enum(["spec.md", "plan.md", "tasks.md", "research.md", "history.md"])
+      },
+      outputSchema: {
+        specId: z.string(),
+        document: z.string(),
+        content: z.string()
+      }
+    },
+    async ({ projectRoot, specId, document }) => {
+      const content = await readSpecDocument(projectRoot, specId, document);
+      const result = { specId, document, content };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: content }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_read_bitacora",
+    {
+      title: "Read bitácora",
+      description:
+        "Read the project logbook: without fileName, list the markdown files of one bitácora folder (handoffs, decisiones, diaria, global — sorted, so the last one is the latest); with fileName, return that file's content. The read counterpart of sdd_write_handoff/sdd_write_decision/sdd_write_daily_log/sdd_append_project_log.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        kind: z.enum(["handoffs", "decisiones", "diaria", "global"]),
+        fileName: z
+          .string()
+          .optional()
+          .describe("Plain markdown basename such as 2026-03-18-handoff.md. Omit to list the folder.")
+      },
+      outputSchema: {
+        kind: z.string(),
+        files: z.array(z.string()),
+        fileName: z.string().optional(),
+        content: z.string().optional()
+      }
+    },
+    async ({ projectRoot, kind, fileName }) => {
+      const bitacoraKind = kind as BitacoraKind;
+      if (fileName) {
+        const file = await readBitacoraFile(projectRoot, bitacoraKind, fileName);
+        const result = { kind, files: [fileName], fileName, content: file.content };
+        return {
+          structuredContent: toStructuredContent(result),
+          content: [{ type: "text", text: file.content }]
+        };
+      }
+      const files = await listBitacoraFiles(projectRoot, bitacoraKind);
+      const result = { kind, files };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_check_drift",
+    {
+      title: "Check spec drift",
+      description:
+        "Spec↔code drift (spec 025) as a direct answer: did the code a spec governs change AFTER its approval date? One spec (specId) or every spec (omitted). States: clean, drifted (with offending commits), unscoped (no File scope declared), unknown (not approved / no git). Same computeSpecDrift rule the board and dashboard use.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema.optional()
+      },
+      outputSchema: {
+        reports: z.array(specDriftReportSchema)
+      }
+    },
+    async ({ projectRoot, specId }) => {
+      const reports = await getSpecDriftReport(projectRoot, specId);
+      const result = { reports };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_add_task",
+    {
+      title: "Add spec task",
+      description:
+        "Append one unchecked task (- [ ] text) to a spec's tasks.md, right after the last existing checkbox (atomic write, same primitive as sdd_set_task_done), and return the updated task list with line numbers.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        text: z.string().min(1).describe("Single-line task text, without the leading checkbox.")
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId, text }) => {
+      const tasks = await addSpecTask(projectRoot, specId, text);
+      const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_lint_ears",
+    {
+      title: "Lint EARS criteria",
+      description:
+        "Lint acceptance criteria against the EARS skeleton (CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ … / WHEN/IF/WHILE … THE SYSTEM SHALL …) plus vague-word checks. Pure and advisory — the same validateEarsCriterion the Builder uses; results are suggestions, never blockers. No filesystem access.",
+      inputSchema: {
+        criteria: z.array(z.string()).min(1).describe("Criterion lines to lint, one entry per criterion.")
+      },
+      outputSchema: {
+        results: z.array(earsLintResultSchema)
+      }
+    },
+    async ({ criteria }) => {
+      const results = criteria.map((criterion) => ({ criterion, ...validateEarsCriterion(criterion) }));
+      const result = { results };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_score_spec",
+    {
+      title: "Score spec quality",
+      description:
+        "Score a spec bundle 0-100 with grade (A/B/C/D) and improvement notes: required files present, spec sections, plan signals (milestones/dependencies/risks), task breakdown, research rationale, dated history. One spec (specId) or every spec (omitted). Heuristics-parity port of scripts/score-spec.sh.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema.optional()
+      },
+      outputSchema: {
+        scores: z.array(specScoreSchema)
+      }
+    },
+    async ({ projectRoot, specId }) => {
+      const scores = await scoreSpec(projectRoot, specId);
+      const result = { scores };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_install_sidecar",
+    {
+      title: "Install spec sidecar",
+      description:
+        "Install the compact spec/ sidecar into an EXISTING external project directory (the recommended layout for real projects outside this template), via scripts/install-spec-sidecar.sh. After this, every other tool works against that projectRoot. Refuses the template root, like every tool here.",
+      inputSchema: {
+        targetPath: z.string().min(1).describe("Absolute path of the existing external project."),
+        profile: z.enum(["minimal", "recommended"]).default("recommended")
+      },
+      outputSchema: {
+        projectRoot: z.string(),
+        sddRoot: z.string(),
+        profile: z.enum(["minimal", "recommended"])
+      }
+    },
+    async ({ targetPath, profile }) => {
+      const result = await installSidecar({ frameworkRoot, targetPath, profile });
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

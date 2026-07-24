@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- **The MCP server can now read what it always could write.** The logbook had four write tools and zero read tools, specs could be approved but not read, and drift only travelled buried inside the board payload — over HTTP (Desk, `npx`), where the agent has no filesystem, those asymmetries were real blocks. Seven new tools (21 → 28): `sdd_read_spec_document`, `sdd_read_bitacora` (list + read, traversal-proof), `sdd_check_drift` (the board's own `computeSpecDrift` rule as a direct answer), `sdd_add_task` (the missing write half of the task tools), `sdd_lint_ears`, `sdd_score_spec` (TypeScript port of `score-spec.sh` — the bash needs ripgrep, which npm/Desk machines don't have), and `sdd_install_sidecar` (the external-project on-ramp, delegating to the production-tested installer). Every tool delegates to `sdd-core`; nothing reimplements a rule. (spec 027)
+
 ### Fixed
 - **A long task list took the spec drawer hostage.** The Summary tab painted every task of `tasks.md` with no ceiling, so on a spec with 52 of them the GitHub issues panel and the `spec.md` excerpt sat several screens below the fold. The list — the longest and most variable section of the drawer, and the only one that could not fold — now folds, with the done/total count in its header so folding never hides how much it folded away. The choice is one preference for the whole builder and survives opening another spec and reloading. Default is expanded: whoever never folds it sees exactly what they saw before. (spec 022)
 

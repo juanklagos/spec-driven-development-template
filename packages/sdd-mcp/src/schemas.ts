@@ -79,6 +79,30 @@ export const specDriftSchema = z.object({
     .default([])
 });
 
+/** Spec 027: drift as a first-class answer (sdd_check_drift). */
+export const specDriftReportSchema = z.object({
+  specId: z.string(),
+  status: z.string(),
+  drift: specDriftSchema
+});
+
+/** Spec 027: EARS lint verdict, mirroring sdd-core's EarsLintResult. */
+export const earsLintResultSchema = z.object({
+  criterion: z.string(),
+  level: z.enum(["ok", "warning"]),
+  matchesPattern: z.boolean(),
+  vagueWords: z.array(z.string()),
+  hints: z.array(z.string())
+});
+
+/** Spec 027: spec quality score, heuristics-parity with scripts/score-spec.sh. */
+export const specScoreSchema = z.object({
+  specId: z.string(),
+  score: z.number(),
+  grade: z.enum(["A", "B", "C", "D"]),
+  notes: z.array(z.string())
+});
+
 export const boardSpecCardSchema = z.object({
   id: z.string(),
   dir: z.string(),

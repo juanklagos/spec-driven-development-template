@@ -83,6 +83,35 @@ export function parseTasksMarkdown(content: string): TaskItem[] {
   return items;
 }
 
+/**
+ * Append one unchecked task to a spec's tasks.md. Spec 027: agents could read
+ * and toggle tasks but never add one — planning over MCP/HTTP had no write
+ * path. The new entry lands right after the last checkbox (or at the end of
+ * the file when there is none), through the same serialized mutate primitive
+ * as the toggle, and the updated task list comes back with line numbers.
+ */
+export async function addSpecTask(projectRoot: string, specId: string, text: string): Promise<TaskItem[]> {
+  const clean = text.trim();
+  if (clean === "" || /[\r\n]/.test(clean)) {
+    throw new Error("Task text must be a single non-empty line");
+  }
+  const next = await mutateSpecDocument(projectRoot, specId, "tasks.md", (content) => {
+    const lines = content.split("\n");
+    let lastTaskLine = -1;
+    lines.forEach((line, index) => {
+      if (TASK_RE.test(line)) lastTaskLine = index;
+    });
+    const entry = `- [ ] ${clean}`;
+    if (lastTaskLine >= 0) {
+      lines.splice(lastTaskLine + 1, 0, entry);
+      return lines.join("\n");
+    }
+    const base = content.endsWith("\n") || content === "" ? content : `${content}\n`;
+    return `${base}${entry}\n`;
+  });
+  return parseTasksMarkdown(next);
+}
+
 export function setTaskDone(content: string, line: number, done: boolean): string {
   const lines = content.split("\n");
   const target = lines[line];
@@ -306,24 +335,55 @@ export async function getBoardView(projectRoot: string): Promise<BoardView> {
       } catch {
         // No readable tasks.md: the spec still exists, it just has no progress.
       }
-      // The approval date is not on SpecSummary (that shape is asserted to be
-      // exactly five fields), so read it here where drift needs it.
-      let approvalDate = "";
-      try {
-        approvalDate = extractApprovalDate(await fs.readFile(path.join(spec.dir, "spec.md"), "utf8"));
-      } catch {
-        // No readable spec.md is impossible here (listSpecs required it), but
-        // stay defensive: an empty date makes drift "unknown", never wrong.
-      }
-      const drift = await computeSpecDrift(projectRoot, {
-        approved: isApprovedStatus(spec.status),
-        approvalDate,
-        fileScope: spec.fileScope
-      });
+      const drift = await driftForSummary(projectRoot, spec);
       return { ...spec, tasks, tone: specTone(spec.status, tasks), drift };
     })
   );
   return { canvas, specs: cards };
+}
+
+/** Drift of one SpecSummary — the exact computation getBoardView performs per card. */
+async function driftForSummary(projectRoot: string, spec: SpecSummary): Promise<SpecDrift> {
+  // The approval date is not on SpecSummary (that shape is asserted to be
+  // exactly five fields), so read it here where drift needs it.
+  let approvalDate = "";
+  try {
+    approvalDate = extractApprovalDate(await fs.readFile(path.join(spec.dir, "spec.md"), "utf8"));
+  } catch {
+    // No readable spec.md is impossible here (listSpecs required it), but
+    // stay defensive: an empty date makes drift "unknown", never wrong.
+  }
+  return computeSpecDrift(projectRoot, {
+    approved: isApprovedStatus(spec.status),
+    approvalDate,
+    fileScope: spec.fileScope
+  });
+}
+
+export interface SpecDriftReport {
+  specId: string;
+  status: string;
+  drift: SpecDrift;
+}
+
+/**
+ * Spec 027: drift as a first-class answer, not a field buried in the board
+ * payload. One spec (`specId`) or every spec (omitted), through the SAME
+ * driftForSummary getBoardView uses — one rule, two callers.
+ */
+export async function getSpecDriftReport(projectRoot: string, specId?: string): Promise<SpecDriftReport[]> {
+  const specs = await listSpecs(projectRoot);
+  const selected = specId ? specs.filter((spec) => spec.id === specId) : specs;
+  if (specId && selected.length === 0) {
+    throw new Error(`Spec not found: ${specId}`);
+  }
+  return Promise.all(
+    selected.map(async (spec) => ({
+      specId: spec.id,
+      status: spec.status,
+      drift: await driftForSummary(projectRoot, spec)
+    }))
+  );
 }
 
 /**

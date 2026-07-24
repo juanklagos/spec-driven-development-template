@@ -526,6 +526,134 @@ Salida estructurada:
 - `updated` (secciones reemplazadas en su lugar)
 - `created` (secciones agregadas porque el archivo no las tenía)
 
+### `sdd_read_spec_document`
+
+Propósito:
+- leer un documento del bundle de una spec (`spec.md`, `plan.md`, `tasks.md`, `research.md` o `history.md`) como markdown crudo
+
+Cuándo usarlo:
+- cuando el agente está conectado por HTTP/Desk (sin filesystem) y necesita el contenido real de la spec — la contraparte de lectura de `sdd_approve_spec` y `sdd_update_spec_sections`
+
+Entrada:
+- `projectRoot`
+- `specId`
+- `document` (uno de los cinco documentos del bundle)
+
+Salida estructurada:
+- `specId`, `document`, `content`
+
+### `sdd_read_bitacora`
+
+Propósito:
+- leer la bitácora: sin `fileName` lista los `.md` de una carpeta (`handoffs`, `decisiones`, `diaria`, `global`), con `fileName` devuelve el contenido
+
+Cuándo usarlo:
+- al retomar una sesión (leer el último handoff — la lista viene ordenada, el último es el más reciente) o al revisar decisiones previas
+
+Reglas:
+- `fileName` debe ser un nombre plano `.md` (sin separadores de ruta); todo intento de traversal falla con error claro
+
+Entrada:
+- `projectRoot`
+- `kind` (`handoffs` | `decisiones` | `diaria` | `global`)
+- `fileName` (opcional)
+
+Salida estructurada:
+- `kind`, `files`, y con `fileName`: `content`
+
+### `sdd_check_drift`
+
+Propósito:
+- responder si el código que gobierna una spec cambió DESPUÉS de su fecha de aprobación (semáforo de deriva, spec 025)
+
+Cuándo usarlo:
+- antes de tocar código gobernado por una spec aprobada, o al auditar el estado del proyecto
+
+Reglas:
+- estados: `clean`, `drifted` (con los commits ofensores), `unscoped` (sin File scope declarado), `unknown` (no aprobada / sin git)
+- misma regla `computeSpecDrift` que el board y el dashboard — nunca inventa un `clean`
+
+Entrada:
+- `projectRoot`
+- `specId` (opcional; sin él, reporta todas las specs)
+
+Salida estructurada:
+- `reports` (specId, status, drift)
+
+### `sdd_add_task`
+
+Propósito:
+- añadir una tarea sin marcar (`- [ ] texto`) al `tasks.md` de una spec
+
+Cuándo usarlo:
+- durante la planificación, cuando aparece trabajo nuevo que debe quedar en la spec
+
+Reglas:
+- la tarea entra justo después del último checkbox (o al final si no hay); escritura atómica, misma primitiva que `sdd_set_task_done`
+
+Entrada:
+- `projectRoot`
+- `specId`
+- `text` (una sola línea, sin el checkbox)
+
+Salida estructurada:
+- `specId`, `tasks` actualizadas con números de línea
+
+### `sdd_lint_ears`
+
+Propósito:
+- lintear criterios de aceptación contra el esqueleto EARS (CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …) y palabras vagas sin número
+
+Cuándo usarlo:
+- al redactar criterios antes de guardarlos con `sdd_update_spec_sections`
+
+Reglas:
+- puro (sin filesystem) y consultivo: los resultados son sugerencias, nunca bloquean
+- el mismo `validateEarsCriterion` que usa el Builder
+
+Entrada:
+- `criteria` (lista de líneas)
+
+Salida estructurada:
+- `results` (criterion, level, matchesPattern, vagueWords, hints)
+
+### `sdd_score_spec`
+
+Propósito:
+- puntuar un bundle de spec 0-100 con nota (A/B/C/D) y observaciones de mejora
+
+Cuándo usarlo:
+- para evaluar si una spec está lista antes de pedir aprobación
+
+Reglas:
+- mismas heurísticas que `scripts/score-spec.sh` (archivos presentes, secciones, plan, tareas, research, history con fechas)
+
+Entrada:
+- `projectRoot`
+- `specId` (opcional; sin él, puntúa todas)
+
+Salida estructurada:
+- `scores` (specId, score, grade, notes)
+
+### `sdd_install_sidecar`
+
+Propósito:
+- instalar el sidecar compacto `spec/` en un proyecto externo EXISTENTE (el layout recomendado para proyectos reales fuera del template)
+
+Cuándo usarlo:
+- como primer paso para adoptar SDD en un proyecto existente desde Desk o `npx`, sin bash ni clone del template
+
+Reglas:
+- delega en `scripts/install-spec-sidecar.sh` (el instalador probado); rechaza la raíz del template como todas las herramientas
+- después de instalarlo, el resto de herramientas funciona contra ese `projectRoot`
+
+Entrada:
+- `targetPath` (directorio existente)
+- `profile` (`minimal` | `recommended`)
+
+Salida estructurada:
+- `projectRoot`, `sddRoot`, `profile`
+
 ### `sdd_board_app`
 
 Propósito:

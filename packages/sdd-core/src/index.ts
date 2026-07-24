@@ -7,6 +7,7 @@ import { withCrossProcessLock, withFileLock } from "./file-lock.js";
 import { checkPolicy } from "./policy.js";
 import { summarize, type ValidationMessage, type ValidationResult } from "./validation.js";
 import {
+  ensureProjectRootAllowed as assertProjectRootAllowed,
   exists,
   frameworkAssetError,
   getFrameworkRoot,
@@ -140,6 +141,50 @@ export async function createWorkspace(input: CreateWorkspaceInput): Promise<Crea
     usedSpecKit: useSpecKit,
     layout
   };
+}
+
+export interface InstallSidecarInput {
+  frameworkRoot: string;
+  /** Existing external project to receive the compact `spec/` sidecar. */
+  targetPath: string;
+  profile?: "minimal" | "recommended";
+}
+
+export interface InstallSidecarResult {
+  projectRoot: string;
+  sddRoot: string;
+  profile: "minimal" | "recommended";
+}
+
+/**
+ * Spec 027: install the compact `spec/` sidecar into an existing external
+ * project. Delegates to scripts/install-spec-sidecar.sh — the same execFile
+ * pattern createWorkspace uses, against the same bundled framework payload —
+ * because those 364 lines of bash are the production-tested installer, not a
+ * competitor to port.
+ */
+export async function installSidecar(input: InstallSidecarInput): Promise<InstallSidecarResult> {
+  const frameworkRoot = path.resolve(input.frameworkRoot);
+  const targetPath = path.resolve(input.targetPath);
+  const profile = input.profile ?? "recommended";
+
+  await assertProjectRootAllowed(targetPath);
+
+  const stats = await fs.stat(targetPath).catch(() => null);
+  if (!stats?.isDirectory()) {
+    throw new Error(`Sidecar target must be an existing directory: ${targetPath}`);
+  }
+
+  const scriptPath = path.join(frameworkRoot, "scripts/install-spec-sidecar.sh");
+  if (!(await exists(scriptPath))) {
+    throw new Error(frameworkAssetError("scripts/install-spec-sidecar.sh"));
+  }
+
+  await execFileAsync("bash", [scriptPath, targetPath, `--profile=${profile}`], {
+    cwd: frameworkRoot
+  });
+
+  return { projectRoot: targetPath, sddRoot: path.join(targetPath, "spec"), profile };
 }
 
 export async function createSpec(input: CreateSpecInput): Promise<CreateSpecResult> {
@@ -930,8 +975,10 @@ export {
   type FrameworkRootInfo
 } from "./workspace.js";
 export type { SpecSummary } from "./workspace.js";
+export * from "./bitacora.js";
 export * from "./board.js";
 export * from "./drift.js";
+export * from "./score.js";
 export * from "./docs.js";
 export * from "./policy.js";
 export * from "./spec-actions.js";

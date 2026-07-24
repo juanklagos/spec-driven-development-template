@@ -59,6 +59,13 @@ async function main() {
     "sdd_gate_summary",
     "sdd_approve_spec",
     "sdd_update_spec_sections",
+    "sdd_read_spec_document",
+    "sdd_read_bitacora",
+    "sdd_check_drift",
+    "sdd_add_task",
+    "sdd_lint_ears",
+    "sdd_score_spec",
+    "sdd_install_sidecar",
     "sdd_board_app"
   ];
 
