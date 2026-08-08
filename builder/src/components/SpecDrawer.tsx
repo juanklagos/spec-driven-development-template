@@ -11,8 +11,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api, errorMessage } from "../api";
 import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
+import { lintEarsCriterion } from "../ears";
 import { useT } from "../i18n";
-import { isApprovedStatusText, parseApproval } from "../sections";
+import { isApprovedStatusText, parseApproval, parseSpecSections } from "../sections";
 import { readTasksCollapsed, useBuilderStore, writeTasksCollapsed } from "../store";
 import { HelpHint } from "./HelpHint";
 import { ImplementModal } from "./ImplementModal";
@@ -37,12 +38,135 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { AppNode, CreateIssuesResult, SpecDetail, TaskItem } from "../types";
+import type { AppNode, CreateIssuesResult, SpecDetail, SpecScore, TaskItem } from "../types";
 
 const EXCERPT_LINES = 25;
 
 const inputClass =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40";
+
+// Spec 028, R7: the spec quality score (same scoreSpec the MCP serves over
+// sdd_score_spec) plus a drawer-level summary of the EARS lint — until now the
+// score only existed for agents, and the lint only inside the guided editor.
+function ScorePanel({ specId, specMarkdown }: { specId: string; specMarkdown: string }) {
+  const { t } = useT();
+  const specsVersion = useBuilderStore((s) => s.specsVersion);
+  const [score, setScore] = useState<SpecScore | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setError(null);
+    api
+      .getSpecScore(specId)
+      .then((s) => {
+        if (!cancelled) setScore(s);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(errorMessage(err));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [specId, specsVersion]);
+
+  // Local lint of the criteria already shown in the drawer (builder/src/ears.ts,
+  // the KEEP-IN-SYNC copy of the core lint the SectionEditor uses live).
+  const ears = useMemo(() => {
+    const criteria = parseSpecSections(specMarkdown).criteria;
+    const results = criteria.map((text) => ({ text, ...lintEarsCriterion(text) }));
+    return { total: results.length, ok: results.filter((r) => r.level === "ok").length, results };
+  }, [specMarkdown]);
+
+  const GRADE_TONE: Record<SpecScore["grade"], string> = {
+    A: "border-primary bg-[var(--primary-soft)] text-primary",
+    B: "border-[var(--blue)] bg-[var(--blue-soft,rgba(59,130,246,0.12))] text-[var(--blue)]",
+    C: "border-[var(--amber)] bg-[var(--amber-soft)] text-[var(--amber)]",
+    D: "border-destructive bg-[var(--danger-soft)] text-destructive"
+  };
+
+  return (
+    <div className="mt-3 rounded-md border bg-muted/40 px-3 py-2.5">
+      <h3 className="m-0 mb-1.5 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+        {t("sheet.score")}
+        <HelpHint topic="score" guide="builder" />
+      </h3>
+      {error ? <p className="m-0 text-xs text-destructive">⚠ {error}</p> : null}
+      {score ? (
+        <div className="flex items-center gap-2.5">
+          <Badge variant="outline" className={GRADE_TONE[score.grade]}>
+            {score.grade}
+          </Badge>
+          <span className="text-sm font-semibold tabular-nums">{score.score}/100</span>
+          {ears.total > 0 ? (
+            <span
+              className={`ml-auto text-xs ${ears.ok === ears.total ? "text-primary" : "text-[var(--amber)]"}`}
+              title={ears.results
+                .filter((r) => r.level !== "ok")
+                .flatMap((r) => r.hints)
+                .join("\n")}
+            >
+              {t("sheet.ears.summary", { ok: ears.ok, total: ears.total })}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+      {score && score.notes.length > 0 ? (
+        <ul className="m-0 mt-1.5 flex list-none flex-col gap-0.5 p-0 text-xs text-muted-foreground">
+          {score.notes.map((note) => (
+            <li key={note}>• {note}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+// Spec 028, R7: add a task from the canvas — the REST could only toggle boxes
+// before, so planning one more step meant leaving the builder.
+function AddTaskForm({ specId, onAdded }: { specId: string; onAdded: (tasks: TaskItem[]) => void }) {
+  const { t } = useT();
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async () => {
+    const clean = text.trim();
+    if (!clean || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await api.addTask(specId, clean);
+      setText("");
+      onAdded(res.tasks);
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="mt-2">
+      <div className="flex gap-2">
+        <input
+          className={inputClass}
+          value={text}
+          placeholder={t("sheet.addTask.ph")}
+          aria-label={t("sheet.addTask.ph")}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") void submit();
+          }}
+        />
+        <Button variant="outline" className="shrink-0" disabled={busy || !text.trim()} onClick={() => void submit()}>
+          {busy ? t("sheet.addTask.adding") : t("sheet.addTask.btn")}
+        </Button>
+      </div>
+      {error ? <p className="m-0 mt-1.5 text-xs text-destructive">⚠ {error}</p> : null}
+    </div>
+  );
+}
 
 // Approval tab (spec 010, R2): the 4 fields of the real block in spec.md.
 // Status and date are read-only (approveSpec stamps `Aprobado` + today);
@@ -514,6 +638,13 @@ export function SpecDrawer() {
       });
   };
 
+  // Shared by the checkbox toggle and the add-task form: the server answered
+  // with the authoritative list, so detail and the board card update together.
+  const handleTasksChanged = (tasks: TaskItem[]) => {
+    if (detail) setDetail({ ...detail, tasks });
+    applyTasks(specId, tasks);
+  };
+
   const handleApproved = () => {
     refetchDetail();
     void refreshSpecs();
@@ -612,6 +743,7 @@ export function SpecDrawer() {
                         </ul>
                       </div>
                     ) : null}
+                    <ScorePanel specId={specId} specMarkdown={detail.docs.spec} />
                     {detail.tasks.length === 0 ? (
                       <>
                         <h3 className="mt-4 mb-2 flex items-center gap-1.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
@@ -674,6 +806,7 @@ export function SpecDrawer() {
                         </AccordionItem>
                       </Accordion>
                     )}
+                    <AddTaskForm specId={specId} onAdded={handleTasksChanged} />
                     <IssuesPanel key={specId} specId={specId} pendingCount={pendingCount} />
                     <Separator className="my-4" />
                     <h3 className="m-0 mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">

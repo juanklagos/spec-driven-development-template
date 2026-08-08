@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { CircleHelp, Redo2, Undo2 } from "lucide-react";
-import { errorMessage } from "../api";
+import { api, errorMessage } from "../api";
 import { exportBoardPng } from "../exportPng";
 import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
+import { BitacoraModal } from "./BitacoraModal";
 import { HelpHint } from "./HelpHint";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
@@ -249,6 +250,49 @@ function ExportPngButton() {
   );
 }
 
+// Spec 028, R7: regenerate STATUS.md + docs/roadmap from the canvas. Both
+// generators already existed in core and MCP; this button is their REST twin.
+function ReportsButton() {
+  const { t } = useT();
+  const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async () => {
+    if (state === "busy") return;
+    setState("busy");
+    setError(null);
+    try {
+      await api.generateStatus();
+      await api.generateRoadmap();
+      setState("done");
+      setTimeout(() => setState("idle"), 3000);
+    } catch (err) {
+      setError(errorMessage(err));
+      setState("error");
+    }
+  };
+
+  const label =
+    state === "busy"
+      ? t("topbar.reports.busy")
+      : state === "done"
+        ? `✓ ${t("topbar.reports")}`
+        : state === "error"
+          ? `⚠ ${t("topbar.reports")}`
+          : `📊 ${t("topbar.reports")}`;
+
+  return (
+    <Button
+      variant="outline"
+      onClick={() => void run()}
+      disabled={state === "busy"}
+      title={error ?? t("topbar.reports.title")}
+    >
+      {label}
+    </Button>
+  );
+}
+
 export function TopBar() {
   const { t } = useT();
   const projectRoot = useBuilderStore((s) => s.projectRoot);
@@ -259,6 +303,7 @@ export function TopBar() {
   const openTour = useBuilderStore((s) => s.openTour);
   const setGalleryOpen = useBuilderStore((s) => s.setGalleryOpen);
   const setAssistantOpen = useBuilderStore((s) => s.setAssistantOpen);
+  const [bitacoraOpen, setBitacoraOpen] = useState(false);
 
   const saveDot =
     saveState === "error"
@@ -286,6 +331,10 @@ export function TopBar() {
         <Separator orientation="vertical" className="!h-5" />
         <HistoryButtons />
         <ExportPngButton />
+        <ReportsButton />
+        <Button variant="outline" onClick={() => setBitacoraOpen(true)} title={t("topbar.bitacora.title")}>
+          📖 {t("topbar.bitacora")}
+        </Button>
         <Button variant="outline" onClick={() => setAssistantOpen(true)} title={t("topbar.assistant.title")}>
           ✨ {t("topbar.assistant")}
         </Button>
@@ -326,6 +375,7 @@ export function TopBar() {
           <a href="/dashboard">Dashboard</a>
         </Button>
       </div>
+      {bitacoraOpen ? <BitacoraModal onClose={() => setBitacoraOpen(false)} /> : null}
     </header>
   );
 }

@@ -122,6 +122,64 @@ export function setTaskDone(content: string, line: number, done: boolean): strin
   return lines.join("\n");
 }
 
+/** Task text is always a single non-empty line (same rule as addSpecTask). */
+function cleanTaskText(text: string): string {
+  const clean = text.trim();
+  if (clean === "" || /[\r\n]/.test(clean)) {
+    throw new Error("Task text must be a single non-empty line");
+  }
+  return clean;
+}
+
+function assertTaskLine(lines: string[], line: number): string {
+  const target = lines[line];
+  if (target === undefined || !TASK_RE.test(target)) {
+    throw new Error(`Line ${line} is not a task checkbox`);
+  }
+  return target;
+}
+
+/**
+ * Spec 028, R4: replace a task's text, preserving its indentation and done
+ * mark. The replacer is a function so a `$` in the new text can never be read
+ * as a replacement pattern.
+ */
+export function renameTask(content: string, line: number, text: string): string {
+  const clean = cleanTaskText(text);
+  const lines = content.split("\n");
+  const target = assertTaskLine(lines, line);
+  lines[line] = target.replace(TASK_RE, (_match, indent: string, mark: string) => `${indent}- [${mark}] ${clean}`);
+  return lines.join("\n");
+}
+
+/** Spec 028, R4: delete one task line; everything else survives byte for byte. */
+export function removeTask(content: string, line: number): string {
+  const lines = content.split("\n");
+  assertTaskLine(lines, line);
+  lines.splice(line, 1);
+  return lines.join("\n");
+}
+
+/**
+ * Spec 028, R4: swap a task with the nearest task above/below it, skipping
+ * any non-task lines in between — the two task lines trade places, so notes
+ * and blank lines never move. "Move to the end" is repeated "down".
+ */
+export function moveTask(content: string, line: number, direction: "up" | "down"): string {
+  const lines = content.split("\n");
+  assertTaskLine(lines, line);
+  const step = direction === "up" ? -1 : 1;
+  let other = line + step;
+  while (other >= 0 && other < lines.length && !TASK_RE.test(lines[other])) {
+    other += step;
+  }
+  if (other < 0 || other >= lines.length) {
+    throw new Error(`Already the ${direction === "up" ? "first" : "last"} task`);
+  }
+  [lines[line], lines[other]] = [lines[other], lines[line]];
+  return lines.join("\n");
+}
+
 function assertSpecId(specId: string): void {
   if (!SPEC_ID_RE.test(specId)) {
     throw new Error(`Invalid spec id: ${specId}`);
@@ -320,6 +378,40 @@ export async function setSpecTaskDone(
   // that was already superseded.
   return parseTasksMarkdown(
     await mutateSpecDocument(projectRoot, specId, "tasks.md", (current) => setTaskDone(current, line, done))
+  );
+}
+
+/**
+ * Spec 028, R4: rename / remove / move a task through the same serialized
+ * read-modify-write primitive as the toggle and the append, so concurrent
+ * edits from MCP and the builder queue instead of losing each other. Each
+ * returns the task list as actually written, with line numbers.
+ */
+export async function renameSpecTask(
+  projectRoot: string,
+  specId: string,
+  line: number,
+  text: string
+): Promise<TaskItem[]> {
+  return parseTasksMarkdown(
+    await mutateSpecDocument(projectRoot, specId, "tasks.md", (current) => renameTask(current, line, text))
+  );
+}
+
+export async function removeSpecTask(projectRoot: string, specId: string, line: number): Promise<TaskItem[]> {
+  return parseTasksMarkdown(
+    await mutateSpecDocument(projectRoot, specId, "tasks.md", (current) => removeTask(current, line))
+  );
+}
+
+export async function moveSpecTask(
+  projectRoot: string,
+  specId: string,
+  line: number,
+  direction: "up" | "down"
+): Promise<TaskItem[]> {
+  return parseTasksMarkdown(
+    await mutateSpecDocument(projectRoot, specId, "tasks.md", (current) => moveTask(current, line, direction))
   );
 }
 

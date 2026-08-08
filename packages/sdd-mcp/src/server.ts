@@ -8,6 +8,7 @@ import {
   appendProjectLogEntry,
   approveSpec,
   checkGate,
+  checkPolicy,
   connectBoardCards,
   createSpec,
   createWorkspace,
@@ -21,14 +22,19 @@ import {
   installSidecar,
   listBitacoraFiles,
   listSpecs,
+  moveSpecTask,
   readBitacoraFile,
   readFrameworkFile,
   readSpecDocument,
   readSpecTasks,
   recordUserConsent,
+  removeSpecTask,
+  renameSpecTask,
   resolveSddRoot,
+  runLegacyDiscovery,
   scoreSpec,
   setSpecTaskDone,
+  updateSpecIndexRow,
   updateSpecSections,
   validateEarsCriterion,
   validateProject,
@@ -36,6 +42,7 @@ import {
   writeDailyLog,
   writeDecision,
   writeHandoff,
+  writeSpecDocument,
   type BitacoraKind,
   type BoardCanvas
 } from "@juanklagos/sdd-core";
@@ -45,12 +52,16 @@ import {
   canvasSchema,
   earsLintResultSchema,
   gateSummaryShape,
+  legacyDiscoveryResultSchema,
   projectRootSchema,
+  specDocumentNameSchema,
   specDriftReportSchema,
   specIdSchema,
   specScoreSchema,
   taskItemSchema,
+  updateIndexRowResultSchema,
   validationMessageSchema,
+  validationResultSchema,
   verdictSchema
 } from "./schemas.js";
 
@@ -800,6 +811,184 @@ export function createSddMcpServer(): McpServer {
     },
     async ({ targetPath, profile }) => {
       const result = await installSidecar({ frameworkRoot, targetPath, profile });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  // --- Spec 028: the surface the 027 audit left out -------------------------
+  // Policy standalone, legacy discovery, raw document write, full task
+  // management and INDEX status. Every one delegates to sdd-core; nothing
+  // reimplements a rule.
+
+  server.registerTool(
+    "sdd_check_policy",
+    {
+      title: "Check SDD policy",
+      description:
+        "Run the multi-agent policy check (sdd.policy.yaml blocks, agent rule files aligned with the canonical operating system) WITHOUT running the full gate. Paired with scripts/check-sdd-policy.sh: same messages, same codes. The gate embeds this check; this tool answers it on its own.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: validationResultSchema
+    },
+    async ({ projectRoot }) => {
+      const result = await checkPolicy(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        isError: !result.ok
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_legacy_discovery",
+    {
+      title: "Discover specs in legacy code",
+      description:
+        "Scan an existing codebase for route/API and user-flow signals and write analysis/legacy-discovery/ (evidence files + report with suggested first specs). TypeScript port of scripts/legacy-discovery.sh — no bash, no ripgrep needed. The entry point for adapting a project that already has code (Case 2 of the guides).",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: legacyDiscoveryResultSchema
+    },
+    async ({ projectRoot }) => {
+      const result = await runLegacyDiscovery(projectRoot);
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_write_spec_document",
+    {
+      title: "Write spec document",
+      description:
+        "Write the FULL content of one spec bundle document (spec.md, plan.md, tasks.md, research.md or history.md), atomically. The low-level counterpart of sdd_read_spec_document; prefer sdd_update_spec_sections for structured edits of spec.md. Any name outside the five fails without touching the filesystem.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        document: specDocumentNameSchema,
+        content: z.string().describe("Complete new markdown content of the document.")
+      },
+      outputSchema: {
+        specId: z.string(),
+        document: z.string(),
+        bytes: z.number()
+      }
+    },
+    async ({ projectRoot, specId, document, content }) => {
+      await writeSpecDocument(projectRoot, specId, document, content);
+      const result = { specId, document, bytes: Buffer.byteLength(content, "utf8") };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_rename_task",
+    {
+      title: "Rename spec task",
+      description:
+        "Replace the text of one task checkbox line in tasks.md, preserving its indentation and done mark (atomic write, same primitive as sdd_set_task_done). Returns the updated task list with line numbers.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        line: z.number().int().nonnegative().describe("Zero-based line number of the task checkbox, as returned by sdd_read_tasks."),
+        text: z.string().min(1).describe("Single-line replacement text, without the leading checkbox.")
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId, line, text }) => {
+      const tasks = await renameSpecTask(projectRoot, specId, line, text);
+      const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_remove_task",
+    {
+      title: "Remove spec task",
+      description:
+        "Delete one task checkbox line from tasks.md; every other line survives byte for byte (atomic write). Returns the updated task list with line numbers.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        line: z.number().int().nonnegative().describe("Zero-based line number of the task checkbox, as returned by sdd_read_tasks.")
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId, line }) => {
+      const tasks = await removeSpecTask(projectRoot, specId, line);
+      const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_move_task",
+    {
+      title: "Move spec task",
+      description:
+        "Swap one task with the nearest task above/below it in tasks.md, skipping non-task lines (atomic write). 'Move to the end' is repeated 'down'. Returns the updated task list with line numbers.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        line: z.number().int().nonnegative().describe("Zero-based line number of the task checkbox, as returned by sdd_read_tasks."),
+        direction: z.enum(["up", "down"])
+      },
+      outputSchema: {
+        specId: z.string(),
+        tasks: z.array(taskItemSchema)
+      }
+    },
+    async ({ projectRoot, specId, line, direction }) => {
+      const tasks = await moveSpecTask(projectRoot, specId, line, direction);
+      const result = { specId, tasks };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_update_spec_status",
+    {
+      title: "Update spec status in INDEX",
+      description:
+        "Update the status, priority and/or owner cells of ONE spec's row in specs/INDEX.md (and refresh its updated date). The only write INDEX accepts besides appending a new row — until now a status change meant editing the table by hand. Fails when the spec has no row.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        specId: specIdSchema,
+        status: z.string().min(1).optional().describe("New status cell, e.g. 'In Progress / En progreso' or 'Done / Completada'."),
+        priority: z.string().min(1).optional().describe("New priority cell, e.g. 'High / Alta'."),
+        owner: z.string().min(1).optional().describe("New owner cell.")
+      },
+      outputSchema: updateIndexRowResultSchema
+    },
+    async ({ projectRoot, specId, status, priority, owner }) => {
+      const result = await updateSpecIndexRow({ projectRoot, specId, status, priority, owner });
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

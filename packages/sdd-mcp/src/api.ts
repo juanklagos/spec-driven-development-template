@@ -4,16 +4,27 @@
 
 import http from "node:http";
 import {
+  addSpecTask,
+  appendProjectLogEntry,
   approveSpec,
   recordUserConsent,
   createSpec,
+  generateRoadmap,
+  generateStatus,
   getBoardView,
   getGateSummary,
+  listBitacoraFiles,
   parseTasksMarkdown,
+  readBitacoraFile,
   readSpecDocument,
+  scoreSpec,
   setSpecTaskDone,
   updateSpecSections,
   writeBoard,
+  writeDailyLog,
+  writeDecision,
+  writeHandoff,
+  type BitacoraKind,
   type SpecSectionsInput
 } from "@juanklagos/sdd-core";
 import { createIssuesForSpec, isGithubPreconditionError } from "./github.js";
@@ -121,6 +132,89 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
           return true;
         }
         json(res, 200, { tasks: await setSpecTaskDone(projectRoot, id, body.line, body.done) });
+        return true;
+      }
+      // Spec 028: the write half of task management on the canvas — until now
+      // the REST could only toggle boxes, so adding a task meant leaving the
+      // builder for a terminal.
+      if (req.method === "POST" && taskMatch) {
+        const id = taskMatch[1];
+        const body = (await readBody(req)) as { text?: string };
+        if (typeof body?.text !== "string" || !body.text.trim()) {
+          json(res, 400, { error: "Expected { text: string }" });
+          return true;
+        }
+        json(res, 201, { tasks: await addSpecTask(projectRoot, id, body.text) });
+        return true;
+      }
+      // Spec 028: the score the MCP already serves (spec 027), now visible
+      // from the drawer — same scoreSpec, so canvas and agent never disagree.
+      const scoreMatch = route.match(/^\/api\/spec\/([^/]+)\/score$/);
+      if (req.method === "GET" && scoreMatch) {
+        const [score] = await scoreSpec(projectRoot, scoreMatch[1]);
+        json(res, 200, score);
+        return true;
+      }
+      // Spec 028: bitácora from the canvas. GET lists a folder (?file=name
+      // reads one entry); POST writes one entry through the same core writers
+      // the MCP tools use — decisiones/handoffs { fileName, content }, diaria
+      // { date, content }, global { entry }.
+      const bitacoraMatch = route.match(/^\/api\/bitacora\/([^/]+)$/);
+      if (bitacoraMatch) {
+        const kind = bitacoraMatch[1] as BitacoraKind;
+        if (!["handoffs", "decisiones", "diaria", "global"].includes(kind)) {
+          json(res, 400, { error: "Unknown bitacora kind. Use handoffs, decisiones, diaria or global." });
+          return true;
+        }
+        if (req.method === "GET") {
+          const file = url.searchParams.get("file");
+          if (file) {
+            json(res, 200, await readBitacoraFile(projectRoot, kind, file));
+          } else {
+            json(res, 200, { kind, files: await listBitacoraFiles(projectRoot, kind) });
+          }
+          return true;
+        }
+        if (req.method === "POST") {
+          const body = (await readBody(req)) as {
+            fileName?: string;
+            date?: string;
+            content?: string;
+            entry?: string;
+          };
+          if (kind === "global") {
+            if (typeof body?.entry !== "string" || !body.entry.trim()) {
+              json(res, 400, { error: "Expected { entry: string }" });
+              return true;
+            }
+            json(res, 201, await appendProjectLogEntry(projectRoot, body.entry));
+            return true;
+          }
+          if (kind === "diaria") {
+            if (typeof body?.date !== "string" || typeof body?.content !== "string" || !body.content.trim()) {
+              json(res, 400, { error: "Expected { date: 'YYYY-MM-DD', content: string }" });
+              return true;
+            }
+            json(res, 201, await writeDailyLog(projectRoot, body.date, body.content));
+            return true;
+          }
+          if (typeof body?.fileName !== "string" || typeof body?.content !== "string" || !body.content.trim()) {
+            json(res, 400, { error: "Expected { fileName: string, content: string }" });
+            return true;
+          }
+          const writer = kind === "decisiones" ? writeDecision : writeHandoff;
+          json(res, 201, await writer(projectRoot, body.fileName, body.content));
+          return true;
+        }
+      }
+      // Spec 028: regenerate the status dashboard and the roadmap from the
+      // canvas — the two generators already existed in core and MCP.
+      if (req.method === "POST" && route === "/api/status") {
+        json(res, 200, await generateStatus(projectRoot));
+        return true;
+      }
+      if (req.method === "POST" && route === "/api/roadmap") {
+        json(res, 200, await generateRoadmap(projectRoot));
         return true;
       }
       if (req.method === "POST" && route === "/api/spec") {

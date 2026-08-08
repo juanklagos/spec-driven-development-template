@@ -1,11 +1,14 @@
 import type {
   ApproveSpecResult,
+  BitacoraKind,
   BoardCanvas,
   BoardResponse,
   CreateIssuesResult,
   CreateSpecResult,
+  FileOutputResult,
   GateSummary,
   SpecDetail,
+  SpecScore,
   SpecSectionsInput,
   TaskItem,
   UpdateSpecSectionsResult
@@ -92,7 +95,34 @@ export const api = {
     }),
 
   createIssues: (id: string): Promise<CreateIssuesResult> =>
-    request(`/api/spec/${encodeURIComponent(id)}/issues`, { method: "POST" })
+    request(`/api/spec/${encodeURIComponent(id)}/issues`, { method: "POST" }),
+
+  // --- Spec 028: the canvas catches up with the MCP surface ---------------
+
+  /** Append one unchecked task to the spec's tasks.md. */
+  addTask: (id: string, text: string): Promise<{ tasks: TaskItem[] }> =>
+    request(`/api/spec/${encodeURIComponent(id)}/tasks`, {
+      method: "POST",
+      body: JSON.stringify({ text })
+    }),
+
+  /** The 0-100 quality score of one spec (same scoreSpec as sdd_score_spec). */
+  getSpecScore: (id: string): Promise<SpecScore> =>
+    request(`/api/spec/${encodeURIComponent(id)}/score`),
+
+  /** Write one bitácora entry (decisiones/handoffs { fileName, content }, diaria { date, content }, global { entry }). */
+  writeBitacora: (kind: BitacoraKind, payload: Record<string, string>): Promise<FileOutputResult> =>
+    request(`/api/bitacora/${encodeURIComponent(kind)}`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }),
+
+  /** Regenerate STATUS.md from specs/INDEX.md. */
+  generateStatus: (): Promise<FileOutputResult> => request("/api/status", { method: "POST" }),
+
+  /** Regenerate docs/roadmap.{md,mmd} from specs/INDEX.md. */
+  generateRoadmap: (): Promise<{ mermaidPath: string; markdownPath: string }> =>
+    request("/api/roadmap", { method: "POST" })
 };
 
 export function errorMessage(error: unknown): string {

@@ -103,6 +103,29 @@ export const specScoreSchema = z.object({
   notes: z.array(z.string())
 });
 
+/** Spec 028: legacy discovery result, heuristics-parity with scripts/legacy-discovery.sh. */
+export const legacyDiscoveryResultSchema = z.object({
+  target: z.string(),
+  outDir: z.string(),
+  routeSignals: z.number(),
+  flowSignals: z.number(),
+  suggestedSpecs: z.array(z.string()),
+  reportPath: z.string(),
+  routesFile: z.string(),
+  flowsFile: z.string()
+});
+
+/** Spec 028: result of the one-row update of specs/INDEX.md. */
+export const updateIndexRowResultSchema = z.object({
+  specNumber: z.string(),
+  row: z.string()
+});
+
+/** The five writable spec documents — the same whitelist sdd-core enforces. */
+export const specDocumentNameSchema = z
+  .enum(["spec.md", "plan.md", "tasks.md", "research.md", "history.md"])
+  .describe("One of the five spec bundle documents.");
+
 export const boardSpecCardSchema = z.object({
   id: z.string(),
   dir: z.string(),

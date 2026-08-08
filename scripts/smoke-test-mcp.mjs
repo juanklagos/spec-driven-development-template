@@ -66,6 +66,13 @@ async function main() {
     "sdd_lint_ears",
     "sdd_score_spec",
     "sdd_install_sidecar",
+    "sdd_check_policy",
+    "sdd_legacy_discovery",
+    "sdd_write_spec_document",
+    "sdd_rename_task",
+    "sdd_remove_task",
+    "sdd_move_task",
+    "sdd_update_spec_status",
     "sdd_board_app"
   ];
 

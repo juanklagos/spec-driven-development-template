@@ -416,6 +416,11 @@ async function makeFixtureWorkspace() {
   for (const dir of ["specs", "idea", "bitacora"]) {
     await fs.mkdir(path.join(root, dir), { recursive: true });
   }
+  // The four logbook subdirs every real scaffold creates (install-spec-sidecar.sh
+  // lines 55-58); the core writers target them directly.
+  for (const sub of ["global", "diaria", "handoffs", "decisiones"]) {
+    await fs.mkdir(path.join(root, "bitacora", sub), { recursive: true });
+  }
   await fs.cp(path.join(process.cwd(), "specs", "_template"), path.join(root, "specs", "_template"), {
     recursive: true
   });
@@ -562,6 +567,93 @@ async function checkRestRoutes() {
 
     const unknown = await restRequest("/api/definitely-not-a-route");
     assert(unknown.status === 404, `an unknown /api/* route must be 404, got ${unknown.status}`);
+  } finally {
+    server.stop();
+    await fs.rm(root, { recursive: true, force: true });
+  }
+}
+
+// Spec 028: the REST routes the canvas gained — add task, score, bitácora
+// read/write, status and roadmap. Same throwaway-workspace pattern as
+// checkRestRoutes, separate so a failure here names the new surface.
+async function checkSpec028Routes() {
+  const root = await makeFixtureWorkspace();
+  const server = startServer(restPort, { SDD_PROJECT_ROOT: root });
+  try {
+    await server.ready;
+
+    const created = await restRequest("/api/spec", {
+      method: "POST",
+      body: JSON.stringify({ name: "rutas nuevas", owner: "Probe" })
+    });
+    const specId = created.json?.specId;
+    assert(specId === "001-rutas-nuevas", `unexpected spec id: ${specId}`);
+
+    // POST /api/spec/:id/tasks — the add half the REST never had.
+    const noText = await restRequest(`/api/spec/${specId}/tasks`, { method: "POST", body: "{}" });
+    assert(noText.status === 400, `POST tasks without text must be 400, got ${noText.status}`);
+    const added = await restRequest(`/api/spec/${specId}/tasks`, {
+      method: "POST",
+      body: JSON.stringify({ text: "Tarea añadida desde REST" })
+    });
+    assert(added.status === 201, `POST tasks must be 201, got ${added.status}`);
+    assert(
+      added.json?.tasks?.some((task) => task.text === "Tarea añadida desde REST"),
+      "POST tasks must return the updated list with the new task"
+    );
+
+    // GET /api/spec/:id/score — same scoreSpec as the MCP tool.
+    const score = await restRequest(`/api/spec/${specId}/score`);
+    assert(score.status === 200, `GET score must be 200, got ${score.status}`);
+    assert(
+      typeof score.json?.score === "number" && ["A", "B", "C", "D"].includes(score.json?.grade),
+      `score must carry a 0-100 number and a grade, got ${JSON.stringify(score.json)}`
+    );
+    const missingScore = await restRequest("/api/spec/099-nope/score");
+    assert(missingScore.status === 422, `GET score of an unknown spec must be 422, got ${missingScore.status}`);
+
+    // GET+POST /api/bitacora/:kind — canvas logbook through the core writers.
+    const badKind = await restRequest("/api/bitacora/nope");
+    assert(badKind.status === 400, `an unknown bitacora kind must be 400, got ${badKind.status}`);
+    const emptyList = await restRequest("/api/bitacora/decisiones");
+    assert(emptyList.status === 200 && Array.isArray(emptyList.json?.files), "GET bitacora must list files");
+    const noFields = await restRequest("/api/bitacora/decisiones", { method: "POST", body: "{}" });
+    assert(noFields.status === 400, `POST decisiones without fields must be 400, got ${noFields.status}`);
+    const decision = await restRequest("/api/bitacora/decisiones", {
+      method: "POST",
+      body: JSON.stringify({ fileName: "2026-08-08-probe.md", content: "# Decisión de prueba\n" })
+    });
+    assert(decision.status === 201, `POST decisiones must be 201, got ${decision.status}`);
+    const listed = await restRequest("/api/bitacora/decisiones");
+    assert(listed.json?.files?.includes("2026-08-08-probe.md"), "the written decision must list afterwards");
+    const readBack = await restRequest("/api/bitacora/decisiones?file=2026-08-08-probe.md");
+    assert(readBack.json?.content?.includes("Decisión de prueba"), "GET ?file= must read the entry back");
+    const traversal = await restRequest("/api/bitacora/decisiones?file=..%2f..%2fpackage.json");
+    assert(traversal.status === 422, `a traversal fileName must be rejected, got ${traversal.status}`);
+    const daily = await restRequest("/api/bitacora/diaria", {
+      method: "POST",
+      body: JSON.stringify({ date: "2026-08-08", content: "# Daily de prueba\n" })
+    });
+    assert(daily.status === 201, `POST diaria must be 201, got ${daily.status}`);
+    const globalEntry = await restRequest("/api/bitacora/global", {
+      method: "POST",
+      body: JSON.stringify({ entry: "### Entrada de prueba" })
+    });
+    assert(globalEntry.status === 201, `POST global must be 201, got ${globalEntry.status}`);
+
+    // POST /api/status + /api/roadmap — the generators, from the canvas.
+    const status = await restRequest("/api/status", { method: "POST" });
+    assert(status.status === 200, `POST /api/status must be 200, got ${status.status}`);
+    assert(
+      (await fs.readFile(path.join(root, "STATUS.md"), "utf8")).includes("Status Dashboard"),
+      "POST /api/status must write STATUS.md in the workspace"
+    );
+    const roadmap = await restRequest("/api/roadmap", { method: "POST" });
+    assert(roadmap.status === 200, `POST /api/roadmap must be 200, got ${roadmap.status}`);
+    assert(
+      (await fs.readFile(path.join(root, "docs", "roadmap.md"), "utf8")).includes("roadmap"),
+      "POST /api/roadmap must write docs/roadmap.md in the workspace"
+    );
   } finally {
     server.stop();
     await fs.rm(root, { recursive: true, force: true });
@@ -740,6 +832,8 @@ async function main() {
   console.log("MCP HTTP smoke test: /builder mount + traversal guard OK (m13)");
 
   await checkRestRoutes();
+
+  await checkSpec028Routes();
   console.log("MCP HTTP smoke test: REST routes OK (I14, I16)");
 
   await checkSessionReclamation();

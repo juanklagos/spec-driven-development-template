@@ -83,6 +83,22 @@ export interface SpecDetail {
   tasks: TaskItem[];
 }
 
+/** Spec 028: GET /api/spec/:id/score — the same scoreSpec the MCP serves. */
+export interface SpecScore {
+  specId: string;
+  score: number;
+  grade: "A" | "B" | "C" | "D";
+  notes: string[];
+}
+
+/** Spec 028: the bitácora folders the REST writes (same kinds as the MCP). */
+export type BitacoraKind = "handoffs" | "decisiones" | "diaria" | "global";
+
+export interface FileOutputResult {
+  path: string;
+  content: string;
+}
+
 export interface CreateSpecResult {
   specId: string;
   specDir: string;

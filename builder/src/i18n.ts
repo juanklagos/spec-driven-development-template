@@ -107,6 +107,30 @@ const es = {
   "topbar.png": "PNG",
   "topbar.png.exporting": "Exportando…",
   "topbar.png.title": "Exporta el tablero como imagen",
+  "topbar.reports": "Informes",
+  "topbar.reports.busy": "Generando…",
+  "topbar.reports.title": "Regenera STATUS.md y docs/roadmap desde specs/INDEX.md",
+  "topbar.bitacora": "Bitácora",
+  "topbar.bitacora.title": "Registra una decisión, daily log o handoff sin salir del canvas",
+  "bitacora.aria": "Registrar entrada en la bitácora",
+  "bitacora.title": "Registrar en la bitácora",
+  "bitacora.note":
+    "Cada entrada se escribe en la carpeta de bitácora del proyecto con las mismas reglas que por MCP o terminal — sin duplicados de formato.",
+  "bitacora.kind": "Tipo de entrada",
+  "bitacora.kind.decisiones": "Decisión",
+  "bitacora.kind.handoffs": "Handoff",
+  "bitacora.kind.diaria": "Daily log",
+  "bitacora.kind.global": "Log global del proyecto",
+  "bitacora.fileName": "Nombre de archivo (.md)",
+  "bitacora.date": "Fecha",
+  "bitacora.content": "Contenido (markdown)",
+  "bitacora.contentPh.decisiones": "# Decisión\n\n## Contexto\n\n## Decisión\n\n## Alternativas descartadas\n\n## Cuándo revisarla",
+  "bitacora.contentPh.handoffs": "# Handoff\n\n## Estado actual\n\n## Próximo paso",
+  "bitacora.contentPh.diaria": "# Daily\n\n## Hecho hoy\n\n## Siguiente",
+  "bitacora.contentPh.global": "Entrada para bitacora/global/PROJECT_LOG.md…",
+  "bitacora.submit": "Guardar entrada",
+  "bitacora.busy": "Guardando…",
+  "bitacora.done": "Entrada registrada",
   "topbar.assistant": "Asistente",
   "topbar.assistant.title": "Describe tu proyecto y genera un borrador de board",
   "topbar.templates": "Plantillas",
@@ -238,6 +262,13 @@ const es = {
     "Un issue por tarea pendiente vía gh CLI; los títulos existentes se saltan",
   "sheet.issues.hint": "Requiere un repo git con remote y gh CLI autenticado.",
   "sheet.issues.summary": "{created} creadas · {skipped} saltadas · {failed} fallidas",
+
+  // Spec 028: puntaje + lint EARS en el drawer, y añadir tarea desde el canvas
+  "sheet.score": "Puntaje de la spec",
+  "sheet.ears.summary": "EARS: {ok}/{total} limpios",
+  "sheet.addTask.ph": "Nueva tarea para esta spec…",
+  "sheet.addTask.btn": "Añadir tarea",
+  "sheet.addTask.adding": "Añadiendo…",
 
   // Status badges
   "status.approved": "Aprobada",
@@ -393,6 +424,10 @@ const es = {
   "help.issues.body":
     "Crea un issue por cada tarea pendiente, con enlace de vuelta a la spec. Es idempotente: los títulos que ya existen se saltan. La casilla en tasks.md sigue siendo la fuente de verdad.",
 
+  "help.score.title": "Puntaje 0-100, calculado en el servidor",
+  "help.score.body":
+    "Es el mismo scoreSpec que los agentes usan por MCP: archivos presentes, secciones de la spec, señales del plan, desglose de tareas, rationale en research e historial con fechas. Las notas dicen exactamente qué mejorar. El resumen EARS lintea los criterios de aceptación con la misma regla del editor guiado.",
+
   // Empty states + líneas de «por qué» en acciones importantes
   "empty.learn":
     "Un workspace vacío significa que aún no hay ningún contrato en disco. En SDD se empieza por la spec, no por el código: crea una, aunque sea pequeña.",
@@ -460,6 +495,30 @@ const en: Record<keyof typeof es, string> = {
   "topbar.png": "PNG",
   "topbar.png.exporting": "Exporting…",
   "topbar.png.title": "Exports the board as an image",
+  "topbar.reports": "Reports",
+  "topbar.reports.busy": "Generating…",
+  "topbar.reports.title": "Regenerates STATUS.md and docs/roadmap from specs/INDEX.md",
+  "topbar.bitacora": "Logbook",
+  "topbar.bitacora.title": "Record a decision, daily log or handoff without leaving the canvas",
+  "bitacora.aria": "Record a logbook entry",
+  "bitacora.title": "Record in the logbook",
+  "bitacora.note":
+    "Every entry is written to the project's bitácora folder with the same rules as MCP or the terminal — no format drift.",
+  "bitacora.kind": "Entry type",
+  "bitacora.kind.decisiones": "Decision",
+  "bitacora.kind.handoffs": "Handoff",
+  "bitacora.kind.diaria": "Daily log",
+  "bitacora.kind.global": "Global project log",
+  "bitacora.fileName": "File name (.md)",
+  "bitacora.date": "Date",
+  "bitacora.content": "Content (markdown)",
+  "bitacora.contentPh.decisiones": "# Decision\n\n## Context\n\n## Decision\n\n## Rejected alternatives\n\n## When to revisit",
+  "bitacora.contentPh.handoffs": "# Handoff\n\n## Current state\n\n## Next step",
+  "bitacora.contentPh.diaria": "# Daily\n\n## Done today\n\n## Next",
+  "bitacora.contentPh.global": "Entry for bitacora/global/PROJECT_LOG.md…",
+  "bitacora.submit": "Save entry",
+  "bitacora.busy": "Saving…",
+  "bitacora.done": "Entry recorded",
   "topbar.assistant": "Assistant",
   "topbar.assistant.title": "Describe your project and generate a draft board",
   "topbar.templates": "Templates",
@@ -589,6 +648,13 @@ const en: Record<keyof typeof es, string> = {
   "sheet.issues.tooltip": "One issue per pending task via the gh CLI; existing titles are skipped",
   "sheet.issues.hint": "Requires a git repo with a remote and an authenticated gh CLI.",
   "sheet.issues.summary": "{created} created · {skipped} skipped · {failed} failed",
+
+  // Spec 028: score + EARS lint in the drawer, and add-task from the canvas
+  "sheet.score": "Spec score",
+  "sheet.ears.summary": "EARS: {ok}/{total} clean",
+  "sheet.addTask.ph": "New task for this spec…",
+  "sheet.addTask.btn": "Add task",
+  "sheet.addTask.adding": "Adding…",
 
   // Status badges
   "status.approved": "Approved",
@@ -738,6 +804,10 @@ const en: Record<keyof typeof es, string> = {
   "help.issues.title": "Tasks → GitHub issues",
   "help.issues.body":
     "Creates one issue per pending task, linking back to the spec. It is idempotent: titles that already exist are skipped. The checkbox in tasks.md stays the source of truth.",
+
+  "help.score.title": "0-100 score, computed on the server",
+  "help.score.body":
+    "The same scoreSpec agents use over MCP: required files, spec sections, plan signals, task breakdown, research rationale and dated history. The notes say exactly what to improve. The EARS summary lints the acceptance criteria with the same rule as the guided editor.",
 
   // Empty states + the "why" line on important actions
   "empty.learn":

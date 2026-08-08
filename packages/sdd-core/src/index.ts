@@ -756,6 +756,82 @@ export async function appendProjectLogEntry(projectRoot: string, entry: string):
   };
 }
 
+export interface UpdateSpecIndexRowInput {
+  projectRoot: string;
+  /** "028" or the full "028-slug"; only the leading number addresses the row. */
+  specId: string;
+  status?: string;
+  priority?: string;
+  owner?: string;
+}
+
+export interface UpdateSpecIndexRowResult {
+  specNumber: string;
+  /** The row as written, for the caller to show without re-reading the file. */
+  row: string;
+}
+
+/**
+ * Spec 028, R5: the FIRST non-append write to specs/INDEX.md — change the
+ * status/priority/owner cells of ONE spec's row (and refresh its `updated`
+ * date). Until now every surface (bash, MCP, builder) could only append rows,
+ * so a status change meant editing the table by hand.
+ *
+ * The row is addressed by its anchored three-digit number, so `028` can never
+ * touch `128`'s row, and only the cells the caller named are replaced: the
+ * property is a one-line diff. Runs under the same file lock as
+ * appendIndexRow so a concurrent new-spec append cannot interleave.
+ */
+export async function updateSpecIndexRow(input: UpdateSpecIndexRowInput): Promise<UpdateSpecIndexRowResult> {
+  const root = await resolveSddRoot(input.projectRoot);
+  const indexPath = path.join(root, "specs/INDEX.md");
+
+  const specNumber = input.specId.match(/^(\d{3})/)?.[1];
+  if (!specNumber) {
+    throw new Error(`Spec id must start with its three-digit number: ${input.specId}`);
+  }
+
+  const updates: Array<[number, string | undefined]> = [
+    [3, input.status],
+    [4, input.priority],
+    [5, input.owner]
+  ];
+  const cells = updates.filter((pair): pair is [number, string] => typeof pair[1] === "string");
+  if (cells.length === 0) {
+    throw new Error("Nothing to update: pass status, priority and/or owner");
+  }
+  for (const [, value] of cells) {
+    if (/[|\r\n]/.test(value) || value.trim() === "") {
+      throw new Error("Status, priority and owner must be single-line text without pipes");
+    }
+  }
+
+  return withFileLock(indexPath, async () => {
+    const lines = (await fs.readFile(indexPath, "utf8")).split("\n");
+    const rowRe = new RegExp(`^\\|\\s*${specNumber}\\s*\\|`);
+    const at = lines.findIndex((line) => rowRe.test(line));
+    if (at < 0) {
+      throw new Error(`No row for spec ${specNumber} in specs/INDEX.md / No hay fila para la spec ${specNumber}`);
+    }
+
+    const parts = lines[at].split("|").map((cell) => cell.trim());
+    // "| 028 | name | status | priority | owner | updated |" splits to
+    // ["", "028", name, status, priority, owner, updated, ""].
+    if (parts.length < 8) {
+      throw new Error(`Malformed INDEX.md row for spec ${specNumber}: ${lines[at]}`);
+    }
+    for (const [cell, value] of cells) {
+      parts[cell] = value;
+    }
+    parts[6] = new Date().toISOString().slice(0, 10);
+
+    const row = `| ${parts.slice(1, 7).join(" | ")} |`;
+    lines[at] = row;
+    await fs.writeFile(indexPath, lines.join("\n"), "utf8");
+    return { specNumber, row };
+  });
+}
+
 export async function writeDailyLog(projectRoot: string, date: string, content: string): Promise<FileOutputResult> {
   const root = await resolveSddRoot(projectRoot);
   const safeDate = normalizeDate(date);
@@ -978,6 +1054,7 @@ export type { SpecSummary } from "./workspace.js";
 export * from "./bitacora.js";
 export * from "./board.js";
 export * from "./drift.js";
+export * from "./legacy.js";
 export * from "./score.js";
 export * from "./docs.js";
 export * from "./policy.js";
