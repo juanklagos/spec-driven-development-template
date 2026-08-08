@@ -138,6 +138,24 @@ Cuando la spec está lista, la pestaña **«Aprobación»** muestra el bloque re
 
 La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) detrás de un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
 
+### El puntaje de la spec y el resumen EARS (spec 028)
+
+Bajo el encabezado del panel aparece el **Puntaje de la spec**: una nota (A/B/C/D), un número 0-100 y la lista de observaciones de qué falta. No es una métrica del lienzo: es el mismo `scoreSpec` que los agentes piden por MCP con `sdd_score_spec` (archivos presentes, secciones de la spec, señales del plan, desglose de tareas, rationale en `research.md`, historial con fechas), servido por `GET /api/spec/:id/score`. Canvas y agente nunca discrepan porque leen la misma función.
+
+Al lado va el resumen **EARS: N/M limpios**, que pasa el mismo lint del editor guiado por todos los criterios de aceptación de la spec y te deja las pistas en el tooltip. Hasta ahora el lint solo existía criterio por criterio *mientras* editabas; ahora tienes el estado del conjunto de un vistazo.
+
+### Añadir tareas desde el panel (spec 028)
+
+Debajo de la lista de tareas hay un campo **«Nueva tarea para esta spec…»** con su botón **«Añadir tarea»**. Escribe y la línea `- [ ] …` se añade al final de `tasks.md` con la misma escritura atómica que usa el checkbox. Antes el lienzo solo sabía *marcar* tareas: añadir una obligaba a abrir una terminal o un editor.
+
+### La bitácora desde el lienzo (spec 028)
+
+El botón **📖 Bitácora** de la barra superior abre un modal para registrar los cuatro tipos de entrada sin salir del canvas: **Decisión**, **Handoff**, **Daily log** y **Log global del proyecto**. Cada tipo pide lo que necesita (nombre de archivo `.md` para decisiones y handoffs, fecha para el daily, texto suelto para el log global) y precarga un esqueleto de markdown como placeholder. Lo escriben los mismos escritores de `sdd-core` que usan las herramientas MCP y los scripts, así que el formato no se bifurca según por dónde entres.
+
+### STATUS y roadmap desde la barra superior (spec 028)
+
+El botón **📊 Informes** regenera `STATUS.md` y `docs/roadmap.md` a partir de `specs/INDEX.md`, los mismos generadores que `sdd_generate_status` y `sdd_generate_roadmap`. Confirma con un ✓ y vuelve a su estado normal a los pocos segundos; si falla, el error queda en el tooltip del botón en vez de desaparecer.
+
 ### El semáforo de deriva (spec 025)
 
 Una vez aprobada una spec, el builder vigila si el código que gobierna siguió moviéndose. Si la spec declara una sección **«Ámbito de archivos / File scope»** y algún commit tocó esas rutas **después** de su fecha de aprobación, la tarjeta muestra un chip ámbar **🔀**, y el drawer lista los commits responsables (hash, fecha, asunto). Es un simple `git log` × ámbito de archivos × fecha de aprobación — **sin LLM, sin red**, calculado una vez en `sdd-core` y pintado como el color de estado, así que el lienzo, la tool MCP y cualquier agente ven la misma señal. Es una *señal, no un veredicto*: decidir si el código contradice la spec, y cuál de los dos debe cambiar, sigue siendo tuyo (o de tu agente). Una spec sin ámbito declarado se lee como «sin ámbito» en vez de un falso «sin deriva»; un workspace que no es repo git degrada en silencio.
@@ -255,3 +273,6 @@ Dónde está de verdad el estándar: la spec MCP 2026-07-28 es una release candi
 | Mueve tarjetas | Posiciones guardadas (con debounce) — nunca toca tus .md |
 | Aprueba desde el panel | El bloque de aprobación real (estado, fecha, aprobador, evidencia) escrito en `spec.md` |
 | Guarda en la pestaña Editar del panel | Solo se reescriben las secciones guiadas de `spec.md` — aprobación y requisitos intactos |
+| Escribe en «Nueva tarea» y pulsa Añadir | Se añade una línea `- [ ] …` al final de `tasks.md` |
+| Guardas una entrada en 📖 Bitácora | Un archivo real en `bitacora/decisiones`, `handoffs`, `diaria` o una entrada en `bitacora/global/PROJECT_LOG.md` |
+| Pulsas 📊 Informes | Se regeneran `STATUS.md` y `docs/roadmap.md` desde `specs/INDEX.md` |

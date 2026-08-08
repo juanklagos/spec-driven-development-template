@@ -138,6 +138,24 @@ When the spec is ready, the **"Approval" tab** shows the real block as a form: s
 
 Approval unlocks **"🤖 Implement with agent"**: a modal preloads the exact implementation kickoff prompt (workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract) behind one "Copy prompt" button. Copy-first by design: no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop spelled out: *no code before approved spec and consistent plan*.
 
+### The spec score and the EARS summary (spec 028)
+
+Under the drawer header sits the **Spec score**: a grade (A/B/C/D), a 0-100 number and the list of notes about what is missing. It is not a canvas-only metric: it is the very same `scoreSpec` agents ask for over MCP with `sdd_score_spec` (required files, spec sections, plan signals, task breakdown, `research.md` rationale, dated history), served by `GET /api/spec/:id/score`. Canvas and agent never disagree, because they read the same function.
+
+Next to it is the **EARS: N/M clean** summary, which runs the guided editor's lint over every acceptance criterion in the spec and leaves the hints in the tooltip. Until now the lint only existed criterion by criterion *while* you typed; now you get the state of the whole set at a glance.
+
+### Adding tasks from the drawer (spec 028)
+
+Below the task list there is a **"New task for this spec…"** field with its **"Add task"** button. Type, and the `- [ ] …` line is appended to `tasks.md` with the same atomic write the checkbox uses. Before this, the canvas could only *tick* tasks: adding one meant opening a terminal or an editor.
+
+### The logbook from the canvas (spec 028)
+
+The **📖 Logbook** button in the top bar opens a modal to record all four entry types without leaving the canvas: **Decision**, **Handoff**, **Daily log** and **Global project log**. Each type asks for what it needs (a `.md` file name for decisions and handoffs, a date for the daily, free text for the global log) and preloads a markdown skeleton as a placeholder. The same `sdd-core` writers the MCP tools and the scripts use do the writing, so the format never forks depending on where you came in from.
+
+### STATUS and roadmap from the top bar (spec 028)
+
+The **📊 Reports** button regenerates `STATUS.md` and `docs/roadmap.md` from `specs/INDEX.md` — the same generators behind `sdd_generate_status` and `sdd_generate_roadmap`. It confirms with a ✓ and returns to normal after a few seconds; if it fails, the error stays in the button's tooltip instead of vanishing.
+
 ### The drift semaphore (spec 025)
 
 Once a spec is approved, the builder watches whether the code it governs kept moving. If a spec declares an **"Ámbito de archivos / File scope"** section and any commit touched those paths **after** its approval date, the card shows an amber **🔀** chip, and the drawer lists the offending commits (hash, date, subject). It is a plain `git log` × file scope × approval date — **no LLM, no network**, computed once in `sdd-core` and painted like the status color, so the canvas, the MCP tool and any agent see the same signal. It is a *signal, not a verdict*: whether the code contradicts the spec, and which one should change, stays your call (or your agent's). A spec with no file scope reads as "unscoped" rather than a false "clean"; a workspace that is not a git repo degrades quietly.
@@ -255,3 +273,6 @@ Where the standard actually is: the MCP 2026-07-28 spec is a release candidate f
 | Move cards around | Positions saved (debounced) — never touches your .md files |
 | Approve in the drawer | The real approval block (status, date, approver, evidence) written into `spec.md` |
 | Save in the drawer's Edit tab | Only the guided sections of `spec.md` are rewritten — approval and requirements untouched |
+| Type in "New task" and hit Add | A `- [ ] …` line is appended to `tasks.md` |
+| Save an entry in 📖 Logbook | A real file in `bitacora/decisiones`, `handoffs`, `diaria`, or an entry in `bitacora/global/PROJECT_LOG.md` |
+| Hit 📊 Reports | `STATUS.md` and `docs/roadmap.md` are regenerated from `specs/INDEX.md` |

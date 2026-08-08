@@ -649,6 +649,138 @@ Input:
 Structured output:
 - `projectRoot`, `sddRoot`, `profile`
 
+### `sdd_check_policy`
+
+Purpose:
+- run the multi-agent policy check (`sdd.policy.yaml` blocks, agent rule files aligned with the canonical operating system) **without** running the full gate
+
+When to use:
+- when you only need to know whether the policy is healthy, not the approval verdict of every spec
+
+Rules:
+- same messages and codes as `scripts/check-sdd-policy.sh`
+- the gate already embeds this check; this tool answers it on its own
+- returns `isError` when the policy fails
+
+Input:
+- `projectRoot`
+
+Structured output:
+- `ok`, `errors`, `warnings`, `messages`
+
+### `sdd_legacy_discovery`
+
+Purpose:
+- scan an existing codebase for route/API and user-flow signals and write `analysis/legacy-discovery/` (evidence files + a report with suggested first specs)
+
+When to use:
+- as the entry point for adapting a project that already has code (Case 2 in the guides), right after `sdd_install_sidecar`
+
+Rules:
+- TypeScript port of `scripts/legacy-discovery.sh`: no bash and no `ripgrep` needed
+- heuristic parity with the script, not byte parity
+- only writes inside `analysis/legacy-discovery/`; never touches project code
+
+Input:
+- `projectRoot`
+
+Structured output:
+- `target`, `outDir`, `routeSignals`, `flowSignals`, `suggestedSpecs`, `reportPath`, `routesFile`, `flowsFile`
+
+### `sdd_write_spec_document`
+
+Purpose:
+- write the FULL content of one bundle document (`spec.md`, `plan.md`, `tasks.md`, `research.md` or `history.md`), atomically
+
+When to use:
+- when you generate a whole document at once; to edit parts of `spec.md`, prefer `sdd_update_spec_sections`
+
+Rules:
+- the low-level counterpart of `sdd_read_spec_document`
+- five-document whitelist: any other name fails **without** touching the filesystem
+- it overwrites whatever was there: this is a full write, not a merge
+
+Input:
+- `projectRoot`, `specId`, `document`, `content`
+
+Structured output:
+- `specId`, `document`, `bytes`
+
+### `sdd_rename_task`
+
+Purpose:
+- replace the text of one task line in `tasks.md`, preserving its indentation and done mark
+
+When to use:
+- when a task changes wording without changing position or state
+
+Rules:
+- atomic write, same primitive as `sdd_set_task_done`
+- the rest of the file survives byte for byte
+- an out-of-range line fails loudly
+
+Input:
+- `projectRoot`, `specId`, `line` (zero-based, as returned by `sdd_read_tasks`), `text`
+
+Structured output:
+- `specId`, `tasks` (updated list with line numbers)
+
+### `sdd_remove_task`
+
+Purpose:
+- delete one task line from `tasks.md`
+
+When to use:
+- when a task stops making sense and ticking it is not enough
+
+Rules:
+- only that line disappears; every other line survives byte for byte
+- atomic write; an out-of-range line fails loudly
+
+Input:
+- `projectRoot`, `specId`, `line`
+
+Structured output:
+- `specId`, `tasks`
+
+### `sdd_move_task`
+
+Purpose:
+- swap one task with the nearest task above or below it in `tasks.md`
+
+When to use:
+- to reorder work without rewriting the whole file
+
+Rules:
+- skips non-task lines (headings, notes): it moves task against task
+- "move to the end" is repeated `down`
+- atomic write
+
+Input:
+- `projectRoot`, `specId`, `line`, `direction` (`up` | `down`)
+
+Structured output:
+- `specId`, `tasks`
+
+### `sdd_update_spec_status`
+
+Purpose:
+- update the status, priority and/or owner cells of ONE spec's row in `specs/INDEX.md` (and refresh its updated date)
+
+When to use:
+- when a spec changes state and until now that meant editing the table by hand
+
+Rules:
+- the only write INDEX accepts besides appending a new row
+- match anchored to the spec number: exactly one line changes and no neighbouring row moves
+- fails when the spec has no row
+
+Input:
+- `projectRoot`, `specId`, `status` (optional), `priority` (optional), `owner` (optional)
+
+Structured output:
+- the updated index row
+
 ### `sdd_board_app`
 
 Purpose:
@@ -761,6 +893,12 @@ The HTTP transport also serves the builder's own API on the same port. It is loo
 | PUT | `/api/spec/:id/sections` | Rewrite spec.md sections (surgical) |
 | POST | `/api/spec/:id/approve` | Fill the approval block |
 | POST | `/api/spec/:id/issues` | Create GitHub issues for pending tasks (needs `gh`) |
+| POST | `/api/spec/:id/tasks` | Add a task to `tasks.md` (`{ text }`) |
+| GET | `/api/spec/:id/score` | 0-100 score with grade and notes (the same `scoreSpec` the MCP serves) |
+| GET | `/api/bitacora/:kind` | List a logbook folder; with `?file=` read one entry |
+| POST | `/api/bitacora/:kind` | Write one entry: `decisiones`/`handoffs` (`{ fileName, content }`), `diaria` (`{ date, content }`), `global` (`{ entry }`) |
+| POST | `/api/status` | Regenerate `STATUS.md` |
+| POST | `/api/roadmap` | Regenerate `docs/roadmap.md` |
 
 ## Prompt reference
 

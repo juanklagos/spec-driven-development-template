@@ -1,6 +1,6 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-07-24 00:23 UTC
+Generated at / Generado en: 2026-08-08 22:12 UTC
 
 ## Active specs / Specs activas
 
@@ -41,21 +41,22 @@ Generated at / Generado en: 2026-07-24 00:23 UTC
 | 025 | semaforo-de-deriva | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 026 | tema-docs | Done / Completada (T6 ticker diferido a propósito) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 027 | mcp-full-coverage | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
+| 028 | mcp-builder-superficie-completa | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / OpenCode | 2026-08-08 |
 
 ## Task progress / Progreso de tareas
 
 - Pending / Pendientes: 11
-- Completed / Completadas: 286
+- Completed / Completadas: 295
 
 ## Recent log excerpt / Extracto reciente de bitácora
 
 ```text
+  ## 2026-07-23 — Spec 027: cobertura completa de comandos MCP
   
-  ### [YYYY-MM-DD HH:MM] Session N / Sesión N
-  - **Goal / Objetivo:**
-  - **Work completed / Trabajo realizado:**
-  - **Decisions made / Decisiones tomadas:**
-  - **Blockers / Bloqueos:**
-  - **Next step / Próximo paso:**
-  - **Owner / Responsable:**
+  - **Goal / Objetivo:** cerrar las asimetrías del servidor MCP (fuerte escribiendo, débil leyendo) tras la auditoría pedida por el propietario («cubre todo»).
+  - **Work completed / Trabajo realizado:** 7 herramientas nuevas (21 → 28): sdd_read_spec_document, sdd_read_bitacora, sdd_check_drift, sdd_add_task, sdd_lint_ears, sdd_score_spec, sdd_install_sidecar. Core nuevo probado (bitacora.ts, score.ts, addSpecTask, getSpecDriftReport, installSidecar); docs ES/EN actualizadas.
+  - **Decisions made / Decisiones tomadas:** score portado a TS (el bash exige rg), sidecar delegado al bash con execFile (patrón createWorkspace) — `bitacora/decisiones/2026-07-23-mcp-score-port-y-sidecar-execfile.md`.
+  - **Blockers / Bloqueos:** ninguno.
+  - **Next step / Próximo paso:** publicar la versión con las 28 herramientas (propietario, con OTP); spec futura opcional: resources/prompts para projectRoot arbitrario.
+  - **Owner / Responsable:** Juan Carlos Alvarez Lagos / Claude
 ```

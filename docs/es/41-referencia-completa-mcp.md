@@ -654,6 +654,138 @@ Entrada:
 Salida estructurada:
 - `projectRoot`, `sddRoot`, `profile`
 
+### `sdd_check_policy`
+
+Propósito:
+- ejecutar el chequeo de política multi-agente (bloques de `sdd.policy.yaml`, archivos de reglas de agente alineados con el sistema operativo canónico) **sin** ejecutar la compuerta completa
+
+Cuándo usarlo:
+- cuando solo quieres saber si la política está sana, sin el veredicto de aprobación de todas las specs
+
+Reglas:
+- mismos mensajes y códigos que `scripts/check-sdd-policy.sh`
+- la compuerta ya incluye este chequeo; esta herramienta lo responde por separado
+- devuelve `isError` cuando la política falla
+
+Entrada:
+- `projectRoot`
+
+Salida estructurada:
+- `ok`, `errors`, `warnings`, `messages`
+
+### `sdd_legacy_discovery`
+
+Propósito:
+- escanear un código existente en busca de señales de rutas/API y de flujos de usuario, y escribir `analysis/legacy-discovery/` (archivos de evidencia + reporte con las primeras specs sugeridas)
+
+Cuándo usarlo:
+- como puerta de entrada para adaptar un proyecto que ya tiene código (Caso 2 de las guías), después de `sdd_install_sidecar`
+
+Reglas:
+- port TypeScript de `scripts/legacy-discovery.sh`: no necesita bash ni `ripgrep`
+- paridad de heurísticas con el script, no de bytes
+- solo escribe dentro de `analysis/legacy-discovery/`; nunca toca el código del proyecto
+
+Entrada:
+- `projectRoot`
+
+Salida estructurada:
+- `target`, `outDir`, `routeSignals`, `flowSignals`, `suggestedSpecs`, `reportPath`, `routesFile`, `flowsFile`
+
+### `sdd_write_spec_document`
+
+Propósito:
+- escribir el contenido COMPLETO de un documento del bundle (`spec.md`, `plan.md`, `tasks.md`, `research.md` o `history.md`), de forma atómica
+
+Cuándo usarlo:
+- cuando generas un documento entero de una vez; para editar partes de `spec.md` sigue siendo mejor `sdd_update_spec_sections`
+
+Reglas:
+- contraparte de bajo nivel de `sdd_read_spec_document`
+- lista blanca de cinco documentos: cualquier otro nombre falla **sin** tocar el filesystem
+- pisa lo que hubiera: es escritura completa, no fusión
+
+Entrada:
+- `projectRoot`, `specId`, `document`, `content`
+
+Salida estructurada:
+- `specId`, `document`, `bytes`
+
+### `sdd_rename_task`
+
+Propósito:
+- reemplazar el texto de una línea de tarea en `tasks.md`, conservando su indentación y su marca de hecho
+
+Cuándo usarlo:
+- cuando una tarea cambia de redacción sin cambiar de posición ni de estado
+
+Reglas:
+- escritura atómica, misma primitiva que `sdd_set_task_done`
+- el resto del archivo sobrevive byte a byte
+- una línea fuera de rango falla en voz alta
+
+Entrada:
+- `projectRoot`, `specId`, `line` (base cero, tal como la devuelve `sdd_read_tasks`), `text`
+
+Salida estructurada:
+- `specId`, `tasks` (lista actualizada con números de línea)
+
+### `sdd_remove_task`
+
+Propósito:
+- borrar una línea de tarea de `tasks.md`
+
+Cuándo usarlo:
+- cuando una tarea deja de tener sentido y no basta con marcarla
+
+Reglas:
+- solo desaparece esa línea; todas las demás sobreviven byte a byte
+- escritura atómica; línea fuera de rango falla en voz alta
+
+Entrada:
+- `projectRoot`, `specId`, `line`
+
+Salida estructurada:
+- `specId`, `tasks`
+
+### `sdd_move_task`
+
+Propósito:
+- intercambiar una tarea con la tarea más cercana por encima o por debajo en `tasks.md`
+
+Cuándo usarlo:
+- para reordenar el trabajo sin reescribir el archivo entero
+
+Reglas:
+- salta las líneas que no son tareas (títulos, notas): mueve tarea contra tarea
+- «mover al final» es repetir `down`
+- escritura atómica
+
+Entrada:
+- `projectRoot`, `specId`, `line`, `direction` (`up` | `down`)
+
+Salida estructurada:
+- `specId`, `tasks`
+
+### `sdd_update_spec_status`
+
+Propósito:
+- actualizar las celdas de estado, prioridad y/o responsable de UNA fila de `specs/INDEX.md` (y refrescar su fecha de actualización)
+
+Cuándo usarlo:
+- cuando una spec cambia de estado y hasta ahora había que editar la tabla a mano
+
+Reglas:
+- es la única escritura que INDEX acepta además de añadir una fila nueva
+- coincidencia anclada al número de spec: cambia exactamente una línea y ninguna fila vecina
+- falla si la spec no tiene fila
+
+Entrada:
+- `projectRoot`, `specId`, `status` (opcional), `priority` (opcional), `owner` (opcional)
+
+Salida estructurada:
+- la fila actualizada del índice
+
 ### `sdd_board_app`
 
 Propósito:
@@ -766,6 +898,12 @@ El transporte HTTP también sirve la API del builder en el mismo puerto. Escucha
 | PUT | `/api/spec/:id/sections` | Reescribe secciones de spec.md (quirúrgico) |
 | POST | `/api/spec/:id/approve` | Rellena el bloque de aprobación |
 | POST | `/api/spec/:id/issues` | Crea issues de GitHub para las tareas pendientes (requiere `gh`) |
+| POST | `/api/spec/:id/tasks` | Añade una tarea a `tasks.md` (`{ text }`) |
+| GET | `/api/spec/:id/score` | Puntaje 0-100 con nota y observaciones (mismo `scoreSpec` que el MCP) |
+| GET | `/api/bitacora/:kind` | Lista una carpeta de bitácora; con `?file=` lee una entrada |
+| POST | `/api/bitacora/:kind` | Escribe una entrada: `decisiones`/`handoffs` (`{ fileName, content }`), `diaria` (`{ date, content }`), `global` (`{ entry }`) |
+| POST | `/api/status` | Regenera `STATUS.md` |
+| POST | `/api/roadmap` | Regenera `docs/roadmap.md` |
 
 ## Referencia de prompts
 
