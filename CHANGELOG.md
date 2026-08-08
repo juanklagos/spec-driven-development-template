@@ -8,7 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+---
+
+## [v2.3.0] — 2026-08-08
+
 ### Added
+- **What only the terminal knew now reaches MCP and the canvas.** Spec 027 closed the server's read asymmetries; policy, legacy discovery, raw document writes, full task management and spec status were still things `sdd-core` and the bash scripts could do but an MCP-only agent — or a canvas-only user — could not reach without asking for a terminal. Seven new tools (28 → 35): `sdd_check_policy` (the policy check on its own, without the full gate), `sdd_legacy_discovery` (TypeScript port of `legacy-discovery.sh` — the bash needs ripgrep, which npm/Desk machines don't have), `sdd_write_spec_document` (full write of one bundle document, five-name whitelist), `sdd_rename_task`, `sdd_remove_task`, `sdd_move_task` (the task management the tools never had beyond ticking a box) and `sdd_update_spec_status` (the first non-append write on `INDEX.md`, anchored to the spec number so exactly one line changes). Every tool delegates to `sdd-core`; nothing reimplements a rule. (spec 028)
+- **The builder canvas stopped needing a terminal.** Six new REST routes and the UI on top of them: the spec drawer now shows the 0-100 score with its notes — the same `scoreSpec` agents get over MCP, so canvas and agent cannot disagree — plus an EARS summary that lints every acceptance criterion at once; a field to add a task instead of only ticking one; a logbook modal that writes decisions, handoffs, daily logs and the global project log through the same core writers; and a Reports button that regenerates `STATUS.md` and `docs/roadmap.md`. (spec 028)
 - **The MCP server can now read what it always could write.** The logbook had four write tools and zero read tools, specs could be approved but not read, and drift only travelled buried inside the board payload — over HTTP (Desk, `npx`), where the agent has no filesystem, those asymmetries were real blocks. Seven new tools (21 → 28): `sdd_read_spec_document`, `sdd_read_bitacora` (list + read, traversal-proof), `sdd_check_drift` (the board's own `computeSpecDrift` rule as a direct answer), `sdd_add_task` (the missing write half of the task tools), `sdd_lint_ears`, `sdd_score_spec` (TypeScript port of `score-spec.sh` — the bash needs ripgrep, which npm/Desk machines don't have), and `sdd_install_sidecar` (the external-project on-ramp, delegating to the production-tested installer). Every tool delegates to `sdd-core`; nothing reimplements a rule. (spec 027)
 
 ### Fixed
