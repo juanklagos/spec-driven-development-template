@@ -802,6 +802,44 @@ Structured output:
 - `board` (canvas + specs, same shape as `sdd_board_read`)
 - `gate` (same shape as `sdd_gate_summary`)
 
+### `sdd_check_version`
+
+Purpose:
+- compare an installed sidecar against this server's version WITHOUT writing anything (spec 029)
+
+When to use it:
+- before any upgrade, and whenever the user asks "am I up to date?"
+
+Rules:
+- `upToDate` is false when file contents differ even if the version number matches: a tampered gate has survived a reinstall before (spec 021)
+- a missing `.sdd/TEMPLATE_VERSION` is reported as unknown, never as current
+
+Input:
+- `projectRoot`
+
+Structured output:
+- `templateVersion`, `packageVersion`, `profile`, `upToDate`
+- `files`, `staleFramework`, `divergedPreserved`, `missing`
+
+### `sdd_upgrade`
+
+Purpose:
+- bring an installed sidecar up to this server's version (spec 029)
+
+When to use it:
+- after `sdd_check_version`, once the user has seen what would change
+
+Rules:
+- framework-owned files (the gate, validators, root resolver) are repaired without asking
+- files the user owns (`sdd.policy.yaml`, `specs/_template/*`, logbook templates) are NEVER written unless named in `applyPreserved`
+- call it with `dryRun: true` first and show the result to the user; an already-current sidecar performs zero writes
+
+Input:
+- `projectRoot`, `dryRun` (optional), `applyPreserved` (optional array of target paths)
+
+Structured output:
+- `sidecarRoot`, `fromVersion`, `toVersion`, `alreadyCurrent`, `files`, `pending`, `markerUpdated`
+
 ### `sdd_next_request`
 
 Purpose:
@@ -936,6 +974,14 @@ The HTTP transport also serves the builder's own API on the same port. It is loo
 | POST | `/api/bitacora/:kind` | Write one entry: `decisiones`/`handoffs` (`{ fileName, content }`), `diaria` (`{ date, content }`), `global` (`{ entry }`) |
 | POST | `/api/status` | Regenerate `STATUS.md` |
 | POST | `/api/roadmap` | Regenerate `docs/roadmap.md` |
+| POST | `/api/spec/:id/consent` | Record consent for that spec (`{ summary }`) — the third gate condition |
+| GET | `/api/version` | Installed sidecar version vs. this server, plus which files diverged (spec 029) |
+| GET | `/api/connect` | The agent-client catalogue: per-client config file, snippet and serve hint (spec 032) |
+| GET | `/api/requests` | The builder's AI request queue plus the agent's last-seen presence (spec 031) |
+| POST | `/api/request` | Publish an AI request for the connected agent (`{ type, instruction, target?, currentText? }`) |
+| POST | `/api/request/:id/resolve` | Close a request: `{ resolution: 'accepted' \| 'rejected' \| 'cancelled' }` — only `accepted` writes |
+| GET | `/builder` | The visual board (also `/builder/*` assets) |
+| GET | `/dashboard` | The read-only status page |
 
 ## Prompt reference
 

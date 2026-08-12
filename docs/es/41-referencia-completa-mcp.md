@@ -807,6 +807,44 @@ Salida estructurada:
 - `board` (canvas + specs, misma forma que `sdd_board_read`)
 - `gate` (misma forma que `sdd_gate_summary`)
 
+### `sdd_check_version`
+
+Propósito:
+- comparar un sidecar instalado con la versión de este servidor SIN escribir nada (spec 029)
+
+Cuándo usarlo:
+- antes de cualquier actualización, y siempre que el usuario pregunte «¿estoy al día?»
+
+Reglas:
+- `upToDate` es falso cuando el contenido difiere aunque el número de versión coincida: una compuerta manipulada ya sobrevivió a un reinstalado (spec 021)
+- un `.sdd/TEMPLATE_VERSION` ausente se reporta como desconocido, nunca como al día
+
+Entrada:
+- `projectRoot`
+
+Salida estructurada:
+- `templateVersion`, `packageVersion`, `profile`, `upToDate`
+- `files`, `staleFramework`, `divergedPreserved`, `missing`
+
+### `sdd_upgrade`
+
+Propósito:
+- poner un sidecar instalado a la versión de este servidor (spec 029)
+
+Cuándo usarlo:
+- después de `sdd_check_version`, cuando el usuario ya vio qué cambiaría
+
+Reglas:
+- los archivos propiedad del framework (la compuerta, los validadores, el resolvedor de raíz) se reparan sin preguntar
+- los archivos del usuario (`sdd.policy.yaml`, `specs/_template/*`, plantillas de bitácora) NO se escriben nunca salvo que vengan nombrados en `applyPreserved`
+- llámalo primero con `dryRun: true` y enséñale el resultado al usuario; un sidecar ya al día no realiza ninguna escritura
+
+Entrada:
+- `projectRoot`, `dryRun` (opcional), `applyPreserved` (opcional, lista de rutas objetivo)
+
+Salida estructurada:
+- `sidecarRoot`, `fromVersion`, `toVersion`, `alreadyCurrent`, `files`, `pending`, `markerUpdated`
+
 ### `sdd_next_request`
 
 Propósito:
@@ -941,6 +979,14 @@ El transporte HTTP también sirve la API del builder en el mismo puerto. Escucha
 | POST | `/api/bitacora/:kind` | Escribe una entrada: `decisiones`/`handoffs` (`{ fileName, content }`), `diaria` (`{ date, content }`), `global` (`{ entry }`) |
 | POST | `/api/status` | Regenera `STATUS.md` |
 | POST | `/api/roadmap` | Regenera `docs/roadmap.md` |
+| POST | `/api/spec/:id/consent` | Registra el consentimiento de esa spec (`{ summary }`) — la tercera condición de la compuerta |
+| GET | `/api/version` | Versión instalada del sidecar frente a la del servidor, y qué archivos difieren (spec 029) |
+| GET | `/api/connect` | Catálogo de clientes de agente: archivo de config, fragmento y atajo por cliente (spec 032) |
+| GET | `/api/requests` | La cola de peticiones de IA del builder y la última presencia del agente (spec 031) |
+| POST | `/api/request` | Publica una petición de IA para el agente conectado (`{ type, instruction, target?, currentText? }`) |
+| POST | `/api/request/:id/resolve` | Cierra una petición: `{ resolution: 'accepted' \| 'rejected' \| 'cancelled' }` — solo `accepted` escribe |
+| GET | `/builder` | El tablero visual (y sus recursos en `/builder/*`) |
+| GET | `/dashboard` | La página de estado, solo lectura |
 
 ## Referencia de prompts
 

@@ -84,16 +84,48 @@ SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
 
 </details>
 
-## Aprender mientras construyes: la ayuda dentro del producto
+## Dónde está cada cosa
 
-Esta plantilla es tanto una escuela como una herramienta, así que no deberías tener que leer una guía antes de poder usar el builder. Cada concepto SDD que muestra la interfaz se puede explicar **donde aparece**, en tu idioma. Un solo idioma a la vez: el interruptor ES/EN cambia todo, la ayuda incluida.
+La barra superior no tiene botones para todo: casi todo vive en el **buscador ⌘K** (Ctrl+K en Windows y Linux) y en el menú **⋯**. Se escribe lo que quieres y se pulsa Enter.
 
-- Hay un `?` junto al concepto: solo icono, junto a los títulos de sección y a las insignias de estado, no en cada elemento. Al pulsarlo, una tarjeta pequeña explica el concepto en dos o tres frases. Lo encuentras en el título de la **Paleta** (💡 Idea vs 📦 Épica vs 📋 Spec, y cuál de ellas escribe de verdad en disco), el **chip del gate** (la regla de oro), la insignia **`⚠ N dep`** (qué te está diciendo un aviso de dependencia), la **insignia de estado y la pestaña Aprobación** del panel de spec (qué significa «aprobada» y qué escribe aprobar en `spec.md`), **Tareas** (las casillas son líneas `- [ ]` de `tasks.md`), **Criterios EARS** (por qué cada criterio se traduce en un test) y **Relaciones** (contiene / depende de / bloquea / relacionada).
-- **Cada ayuda enlaza a la guía completa.** Cada tarjeta termina en un enlace «Guía completa →» que abre la página correspondiente del sitio de documentación: esta guía (51) para el builder, la guía 12 para EARS y la guía 02 para el flujo y el gate. Los slugs viven una sola vez en `sdd-core` (`DOC_GUIDES`), así que un enlace no puede pudrirse en un 404: el test de integración falla si un slug cambia o si el espejo del builder no coincide.
-- **La ayuda cambia con el estado del workspace.** Cuando el gate está en rojo, su `?` no solo define la regla: dice *esto es la regla de oro funcionando* y lista qué falta ahora mismo (errores de validación, specs sin aprobar) con la siguiente acción para cada punto, y el mismo bloque aparece en la banda del gate del `/dashboard`. Un lienzo vacío dice qué significa «sin specs» en SDD (todavía no hay contrato en disco; se empieza por la spec, no por el código) y enlaza a la guía del flujo. Una spec sin tareas explica que el plan aún no se ha bajado a tareas, y cómo arreglarlo.
-- Aprobar una spec, elegir el propósito de una unión y crear issues de GitHub llevan una única línea 💡 que explica la consecuencia: la firma de aprobación es lo que abre el gate, «depende de» y «bloquea» son los propósitos que generan avisos, y los issues enlazan de vuelta a la spec mientras `tasks.md` sigue siendo la fuente de verdad.
+**En ⌘K puedes:**
 
-Todo ese texto vive en los diccionarios i18n (`builder/src/i18n.ts` y los diccionarios del panel en `packages/sdd-mcp/src/dashboard.ts`), nunca escrito a mano en un componente; los conjuntos de claves ES y EN se comprueban en tiempo de compilación. La ayuda contextual es complementaria al **tour de bienvenida**: el tour es un recorrido de una vez, el `?` está siempre.
+| Escribes | Qué hace |
+| :--- | :--- |
+| el número o el nombre de una spec | salta a esa tarjeta y la abre |
+| «validar» | ejecuta la validación real del proyecto |
+| «aprobar» | abre la pestaña de aprobación de la spec que tengas abierta |
+| «decisión» | abre la bitácora para registrar una decisión |
+| «informes» | regenera `STATUS.md` y el roadmap |
+| «PNG» | exporta el grafo como imagen |
+| «plantillas» | abre la galería de plantillas |
+| «asistente» | abre el asistente que propone un tablero entero |
+| «conectar» | te dice cómo conectar tu agente |
+| «tour» | vuelve a lanzar el recorrido guiado |
+| «idioma» | cambia entre español e inglés |
+| «guardar» | fuerza el guardado ahora |
+| «dashboard» | abre la página de estado |
+
+Dentro de ⌘K te mueves con ↑ y ↓, ejecutas con Enter y cierras con Esc.
+
+**Atajos de teclado**, para cuando ya te lo sabes:
+
+| Tecla | Qué hace |
+| :--- | :--- |
+| **I** | pone una nota de Idea en el centro |
+| **E** | pone una nota de Épica |
+| **S** | abre el formulario de spec nueva |
+| **⌘K** / Ctrl+K | abre el buscador |
+| **⌘Z** / Ctrl+Z | deshace |
+| **⇧⌘Z** / Ctrl+Shift+Z | rehace |
+| **Supr** o **Retroceso** | borra la nota o la unión seleccionada (las tarjetas de spec no se borran así, y te explica por qué) |
+| **⌘Enter** / Ctrl+Enter | confirma en los campos de texto largos (nota, asistente, petición a la IA) |
+| **Esc** | cancela la edición |
+| **←** **→** | avanza y retrocede en el tour |
+
+Las tres teclas I, E y S solo funcionan cuando no estás escribiendo en un campo.
+
+**Los filtros** de la segunda franja no ocultan nada: **atenúan** lo que no coincide, para que el tablero no cambie de forma mientras miras. Son tres: `pendientes` (specs sin aprobar), `con avisos` (specs con errores del gate) y `con deriva` (specs cuyo código cambió después de aprobarlas). A la derecha de esa franja tienes el recuento: cuántas specs, cuántas uniones y el zoom.
 
 ## Tu primer proyecto con el asistente ✨
 
@@ -103,7 +135,7 @@ La forma más rápida de pasar de nada a un board conectado es el **asistente**,
 
 *El borrador es una vista previa: renombra o quita specs, pulsa «↺ Regenerar» para nombres alternativos. Nada toca el disco hasta que confirmes.*
 
-Lo importante es lo que el asistente **no** hace: nunca llama a un LLM (no hay API keys que configurar, solo heurísticas locales) y no escribe nada hasta que pulsas **«Crear en el board»**. En ese momento ejecuta las mismas llamadas reales que la galería de plantillas — un `POST /api/spec` por spec más el lienzo pre-ordenado — así que terminas con bundles `specs/NNN-slug/` auténticos, no maquetas. El asistente solo se aplica en un workspace vacío.
+Lo importante es lo que el asistente **no** hace: nunca llama a un LLM (no hay API keys que configurar, solo heurísticas locales) y no escribe nada hasta que pulsas **«Crear N specs en disco»**. En ese momento ejecuta las mismas llamadas reales que la galería de plantillas — un `POST /api/spec` por spec más el lienzo pre-ordenado — así que terminas con bundles `specs/NNN-slug/` auténticos, no maquetas. El asistente solo se aplica en un workspace vacío.
 
 Si *sí* tienes un agente IA, la sección plegable «🤖 ¿Tienes un agente IA?» precarga un prompt orquestador copiable que delega el mismo trabajo a inteligencia real vía MCP — ver [Desde un agente IA](#desde-un-agente-ia-mcp) más abajo.
 
@@ -114,7 +146,7 @@ Todo lo que hay en el lienzo corresponde a algo real:
 - **Las tarjetas de spec** muestran el número y nombre del bundle, un badge de aprobación (Pendiente / Aprobado / Hecho) y una barra de progreso calculada con los checkboxes reales de `tasks.md`. Arrastra una tarjeta **Spec** desde la paleta y ponle nombre: se crea al momento un bundle real `specs/NNN-slug/` (spec, plan, tasks, history).
 - **Las notas 💡 Idea y 📦 Épica** son nodos de texto libres, con color, para dar forma a la historia alrededor de tus specs. Viven solo en `board.canvas`.
 - **Las uniones** se dibujan arrastrando entre tarjetas — y en el momento de crear una se abre un selector de propósito sobre la propia unión (spec 010): **contiene** (gris, épica → spec), **depende de** (ámbar), **bloquea** (rojo), **relacionada** (azul, por defecto) o cualquier etiqueta libre. Doble clic en la unión para cambiar su propósito después. El propósito viaja en el campo `label` de `board.canvas` (las grafías ES y EN son canónicas) más un `color` estándar de JSON Canvas.
-- **Mover tarjetas** guarda posiciones (con debounce) en `board.canvas`, y nunca toca tus `.md`. El lienzo tiene deshacer/rehacer (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «📷 PNG» para exportar el tablero como imagen.
+- **Mover tarjetas** guarda posiciones (con debounce) en `board.canvas`, y nunca toca tus `.md`. El lienzo tiene deshacer/rehacer (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) y un botón «Exportar PNG» (⌘K o el menú ⋯) para exportar el tablero como imagen.
 
 Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero depende de `004-envios-y-seguimiento`, que sigue pendiente: no puedes cobrar el total sin saber el costo del envío. De ahí el aviso.
 
@@ -136,7 +168,7 @@ La pestaña **«✏️ Editar spec»** del panel es un editor guiado completo (s
 
 Cuando la spec está lista, la pestaña **«Aprobación»** muestra el bloque real como formulario: estado y fecha en solo lectura (aprobar estampa `Aprobado` + la fecha de hoy), aprobador y evidencia editables. Lo escribe en `spec.md` sin tocar el resto del archivo. Si la spec no tiene bloque de aprobación, recibes un error claro en lugar de un arreglo silencioso. La pestaña **«Relaciones»** lista cada unión con propósito que toca la spec (entrantes/salientes) con su icono y color, y permite cambiar el propósito o eliminar la unión.
 
-La aprobación desbloquea **«🤖 Implementar con agente»**: un modal precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) detrás de un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
+La aprobación desbloquea **«Prepara el prompt exacto para tu agente»**: un modal precarga el prompt exacto de arranque de implementación (ruta del workspace, carpeta de la spec, ejecutar la compuerta SDD, registrar consentimiento, hard stop, marcar tareas, cerrar con el contrato de sesión) detrás de un botón «Copiar prompt». Copy-first por diseño: sin deep links frágiles; funciona con Claude Code, Codex, Cursor, lo que sea. En una spec no aprobada el botón está deshabilitado con el hard stop explícito: *no hay código sin spec aprobada y plan consistente*.
 
 ### El puntaje de la spec y el resumen EARS (spec 028)
 
@@ -172,8 +204,8 @@ v1 honesta: arrastrar una tarjeta a otra columna *no cambia nada* en disco: apro
 
 Aquí viven dos funciones de equipo más:
 
-- **Tareas → issues de GitHub**: en el panel, «🐙 Crear issues» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
-- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra de identidad muestra el número de personas viendo el workspace — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
+- **Tareas → issues de GitHub**: en el panel, «Crear N issues de las tareas pendientes» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
+- **Trabajo en paralelo**: varias personas (o agentes) pueden tener el builder abierto sobre el mismo workspace. Cada cambio en disco llega a todas las pantallas por el mismo canal en vivo — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
 
 ## Plantillas
 

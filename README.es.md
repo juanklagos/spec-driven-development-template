@@ -96,7 +96,7 @@ Si usas **Claude Code**, este repo trae slash commands listos. Empieza con `/sdd
 ```
 
 - **VS Code / Copilot:** los mismos flujos como prompt files en [`.github/prompts/`](./.github/prompts/).
-- **Cualquier agente (32+ herramientas):** Agent Skill portable en [skills/sdd-workflow/SKILL.md](./skills/sdd-workflow/SKILL.md).
+- **Cualquier agente (39 herramientas):** Agent Skill portable en [skills/sdd-workflow/SKILL.md](./skills/sdd-workflow/SKILL.md).
 - **Contexto para IA:** [llms.txt](./llms.txt) indexa toda la documentación para agentes de código (regenéralo con `./scripts/generate-llms-txt.sh`).
 
 ## La regla de oro
@@ -205,7 +205,7 @@ npm run build
 npm run mcp:start
 ```
 
-- **¿Sin clonar?** Apunta tu cliente MCP directo a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp"]}`.
+- **¿Sin clonar?** Apunta tu cliente MCP directo a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp@latest"]}`.
 - **SDD Builder (visual, arrastrar y soltar):** compila una vez con `npm run builder:build`, luego `SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start` y abre `http://127.0.0.1:3334/builder`. Construyes tus specs como tarjetas conectadas, y cada tarjeta es un bundle real `specs/NNN/` en disco. Dentro de este repositorio template el builder está bloqueado por diseño (no se ejecuta trabajo de proyecto destino en la raíz del template), así que apunta siempre `SDD_PROJECT_ROOT` a un workspace real. Ver la [guía visual](./docs/es/51-guia-visual-sdd-builder.md).
 - **¿Ya usas SDD y quieres lo último?** `npx @juanklagos/sdd-mcp@latest upgrade --project-root . --dry-run` te muestra qué cambiaría antes de cambiar nada: lo del framework se repara, lo tuyo no se escribe sin `--apply`. Ver la [guía de actualización](./docs/es/52-guia-de-actualizacion.md).
 - **SDD Desk (el mismo builder, como app de escritorio):** [descárgala](https://juanklagos.github.io/spec-driven-development-template/es/download/) para macOS, Windows o Linux. Trae su propio Node adentro, así que no hay que instalar nada antes, y mientras está abierta la app **es** el servidor MCP de tu proyecto: apunta tu agente a la URL que te muestra. Las builds **no están firmadas**: macOS y Windows te piden autorizarla una vez, con un aviso que suena alarmante, así que conviene a quien no le moleste hacerlo. Si prefieres evitarlo, `npx @juanklagos/sdd-mcp@latest --http` te da el mismo builder en el navegador sin ningún aviso.
@@ -228,7 +228,7 @@ Nota: `GitMCP` (gratis, remoto) ayuda a una IA a *leer* este repo público; el `
 2. [Estructura](./docs/es/01-estructura.md) — para qué sirve cada carpeta
 3. [SDD en 2026: estado del arte](./docs/es/50-estado-del-arte-sdd-2026.md) — el mapa de la industria y dónde está este template
 
-**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 52 guías (EN/ES) por tema.
+**Todo lo demás:** el [índice completo de documentación](./docs/README.md) organiza las 53 guías (EN/ES) por tema.
 
 ## Comunidad
 

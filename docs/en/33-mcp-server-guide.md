@@ -33,28 +33,16 @@ Transports:
 - `stdio`
 - `Streamable HTTP`
 
-Tools (21 in total — full details in [guide 41](./41-complete-mcp-reference.md)):
-- `sdd_create_workspace`
-- `sdd_create_spec`
-- `sdd_validate`
-- `sdd_check_gate`
-- `sdd_record_user_consent`
-- `sdd_list_specs`
-- `sdd_generate_status`
-- `sdd_generate_roadmap`
-- `sdd_append_project_log`
-- `sdd_write_daily_log`
-- `sdd_write_handoff`
-- `sdd_write_decision`
-- `sdd_board_read`
-- `sdd_board_write`
-- `sdd_board_connect`
-- `sdd_read_tasks`
-- `sdd_set_task_done`
-- `sdd_gate_summary`
-- `sdd_approve_spec`
-- `sdd_update_spec_sections`
-- `sdd_board_app`
+Tools — **39 in total**. This guide does not list them one by one on purpose: that list drifted out of date twice. The complete, always-current reference is [guide 41](./41-complete-mcp-reference.md). What they cover:
+
+- **Create and validate**: workspaces, numbered specs, validation, the gate, consent, spec scoring, EARS linting.
+- **Read and write specs**: whole documents, guided sections, the INDEX row, and the full task list (add, rename, remove, move, tick).
+- **The board**: read it, write it, connect two cards, and the board view for MCP-Apps clients.
+- **Logbook**: decisions, handoffs, daily logs, the project log — read and write.
+- **Reports**: STATUS.md and the roadmap.
+- **Existing projects**: install the `spec/` folder, discover legacy structure, check the policy, check drift.
+- **Stay current**: compare your installed version against the server, and upgrade.
+- **The builder's AI queue**: claim a request, answer it with a proposal.
 
 Structured tool output:
 - each tool exposes `outputSchema`
@@ -84,6 +72,7 @@ Prompts:
 - `easy_validate_project`
 - `easy_show_next_step`
 - `easy_close_session`
+- `sdd_serve_requests` — the queue-serving loop for the builder's AI requests (no install needed in clients that show MCP prompts as slash commands)
 
 ## Local setup
 

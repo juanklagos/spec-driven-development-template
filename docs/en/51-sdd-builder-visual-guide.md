@@ -84,16 +84,48 @@ SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
 
 </details>
 
-## Learning while you build: the in-product help
+## Where everything lives
 
-This template is a school as much as a tool, so you should not have to read a guide before you can use the builder. Every SDD concept the interface shows can be explained **where it appears**, in your language. One language at a time: the ES/EN switch changes everything, including the help.
+The top bar does not carry a button for everything: almost everything lives in the **⌘K search** (Ctrl+K on Windows and Linux) and in the **⋯** menu. You type what you want and press Enter.
 
-- There is a `?` next to the concept, icon-only, on section headings and status badges, not on every element. Click it and a small card explains the concept in two or three sentences. You will find one on the **Palette** heading (💡 Idea vs 📦 Epic vs 📋 Spec, and which of them actually writes to disk), the **gate chip** (the golden rule), the **`⚠ N dep` badge** (what a dependency warning is telling you), the spec sheet's **status badge and Approval tab** (what "approved" means and what approving writes into `spec.md`), **Tasks** (the checkboxes are `- [ ]` lines in `tasks.md`), **EARS criteria** (why each criterion maps to a test) and **Relations** (contains / depends on / blocks / related).
-- **Every hint links to the full guide.** Each card ends in a "Full guide →" link that opens the matching page on the docs site: this guide (51) for the builder, guide 12 for EARS, guide 02 for the flow and the gate. The slugs live once in `sdd-core` (`DOC_GUIDES`), so a link cannot rot into a 404; the integration test fails if a slug drifts or if the builder's mirror disagrees.
-- **The help changes with the state of the workspace.** When the gate is red, its `?` does not only define the rule: it says *this is the golden rule working* and lists what is missing right now (validation errors, specs still not approved) with the next action for each, and the same block appears on the `/dashboard` gate band. An empty canvas says what "no specs" means in SDD (there is no contract on disk yet, so start with the spec, not the code) and links to the flow guide. A spec with no tasks explains that the plan has not been broken down yet, and how to fix it.
-- Approving a spec, choosing a connection's purpose and creating GitHub issues each carry a single 💡 line explaining the consequence: the approval signature is what opens the gate, "depends on"/"blocks" are the purposes that raise warnings, and issues link back to the spec while `tasks.md` stays the source of truth.
+**In ⌘K you can:**
 
-All of this text lives in the i18n dictionaries (`builder/src/i18n.ts` and the dashboard dicts in `packages/sdd-mcp/src/dashboard.ts`), never hardcoded in a component; the ES and EN key sets are checked at compile time. The contextual help complements the **welcome tour**: the tour is a one-time walkthrough, the `?` is always there.
+| You type | What happens |
+| :--- | :--- |
+| a spec number or name | jumps to that card and opens it |
+| "validate" | runs the real project validation |
+| "approve" | opens the approval tab of the spec you have open |
+| "decision" | opens the logbook to record a decision |
+| "reports" | regenerates `STATUS.md` and the roadmap |
+| "PNG" | exports the graph as an image |
+| "templates" | opens the template gallery |
+| "assistant" | opens the assistant that proposes a whole board |
+| "connect" | tells you how to connect your agent |
+| "tour" | replays the guided walkthrough |
+| "language" | switches between Spanish and English |
+| "save" | forces a save right now |
+| "dashboard" | opens the status page |
+
+Inside ⌘K you move with ↑ and ↓, run with Enter and close with Esc.
+
+**Keyboard shortcuts**, for when you know your way around:
+
+| Key | What it does |
+| :--- | :--- |
+| **I** | drops an Idea note in the middle |
+| **E** | drops an Epic note |
+| **S** | opens the new-spec form |
+| **⌘K** / Ctrl+K | opens the search |
+| **⌘Z** / Ctrl+Z | undo |
+| **⇧⌘Z** / Ctrl+Shift+Z | redo |
+| **Delete** or **Backspace** | deletes the selected note or connection (spec cards are not deleted this way, and it tells you why) |
+| **⌘Enter** / Ctrl+Enter | confirms in the long text fields (note, assistant, AI request) |
+| **Esc** | cancels the edit |
+| **←** **→** | previous and next step in the tour |
+
+I, E and S only work when you are not typing in a field.
+
+**The filters** in the second strip hide nothing: they **dim** what does not match, so the board does not change shape while you look at it. There are three: `pending` (specs not approved yet), `with warnings` (specs with gate errors) and `with drift` (specs whose code changed after they were approved). To the right of that strip you get the counts: how many specs, how many connections, and the zoom level.
 
 ## Your first project with the ✨ assistant
 
@@ -103,7 +135,7 @@ The fastest way to go from nothing to a connected board is the **assistant**, in
 
 *The draft is a preview: rename or remove specs, press "↺ Regenerate" for alternative names. Nothing touches the disk until you confirm.*
 
-The important part is what the assistant does **not** do: it never calls an LLM (local heuristics only, no API keys to configure), and nothing is written until you press **"Create on the board"**. At that moment it runs the same real calls as the template gallery, one `POST /api/spec` per spec plus the pre-laid-out canvas, so you end up with genuine `specs/NNN-slug/` bundles, not mockups. The assistant only applies to an empty workspace.
+The important part is what the assistant does **not** do: it never calls an LLM (local heuristics only, no API keys to configure), and nothing is written until you press **"Create N specs on disk"**. At that moment it runs the same real calls as the template gallery, one `POST /api/spec` per spec plus the pre-laid-out canvas, so you end up with genuine `specs/NNN-slug/` bundles, not mockups. The assistant only applies to an empty workspace.
 
 If you *do* have an AI agent, the collapsible "🤖 Have an AI agent?" section preloads a copyable orchestrator prompt that delegates the same job to real intelligence over MCP — see [From an AI agent](#from-an-ai-agent-mcp) below.
 
@@ -114,11 +146,11 @@ Everything on the canvas maps to something real:
 - **Spec cards** show the bundle number and name, an approval badge (Pending / Approved / Done), and a progress bar computed from the real checkboxes in `tasks.md`. Drag a **Spec** card from the palette and name it: a real `specs/NNN-slug/` bundle (spec, plan, tasks, history) is created on the spot.
 - **💡 Idea and 📦 Epic notes** are free, color-coded text nodes for shaping the story around your specs. They live only in `board.canvas`.
 - **Connections** are drawn by dragging between cards, and the moment you create one a purpose picker opens right on the edge (spec 010): **contains** (gray, epic → spec), **depends on** (amber), **blocks** (red), **related** (blue, the default) or any free-text label. Double-click a connection to change its purpose later. The purpose travels in the `label` field of `board.canvas` (EN and ES spellings are both canonical) plus a standard JSON Canvas `color`.
-- **Moving cards** saves positions (debounced) to `board.canvas`. It never touches your `.md` files. The canvas has undo/redo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) and a "📷 PNG" button to export the board as an image.
+- **Moving cards** saves positions (debounced) to `board.canvas`. It never touches your `.md` files. The canvas has undo/redo (Cmd/Ctrl+Z, Shift+Cmd/Ctrl+Z) and a "Export PNG" (⌘K or the ⋯ menu) button to export the board as an image.
 
 Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you. An amber `⚠ N dep` chip appears next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. The warning is informational; the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but depends on `004-envios-y-seguimiento`, which is still pending: you cannot charge the total without knowing the shipping cost. Hence the warning.
 
-The **gate bar**, pinned at the bottom, is the SDD hard stop made visible: the verdict (open / closed / blocked), the counts of errors, warnings and approved specs, the rule written out — "no code before an approved spec" — and two buttons, "Validate now" and "What is missing". Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
+The **gate bar**, pinned at the bottom, is the SDD hard stop made visible: the verdict (open / closed / blocked), the counts of errors, warnings and approved specs, the rule written out — "no code before an approved spec" — and two buttons, "Validate now" and "See what's missing". Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
 
 Clicking any spec card opens the **drawer** — the bridge between canvas and markdown:
 
@@ -136,7 +168,7 @@ The sheet's **"✏️ Edit spec" tab** is a full guided editor (spec 010). One f
 
 When the spec is ready, the **"Approval" tab** shows the real block as a form: status and date read-only (approving stamps `Aprobado` + today), approver and evidence editable. It writes the result straight into `spec.md`, one block, nothing else. If the spec has no approval block, you get a clear error instead of a silent fix. The **"Relations" tab** lists every purposeful connection touching the spec (incoming/outgoing) with its icon and color, and lets you change the purpose or delete the connection.
 
-Approval unlocks **"🤖 Implement with agent"**: a modal preloads the exact implementation kickoff prompt (workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract) behind one "Copy prompt" button. Copy-first by design: no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop spelled out: *no code before approved spec and consistent plan*.
+Approval unlocks **"Prepare the exact prompt for your agent"**: a modal preloads the exact implementation kickoff prompt (workspace path, spec folder, run the SDD gate, record consent, hard stop, tick tasks, close with the session contract) behind one "Copy prompt" button. Copy-first by design: no fragile deep links, works with Claude Code, Codex, Cursor, anything. On a non-approved spec the button is disabled with the hard stop spelled out: *no code before approved spec and consistent plan*.
 
 ### The spec score and the EARS summary (spec 028)
 
@@ -172,8 +204,8 @@ In v1, dragging a card to another column changes *nothing* on disk. Approval is 
 
 Two more team features live here:
 
-- **Tasks → GitHub issues**: in the drawer, "🐙 Create issues" creates one GitHub issue per **pending** task via your local `gh` CLI: title `[<specId>] <task>` for traceability, body linking the bundle's `tasks.md`. Idempotent by title: tasks whose exact title already exists are skipped, and the result is reported per task (created / skipped / failed) with links. Without a git repo, a remote, or an authenticated `gh` it does not fail vaguely; you get a clear bilingual error telling you exactly what to run.
-- **Presence**: when more than one person (or agent) has the builder open on the same workspace, the identity bar shows how many people are viewing the workspace — powered by the same SSE hub as live sync, join/leave updates included.
+- **Tasks → GitHub issues**: in the drawer, "Create N issues from the pending tasks" creates one GitHub issue per **pending** task via your local `gh` CLI: title `[<specId>] <task>` for traceability, body linking the bundle's `tasks.md`. Idempotent by title: tasks whose exact title already exists are skipped, and the result is reported per task (created / skipped / failed) with links. Without a git repo, a remote, or an authenticated `gh` it does not fail vaguely; you get a clear bilingual error telling you exactly what to run.
+- **Working in parallel**: several people (or agents) can have the builder open on the same workspace. Every change on disk reaches all screens through the same live channel — powered by the same SSE hub as live sync, join/leave updates included.
 
 ## Templates
 

@@ -42,10 +42,10 @@ Luego salta al paso 4. Los pasos 2 y 3 son para la ruta larga.
 
 ### 2) Longer route: work inside a clone of the template / Ruta larga: trabajar dentro de un clon del template
 
-EN: only if you want the full teaching workspace — the 32 guides, the course, the examples —
+EN: only if you want the full teaching workspace — the 53 guides, the course, the examples —
 in the same repository as your code. Most people do not need this.
 
-ES: solo si quieres el espacio de enseñanza completo —las 32 guías, el curso, los ejemplos—
+ES: solo si quieres el espacio de enseñanza completo —las 53 guías, el curso, los ejemplos—
 en el mismo repositorio que tu código. La mayoría no lo necesita.
 
 ```bash

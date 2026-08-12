@@ -33,28 +33,16 @@ Transportes:
 - `stdio`
 - `Streamable HTTP`
 
-Tools (21 en total — detalle completo en la [guía 41](./41-referencia-completa-mcp.md)):
-- `sdd_create_workspace`
-- `sdd_create_spec`
-- `sdd_validate`
-- `sdd_check_gate`
-- `sdd_record_user_consent`
-- `sdd_list_specs`
-- `sdd_generate_status`
-- `sdd_generate_roadmap`
-- `sdd_append_project_log`
-- `sdd_write_daily_log`
-- `sdd_write_handoff`
-- `sdd_write_decision`
-- `sdd_board_read`
-- `sdd_board_write`
-- `sdd_board_connect`
-- `sdd_read_tasks`
-- `sdd_set_task_done`
-- `sdd_gate_summary`
-- `sdd_approve_spec`
-- `sdd_update_spec_sections`
-- `sdd_board_app`
+Herramientas — **39 en total**. Esta guía no las lista una por una a propósito: esa lista se quedó obsoleta dos veces. La referencia completa y siempre al día es la [guía 41](./41-referencia-completa-mcp.md). Lo que cubren:
+
+- **Crear y validar**: workspaces, specs numeradas, validación, la compuerta, consentimiento, puntaje de spec, lint EARS.
+- **Leer y escribir specs**: documentos completos, secciones guiadas, la fila del INDEX y toda la lista de tareas (añadir, renombrar, quitar, mover, marcar).
+- **El tablero**: leerlo, escribirlo, unir dos tarjetas y la vista para clientes con MCP Apps.
+- **Bitácora**: decisiones, handoffs, diarias, log del proyecto — leer y escribir.
+- **Informes**: STATUS.md y el roadmap.
+- **Proyectos existentes**: instalar la carpeta `spec/`, descubrir estructura heredada, comprobar la política, comprobar deriva.
+- **Mantenerte al día**: comparar tu versión instalada con la del servidor, y actualizar.
+- **La cola de IA del builder**: reclamar una petición y responderla con una propuesta.
 
 Salida estructurada:
 - cada tool expone `outputSchema`
@@ -84,6 +72,7 @@ Prompts:
 - `easy_validate_project`
 - `easy_show_next_step`
 - `easy_close_session`
+- `sdd_serve_requests` — el bucle de atención de la cola de IA del builder (sin instalar nada en clientes que muestran los prompts MCP como slash commands)
 
 ## Configuración local
 

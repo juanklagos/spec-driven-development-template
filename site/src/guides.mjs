@@ -1,4 +1,4 @@
-// Single source of truth for how the 52 guides are named and grouped on the site.
+// Single source of truth for how the guides are named and grouped on the site.
 // Imported by both scripts/sync-docs.mjs (which writes the pages) and astro.config.mjs
 // (which builds the sidebar and the redirects), so the two can never drift apart.
 //
