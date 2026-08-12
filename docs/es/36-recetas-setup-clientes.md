@@ -4,6 +4,8 @@
 
 Recetas exactas y copiables para los clientes IA locales que más se usan con este framework. Sin variantes ni ramas: el archivo, el bloque a pegar y cómo comprobar que quedó bien.
 
+> **Atajo (spec 032):** `npx @juanklagos/sdd-mcp@latest connect` hace todo esto por ti — detecta tus clientes, escribe la configuración en el archivo de cada uno (fusionando, sin pisar lo tuyo) e instala la skill `/sdd-serve`. Cubre además Windsurf, VS Code, Gemini CLI y opencode, que esta guía no trae. Ver guía 51. Las recetas de abajo son la referencia manual y la ruta para quien desarrolla el propio template (usan `node …/dist/index.js` en vez de `npx @juanklagos/sdd-mcp@latest`).
+
 ## Mapa de setup por cliente
 
 ```mermaid

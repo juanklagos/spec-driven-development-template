@@ -105,49 +105,64 @@ export function Tour() {
         <div className="tour-backdrop" />
       )}
       <div className="tour-card" style={cardStyle}>
-        <header className="flex items-center justify-between gap-2">
-          <strong>{t(current.titleKey)}</strong>
+        {/* El progreso vive en la cabecera (spec 030): no compite con el texto. */}
+        <header className="flex h-8 shrink-0 items-center gap-2 border-b bg-muted px-3.5">
+          <span className="font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
+            {t("tour.step", { n: step + 1, total: STEPS.length })}
+          </span>
           <Button
             size="icon"
             variant="ghost"
-            className="size-7"
+            className="ml-auto size-6"
             onClick={() => closeTour(dontShowAgain)}
             aria-label={t("tour.close")}
           >
-            <X />
+            <X className="size-[13px]" />
           </Button>
         </header>
-        <p className="m-0 text-sm text-muted-foreground">{t(current.bodyKey)}</p>
-        <div className="flex gap-1.5" aria-hidden>
-          {STEPS.map((s, i) => (
-            <span
-              key={`${s.target}-${i}`}
-              className={`size-[7px] rounded-full ${i === step ? "bg-primary" : "bg-border"}`}
-            />
-          ))}
-        </div>
-        <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
-          <input
-            type="checkbox"
-            className="accent-[var(--primary)]"
-            checked={dontShowAgain}
-            onChange={(e) => setDontShowAgain(e.target.checked)}
-          />
-          {t("tour.dontShow")}
-        </label>
-        <div className="flex justify-between gap-2">
-          <Button size="sm" variant="outline" onClick={() => setStep(step - 1)} disabled={step === 0}>
-            {t("tour.back")}
-          </Button>
-          {isLast ? (
-            <Button size="sm" onClick={() => closeTour(dontShowAgain)}>
-              {t("tour.finish")}
+        <div className="flex flex-col gap-[11px] p-4">
+          <strong className="text-base leading-snug font-semibold">{t(current.titleKey)}</strong>
+          <p className="m-0 text-[13.5px] leading-[1.6] text-muted-foreground">
+            {t(current.bodyKey)}
+          </p>
+          <div className="flex gap-1.5" aria-hidden>
+            {STEPS.map((s, i) => (
+              <span
+                key={`${s.target}-${i}`}
+                className={`h-[3px] rounded-[2px] transition-all ${
+                  i === step ? "w-[18px] bg-primary" : "w-[9px] bg-border"
+                }`}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+              <input
+                type="checkbox"
+                className="accent-[var(--primary)]"
+                checked={dontShowAgain}
+                onChange={(e) => setDontShowAgain(e.target.checked)}
+              />
+              {t("tour.dontShow")}
+            </label>
+            <Button
+              variant="outline"
+              className="h-[30px]"
+              onClick={() => setStep(step - 1)}
+              disabled={step === 0}
+            >
+              {t("tour.back")}
             </Button>
-          ) : (
-            <Button size="sm" onClick={() => setStep(step + 1)}>
-              {t("tour.next")}
-            </Button>
-          )}
+            {isLast ? (
+              <Button className="h-[30px]" onClick={() => closeTour(dontShowAgain)}>
+                {t("tour.finish")}
+              </Button>
+            ) : (
+              <Button className="h-[30px]" onClick={() => setStep(step + 1)}>
+                {t("tour.next")}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,74 +1,134 @@
-/* SDD Builder — Tailwind v4 + shadcn/ui theme (spec 010, R4).
-   Light/dark follows the system preference (no toggle), same as React Flow's
-   colorMode="system". The 🌱 green stays the primary accent. */
+/* SDD Builder — Tailwind v4 + shadcn/ui theme (spec 010, R4 → spec 030 "2a
+   Terminal claro"). Light/dark follows the system preference (no toggle), same
+   as React Flow's colorMode="system". The 🌱 green stays the primary accent.
+
+   Spec 030: state colors DROP in lightness in light mode (the background got
+   lighter and 4.5:1 must hold) and RISE in dark mode. Shadows are one layer:
+   the old two-layer card shadow produced a grey haze with 29 cards on screen. */
 
 @import "tailwindcss";
 @import "tw-animate-css";
 
 :root {
   color-scheme: light dark;
-  --radius: 0.625rem;
-  --background: oklch(0.977 0.003 247.9);
-  --foreground: oklch(0.235 0.02 257.3);
+  --radius: 0.5rem;
+
+  /* Superficies */
+  --background: oklch(0.978 0.003 260);
+  --foreground: oklch(0.26 0.015 258);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.02 257.3);
+  --card-foreground: oklch(0.26 0.015 258);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.02 257.3);
-  --primary: oklch(0.627 0.17 149.2); /* #16a34a 🌱 */
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.955 0.006 255.5);
-  --secondary-foreground: oklch(0.235 0.02 257.3);
-  --muted: oklch(0.945 0.007 255.5);
-  --muted-foreground: oklch(0.5 0.025 257.3);
-  --accent: oklch(0.955 0.006 255.5);
-  --accent-foreground: oklch(0.235 0.02 257.3);
-  --destructive: oklch(0.577 0.245 27.3);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.906 0.01 255.5);
-  --input: oklch(0.906 0.01 255.5);
-  --ring: oklch(0.627 0.17 149.2);
-  /* Builder-specific accents shared by both themes */
-  --primary-soft: oklch(0.627 0.17 149.2 / 14%);
-  --amber: oklch(0.681 0.143 75.8); /* #ca8a04 */
-  --amber-soft: oklch(0.681 0.143 75.8 / 15%);
-  --blue: oklch(0.546 0.215 262.9); /* #2563eb */
-  --blue-soft: oklch(0.546 0.215 262.9 / 13%);
-  --danger-soft: oklch(0.577 0.245 27.3 / 12%);
-  --gray-edge: oklch(0.551 0.023 264.4); /* #6b7280 */
-  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.08), 0 4px 14px rgb(15 23 42 / 0.08);
-  --shadow-strong: 0 8px 30px rgb(15 23 42 / 0.22);
+  --popover-foreground: oklch(0.26 0.015 258);
+  --muted: oklch(0.972 0.003 260);
+  --muted-foreground: oklch(0.58 0.015 258);
+  --secondary: oklch(0.965 0.004 260);
+  --secondary-foreground: oklch(0.26 0.015 258);
+  --accent: oklch(0.965 0.004 260);
+  --accent-foreground: oklch(0.26 0.015 258);
+  --border: oklch(0.905 0.007 258);
+  --input: oklch(0.905 0.007 258);
+
+  /* Franja de chrome: un paso bajo --card, uno sobre --background */
+  --chrome: oklch(0.975 0.003 260);
+  /* Hairline interno (filas de tarea, listas) */
+  --hairline: oklch(0.945 0.006 258);
+  /* Texto de lista y deshabilitado */
+  --list-foreground: oklch(0.45 0.015 258);
+  --disabled-foreground: oklch(0.72 0.015 258);
+
+  /* Estado */
+  --primary: oklch(0.5 0.15 149);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-strong: oklch(0.45 0.13 149); /* specs "hecha" */
+  --primary-text: oklch(0.4 0.13 149);
+  --ring: oklch(0.5 0.15 149);
+  --amber: oklch(0.6 0.13 72);
+  --amber-text: oklch(0.48 0.12 72);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --destructive-text: oklch(0.48 0.19 27);
+  --epic: oklch(0.52 0.15 300);
+  --blue: oklch(0.5 0.16 250);
+  --gray-edge: oklch(0.62 0.015 258);
+
+  /* Suaves: 8% para superficies grandes, 12% para chips */
+  --primary-soft: oklch(0.5 0.15 149 / 8%);
+  --primary-chip: oklch(0.5 0.15 149 / 12%);
+  --amber-soft: oklch(0.6 0.13 72 / 8%);
+  --amber-chip: oklch(0.6 0.13 72 / 12%);
+  --danger-soft: oklch(0.55 0.2 27 / 8%);
+  --blue-soft: oklch(0.5 0.16 250 / 10%);
+
+  /* Rejilla de puntos del grafo */
+  --dot-grid: oklch(0.885 0.008 258);
+
+  /* Sombras: una sola capa */
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-chip: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-raised: 0 1px 2px rgb(15 23 42 / 0.08);
+  --shadow-drawer: -8px 0 24px rgb(15 23 42 / 0.06);
+  --shadow-modal: 0 20px 60px rgb(15 23 42 / 0.3);
+  --shadow-palette: 0 24px 64px rgb(15 23 42 / 0.32);
+  --shadow-tour: 0 12px 40px rgb(15 23 42 / 0.28);
+  --shadow-strong: var(--shadow-modal);
 }
 
+/* Oscuro derivado de la variante 1a del mismo sistema (handoff spec 030). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: oklch(0.172 0.014 261.7);
-    --foreground: oklch(0.925 0.008 255.5);
-    --card: oklch(0.225 0.016 261.7);
-    --card-foreground: oklch(0.925 0.008 255.5);
-    --popover: oklch(0.225 0.016 261.7);
-    --popover-foreground: oklch(0.925 0.008 255.5);
-    --primary: oklch(0.723 0.192 149.6); /* #22c55e */
-    --primary-foreground: oklch(0.205 0.03 150);
-    --secondary: oklch(0.28 0.02 260);
-    --secondary-foreground: oklch(0.925 0.008 255.5);
-    --muted: oklch(0.268 0.018 260);
-    --muted-foreground: oklch(0.69 0.02 256.8);
-    --accent: oklch(0.28 0.02 260);
-    --accent-foreground: oklch(0.925 0.008 255.5);
-    --destructive: oklch(0.704 0.191 22.2);
-    --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.32 0.02 260);
-    --input: oklch(0.34 0.02 260);
-    --ring: oklch(0.723 0.192 149.6);
-    --primary-soft: oklch(0.723 0.192 149.6 / 16%);
-    --amber: oklch(0.795 0.161 86.1); /* #eab308 */
-    --amber-soft: oklch(0.795 0.161 86.1 / 16%);
-    --blue: oklch(0.707 0.143 254.6); /* #60a5fa */
-    --blue-soft: oklch(0.707 0.143 254.6 / 15%);
-    --danger-soft: oklch(0.704 0.191 22.2 / 14%);
-    --gray-edge: oklch(0.707 0.022 261.3); /* #9ca3af */
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 14px rgb(0 0 0 / 0.35);
-    --shadow-strong: 0 8px 30px rgb(0 0 0 / 0.55);
+    --background: oklch(0.175 0.012 260);
+    --foreground: oklch(0.93 0.006 260);
+    --card: oklch(0.225 0.012 260);
+    --card-foreground: oklch(0.93 0.006 260);
+    --popover: oklch(0.235 0.012 260);
+    --popover-foreground: oklch(0.93 0.006 260);
+    --muted: oklch(0.2 0.012 260);
+    --muted-foreground: oklch(0.62 0.012 260);
+    --secondary: oklch(0.28 0.014 260);
+    --secondary-foreground: oklch(0.93 0.006 260);
+    --accent: oklch(0.28 0.014 260);
+    --accent-foreground: oklch(0.93 0.006 260);
+    --border: oklch(0.28 0.014 260);
+    --input: oklch(0.3 0.014 260);
+
+    --chrome: oklch(0.2 0.012 260);
+    --hairline: oklch(0.26 0.014 260);
+    --list-foreground: oklch(0.68 0.012 260);
+    --disabled-foreground: oklch(0.5 0.012 260);
+
+    --primary: oklch(0.74 0.17 150);
+    --primary-foreground: oklch(0.2 0.03 150);
+    --primary-strong: oklch(0.78 0.17 150);
+    --primary-text: oklch(0.82 0.15 150);
+    --ring: oklch(0.74 0.17 150);
+    --amber: oklch(0.8 0.13 82);
+    --amber-text: oklch(0.84 0.13 82);
+    --destructive: oklch(0.62 0.2 25);
+    --destructive-foreground: oklch(0.99 0 0);
+    --destructive-text: oklch(0.78 0.18 25);
+    --epic: oklch(0.76 0.11 300);
+    --blue: oklch(0.72 0.13 250);
+    --gray-edge: oklch(0.55 0.012 260);
+
+    --primary-soft: oklch(0.74 0.17 150 / 12%);
+    --primary-chip: oklch(0.74 0.17 150 / 16%);
+    --amber-soft: oklch(0.8 0.13 82 / 12%);
+    --amber-chip: oklch(0.8 0.13 82 / 16%);
+    --danger-soft: oklch(0.62 0.2 25 / 14%);
+    --blue-soft: oklch(0.72 0.13 250 / 14%);
+
+    --dot-grid: oklch(0.3 0.014 260);
+
+    /* A 5% no se ve nada sobre fondo oscuro: subir ~4x y pasar a negro puro. */
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-chip: 0 1px 2px rgb(0 0 0 / 0.35);
+    --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-drawer: -8px 0 24px rgb(0 0 0 / 0.4);
+    --shadow-modal: 0 20px 60px rgb(0 0 0 / 0.6);
+    --shadow-palette: 0 24px 64px rgb(0 0 0 / 0.62);
+    --shadow-tour: 0 12px 40px rgb(0 0 0 / 0.55);
+    --shadow-strong: var(--shadow-modal);
   }
 }
 
@@ -98,6 +158,8 @@
   --color-ring: var(--ring);
   --color-amber-accent: var(--amber);
   --color-blue-accent: var(--blue);
+  --color-chrome: var(--chrome);
+  --color-hairline: var(--hairline);
 }
 
 @layer base {
@@ -115,17 +177,28 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 14px;
     line-height: 1.45;
   }
 
+  /* El mono es estructural: identificadores, rutas, comandos, atajos. */
+  code,
+  pre,
+  kbd,
+  .font-mono {
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
   code {
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     font-size: 0.86em;
     background: var(--muted);
     border-radius: 4px;
     padding: 0.05em 0.35em;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
@@ -151,113 +224,95 @@
   background: var(--background);
 }
 
-/* Workspace path chip: truncated from the left so the tail stays visible. */
-.workspace {
-  max-width: 34ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  direction: rtl;
-  color: var(--muted-foreground);
-}
-
 /* ---------- Cards (canvas + kanban nodes) ---------- */
 
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: 9px;
   box-shadow: var(--shadow-card);
-  padding: 0.75rem 0.9rem;
+  padding: 13px 14px;
   transition: box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
+.card:hover {
+  border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+}
+
 .card.selected {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow-card);
+  border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  box-shadow: 0 0 0 3px var(--primary-chip), var(--shadow-card);
 }
 
 .spec-card {
   cursor: pointer;
 }
 
-.spec-open-hint {
-  opacity: 0;
-  transition: opacity 0.12s ease;
-  color: var(--blue);
-}
-
-.spec-card:hover .spec-open-hint {
-  opacity: 1;
-}
-
 .note-card {
-  border-top: 3px solid var(--amber);
+  border-left: 3px solid var(--amber);
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-/* ---------- Status badges + progress (shared canvas/kanban/sheet) ---------- */
+/* ---------- Status + progress (shared canvas/kanban/sheet) ---------- */
 
 .badge-tone {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.1rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
+  gap: 0.35rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
   white-space: nowrap;
 }
 
-.badge-tone.ok {
-  background: var(--primary-soft);
-  color: var(--primary);
+.badge-tone::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.badge-tone.ok,
+.badge-tone.done {
+  color: var(--primary-text);
 }
 
 .badge-tone.pending {
-  background: var(--amber-soft);
-  color: var(--amber);
-}
-
-.badge-tone.done {
-  background: var(--primary-soft);
-  color: var(--primary);
-  outline: 1px solid var(--primary);
+  color: var(--amber-text);
 }
 
 .badge-tone.error {
-  background: var(--danger-soft);
-  color: var(--destructive);
-  outline: 1px solid var(--destructive);
+  color: var(--destructive-text);
   cursor: help;
 }
 
 .badge-tone.warn {
-  background: var(--amber-soft);
-  color: var(--amber);
-  outline: 1px solid var(--amber);
+  color: var(--amber-text);
   cursor: help;
 }
 
 .progress-track {
-  height: 7px;
-  border-radius: 999px;
+  height: 2px;
+  border-radius: 2px;
   background: var(--muted);
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 2px;
   background: var(--amber);
   transition: width 0.25s ease;
 }
 
-.progress-fill.ok,
-.progress-fill.done {
+.progress-fill.ok {
   background: var(--primary);
+}
+
+.progress-fill.done {
+  background: var(--primary-strong);
 }
 
 /* ---------- React Flow chrome ---------- */
@@ -284,6 +339,11 @@
   overflow: hidden;
 }
 
+/* Filtros de la ContextStrip: atenúan, nunca ocultan (spec 030, R8). */
+.react-flow__node.filter-dimmed {
+  opacity: 0.35;
+}
+
 /* ---------- Edges: purpose chip + selector (spec 009 + 010 R3) ---------- */
 
 .edge-label {
@@ -295,11 +355,12 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 0.12rem 0.6rem;
-  font-size: 0.74rem;
-  font-weight: 600;
+  padding: 2px 6px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--foreground);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-chip);
   cursor: pointer;
   user-select: none;
 }
@@ -321,12 +382,12 @@
 
 .edge-label.kind-depends {
   border-color: var(--amber);
-  color: var(--amber);
+  color: var(--amber-text);
 }
 
 .edge-label.kind-blocks {
   border-color: var(--destructive);
-  color: var(--destructive);
+  color: var(--destructive-text);
 }
 
 .edge-label.kind-contains {
@@ -346,7 +407,7 @@
   color: var(--popover-foreground);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-strong);
+  box-shadow: var(--shadow-modal);
   padding: 0.3rem;
   z-index: 10;
 }
@@ -405,7 +466,7 @@
   color: var(--muted-foreground);
 }
 
-/* ---------- Welcome tour (spec 007, R3) ---------- */
+/* ---------- Welcome tour (spec 007, R3 → spec 030) ---------- */
 
 .tour-layer {
   position: fixed;
@@ -417,7 +478,7 @@
 .tour-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(9 12 17 / 0.55);
+  background: rgb(15 20 28 / 0.5);
 }
 
 .tour-ring {
@@ -425,35 +486,37 @@
   border: 2px solid var(--primary);
   border-radius: 12px;
   /* The giant shadow dims everything except the highlighted target. */
-  box-shadow: 0 0 0 9999px rgb(9 12 17 / 0.55);
+  box-shadow: 0 0 0 9999px rgb(15 20 28 / 0.5);
   transition: top 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease;
 }
 
 .tour-card {
   position: fixed;
-  width: 320px;
+  width: 340px;
   max-width: calc(100vw - 24px);
-  background: var(--popover);
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-strong);
-  padding: 0.9rem 1rem;
+  border-radius: 11px;
+  box-shadow: var(--shadow-tour);
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  overflow: hidden;
 }
 
 /* ---------- Misc ---------- */
 
 .palette-ghost {
-  padding: 0.55rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0.45rem 0.8rem;
   background: var(--card);
   border: 1px solid var(--primary);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-strong);
+  box-shadow: var(--shadow-modal);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 13px;
   cursor: grabbing;
 }
 
@@ -467,10 +530,4 @@
   color: var(--foreground);
   font: inherit;
   padding: 0.4rem 0.5rem;
-}
-
-@media (max-width: 800px) {
-  .workspace {
-    display: none;
-  }
 }

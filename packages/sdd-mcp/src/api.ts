@@ -27,6 +27,15 @@ import {
   type BitacoraKind,
   type SpecSectionsInput
 } from "@juanklagos/sdd-core";
+import {
+  createAiRequest,
+  getAgentPresence,
+  listAiRequests,
+  manualInstructions,
+  resolveAiRequest,
+  type AiRequestResolution,
+  type CreateAiRequestInput
+} from "@juanklagos/sdd-core";
 import { createIssuesForSpec, isGithubPreconditionError } from "./github.js";
 import { isPayloadTooLarge, json, payloadTooLargeResponse, readBody } from "./http-utils.js";
 
@@ -215,6 +224,53 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       }
       if (req.method === "POST" && route === "/api/roadmap") {
         json(res, 200, await generateRoadmap(projectRoot));
+        return true;
+      }
+      // Spec 031: the AI request queue. The builder publishes requests here
+      // and the user's agent session answers them over MCP; these routes are
+      // the builder-facing mirror. Note there is no "respond" route — only an
+      // agent answers, and only the user accepts (which is `resolve`).
+      if (req.method === "POST" && route === "/api/request") {
+        const body = (await readBody(req)) as CreateAiRequestInput | undefined;
+        if (typeof body?.instruction !== "string" || !body.instruction.trim()) {
+          json(res, 400, { error: "Expected { type, instruction, target?, currentText? }" });
+          return true;
+        }
+        json(res, 201, await createAiRequest(projectRoot, body));
+        return true;
+      }
+      // Spec 032, R10: the connect panel's data comes from the SAME client
+      // catalogue the CLI writes from, so the builder can never show a path
+      // or a snippet that `connect` does not actually produce.
+      if (req.method === "GET" && route === "/api/connect") {
+        json(res, 200, {
+          projectRoot,
+          command: "npx @juanklagos/sdd-mcp@latest connect",
+          clients: manualInstructions(projectRoot).map(({ client, file, snippet }) => ({
+            id: client.id,
+            label: client.label,
+            configFile: file,
+            format: client.format,
+            serveHint: client.serveHint,
+            snippet
+          }))
+        });
+        return true;
+      }
+      if (req.method === "GET" && route === "/api/requests") {
+        const [requests, agent] = await Promise.all([listAiRequests(projectRoot), getAgentPresence(projectRoot)]);
+        json(res, 200, { requests, agent });
+        return true;
+      }
+      const requestResolveMatch = route.match(/^\/api\/request\/([^/]+)\/resolve$/);
+      if (req.method === "POST" && requestResolveMatch) {
+        const body = (await readBody(req)) as { resolution?: string };
+        const resolution = body?.resolution;
+        if (resolution !== "accepted" && resolution !== "rejected" && resolution !== "cancelled") {
+          json(res, 400, { error: "Expected { resolution: 'accepted' | 'rejected' | 'cancelled' }" });
+          return true;
+        }
+        json(res, 200, await resolveAiRequest(projectRoot, requestResolveMatch[1], resolution as AiRequestResolution));
         return true;
       }
       if (req.method === "POST" && route === "/api/spec") {

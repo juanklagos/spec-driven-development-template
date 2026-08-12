@@ -14,23 +14,23 @@ import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import type { SpecSummary } from "../types";
 
-// Kanban view (spec 009, R1): the SAME store data as the canvas (specs from
-// /api/board, gate from /api/gate) projected into columns by the real state
-// of the .md files. v1 is read-only for approval: dragging a card to another
-// column changes NOTHING on disk — a toast points to the sheet, where the
-// real Approve flow (spec 007/010) lives.
+// Kanban view (spec 009, R1 → spec 030): the SAME store data as the graph
+// (specs from /api/board, gate from /api/gate) projected into columns by the
+// real state of the .md files. Spec 030 turns the framed column cards into
+// full-bleed columns separated by hairlines, without emojis in the chrome.
+// Dragging a draft to "approved" OPENS the approval form; it never approves.
 
 type ColumnKey = "draft" | "approved" | "done";
 
-const COLUMNS: { key: ColumnKey; emoji: string; titleKey: string }[] = [
-  { key: "draft", emoji: "📝", titleKey: "kanban.col.draft" },
-  { key: "approved", emoji: "✅", titleKey: "kanban.col.approved" },
-  { key: "done", emoji: "🏁", titleKey: "kanban.col.done" }
+const COLUMNS: { key: ColumnKey; box: string; titleKey: string }[] = [
+  { key: "draft", box: "bg-[var(--amber)]", titleKey: "kanban.col.draft" },
+  { key: "approved", box: "bg-primary", titleKey: "kanban.col.approved" },
+  { key: "done", box: "bg-[var(--primary-strong)]", titleKey: "kanban.col.done" }
 ];
 
 /**
  * Column from the tone computed once in sdd-core (specTone) and shipped by the
- * API — the exact same value the canvas card and the dashboard render.
+ * API — the exact same value the graph card and the dashboard render.
  */
 export function columnForSpec(spec: SpecSummary): ColumnKey {
   if (spec.tone === "done") return "done";
@@ -45,6 +45,7 @@ function splitSpecId(id: string): { num: string; name: string } {
 
 function KanbanCardBody({ spec, column }: { spec: SpecSummary; column: ColumnKey }) {
   const { t } = useT();
+  const score = useBuilderStore((s) => s.scores[spec.id]);
   const gateIssues = useBuilderStore((s) => s.gate?.specIssues[spec.id]);
   const depWarnings = useBuilderStore((s) => s.gate?.dependencyWarnings);
   const gateErrors = gateIssues?.filter((issue) => issue.level === "error") ?? [];
@@ -54,31 +55,40 @@ function KanbanCardBody({ spec, column }: { spec: SpecSummary; column: ColumnKey
   const { done, total } = spec.tasks;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   const tone = column === "done" ? "done" : column === "approved" ? "ok" : "pending";
+  const stateWord = t(
+    tone === "done" ? "status.done" : tone === "ok" ? "status.approved" : "status.pending"
+  ).toLowerCase();
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold text-muted-foreground">📋 {num}</span>
-        <span className="inline-flex items-center gap-1.5">
-          {gateErrors.length > 0 ? (
-            <span
-              className="badge-tone error"
-              title={`${t("status.gateErrors")}\n${gateErrors.map((e) => `• ${e.message}`).join("\n")}`}
-            >
-              ⚠ {gateErrors.length}
-            </span>
-          ) : null}
-          {myDeps.length > 0 ? (
-            <span
-              className="badge-tone warn"
-              title={`${t("status.depWarn")}\n${myDeps.map((w) => `• ${w.message}`).join("\n")}`}
-            >
-              ⚠ dep
-            </span>
-          ) : null}
+      <div className="mb-[9px] flex items-center gap-2">
+        <span className="font-mono text-xs font-semibold tracking-[0.06em] text-muted-foreground">
+          {num}
         </span>
+        {gateErrors.length > 0 ? (
+          <span
+            className="cursor-help rounded-[4px] border border-destructive px-1.5 py-px font-mono text-[10.5px] whitespace-nowrap text-[var(--destructive-text)]"
+            title={`${t("status.gateErrors")}\n${gateErrors.map((e) => `• ${e.message}`).join("\n")}`}
+          >
+            {gateErrors.length} error
+          </span>
+        ) : null}
+        {myDeps.length > 0 ? (
+          <span
+            className="cursor-help rounded-[4px] border border-[var(--amber)] px-1.5 py-px font-mono text-[10.5px] whitespace-nowrap text-[var(--amber-text)]"
+            title={`${t("status.depWarn")}\n${myDeps.map((w) => `• ${w.message}`).join("\n")}`}
+          >
+            dep
+          </span>
+        ) : null}
+        <span className={`badge-tone ${tone} ml-auto`}>{stateWord}</span>
       </div>
-      <h3 className="mt-2 mb-2.5 text-base leading-snug font-semibold" title={label}>{label}</h3>
+      <h3
+        className="m-0 mb-3 text-[16.5px] leading-[1.3] font-semibold tracking-[-0.005em]"
+        title={label}
+      >
+        {label}
+      </h3>
       <div
         className="progress-track"
         role="progressbar"
@@ -89,9 +99,13 @@ function KanbanCardBody({ spec, column }: { spec: SpecSummary; column: ColumnKey
       >
         <div className={`progress-fill ${tone}`} style={{ width: `${pct}%` }} />
       </div>
-      <div className="mt-2 flex items-baseline justify-between text-xs text-muted-foreground">
+      <div className="mt-[9px] flex items-baseline justify-between font-mono text-[11.5px] text-muted-foreground">
         <span>{t("status.tasks", { done, total })}</span>
-        <span className="spec-open-hint">{t("status.open")}</span>
+        {score ? (
+          <span title={score.notes.join("\n")}>
+            {score.grade} · {score.score}
+          </span>
+        ) : null}
       </div>
     </>
   );
@@ -153,23 +167,37 @@ function KanbanColumn({
     disabled: !acceptsDrop
   });
   return (
-    <section
-      ref={setNodeRef}
-      className={`flex min-h-0 flex-col rounded-xl border bg-muted/60 transition-colors ${isOver ? "border-primary" : ""}`}
-      aria-label={t(column.titleKey)}
-    >
-      <header className="flex items-center justify-between gap-2 border-b px-3 py-2.5 text-xs font-bold tracking-wide text-muted-foreground uppercase">
-        <span>
-          {column.emoji} {t(column.titleKey)}
+    <section ref={setNodeRef} className="flex min-h-0 flex-col bg-background" aria-label={t(column.titleKey)}>
+      <header className="flex h-10 shrink-0 items-center gap-[9px] border-b bg-card px-3.5">
+        <span className={`size-[7px] rounded-[2px] ${column.box}`} aria-hidden />
+        <span className="font-mono text-[11.5px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+          {t(column.titleKey)}
         </span>
-        <span className="rounded-full border bg-card px-2 py-0.5 text-[0.72rem]">{specs.length}</span>
+        <span className="ml-auto font-mono text-xs text-muted-foreground">{specs.length}</span>
       </header>
       <div className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto p-3">
-        {specs.length === 0 ? (
-          <p className="my-2.5 text-center text-xs text-muted-foreground">{t("kanban.empty")}</p>
-        ) : (
-          specs.map((spec) => <KanbanCard key={spec.id} spec={spec} column={column.key} onOpen={onOpen} />)
-        )}
+        {specs.length === 0 && !acceptsDrop ? (
+          <p className="my-2.5 text-center font-mono text-xs text-muted-foreground">
+            {t("kanban.empty")}
+          </p>
+        ) : null}
+        {specs.map((spec) => (
+          <KanbanCard key={spec.id} spec={spec} column={column.key} onOpen={onOpen} />
+        ))}
+        {acceptsDrop ? (
+          // Soltar aquí abre el formulario de aprobación (spec 030): la zona
+          // dice qué va a pedir antes de que el usuario suelte.
+          <div
+            className={`rounded-[9px] border border-dashed p-3.5 text-center transition-colors ${
+              isOver ? "border-primary bg-[var(--primary-soft)]" : "border-border"
+            }`}
+          >
+            <p className="m-0 font-mono text-[11.5px] text-muted-foreground">
+              {t("kanban.dropHint")}
+            </p>
+            <p className="m-0 mt-1 text-[12.5px] text-muted-foreground">{t("kanban.dropBody")}</p>
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -212,16 +240,8 @@ export function KanbanBoard() {
     const target = event.over?.data.current?.column as ColumnKey | undefined;
     if (!spec || !target || target === columnForSpec(spec)) return;
 
-    // Dragging OPENS the approval, it never performs it.
-    //
-    // The card used to snap back and show a toast: a draggable thing that
-    // cannot be dropped anywhere is a broken affordance. But making a drag
-    // approve a spec would undercut the whole product — approval is a
-    // deliberate act with an approver and evidence, not a gesture. So the drag
-    // takes you to the form.
-    //
-    // "done" is not a destination: it is computed from completed tasks, so it
-    // is not offered as a drop target at all (see droppable below).
+    // Dragging OPENS the approval, it never performs it: approval is a
+    // deliberate act with an approver and evidence, not a gesture.
     if (columnForSpec(spec) === "draft" && target === "approved") {
       selectSpec(specId, "approval");
     }
@@ -232,7 +252,8 @@ export function KanbanBoard() {
   return (
     <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-background" data-tour="canvas">
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <div className="grid min-h-0 flex-1 grid-cols-[repeat(3,minmax(15rem,1fr))] gap-3.5 overflow-x-auto p-4">
+        {/* gap-px sobre fondo --border: hairlines de 1px sin bordes por columna. */}
+        <div className="grid min-h-0 flex-1 grid-cols-3 gap-px overflow-x-auto bg-border max-[900px]:grid-cols-[repeat(3,minmax(15rem,1fr))]">
           {COLUMNS.map((column) => (
             <KanbanColumn
               key={column.key}

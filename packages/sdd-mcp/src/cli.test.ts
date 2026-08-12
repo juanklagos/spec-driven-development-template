@@ -5,6 +5,37 @@ import { describe, expect, it } from "vitest";
 
 import { helpText, parseCliArgs, unknownArgMessage } from "./cli.js";
 
+describe("parseCliArgs — connect verb (spec 032)", () => {
+  it("bare connect → defaults (detect clients, write, project scope)", () => {
+    expect(parseCliArgs(["connect"])).toEqual({
+      kind: "connect",
+      clients: undefined,
+      dryRun: false,
+      global: false,
+      projectRoot: undefined
+    });
+  });
+
+  it("accepts --dry-run, --global, --client (repeated and comma-separated) and --project-root", () => {
+    expect(parseCliArgs(["connect", "--dry-run", "--global"])).toMatchObject({ dryRun: true, global: true });
+    expect(parseCliArgs(["connect", "--client", "codex,cursor"])).toMatchObject({ clients: ["codex", "cursor"] });
+    expect(parseCliArgs(["connect", "--client=codex", "--client", "gemini"])).toMatchObject({
+      clients: ["codex", "gemini"]
+    });
+    expect(parseCliArgs(["connect", "--project-root", "/tmp/x"])).toMatchObject({ projectRoot: "/tmp/x" });
+    expect(parseCliArgs(["connect", "--project-root=/tmp/x"])).toMatchObject({ projectRoot: "/tmp/x" });
+  });
+
+  it("keeps the strict contract: an unknown flag after connect is reported, never run", () => {
+    expect(parseCliArgs(["connect", "--force"])).toEqual({ kind: "unknown", arg: "--force" });
+    expect(parseCliArgs(["connect", "--client"])).toEqual({ kind: "unknown", arg: "--client (missing value)" });
+  });
+
+  it("--help still wins over connect", () => {
+    expect(parseCliArgs(["connect", "--help"])).toEqual({ kind: "help" });
+  });
+});
+
 describe("parseCliArgs", () => {
   it("no arguments → stdio (unchanged default)", () => {
     expect(parseCliArgs([])).toEqual({ kind: "stdio" });

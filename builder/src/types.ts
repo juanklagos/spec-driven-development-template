@@ -241,8 +241,28 @@ export interface LiveChange {
   kind: ChangeKind;
 }
 
-export type ChangeKind = "board" | "specs";
+export type ChangeKind = "board" | "specs" | "request";
 export type LiveStatus = "on" | "off";
 
 /** Tabs of the spec drawer, so callers can open the one that matters. */
 export type DrawerTab = "summary" | "sections" | "approval" | "relations";
+
+// --- Spec 032: connect panel ------------------------------------------------
+
+/** One agent client as served by GET /api/connect (source: sdd-core). */
+export interface ConnectClientInfo {
+  id: string;
+  label: string;
+  configFile: string;
+  format: "json" | "toml";
+  /** What the user types in that client to serve the queue. */
+  serveHint: string;
+  /** Ready-to-paste config for the manual path. */
+  snippet: string;
+}
+
+export interface ConnectInfo {
+  projectRoot: string;
+  command: string;
+  clients: ConnectClientInfo[];
+}

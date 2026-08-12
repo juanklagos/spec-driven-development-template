@@ -121,6 +121,8 @@ Referencias relacionadas:
 
 ## Ejemplos listos para copiar
 
+> **Atajo (spec 032):** `npx @juanklagos/sdd-mcp@latest connect` escribe estos archivos por ti, para siete clientes, fusionando con lo que ya tengas. Ver guía 51. Los ejemplos de abajo siguen como referencia manual.
+
 Archivos de referencia:
 - `packages/sdd-mcp/examples/.cursor/mcp.json`
 - `packages/sdd-mcp/examples/.mcp.json`

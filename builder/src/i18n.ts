@@ -61,6 +61,7 @@ const es = {
   "common.remove": "Quitar",
   "common.moveUp": "Subir",
   "common.moveDown": "Bajar",
+  "common.loading": "Cargando…",
 
   // Top bar
   "topbar.save.saved": "Guardado",
@@ -75,7 +76,7 @@ const es = {
   "topbar.gate.open": "Gate abierto",
   "topbar.gate.closed": "Gate cerrado",
   "topbar.gate.blocked": "Gate bloqueado",
-  "canvas.specNotDeletable": "Las tarjetas de spec no se borran desde el lienzo",
+  "canvas.specNotDeletable": "Las tarjetas de spec no se borran desde el grafo",
   "jump.title": "Ir a una spec",
   "jump.placeholder": "Escribe un número o parte del título…",
   "jump.empty": "Ninguna spec coincide.",
@@ -97,7 +98,7 @@ const es = {
   "topbar.gate.validating": "Validando…",
   "topbar.gate.validateTitle": "Ejecuta la validación real del proyecto",
   "topbar.view.label": "Vista",
-  "topbar.view.canvas": "Lienzo",
+  "topbar.view.canvas": "Grafo",
   "topbar.view.board": "Tablero",
   "topbar.presence.title": "{n} personas viendo este workspace",
   "topbar.undo": "Deshacer",
@@ -144,15 +145,19 @@ const es = {
   "banner.workspaceChanged": "El workspace del servidor cambió — recarga",
   "banner.reload": "Recargar",
   "app.loading": "Cargando el tablero…",
-  "empty.title": "Tu lienzo está vacío",
-  "empty.body": "Arrastra 💡 Idea o 📦 Épica para pensar, o 📋 Spec para crear tu primera spec real.",
-  "empty.cta": "📋 Crear la primera spec",
+  "empty.title": "Todavía no hay ningún contrato en disco",
+  "empty.body":
+    "En SDD se empieza por la spec, no por el código. Una spec es una carpeta real — spec.md, plan.md, tasks.md — y es lo único que puede abrir la compuerta.",
+  "empty.cta": "Crear la primera spec",
+  "empty.describe": "Describir el proyecto",
+  "empty.template": "Usar plantilla",
+  "empty.terminal": "o desde la terminal",
   "loadError.title": "No se pudo cargar el tablero",
   "loadError.hint": "¿Está corriendo el servidor?",
 
   // Palette
   "palette.title": "Paleta",
-  "palette.help": "Arrastra al lienzo (o clic)",
+  "palette.help": "Arrastra al grafo (o clic)",
   "palette.idea": "Idea",
   "palette.idea.hint": "Nota libre",
   "palette.epic": "Épica",
@@ -166,14 +171,15 @@ const es = {
   "tour.aria": "Tour de bienvenida",
   "tour.close": "Cerrar el tour",
   "tour.dontShow": "No mostrar de nuevo",
-  "tour.back": "← Atrás",
-  "tour.next": "Siguiente →",
+  "tour.back": "Atrás",
+  "tour.next": "Siguiente",
   "tour.finish": "Terminar",
-  "tour.1.title": "1 · La paleta",
-  "tour.1.body": "Arrastra 💡 Idea, 📦 Épica o 📋 Spec desde aquí al lienzo (o haz clic).",
+  "tour.1.title": "El rail es tu proyecto entero",
+  "tour.1.body":
+    "Arriba, lo que puedes colocar en el grafo: Idea y Épica viven solo aquí; Spec escribe una carpeta real. Abajo, las specs del disco con su estado.",
   "tour.2.title": "2 · Crear una spec",
   "tour.2.body":
-    "La tarjeta 📋 Spec crea una carpeta real specs/NNN-… con spec, plan y tareas — sin tocar la terminal.",
+    "La tarjeta Spec crea una carpeta real specs/NNN-… con spec, plan y tareas — sin tocar la terminal.",
   "tour.3.title": "3 · Conectar tarjetas",
   "tour.3.body":
     "Arrastra desde el punto derecho de una tarjeta hasta otra para unirlas y elige el propósito de la unión (contiene, depende de, bloquea o relacionada).",
@@ -182,7 +188,7 @@ const es = {
     "Haz clic en una tarjeta de spec para abrir el panel: marca tareas y edita cada sección de la spec con su propio formulario.",
   "tour.5.title": "5 · El gate",
   "tour.5.body":
-    "El semáforo del gate te dice si puedes implementar: 🟢 abierto, 🔴 cerrado. Pulsa «Validar ahora» para comprobarlo.",
+    "La barra inferior te dice si puedes implementar: verde abierto, ámbar cerrado, rojo bloqueado — y la regla siempre a la vista. Pulsa «Validar ahora» para comprobarlo.",
 
   // New spec modal
   "newSpec.title": "Nueva spec",
@@ -209,14 +215,14 @@ const es = {
   "assistant.intro":
     "Escribe tu proyecto en una frase o párrafo y te propongo un borrador de board: idea, épicas y specs conectadas. Nada se guarda hasta que aceptes.",
   "assistant.ph": "p. ej. una tienda online de plantas con pagos y panel de administración",
-  "assistant.propose": "✨ Proponer borrador",
+  "assistant.propose": "Proponer borrador",
   "assistant.draftNote": "Borrador (aún sin guardar): renombra o quita specs antes de crear.",
   "assistant.hasSpecs":
     "Este workspace ya tiene specs; el asistente solo se aplica en un workspace vacío.",
   "assistant.keepOne": "Deja al menos una spec en el borrador",
-  "assistant.regenerate": "↺ Regenerar",
+  "assistant.regenerate": "regenerar",
   "assistant.regenerate.title": "Propone nombres alternativos",
-  "assistant.create": "✅ Crear en el board",
+  "assistant.create": "Crear en el board",
   "assistant.creating": "Creando…",
   "assistant.meta.one": "{specs} specs · 1 épica: {names}",
   "assistant.meta.many": "{specs} specs · {epics} épicas: {names}",
@@ -227,15 +233,65 @@ const es = {
     "Pega este prompt en tu agente conectado al MCP sdd-mcp: generará el board con inteligencia real (specs con borrador incluido).",
 
   // Implement modal
-  "implement.title": "🤖 Implementar con agente",
+  "implement.title": "Implementar con agente",
   "implement.aria": "Implementar {id} con agente",
   "implement.note":
     "Copia este prompt y pégalo en tu agente (Claude Code, Codex, Cursor…). Incluye el workspace, la spec aprobada y la compuerta SDD con consentimiento.",
 
   // Prompt box
-  "prompt.copy": "📋 Copiar prompt",
+  "prompt.copy": "Copiar prompt",
   "prompt.copied": "✓ Copiado",
-  "prompt.manual": "⚠ Selecciona y copia (⌘C)",
+  "prompt.manual": "Selecciona y copia (⌘C)",
+
+  // Asistencia IA sin copy-paste (spec 031)
+  "ai.assist": "Ampliar con IA",
+  "ai.title": "Pedir al agente",
+  "ai.instruction.ph": "Qué quieres que haga con este campo (ampliar, reescribir, proponer más…)",
+  "ai.send": "Enviar al agente",
+  "ai.sending": "Enviando…",
+  "ai.pending": "Pendiente — esperando a que el agente la recoja",
+  "ai.working": "En curso — {agent} está redactando",
+  "ai.answered": "Propuesta del agente",
+  "ai.accept": "Aceptar",
+  "ai.applying": "Aplicando…",
+  "ai.reject": "Rechazar",
+  "ai.cancel": "Cancelar petición",
+  "ai.again": "Pedir de nuevo",
+  "ai.stalled": "estancada >10 min",
+  "ai.agentOn": "agente: {agent}",
+  "ai.noAgentShort": "sin agente",
+  "ai.noAgent":
+    "Ningún agente está escuchando la cola. Deja una sesión conectada al MCP atendiendo peticiones (sdd_next_request) o usa el prompt clásico:",
+  "ai.queue.one": "IA: 1 petición",
+  "ai.queue.many": "IA: {n} peticiones",
+  "ai.queue.title": "Peticiones a la IA",
+  "ai.queue.empty": "Sin peticiones activas.",
+  "ai.status.pending": "pendiente",
+  "ai.status.in_progress": "en curso",
+  "ai.status.answered": "atendida — revisa la propuesta en su campo",
+  "assistant.structure": "Estructurar con IA",
+  "assistant.structure.waiting": "El agente está estructurando tu idea. La propuesta aparecerá aquí sola.",
+  "assistant.structure.title": "Borrador propuesto por el agente",
+  "assistant.structure.name": "Nombre de la spec",
+  "assistant.structure.create": "Crear spec con estas secciones",
+  "assistant.structure.parseError":
+    "La propuesta del agente no se pudo interpretar como secciones. Recházala y pide de nuevo.",
+
+  // Conectar agente (spec 032)
+  "ai.connect": "Cómo conecto un agente",
+  "cmdk.connect": "Conectar agente",
+  "empty.connect": "Conectar un agente",
+  "connect.tag": "CONECTAR AGENTE",
+  "connect.title": "Conecta tu agente a este workspace",
+  "connect.body":
+    "Un comando registra el MCP en cada cliente que encuentre (Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini, opencode) e instala la skill que atiende la cola. No sobrescribe tu configuración: la fusiona.",
+  "connect.step1": "1 · Ejecuta esto en tu terminal",
+  "connect.step1.hint":
+    "Respeta lo que ya tengas configurado y se puede repetir sin efectos. Añade --dry-run para ver qué haría sin escribir nada.",
+  "connect.step2": "2 · Pon al agente a atender la cola",
+  "connect.manual": "Si prefieres hacerlo a mano, esto va en {file}:",
+  "connect.footer":
+    "Después de conectar, reinicia el cliente para que cargue el MCP. Mientras un agente consulte la cola, los botones «Ampliar con IA» funcionan solos.",
 
   // Spec sheet (drawer)
   "sheet.aria": "Detalle de la spec {id}",
@@ -247,7 +303,7 @@ const es = {
   "sheet.tasks": "Tareas",
   "sheet.tasks.count": "{done}/{total} hechas",
   "sheet.noTasks": "Sin tareas",
-  "sheet.implement": "🤖 Implementar con agente",
+  "sheet.implement": "Implementar con agente",
   "sheet.implement.ready": "Prepara el prompt exacto para tu agente",
   "sheet.hardStop":
     "No hay código sin spec aprobada y plan consistente — aprueba la spec primero.",
@@ -307,7 +363,7 @@ const es = {
   "editor.success.add": "Añadir criterio",
   "editor.outOfScope": "Fuera de alcance",
   "editor.outOfScope.ph": "Lo que esta spec NO cubre",
-  "editor.save": "💾 Guardar secciones",
+  "editor.save": "Guardar secciones",
   "editor.saving": "Guardando…",
   "editor.saved.one": "Guardado en spec.md (1 sección)",
   "editor.saved.many": "Guardado en spec.md ({n} secciones)",
@@ -325,15 +381,15 @@ const es = {
   "approval.approverPh": "¿Quién aprueba?",
   "approval.evidence": "Evidencia (enlace o cita corta)",
   "approval.evidencePh": "p. ej. enlace al hilo o cita del OK",
-  "approval.submit": "✅ Aprobar spec",
-  "approval.update": "💾 Actualizar aprobación",
+  "approval.submit": "Aprobar spec",
+  "approval.update": "Actualizar aprobación",
   "approval.busy": "Escribiendo…",
   "approval.done": "Aprobación escrita en spec.md",
 
   // Relations tab
   "relations.incoming": "Entrantes",
   "relations.outgoing": "Salientes",
-  "relations.none": "Esta spec no tiene uniones en el lienzo.",
+  "relations.none": "Esta spec no tiene uniones en el grafo.",
   "relations.delete": "Eliminar unión",
   "relations.typeAria": "Tipo de unión",
   "relations.note": "Las uniones viven en board.canvas; el tipo se guarda como etiqueta canónica.",
@@ -355,8 +411,8 @@ const es = {
   "kanban.empty": "— vacío —",
 
   // Notes
-  "note.idea.new": "💡 Idea nueva",
-  "note.epic.new": "📦 Épica nueva",
+  "note.idea.new": "Idea nueva",
+  "note.epic.new": "Épica nueva",
   "note.empty": "(vacío)",
   "note.editTitle": "Doble clic para editar",
 
@@ -389,7 +445,7 @@ const es = {
 
   "help.palette.title": "Idea, Épica y Spec",
   "help.palette.body":
-    "💡 Idea es una nota libre y 📦 Épica agrupa specs: ambas viven solo en el lienzo y no tocan el disco. 📋 Spec sí crea una carpeta real specs/NNN-… con spec.md, plan.md y tasks.md: es la unidad que se aprueba y la única que puede abrir el gate.",
+    "Idea es una nota libre y Épica agrupa specs: ambas viven solo en el grafo y no tocan el disco. Spec sí crea una carpeta real specs/NNN-… con spec.md, plan.md y tasks.md: es la unidad que se aprueba y la única que puede abrir el gate.",
 
   "help.gate.title": "El gate: la regla de oro",
   "help.gate.body":
@@ -437,7 +493,144 @@ const es = {
     "Esta firma queda escrita en spec.md y es lo que abre el gate para esta spec.",
   "edge.why": "«depende de» y «bloquea» son las únicas uniones que generan avisos de dependencia.",
   "sheet.issues.why":
-    "Reparte el trabajo fuera del repo sin perder el hilo: cada issue enlaza a su spec."
+    "Reparte el trabajo fuera del repo sin perder el hilo: cada issue enlaza a su spec.",
+
+  // ── Rediseño 2a (spec 030) ────────────────────────────────────────────────
+  // Franja 1 — identidad
+  "identity.search": "Buscar spec, ejecutar acción…",
+  "identity.liveSaved": "en vivo · guardado",
+  "identity.more": "Más acciones",
+
+  // Franja 2 — contexto
+  "context.filter": "filtro",
+  "context.pending": "pendientes",
+  "context.warnings": "con avisos",
+  "context.drift": "con deriva",
+  "context.meta": "{n} specs · {e} uniones · zoom {z}%",
+  "context.metaBoard": "{n} specs · {c} columnas",
+
+  // Franja 4 — compuerta
+  "gatebar.open": "gate: abierto",
+  "gatebar.closed": "gate: cerrado",
+  "gatebar.blocked": "gate: bloqueado",
+  "gatebar.rule": "no hay código sin spec aprobada",
+  "gatebar.detail": "{e} error · {w} avisos · {a}/{t} aprobadas",
+  "gatebar.emptyDetail":
+    "sin specs en disco — crea la primera para que la compuerta tenga algo que leer",
+  "gatebar.whatsMissing": "Ver qué falta",
+  "gatebar.noIssues": "La compuerta no tiene pendientes que mostrar.",
+
+  // Franja 3 — rail
+  "rail.add": "añadir",
+  "rail.specsEmpty": "— sin specs en disco —",
+
+  // Menú ⋯
+  "menu.exportPng": "Exportar PNG",
+  "menu.reports": "Regenerar informes",
+  "menu.bitacora": "Bitácora",
+  "menu.assistant": "Asistente",
+  "menu.templates": "Plantillas",
+  "menu.tour": "Tour",
+  "menu.language": "Idioma",
+  "menu.dashboard": "Dashboard",
+
+  // Drawer
+  "drawer.blocked.title": "Implementar está bloqueado",
+  "drawer.blocked.rule": "No hay código sin spec aprobada y plan consistente.",
+  "drawer.blocked.pending": "Esta spec sigue pendiente.",
+  "drawer.blocked.dep": "Depende de {id}, que tampoco está aprobada.",
+  "drawer.blocked.goApprove": "Ir a aprobación",
+  "drawer.blocked.openDep": "Abrir {id}",
+  "drawer.score.label": "puntaje",
+  "drawer.score.target": "meta {n}",
+  "drawer.score.ears": "EARS {clean}/{total} limpios",
+  "drawer.tasks.collapse": "plegar",
+  "drawer.tasks.expand": "desplegar",
+  "drawer.issues.cta": "Crear {n} issues de las tareas pendientes",
+  "drawer.spec.excerpt": "primeras {n} líneas",
+  "drawer.sections.intro":
+    "Se reemplaza solo la sección que guardas dentro de spec.md. El bloque de aprobación no se toca.",
+  "drawer.sections.dirty": "{n} secciones modificadas",
+  "drawer.sections.discard": "Descartar",
+  "drawer.sections.save": "Guardar en spec.md",
+  "drawer.ears.what": "qué es EARS",
+  "drawer.ears.vague":
+    "Sin disparador ni respuesta medible. «{words}» no se puede testear — di cuántos ms.",
+
+  // Aprobación (rediseño)
+  "approval.intro":
+    "Aprobar escribe el bloque real en spec.md: estado, fecha de hoy, quién firma y la evidencia. Eso es lo que leen la compuerta, la CI y tu agente antes de permitir código.",
+  "approval.dateHint": "se estampa hoy",
+  "approval.byPlaceholder": "¿Quién firma?",
+  "approval.evidencePlaceholder": "enlace al hilo, o la cita del OK",
+  "approval.evidenceHint":
+    "Sin evidencia el bloque queda firmado pero sin rastro de dónde salió el OK.",
+  "approval.consent.tag": "segundo paso · falta",
+
+  // Relaciones (rediseño)
+  "relations.intro":
+    "Las uniones viven en board.canvas, no en la spec. Solo «depende de» y «bloquea» generan avisos de dependencia.",
+  "relations.warnBody":
+    "Implementar {id} sería construir sobre un contrato sin firmar. Es un aviso, no un bloqueo.",
+  "relations.typesTitle": "los cuatro tipos",
+
+  // Sin conexión
+  "loadError.nothingLost":
+    "El grafo es una vista de tus archivos; sin el servidor no hay archivos que mostrar. Nada se ha perdido.",
+  "loadError.startIt": "arráncalo así",
+  "loadError.apiTag": "api inalcanzable",
+  "loadError.newTitle": "El builder no encuentra el servidor",
+
+  // Asistente (rediseño)
+  "assistant.tag": "borrador de board",
+  "assistant.newTitle": "Descríbeme el proyecto en una frase",
+  "assistant.newBody":
+    "Propongo idea, épicas y specs conectadas. Nada se escribe en disco hasta que aceptes.",
+  "assistant.proposal": "propuesta · {specs} specs · {epics} épicas",
+  "assistant.copyPrompt": "Copiar prompt para tu agente MCP",
+  "assistant.createN": "Crear {n} specs en disco",
+
+  // Implementar (rediseño)
+  "implement.tag": "implementar · {id}",
+  "implement.newTitle": "La compuerta está abierta para esta spec",
+  "implement.newBody":
+    "Copia el prompt y pégalo en tu agente. Lleva el workspace, la spec aprobada y la regla de la compuerta.",
+  "implement.pre.approved": "spec aprobada",
+  "implement.pre.plan": "plan consistente",
+  "implement.pre.consent": "consentimiento registrado",
+  "implement.copyClose": "Copiar y cerrar",
+  "implement.agents": "Claude Code · Codex · Cursor · cualquier agente MCP",
+
+  // Plantillas (rediseño)
+  "templates.notEmpty":
+    "Este workspace ya tiene {n} specs. Las plantillas solo se aplican en uno vacío, para no mezclar dos árboles de decisiones.",
+
+  // Bitácora (rediseño)
+  "bitacora.markdown": "markdown · se guarda en disco",
+
+  // ⌘K
+  "cmdk.actions": "acciones",
+  "cmdk.specs": "specs",
+  "cmdk.foot": "↑↓ moverse · ↩ ejecutar · esc cerrar",
+  "cmdk.approveOpen": "Aprobar la spec abierta",
+  "cmdk.validate": "Validar la compuerta ahora",
+  "cmdk.logDecision": "Registrar una decisión en la bitácora",
+  "cmdk.reports": "Regenerar STATUS.md y el roadmap",
+  "cmdk.exportPng": "Exportar el grafo como PNG",
+  "cmdk.templates": "Abrir plantillas",
+  "cmdk.assistant": "Abrir el asistente",
+  "cmdk.tour": "Ver el tour de bienvenida",
+  "cmdk.lang": "Cambiar idioma ({lang})",
+  "cmdk.saveNow": "Guardar ahora",
+  "cmdk.dashboard": "Ir al dashboard",
+
+  // Kanban (rediseño)
+  "kanban.dropHint": "arrastra un borrador aquí",
+  "kanban.dropBody":
+    "Se abre el formulario de aprobación: aprobar necesita quién firma y con qué evidencia.",
+
+  // Tour (rediseño)
+  "tour.step": "paso {n} / {total}"
 };
 
 const en: Record<keyof typeof es, string> = {
@@ -449,6 +642,7 @@ const en: Record<keyof typeof es, string> = {
   "common.remove": "Remove",
   "common.moveUp": "Move up",
   "common.moveDown": "Move down",
+  "common.loading": "Loading…",
 
   // Top bar
   "topbar.save.saved": "Saved",
@@ -463,7 +657,7 @@ const en: Record<keyof typeof es, string> = {
   "topbar.gate.open": "Gate open",
   "topbar.gate.closed": "Gate closed",
   "topbar.gate.blocked": "Gate blocked",
-  "canvas.specNotDeletable": "Spec cards cannot be deleted from the canvas",
+  "canvas.specNotDeletable": "Spec cards can't be deleted from the graph",
   "jump.title": "Go to a spec",
   "jump.placeholder": "Type a number or part of the title…",
   "jump.empty": "No spec matches.",
@@ -485,7 +679,7 @@ const en: Record<keyof typeof es, string> = {
   "topbar.gate.validating": "Validating…",
   "topbar.gate.validateTitle": "Runs the real project validation",
   "topbar.view.label": "View",
-  "topbar.view.canvas": "Canvas",
+  "topbar.view.canvas": "Graph",
   "topbar.view.board": "Board",
   "topbar.presence.title": "{n} people viewing this workspace",
   "topbar.undo": "Undo",
@@ -532,15 +726,19 @@ const en: Record<keyof typeof es, string> = {
   "banner.workspaceChanged": "Server workspace changed — reload",
   "banner.reload": "Reload",
   "app.loading": "Loading the board…",
-  "empty.title": "Your canvas is empty",
-  "empty.body": "Drag 💡 Idea or 📦 Epic to think, or 📋 Spec to create your first real spec.",
-  "empty.cta": "📋 Create the first spec",
+  "empty.title": "No contract on disk yet",
+  "empty.body":
+    "In SDD you start from the spec, not the code. A spec is a real folder — spec.md, plan.md, tasks.md — and it's the only thing that can open the gate.",
+  "empty.cta": "Create the first spec",
+  "empty.describe": "Describe the project",
+  "empty.template": "Use a template",
+  "empty.terminal": "or from the terminal",
   "loadError.title": "Could not load the board",
   "loadError.hint": "Is the server running?",
 
   // Palette
   "palette.title": "Palette",
-  "palette.help": "Drag onto the canvas (or click)",
+  "palette.help": "Drag onto the graph (or click)",
   "palette.idea": "Idea",
   "palette.idea.hint": "Free note",
   "palette.epic": "Epic",
@@ -554,14 +752,15 @@ const en: Record<keyof typeof es, string> = {
   "tour.aria": "Welcome tour",
   "tour.close": "Close the tour",
   "tour.dontShow": "Don't show again",
-  "tour.back": "← Back",
-  "tour.next": "Next →",
+  "tour.back": "Back",
+  "tour.next": "Next",
   "tour.finish": "Finish",
-  "tour.1.title": "1 · The palette",
-  "tour.1.body": "Drag 💡 Idea, 📦 Epic or 📋 Spec from here onto the canvas (or click).",
+  "tour.1.title": "The rail is your whole project",
+  "tour.1.body":
+    "Up top, what you can place on the graph: Idea and Epic live only here; Spec writes a real folder. Below, the specs on disk with their state.",
   "tour.2.title": "2 · Create a spec",
   "tour.2.body":
-    "The 📋 Spec card creates a real specs/NNN-… folder with spec, plan and tasks — no terminal needed.",
+    "The Spec card creates a real specs/NNN-… folder with spec, plan and tasks — no terminal needed.",
   "tour.3.title": "3 · Connect cards",
   "tour.3.body":
     "Drag from a card's right handle to another card to connect them, then pick the connection's purpose (contains, depends on, blocks or related).",
@@ -570,7 +769,7 @@ const en: Record<keyof typeof es, string> = {
     "Click a spec card to open the panel: tick tasks and edit every spec section with its own form.",
   "tour.5.title": "5 · The gate",
   "tour.5.body":
-    "The gate semaphore tells you whether you can implement: 🟢 open, 🔴 closed. Press “Validate now” to check.",
+    "The bottom bar tells you whether you can implement: green open, amber closed, red blocked — with the rule always in sight. Press “Validate now” to check.",
 
   // New spec modal
   "newSpec.title": "New spec",
@@ -597,14 +796,14 @@ const en: Record<keyof typeof es, string> = {
   "assistant.intro":
     "Write your project in a sentence or a paragraph and I'll propose a draft board: idea, epics and connected specs. Nothing is saved until you accept.",
   "assistant.ph": "e.g. an online plant store with payments and an admin panel",
-  "assistant.propose": "✨ Propose draft",
+  "assistant.propose": "Propose draft",
   "assistant.draftNote": "Draft (not saved yet): rename or remove specs before creating.",
   "assistant.hasSpecs":
     "This workspace already has specs; the assistant only applies to an empty workspace.",
   "assistant.keepOne": "Keep at least one spec in the draft",
-  "assistant.regenerate": "↺ Regenerate",
+  "assistant.regenerate": "regenerate",
   "assistant.regenerate.title": "Proposes alternative names",
-  "assistant.create": "✅ Create on the board",
+  "assistant.create": "Create on the board",
   "assistant.creating": "Creating…",
   "assistant.meta.one": "{specs} specs · 1 epic: {names}",
   "assistant.meta.many": "{specs} specs · {epics} epics: {names}",
@@ -615,15 +814,65 @@ const en: Record<keyof typeof es, string> = {
     "Paste this prompt into your agent connected to the sdd-mcp MCP: it will generate the board with real intelligence (specs with a draft included).",
 
   // Implement modal
-  "implement.title": "🤖 Implement with agent",
+  "implement.title": "Implement with agent",
   "implement.aria": "Implement {id} with an agent",
   "implement.note":
     "Copy this prompt and paste it into your agent (Claude Code, Codex, Cursor…). It includes the workspace, the approved spec and the SDD gate with consent.",
 
   // Prompt box
-  "prompt.copy": "📋 Copy prompt",
+  "prompt.copy": "Copy prompt",
   "prompt.copied": "✓ Copied",
-  "prompt.manual": "⚠ Select and copy (Ctrl+C)",
+  "prompt.manual": "Select and copy (Ctrl+C)",
+
+  // AI assistance without copy-paste (spec 031)
+  "ai.assist": "Expand with AI",
+  "ai.title": "Ask the agent",
+  "ai.instruction.ph": "What should the agent do with this field (expand, rewrite, propose more…)",
+  "ai.send": "Send to agent",
+  "ai.sending": "Sending…",
+  "ai.pending": "Pending — waiting for the agent to claim it",
+  "ai.working": "In progress — {agent} is drafting",
+  "ai.answered": "Agent's proposal",
+  "ai.accept": "Accept",
+  "ai.applying": "Applying…",
+  "ai.reject": "Reject",
+  "ai.cancel": "Cancel request",
+  "ai.again": "Ask again",
+  "ai.stalled": "stalled >10 min",
+  "ai.agentOn": "agent: {agent}",
+  "ai.noAgentShort": "no agent",
+  "ai.noAgent":
+    "No agent is listening to the queue. Keep an MCP-connected session serving requests (sdd_next_request) or use the classic prompt:",
+  "ai.queue.one": "AI: 1 request",
+  "ai.queue.many": "AI: {n} requests",
+  "ai.queue.title": "AI requests",
+  "ai.queue.empty": "No active requests.",
+  "ai.status.pending": "pending",
+  "ai.status.in_progress": "in progress",
+  "ai.status.answered": "answered — review the proposal in its field",
+  "assistant.structure": "Structure with AI",
+  "assistant.structure.waiting": "The agent is structuring your idea. The proposal will appear here on its own.",
+  "assistant.structure.title": "Draft proposed by the agent",
+  "assistant.structure.name": "Spec name",
+  "assistant.structure.create": "Create spec with these sections",
+  "assistant.structure.parseError":
+    "The agent's proposal could not be parsed as sections. Reject it and ask again.",
+
+  // Connect agent (spec 032)
+  "ai.connect": "How do I connect an agent",
+  "cmdk.connect": "Connect agent",
+  "empty.connect": "Connect an agent",
+  "connect.tag": "CONNECT AGENT",
+  "connect.title": "Connect your agent to this workspace",
+  "connect.body":
+    "One command registers the MCP in every client it finds (Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini, opencode) and installs the skill that serves the queue. It does not overwrite your config: it merges into it.",
+  "connect.step1": "1 · Run this in your terminal",
+  "connect.step1.hint":
+    "It respects whatever you already configured and is safe to re-run. Add --dry-run to see what it would do without writing anything.",
+  "connect.step2": "2 · Put the agent to serve the queue",
+  "connect.manual": "If you prefer doing it by hand, this goes in {file}:",
+  "connect.footer":
+    "After connecting, restart the client so it loads the MCP. While an agent polls the queue, the \"Expand with AI\" buttons work on their own.",
 
   // Spec sheet (drawer)
   "sheet.aria": "Spec {id} detail",
@@ -635,7 +884,7 @@ const en: Record<keyof typeof es, string> = {
   "sheet.tasks": "Tasks",
   "sheet.tasks.count": "{done}/{total} done",
   "sheet.noTasks": "No tasks",
-  "sheet.implement": "🤖 Implement with agent",
+  "sheet.implement": "Implement with agent",
   "sheet.implement.ready": "Prepares the exact prompt for your agent",
   "sheet.hardStop": "No code before approved spec and consistent plan — approve the spec first.",
   "sheet.excerpt": "spec.md (excerpt)",
@@ -693,7 +942,7 @@ const en: Record<keyof typeof es, string> = {
   "editor.success.add": "Add criterion",
   "editor.outOfScope": "Out of scope",
   "editor.outOfScope.ph": "What this spec does NOT cover",
-  "editor.save": "💾 Save sections",
+  "editor.save": "Save sections",
   "editor.saving": "Saving…",
   "editor.saved.one": "Saved into spec.md (1 section)",
   "editor.saved.many": "Saved into spec.md ({n} sections)",
@@ -711,15 +960,15 @@ const en: Record<keyof typeof es, string> = {
   "approval.approverPh": "Who approves?",
   "approval.evidence": "Evidence (link or short quote)",
   "approval.evidencePh": "e.g. a link to the thread or the OK quote",
-  "approval.submit": "✅ Approve spec",
-  "approval.update": "💾 Update approval",
+  "approval.submit": "Approve spec",
+  "approval.update": "Update approval",
   "approval.busy": "Writing…",
   "approval.done": "Approval written into spec.md",
 
   // Relations tab
   "relations.incoming": "Incoming",
   "relations.outgoing": "Outgoing",
-  "relations.none": "This spec has no connections on the canvas.",
+  "relations.none": "This spec has no links in the graph.",
   "relations.delete": "Delete connection",
   "relations.typeAria": "Connection type",
   "relations.note": "Connections live in board.canvas; the type is stored as a canonical label.",
@@ -741,8 +990,8 @@ const en: Record<keyof typeof es, string> = {
   "kanban.empty": "— empty —",
 
   // Notes
-  "note.idea.new": "💡 New idea",
-  "note.epic.new": "📦 New epic",
+  "note.idea.new": "New idea",
+  "note.epic.new": "New epic",
   "note.empty": "(empty)",
   "note.editTitle": "Double-click to edit",
 
@@ -770,7 +1019,7 @@ const en: Record<keyof typeof es, string> = {
 
   "help.palette.title": "Idea, Epic and Spec",
   "help.palette.body":
-    "💡 Idea is a free note and 📦 Epic groups specs: both live on the canvas only and never touch disk. 📋 Spec does create a real specs/NNN-… folder with spec.md, plan.md and tasks.md: it is the unit you approve and the only one that can open the gate.",
+    "Idea is a free note and Epic groups specs: both live only in the graph and never touch disk. Spec does create a real specs/NNN-… folder with spec.md, plan.md and tasks.md: it is the unit you approve and the only one that can open the gate.",
 
   "help.gate.title": "The gate: the golden rule",
   "help.gate.body":
@@ -818,7 +1067,128 @@ const en: Record<keyof typeof es, string> = {
     "This signature gets written into spec.md, and it is what opens the gate for this spec.",
   "edge.why": "“depends on” and “blocks” are the only connections that raise dependency warnings.",
   "sheet.issues.why":
-    "Hand the work out beyond the repo without losing track of it: every issue links back to its spec."
+    "Hand the work out beyond the repo without losing track of it: every issue links back to its spec.",
+
+  // ── Redesign 2a (spec 030) ────────────────────────────────────────────────
+  "identity.search": "Search specs, run an action…",
+  "identity.liveSaved": "live · saved",
+  "identity.more": "More actions",
+
+  "context.filter": "filter",
+  "context.pending": "pending",
+  "context.warnings": "with warnings",
+  "context.drift": "with drift",
+  "context.meta": "{n} specs · {e} links · zoom {z}%",
+  "context.metaBoard": "{n} specs · {c} columns",
+
+  "gatebar.open": "gate: open",
+  "gatebar.closed": "gate: closed",
+  "gatebar.blocked": "gate: blocked",
+  "gatebar.rule": "no code without an approved spec",
+  "gatebar.detail": "{e} error · {w} warnings · {a}/{t} approved",
+  "gatebar.emptyDetail":
+    "no specs on disk — create the first one so the gate has something to read",
+  "gatebar.whatsMissing": "See what's missing",
+  "gatebar.noIssues": "The gate has nothing pending to show.",
+
+  "rail.add": "add",
+  "rail.specsEmpty": "— no specs on disk —",
+
+  "menu.exportPng": "Export PNG",
+  "menu.reports": "Regenerate reports",
+  "menu.bitacora": "Logbook",
+  "menu.assistant": "Assistant",
+  "menu.templates": "Templates",
+  "menu.tour": "Tour",
+  "menu.language": "Language",
+  "menu.dashboard": "Dashboard",
+
+  "drawer.blocked.title": "Implementing is blocked",
+  "drawer.blocked.rule": "No code without an approved spec and a consistent plan.",
+  "drawer.blocked.pending": "This spec is still pending.",
+  "drawer.blocked.dep": "It depends on {id}, which isn't approved either.",
+  "drawer.blocked.goApprove": "Go to approval",
+  "drawer.blocked.openDep": "Open {id}",
+  "drawer.score.label": "score",
+  "drawer.score.target": "target {n}",
+  "drawer.score.ears": "EARS {clean}/{total} clean",
+  "drawer.tasks.collapse": "collapse",
+  "drawer.tasks.expand": "expand",
+  "drawer.issues.cta": "Create {n} issues from the open tasks",
+  "drawer.spec.excerpt": "first {n} lines",
+  "drawer.sections.intro":
+    "Only the section you save is replaced inside spec.md. The approval block is left alone.",
+  "drawer.sections.dirty": "{n} sections changed",
+  "drawer.sections.discard": "Discard",
+  "drawer.sections.save": "Save into spec.md",
+  "drawer.ears.what": "what is EARS",
+  "drawer.ears.vague":
+    "No trigger and no measurable response. «{words}» can't be tested — say how many ms.",
+
+  "approval.intro":
+    "Approving writes the real block into spec.md: status, today's date, who signs and the evidence. That's what the gate, CI and your agent read before allowing any code.",
+  "approval.dateHint": "stamped today",
+  "approval.byPlaceholder": "Who signs?",
+  "approval.evidencePlaceholder": "link to the thread, or quote the OK",
+  "approval.evidenceHint":
+    "Without evidence the block is signed but leaves no trace of where the OK came from.",
+  "approval.consent.tag": "second step · missing",
+
+  "relations.intro":
+    "Links live in board.canvas, not in the spec. Only «depends on» and «blocks» raise dependency warnings.",
+  "relations.warnBody":
+    "Implementing {id} would build on an unsigned contract. It's a warning, not a block.",
+  "relations.typesTitle": "the four types",
+
+  "loadError.nothingLost":
+    "The graph is a view of your files; without the server there are no files to show. Nothing was lost.",
+  "loadError.startIt": "start it like this",
+  "loadError.apiTag": "api unreachable",
+  "loadError.newTitle": "The builder can't find the server",
+
+  "assistant.tag": "board draft",
+  "assistant.newTitle": "Describe the project in one sentence",
+  "assistant.newBody":
+    "I'll propose an idea, epics and connected specs. Nothing is written to disk until you accept.",
+  "assistant.proposal": "proposal · {specs} specs · {epics} epics",
+  "assistant.copyPrompt": "Copy the prompt for your MCP agent",
+  "assistant.createN": "Create {n} specs on disk",
+
+  "implement.tag": "implement · {id}",
+  "implement.newTitle": "The gate is open for this spec",
+  "implement.newBody":
+    "Copy the prompt and paste it into your agent. It carries the workspace, the approved spec and the gate rule.",
+  "implement.pre.approved": "spec approved",
+  "implement.pre.plan": "plan consistent",
+  "implement.pre.consent": "consent recorded",
+  "implement.copyClose": "Copy and close",
+  "implement.agents": "Claude Code · Codex · Cursor · any MCP agent",
+
+  "templates.notEmpty":
+    "This workspace already has {n} specs. Templates only apply to an empty one, so two decision trees don't get mixed.",
+
+  "bitacora.markdown": "markdown · saved to disk",
+
+  "cmdk.actions": "actions",
+  "cmdk.specs": "specs",
+  "cmdk.foot": "↑↓ move · ↩ run · esc close",
+  "cmdk.approveOpen": "Approve the open spec",
+  "cmdk.validate": "Validate the gate now",
+  "cmdk.logDecision": "Log a decision in the bitácora",
+  "cmdk.reports": "Regenerate STATUS.md and the roadmap",
+  "cmdk.exportPng": "Export the graph as PNG",
+  "cmdk.templates": "Open templates",
+  "cmdk.assistant": "Open the assistant",
+  "cmdk.tour": "Show the welcome tour",
+  "cmdk.lang": "Switch language ({lang})",
+  "cmdk.saveNow": "Save now",
+  "cmdk.dashboard": "Go to the dashboard",
+
+  "kanban.dropHint": "drag a draft here",
+  "kanban.dropBody":
+    "The approval form opens: approving needs who signs and with what evidence.",
+
+  "tour.step": "step {n} / {total}"
 };
 
 const DICTS: Record<Lang, Dict> = { es, en };

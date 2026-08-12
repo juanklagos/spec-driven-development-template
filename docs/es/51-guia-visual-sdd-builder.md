@@ -187,7 +187,38 @@ Si prefieres partir de una forma probada en lugar de una frase, el botón **🧩
 
 Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board. Las tools del board — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — están respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Los agentes también tienen los poderes del panel (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), y los avisos de dependencias aparecen en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`. Ver guía 41 (referencia completa de MCP).
 
-### Conecta tu agente
+### Conecta tu agente en un comando (spec 032)
+
+La forma corta, desde la carpeta de tu proyecto:
+
+```bash
+npx @juanklagos/sdd-mcp@latest connect
+```
+
+Detecta qué clientes tienes, escribe la configuración MCP **en el archivo propio de cada uno** e instala la skill `/sdd-serve` que atiende la cola. No sobrescribe nada: fusiona la entrada `sdd` y deja el resto de tu configuración intacta; si algún archivo no se puede interpretar, lo deja como está y te lo dice. Ejecutarlo dos veces no cambia nada («sin cambios»).
+
+| Cliente | Archivo que escribe | Clave | Atender la cola |
+| :--- | :--- | :--- | :--- |
+| Claude Code | `.mcp.json` | `mcpServers.sdd` | `/sdd-serve` |
+| Codex | `.codex/config.toml` | `[mcp_servers.sdd]` | `/sdd-serve` |
+| Cursor | `.cursor/mcp.json` | `mcpServers.sdd` | `/sdd-serve` |
+| VS Code | `.vscode/mcp.json` | `servers.sdd` | prompt MCP `sdd_serve_requests` |
+| Windsurf | `.windsurf/mcp_config.json` | `mcpServers.sdd` | prompt MCP `sdd_serve_requests` |
+| Gemini CLI | `.gemini/settings.json` | `mcpServers.sdd` | `/sdd:serve` |
+| opencode | `opencode.json` | `mcp.sdd` | `/sdd-serve` |
+
+Opciones útiles:
+
+- `--dry-run` — imprime qué archivos tocaría y qué cambiaría, sin escribir nada.
+- `--client codex,cursor` — solo esos clientes (útil si tienes uno instalado pero aún sin usar).
+- `--global` — configuración de usuario en vez de la del proyecto.
+- `--project-root <ruta>` — registra otro workspace.
+
+Dentro del builder tienes lo mismo en **⌘K → Conectar agente** (y en el aviso «sin agente» de cualquier botón ✨): muestra el comando ya con tu ruta y, por cliente, la configuración exacta por si prefieres pegarla a mano.
+
+Tres caminos, porque en 2026 ninguno cubre a todos los clientes: la **skill** `/sdd-serve` (estándar abierto SKILL.md, lo leen Claude Code, Codex, Cursor y compatibles), los **comandos nativos** para Gemini y opencode, y el **prompt MCP** `sdd_serve_requests`, que no necesita instalar nada en los clientes que muestran prompts MCP como slash commands (Claude Code, VS Code; Codex todavía no lo soporta).
+
+### Conecta tu agente a mano
 
 El comando exacto por cliente — ejecútalo desde (o apuntando a) el proyecto en el que quieres que trabaje el agente. Todo lo que el agente escribe aparece **en vivo** en `/builder` (el watcher SSE recoge cada cambio en disco), y todo lo que haces en el builder lo ve el agente al instante.
 
@@ -252,6 +283,42 @@ Dónde está de verdad el estándar: la spec MCP 2026-07-28 es una release candi
 - Los hosts **sin** MCP Apps no se rompen: `sdd_board_app` devuelve los mismos datos de board + gate como texto JSON.
 - La vista es totalmente autocontenida (sin CDNs): el bridge oficial de ext-apps va inline dentro del recurso `ui://sdd/board.html`.
 - A revisar tras el 2026-07-28: confirmar que el texto final de la spec mantiene `_meta.ui.resourceUri` + `text/html;profile=mcp-app` tal cual y subir `@modelcontextprotocol/ext-apps` si sale una versión final.
+
+### Modo conectado: «Ampliar con IA» sin copy-paste (spec 031)
+
+Todo campo editable de contenido del builder — las 7 secciones de `spec.md`,
+las tareas, las notas del lienzo y los borradores de bitácora — tiene un botón
+**✨ Ampliar con IA**. Al usarlo, el builder NO llama a ninguna API: publica
+una petición en `.sdd/requests/` y tu propia sesión de agente la atiende por
+MCP. El ciclo completo:
+
+1. En el builder: pulsa «Ampliar con IA» en un campo, escribe la indicación y
+   envía. La petición queda visible en la barra de estado (`IA: 1 petición`).
+2. En tu agente (Claude Code u otro cliente MCP conectado): llama a
+   `sdd_next_request` — recibe la petición más antigua con el campo, su texto
+   actual y tu indicación — redacta la propuesta y respóndela con
+   `sdd_respond_request`. **El agente nunca escribe specs**: solo propone.
+3. De vuelta en el builder: la propuesta aparece sola como diff
+   (actual vs. propuesto). **Aceptar** escribe solo ese campo por la ruta de
+   siempre; **Rechazar** no toca nada.
+
+Para dejar la sesión escuchando, pídele a tu agente algo como:
+
+> Atiende la cola del SDD Builder: llama a `sdd_next_request`
+> (projectRoot: …) en bucle; para cada petición redacta la propuesta y
+> respóndela con `sdd_respond_request`. No escribas ningún archivo de specs.
+
+En Claude Code, `/loop` sirve exactamente para esto. Si ningún agente ha
+consultado la cola en los últimos 5 minutos, los botones de IA lo dicen
+(«sin agente») y ofrecen el prompt clásico copiable — nadie se queda
+esperando. Una petición estancada >10 minutos se marca y se puede cancelar
+desde la propia barra de estado.
+
+El asistente ✨ también acepta una idea en bruto: **Estructurar con IA**
+manda el braindump por la misma cola y devuelve un borrador de spec completo
+(historia, escenarios, criterios EARS, requisitos) editable antes de crear
+nada. Los campos de aprobación y consentimiento no tienen botón de IA a
+propósito: son la firma humana del gate.
 
 ## Limitaciones (honestas)
 

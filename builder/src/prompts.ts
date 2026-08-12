@@ -69,6 +69,42 @@ export function buildImplementPrompt(
 }
 
 /**
+ * Spec 031 (R6) — the classic copyable fallback for one field when no agent
+ * is polling the queue. Same copy-first philosophy as the prompts above.
+ */
+export function buildFieldPrompt(
+  kind: "section" | "task" | "note" | "bitacora",
+  specId: string | undefined,
+  refId: string,
+  currentText: string,
+  instruction: string,
+  lang: Lang
+): string {
+  const where = specId ? `${specId} / ${refId}` : refId;
+  const body = currentText.trim() || (lang === "es" ? "(vacío)" : "(empty)");
+  if (lang === "es") {
+    return [
+      `Ayúdame a redactar el campo «${where}» (${kind}) de mi workspace SDD.`,
+      instruction.trim() ? `Indicación: ${instruction.trim()}` : "Amplía y mejora el texto actual.",
+      "Texto actual:",
+      "---",
+      body,
+      "---",
+      "Devuélveme SOLO el texto propuesto para el campo, listo para pegar. No toques archivos."
+    ].join("\n");
+  }
+  return [
+    `Help me draft the field "${where}" (${kind}) of my SDD workspace.`,
+    instruction.trim() ? `Instruction: ${instruction.trim()}` : "Expand and improve the current text.",
+    "Current text:",
+    "---",
+    body,
+    "---",
+    "Return ONLY the proposed text for the field, ready to paste. Do not touch any files."
+  ].join("\n");
+}
+
+/**
  * Clipboard helper with a legacy fallback; returns false when both fail.
  * navigator.clipboard.writeText can HANG forever in embedded browsers that
  * never answer the permission prompt, so it races a short timeout before

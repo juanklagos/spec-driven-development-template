@@ -1060,3 +1060,5 @@ export * from "./docs.js";
 export * from "./policy.js";
 export * from "./spec-actions.js";
 export * from "./validation.js";
+export * from "./requests.js";
+export * from "./connect.js";

@@ -16,12 +16,12 @@ export async function exportBoardPng(nodes: AppNode[]): Promise<void> {
   const es = currentLang() === "es";
   if (nodes.length === 0) {
     throw new Error(
-      es ? "Nada que exportar: el lienzo está vacío" : "Nothing to export: the canvas is empty"
+      es ? "Nada que exportar: el grafo está vacío" : "Nothing to export: the graph is empty"
     );
   }
   const viewportEl = document.querySelector<HTMLElement>(".react-flow__viewport");
   if (!viewportEl) {
-    throw new Error(es ? "No se encontró el lienzo" : "Could not find the canvas");
+    throw new Error(es ? "No se encontró el grafo" : "Could not find the graph");
   }
 
   const bounds = getNodesBounds(nodes);

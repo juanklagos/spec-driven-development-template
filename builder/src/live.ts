@@ -82,7 +82,9 @@ function connect(): void {
     lastActivityAt = Date.now();
     const data = parse<LiveChange>(event.data);
     const kind: ChangeKind | undefined =
-      data?.kind === "board" || data?.kind === "specs" ? data.kind : undefined;
+      data?.kind === "board" || data?.kind === "specs" || data?.kind === "request"
+        ? data.kind
+        : undefined;
     if (kind) void useBuilderStore.getState().handleLiveChange(kind);
   });
 }

@@ -23,6 +23,7 @@ import {
   listBitacoraFiles,
   listSpecs,
   moveSpecTask,
+  nextAiRequest,
   readBitacoraFile,
   readFrameworkFile,
   readSpecDocument,
@@ -31,8 +32,10 @@ import {
   removeSpecTask,
   renameSpecTask,
   resolveSddRoot,
+  respondAiRequest,
   runLegacyDiscovery,
   scoreSpec,
+  SERVE_QUEUE_INSTRUCTIONS,
   setSpecTaskDone,
   updateSpecIndexRow,
   updateSpecSections,
@@ -996,6 +999,80 @@ export function createSddMcpServer(): McpServer {
     }
   );
 
+  // --- AI request queue (spec 031): builder -> agent without copy-paste ----
+  // The builder publishes requests; an agent session claims and answers them
+  // here. Deliberately proposal-only: acceptance (the only write to specs/)
+  // stays with the human in the builder.
+  const aiRequestSchema = z.object({
+    id: z.string(),
+    type: z.enum(["draft-field", "structure-idea"]),
+    target: z
+      .object({
+        kind: z.enum(["section", "task", "note", "bitacora"]),
+        specId: z.string().optional(),
+        ref: z.string()
+      })
+      .optional(),
+    currentText: z.string().optional(),
+    instruction: z.string(),
+    status: z.enum(["pending", "in_progress", "answered", "accepted", "rejected", "cancelled"]),
+    createdAt: z.string(),
+    agent: z.string().optional(),
+    startedAt: z.string().optional(),
+    proposal: z.string().optional(),
+    answeredAt: z.string().optional(),
+    resolvedAt: z.string().optional()
+  });
+
+  server.registerTool(
+    "sdd_next_request",
+    {
+      title: "Claim the next AI request",
+      description:
+        "Claim the oldest pending AI-assist request published by the SDD Builder (pending -> in_progress) and return it with its full context: target field, its current text, and the user's instruction. Returns { request: null } when the queue is empty — polling also records agent presence, which is what the builder shows as 'agent connected'. Answer with sdd_respond_request; never write the spec files yourself.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        agent: z.string().min(1).optional().describe("Agent display name shown in the builder, e.g. 'claude-code'.")
+      },
+      outputSchema: {
+        request: aiRequestSchema.nullable()
+      }
+    },
+    async ({ projectRoot, agent }) => {
+      const request = await nextAiRequest(projectRoot, agent ?? "agent");
+      const result = { request };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_respond_request",
+    {
+      title: "Answer an AI request with a proposal",
+      description:
+        "Attach a proposal to a claimed AI-assist request (in_progress -> answered). The proposal is plain text for the target field (or, for structure-idea requests, the structured draft the builder asked for in the instruction). It is NOT written to any spec file: the user reviews it as a diff in the builder and only their acceptance writes, through the existing section/task routes.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        id: z.string().min(1).describe("Request id, as returned by sdd_next_request."),
+        proposal: z.string().min(1).describe("Proposed text for the target field.")
+      },
+      outputSchema: {
+        request: aiRequestSchema
+      }
+    },
+    async ({ projectRoot, id, proposal }) => {
+      const request = await respondAiRequest(projectRoot, id, proposal);
+      const result = { request };
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
   // --- MCP App (spec 006, R5): board view inside compatible clients -------
   // ui://sdd/board.html resource + sdd_board_app tool (SEP-1865, ext-apps).
   registerSddBoardApp(server);
@@ -1336,6 +1413,39 @@ export function createSddMcpServer(): McpServer {
               projectRoot ? `Target project: ${projectRoot}` : "Use the active target project.",
               "Summarize what was done, what changed, risks, validation, and the next exact step.",
               "Use simple language and keep the summary easy to scan."
+            ].join("\n")
+          }
+        }
+      ]
+    })
+  );
+
+  // Spec 032, R7. The zero-install path to serving the builder's AI queue: in
+  // clients that surface MCP prompts as slash commands (Claude Code, VS Code)
+  // this needs no file on disk at all. The text is the SAME source the skill
+  // and the native commands render from, so the contract cannot drift with
+  // the way a user happens to invoke it.
+  server.prompt(
+    "sdd_serve_requests",
+    {
+      projectRoot: z.string().optional()
+    },
+    ({ projectRoot }) => ({
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: [
+              projectRoot
+                ? `Workspace / projectRoot: ${projectRoot}`
+                : "Use the active target project as projectRoot.",
+              "",
+              SERVE_QUEUE_INSTRUCTIONS.en,
+              "",
+              "---",
+              "",
+              SERVE_QUEUE_INSTRUCTIONS.es
             ].join("\n")
           }
         }

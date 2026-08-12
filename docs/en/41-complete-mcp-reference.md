@@ -802,6 +802,43 @@ Structured output:
 - `board` (canvas + specs, same shape as `sdd_board_read`)
 - `gate` (same shape as `sdd_gate_summary`)
 
+### `sdd_next_request`
+
+Purpose:
+- claim the oldest AI-assist request published by the SDD Builder (`pending` → `in_progress`) with its full context: target field, current text and the user's instruction (spec 031)
+
+When to use it:
+- when the operator asks you to serve the builder queue ("listen to the board", typically in a loop with `/loop`)
+
+Rules:
+- an empty queue returns `{ request: null }`, never an error; the poll itself records your presence, which the builder shows as "agent connected"
+- requests cancelled by the user are never delivered
+- never write spec files as an answer: reply with `sdd_respond_request`
+
+Input:
+- `projectRoot`, `agent` (optional, display name shown in the builder)
+
+Structured output:
+- `request` (id, type `draft-field` | `structure-idea`, target, currentText, instruction, status, dates) or `null`
+
+### `sdd_respond_request`
+
+Purpose:
+- attach your proposal to a claimed request (`in_progress` → `answered`)
+
+When to use it:
+- right after drafting the proposal for the request you claimed
+
+Rules:
+- the proposal is NOT written to any file: the user reviews it as a diff in the builder and only their acceptance writes, through the existing section/task routes
+- answering a cancelled request fails with a clear error: drop it and claim the next one
+
+Input:
+- `projectRoot`, `id`, `proposal`
+
+Structured output:
+- `request` (the request, now `answered`)
+
 ## Resource reference
 
 ### Static resources
@@ -937,6 +974,12 @@ The HTTP transport also serves the builder's own API on the same port. It is loo
 ### `easy_close_session`
 - use when ending a session for a non-technical user
 - expects the AI to summarize in simple language and leave one exact next step
+
+### `sdd_serve_requests`
+- delivers the SDD Builder queue-serving loop: `sdd_next_request` → draft a proposal → `sdd_respond_request` → repeat (spec 032)
+- optional `projectRoot` argument
+- in clients that surface MCP prompts as slash commands (Claude Code, VS Code) this is the **zero-install** path; elsewhere the same instructions arrive as the `/sdd-serve` skill (see guide 51)
+- carries the hard rule: the agent proposes, it never writes files under `specs/`
 
 ## Recommended user flow
 

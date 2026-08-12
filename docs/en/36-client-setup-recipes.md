@@ -4,6 +4,8 @@
 
 This guide gives exact copy-paste setup recipes for the main local AI clients used with this framework.
 
+> **Shortcut (spec 032):** `npx @juanklagos/sdd-mcp@latest connect` does all of this for you — it detects your clients, writes the configuration into each one's own file (merging, never clobbering yours) and installs the `/sdd-serve` skill. It also covers Windsurf, VS Code, Gemini CLI and opencode, which this guide does not. See guide 51. The recipes below are the manual reference and the path for people developing the template itself (they use `node …/dist/index.js` instead of `npx @juanklagos/sdd-mcp@latest`).
+
 ## Client setup map
 
 ```mermaid

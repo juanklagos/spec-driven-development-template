@@ -187,7 +187,38 @@ If you would rather start from a proven shape than from a sentence, the **🧩 T
 
 Any MCP client connected to `sdd-mcp` can work with the same board. The board tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — are backed by the exact same `sdd-core` layer as the canvas, so what your agent writes is what you see in `/builder` (and vice versa). Agents also get the drawer's powers (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), and the dependency warnings appear in the `dependencyWarnings` field of `sdd_gate_summary` and of `GET /api/gate`. See guide 41 (complete MCP reference).
 
-### Connect your agent
+### Connect your agent in one command (spec 032)
+
+The short way, from your project folder:
+
+```bash
+npx @juanklagos/sdd-mcp@latest connect
+```
+
+It detects which clients you have, writes the MCP configuration **into each one's own file**, and installs the `/sdd-serve` skill that serves the queue. It overwrites nothing: it merges the `sdd` entry and leaves the rest of your configuration untouched; if a file cannot be parsed it is left exactly as it is and reported. Running it twice changes nothing ("unchanged").
+
+| Client | File it writes | Key | Serve the queue |
+| :--- | :--- | :--- | :--- |
+| Claude Code | `.mcp.json` | `mcpServers.sdd` | `/sdd-serve` |
+| Codex | `.codex/config.toml` | `[mcp_servers.sdd]` | `/sdd-serve` |
+| Cursor | `.cursor/mcp.json` | `mcpServers.sdd` | `/sdd-serve` |
+| VS Code | `.vscode/mcp.json` | `servers.sdd` | MCP prompt `sdd_serve_requests` |
+| Windsurf | `.windsurf/mcp_config.json` | `mcpServers.sdd` | MCP prompt `sdd_serve_requests` |
+| Gemini CLI | `.gemini/settings.json` | `mcpServers.sdd` | `/sdd:serve` |
+| opencode | `opencode.json` | `mcp.sdd` | `/sdd-serve` |
+
+Useful options:
+
+- `--dry-run` — print which files it would touch and what would change, writing nothing.
+- `--client codex,cursor` — only those clients (useful when one is installed but not used yet).
+- `--global` — user-level configuration instead of the project's.
+- `--project-root <path>` — register a different workspace.
+
+The builder has the same thing in **⌘K → Connect agent** (and behind the "no agent" note on any ✨ button): it shows the command with your path already in it and, per client, the exact configuration in case you would rather paste it by hand.
+
+Three paths, because in 2026 no single one covers every client: the **skill** `/sdd-serve` (open SKILL.md standard, read by Claude Code, Codex, Cursor and compatible tools), the **native commands** for Gemini and opencode, and the **MCP prompt** `sdd_serve_requests`, which needs no install at all in clients that surface MCP prompts as slash commands (Claude Code, VS Code; Codex does not support it yet).
+
+### Connect your agent by hand
 
 The exact command per client — run each one from (or pointing at) the project you want the agent to work on. Everything the agent writes shows up **live** in `/builder` (the SSE watcher picks up every disk change), and everything you do in the builder is instantly visible to the agent.
 
@@ -252,6 +283,41 @@ Where the standard actually is: the MCP 2026-07-28 spec is a release candidate f
 - Hosts **without** MCP Apps degrade gracefully: `sdd_board_app` returns the same board + gate data as JSON text.
 - The view is fully self-contained (no CDNs): the official ext-apps bridge is inlined into the `ui://sdd/board.html` resource.
 - To re-check after 2026-07-28: confirm the final spec text kept `_meta.ui.resourceUri` + `text/html;profile=mcp-app` as-is and bump `@modelcontextprotocol/ext-apps` if a final-release version lands.
+
+### Connected mode: "Expand with AI" without copy-paste (spec 031)
+
+Every editable content field in the builder — the 7 `spec.md` sections,
+tasks, canvas notes and bitácora drafts — has an **✨ Expand with AI**
+button. Using it, the builder does NOT call any AI API: it publishes a
+request under `.sdd/requests/` and your own agent session serves it over
+MCP. The full cycle:
+
+1. In the builder: press "Expand with AI" on a field, type the instruction
+   and send. The request stays visible in the status bar (`AI: 1 request`).
+2. In your agent (Claude Code or any connected MCP client): call
+   `sdd_next_request` — it returns the oldest request with the field, its
+   current text and your instruction — draft the proposal and answer with
+   `sdd_respond_request`. **The agent never writes specs**: it only proposes.
+3. Back in the builder: the proposal shows up on its own as a diff (current
+   vs. proposed). **Accept** writes only that field through the usual route;
+   **Reject** touches nothing.
+
+To keep a session listening, ask your agent something like:
+
+> Serve the SDD Builder queue: call `sdd_next_request` (projectRoot: …) in a
+> loop; for each request draft the proposal and answer with
+> `sdd_respond_request`. Do not write any spec files.
+
+In Claude Code, `/loop` is exactly this. If no agent has polled the queue in
+the last 5 minutes, the AI buttons say so ("no agent") and offer the classic
+copyable prompt — nobody is left waiting. A request stalled for >10 minutes
+gets flagged and can be cancelled right from the status bar.
+
+The ✨ assistant also takes a raw braindump: **Structure with AI** sends it
+through the same queue and returns a full spec draft (story, scenarios, EARS
+criteria, requirements), editable before anything is created. Approval and
+consent fields have no AI button on purpose: they are the human signature of
+the gate.
 
 ## Limitations (honest)
 

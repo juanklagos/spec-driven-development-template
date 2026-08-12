@@ -1,6 +1,7 @@
 import type {
   ApproveSpecResult,
   BitacoraKind,
+  ConnectInfo,
   BoardCanvas,
   BoardResponse,
   CreateIssuesResult,
@@ -15,6 +16,7 @@ import type {
 } from "./types";
 
 import { hasTranslation, translate } from "./i18n";
+import type { AgentPresence, AiRequest, AiRequestTarget, AiRequestType } from "./requests";
 
 // Same-origin API served by packages/sdd-mcp (http://127.0.0.1:3334/builder).
 //
@@ -122,7 +124,31 @@ export const api = {
 
   /** Regenerate docs/roadmap.{md,mmd} from specs/INDEX.md. */
   generateRoadmap: (): Promise<{ mermaidPath: string; markdownPath: string }> =>
-    request("/api/roadmap", { method: "POST" })
+    request("/api/roadmap", { method: "POST" }),
+
+  // --- Spec 031: AI request queue (builder -> agent, no clipboard) ---------
+
+  /** Publish one AI-assist request for the connected agent session. */
+  createAiRequest: (input: {
+    type: AiRequestType;
+    target?: AiRequestTarget;
+    currentText?: string;
+    instruction: string;
+  }): Promise<AiRequest> => request("/api/request", { method: "POST", body: JSON.stringify(input) }),
+
+  /** Every queued request plus the agent's last-seen presence. */
+  listAiRequests: (): Promise<{ requests: AiRequest[]; agent: AgentPresence | null }> =>
+    request("/api/requests"),
+
+  /** Spec 032: the agent-client catalogue, straight from sdd-core. */
+  getConnectInfo: (): Promise<ConnectInfo> => request("/api/connect"),
+
+  /** Close one request. `accepted` is the ONLY path that follows with a write. */
+  resolveAiRequest: (id: string, resolution: "accepted" | "rejected" | "cancelled"): Promise<AiRequest> =>
+    request(`/api/request/${encodeURIComponent(id)}/resolve`, {
+      method: "POST",
+      body: JSON.stringify({ resolution })
+    })
 };
 
 export function errorMessage(error: unknown): string {

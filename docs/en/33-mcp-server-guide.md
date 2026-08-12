@@ -121,6 +121,8 @@ Related references:
 
 ## Copy-paste config examples
 
+> **Shortcut (spec 032):** `npx @juanklagos/sdd-mcp@latest connect` writes these files for you, for seven clients, merging into whatever you already have. See guide 51. The examples below stay as the manual reference.
+
 Reference examples:
 - `packages/sdd-mcp/examples/.cursor/mcp.json`
 - `packages/sdd-mcp/examples/.mcp.json`

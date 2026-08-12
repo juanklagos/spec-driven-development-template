@@ -1,18 +1,20 @@
-// Full guided spec.md editor (spec 007, R5 → spec 010, R2): one form per
-// template section — user story, scenarios, EARS criteria, requirements,
-// spec properties, success criteria and out of scope — in an ordered
-// accordion, prefilled from the current document. List sections support
-// add/remove/reorder. Saving calls PUT /api/spec/:id/sections, whose
-// surgical replace lives in sdd-core — the rest of spec.md (the approval
-// block included) is never touched.
+// Full guided spec.md editor (spec 007, R5 → spec 010, R2 → spec 030).
+// One form per template section in an ordered accordion, prefilled from the
+// current document. Saving calls PUT /api/spec/:id/sections, whose surgical
+// replace lives in sdd-core — the rest of spec.md (the approval block
+// included) is never touched.
+//
+// Spec 030: EARS lint rows get a 3px colored spine and the reason names the
+// vague word; the save button moves to a fixed bottom bar with a dirty count.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, X } from "lucide-react";
 import { api, errorMessage } from "../api";
+import { AiAssistButton } from "./AiAssistButton";
 import { lintEarsCriterion } from "../ears";
+import { docsUrl } from "../help";
 import { useT, type TFunction } from "../i18n";
 import { parseSpecSections } from "../sections";
-import { HelpHint } from "./HelpHint";
 import type { SpecSectionsInput } from "../types";
 import {
   Accordion,
@@ -21,6 +23,7 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const EARS_PREFIX_ES = "CUANDO ";
 const EARS_PREFIX_EN = "WHEN ";
@@ -35,7 +38,7 @@ interface Props {
 }
 
 const inputClass =
-  "w-full rounded-md border border-input bg-muted/50 px-2.5 py-1.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40";
+  "w-full rounded-[7px] border border-input bg-muted/50 px-2.5 py-1.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/40";
 
 interface ListEditorProps {
   items: string[];
@@ -61,6 +64,7 @@ function ListEditor({ items, onChange, placeholder, addLabel, earsAutocomplete, 
     [next[index], next[target]] = [next[target], next[index]];
     onChange(next);
   };
+  const iconBtn = "size-[26px] shrink-0";
   return (
     <div className="flex flex-col gap-2">
       {items.map((item, index) => {
@@ -68,20 +72,25 @@ function ListEditor({ items, onChange, placeholder, addLabel, earsAutocomplete, 
         const value = item.trim();
         const lint =
           earsLint && value !== "" && value !== earsPrefix.trim() ? lintEarsCriterion(item) : null;
-        const lintClass =
-          lint == null ? "" : lint.level === "ok" ? " !border-primary" : " !border-[var(--amber)]";
+        const spine =
+          lint == null ? null : lint.level === "ok" ? "bg-primary" : "bg-[var(--amber)]";
         const hints: string[] = [];
-        if (lint && !lint.matchesPattern) hints.push(t("ears.pattern"));
         if (lint && lint.vagueWords.length > 0) {
-          hints.push(t("ears.vague", { words: lint.vagueWords.join(", ") }));
+          // Nombra la palabra en lugar de citar la regla (spec 030).
+          hints.push(t("drawer.ears.vague", { words: lint.vagueWords.join("», «") }));
+        } else if (lint && !lint.matchesPattern) {
+          hints.push(t("ears.pattern"));
         }
         return (
           // Index keys are fine here: rows are only appended/removed/swapped in place.
           <div className="flex flex-col gap-1" key={index}>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
+              {spine ? (
+                <span className={`w-[3px] self-stretch rounded-[2px] ${spine}`} aria-hidden />
+              ) : null}
               <input
                 value={item}
-                className={inputClass + lintClass}
+                className={inputClass + (earsLint ? " font-mono text-xs" : "")}
                 placeholder={placeholder}
                 onChange={(e) => setItem(index, e.target.value)}
                 onFocus={(e) => {
@@ -92,40 +101,42 @@ function ListEditor({ items, onChange, placeholder, addLabel, earsAutocomplete, 
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="size-7 shrink-0"
+                className={iconBtn}
                 aria-label={t("common.moveUp")}
                 title={t("common.moveUp")}
                 disabled={index === 0}
                 onClick={() => move(index, -1)}
               >
-                <ChevronUp />
+                <ChevronUp className="size-[13px]" />
               </Button>
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="size-7 shrink-0"
+                className={iconBtn}
                 aria-label={t("common.moveDown")}
                 title={t("common.moveDown")}
                 disabled={index === items.length - 1}
                 onClick={() => move(index, 1)}
               >
-                <ChevronDown />
+                <ChevronDown className="size-[13px]" />
               </Button>
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
-                className="size-7 shrink-0"
+                className={iconBtn}
                 aria-label={t("common.remove")}
                 title={t("common.remove")}
                 onClick={() => onChange(items.filter((_, i) => i !== index))}
               >
-                <X />
+                <X className="size-[13px]" />
               </Button>
             </div>
             {hints.length > 0 ? (
-              <p className="m-0 text-xs text-[var(--amber)]">💡 {hints.join(" · ")}</p>
+              <p className="m-0 text-[12.5px] leading-[1.5] text-[var(--amber-text)]">
+                {hints.join(" · ")}
+              </p>
             ) : null}
           </div>
         );
@@ -134,26 +145,21 @@ function ListEditor({ items, onChange, placeholder, addLabel, earsAutocomplete, 
         type="button"
         size="sm"
         variant="outline"
-        className="self-start"
+        className="h-7 self-start border-dashed"
         onClick={() => onChange([...items, ""])}
       >
-        + {addLabel}
+        <Plus className="size-3" />
+        {addLabel}
       </Button>
     </div>
   );
 }
 
 /**
- * Unsaved edits, kept per spec id while the app is open.
- *
- * The effect below re-primes every field when another spec is selected. Without
- * this it overwrote whatever you had typed and there was no warning, no dirty
- * marker and no undo: click another card mid-sentence and the sentence was
- * gone. Rather than block the switch with a dialog, the draft travels with the
- * spec — switch away and back and your text is still there.
- *
- * Module scope, not the store: this is transient UI state that must not be
- * persisted, replayed by undo, or shipped over the wire.
+ * Unsaved edits, kept per spec id while the app is open. The draft travels
+ * with the spec — switch away and back and your text is still there.
+ * Module scope, not the store: transient UI state that must not be persisted,
+ * replayed by undo, or shipped over the wire.
  */
 type SectionDraft = {
   story: string;
@@ -196,23 +202,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
   const currentRef = useRef(current);
   currentRef.current = current;
 
-  useEffect(() => {
-    const leaving = previousSpecId.current;
-    if (leaving && leaving !== specId) {
-      drafts.set(leaving, currentRef.current);
-    }
-    previousSpecId.current = specId;
-
-    const restored = drafts.get(specId);
-    const next = restored ?? {
-      story: parsed.story,
-      scenarios: parsed.scenarios,
-      criteria: parsed.criteria,
-      requirements: parsed.requirements,
-      properties: parsed.properties,
-      successCriteria: parsed.successCriteria,
-      outOfScope: parsed.outOfScope
-    };
+  const primeFrom = (next: SectionDraft) => {
     setStory(next.story);
     setScenarios(next.scenarios);
     setCriteria(next.criteria);
@@ -220,14 +210,64 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
     setProperties(next.properties);
     setSuccessCriteria(next.successCriteria);
     setOutOfScope(next.outOfScope);
+  };
+
+  useEffect(() => {
+    const leaving = previousSpecId.current;
+    if (leaving && leaving !== specId) {
+      drafts.set(leaving, currentRef.current);
+    }
+    previousSpecId.current = specId;
+
+    primeFrom(
+      drafts.get(specId) ?? {
+        story: parsed.story,
+        scenarios: parsed.scenarios,
+        criteria: parsed.criteria,
+        requirements: parsed.requirements,
+        properties: parsed.properties,
+        successCriteria: parsed.successCriteria,
+        outOfScope: parsed.outOfScope
+      }
+    );
     setError(null);
     setSavedNote(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [specId]);
 
+  // Cuántas secciones difieren de lo parseado: alimenta la barra inferior.
+  const cleanList = (items: string[]) => items.map((item) => item.trim()).filter(Boolean);
+  const dirtyCount = useMemo(() => {
+    let n = 0;
+    if (story.trim() !== parsed.story.trim()) n++;
+    const listChanged = (a: string[], b: string[]) =>
+      JSON.stringify(cleanList(a)) !== JSON.stringify(cleanList(b));
+    if (listChanged(scenarios, parsed.scenarios)) n++;
+    if (listChanged(criteria, parsed.criteria)) n++;
+    if (listChanged(requirements, parsed.requirements)) n++;
+    if (listChanged(properties, parsed.properties)) n++;
+    if (listChanged(successCriteria, parsed.successCriteria)) n++;
+    if (outOfScope.trim() !== parsed.outOfScope.trim()) n++;
+    return n;
+  }, [story, scenarios, criteria, requirements, properties, successCriteria, outOfScope, parsed]);
+
+  const discard = () => {
+    drafts.delete(specId);
+    primeFrom({
+      story: parsed.story,
+      scenarios: parsed.scenarios,
+      criteria: parsed.criteria,
+      requirements: parsed.requirements,
+      properties: parsed.properties,
+      successCriteria: parsed.successCriteria,
+      outOfScope: parsed.outOfScope
+    });
+    setError(null);
+    setSavedNote(null);
+  };
+
   const save = async () => {
     if (busy) return;
-    const cleanList = (items: string[]) => items.map((item) => item.trim()).filter(Boolean);
     const cleanScenarios = cleanList(scenarios);
     const cleanCriteria = cleanList(criteria).filter(
       (c) => c !== EARS_PREFIX_ES.trim() && c !== EARS_PREFIX_EN.trim()
@@ -274,136 +314,219 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
     return n > 0 ? ` (${n})` : "";
   };
 
+  // --- Ampliar con IA por sección (spec 031, R4) ---------------------------
+  // Accepting a proposal writes ONLY that section through the existing
+  // sections route, and mirrors it into the local draft so the form agrees
+  // with the disk.
+  const listFromProposal = (proposal: string): string[] =>
+    proposal
+      .split("\n")
+      .map((line) => line.replace(/^\s*[-*]\s+/, "").trim())
+      .filter(Boolean);
+
+  const aiText = (refId: string, current: string, setLocal: (v: string) => void, key: "story" | "outOfScope") => (
+    <div className="flex justify-end">
+      <AiAssistButton
+        kind="section"
+        specId={specId}
+        refId={refId}
+        currentText={current}
+        onAccept={async (proposal) => {
+          const value = proposal.trim();
+          setLocal(value);
+          await api.putSections(specId, { [key]: value });
+          onSaved();
+        }}
+      />
+    </div>
+  );
+
+  const aiList = (
+    refId: string,
+    current: string[],
+    setLocal: (v: string[]) => void,
+    key: "scenarios" | "criteria" | "requirements" | "properties" | "successCriteria"
+  ) => (
+    <div className="flex justify-end">
+      <AiAssistButton
+        kind="section"
+        specId={specId}
+        refId={refId}
+        currentText={cleanList(current).join("\n")}
+        onAccept={async (proposal) => {
+          const items = listFromProposal(proposal);
+          setLocal(items);
+          await api.putSections(specId, { [key]: items });
+          onSaved();
+        }}
+      />
+    </div>
+  );
+
   return (
-    <div className="flex flex-col gap-3 pt-2">
-      <p className="m-0 text-xs text-muted-foreground">{t("editor.note")}</p>
-      <Accordion type="multiple" defaultValue={["story", "criteria"]} className="w-full">
-        <AccordionItem value="story">
-          <AccordionTrigger className="py-2.5 text-sm">{t("editor.story")}</AccordionTrigger>
-          <AccordionContent className="pb-3">
-            <textarea
-              className={inputClass + " resize-y"}
-              value={story}
-              rows={3}
-              placeholder={t("editor.story.ph")}
-              onChange={(e) => setStory(e.target.value)}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="scenarios">
-          <AccordionTrigger className="py-2.5 text-sm">
-            {t("editor.scenarios")}
-            {sectionCount(scenarios)}
-          </AccordionTrigger>
-          <AccordionContent className="pb-3">
-            <ListEditor
-              items={scenarios}
-              onChange={setScenarios}
-              placeholder={t("editor.scenarios.ph")}
-              addLabel={t("editor.scenarios.add")}
-              t={t}
-              earsPrefix={earsPrefix}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="criteria">
-          <AccordionTrigger className="py-2.5 text-sm">
-            {t("editor.criteria")}
-            {sectionCount(criteria)}
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-2 pb-3">
-            {/* The pattern in one line + the "why it maps to a test" behind ?. */}
-            <p className="m-0 flex items-start gap-1.5 text-xs text-muted-foreground">
-              <span className="min-w-0 flex-1">{t("ears.pattern")}</span>
-              <HelpHint topic="ears" guide="ears" />
+    <div className="flex h-full min-h-0 flex-col">
+      <ScrollArea className="min-h-0 flex-1 px-4">
+        <div className="flex flex-col gap-3 pt-3 pb-3 pr-3">
+          <p className="m-0 text-[13px] leading-[1.55] text-muted-foreground">
+            {t("drawer.sections.intro")}
+          </p>
+          <Accordion type="multiple" defaultValue={["story", "criteria"]} className="w-full">
+            <AccordionItem value="story">
+              <AccordionTrigger className="py-2.5 text-sm">{t("editor.story")}</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-1.5 pb-3">
+                {aiText("story", story, setStory, "story")}
+                <textarea
+                  className={inputClass + " resize-y"}
+                  value={story}
+                  rows={3}
+                  placeholder={t("editor.story.ph")}
+                  onChange={(e) => setStory(e.target.value)}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="scenarios">
+              <AccordionTrigger className="py-2.5 text-sm">
+                {t("editor.scenarios")}
+                {sectionCount(scenarios)}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-1.5 pb-3">
+                {aiList("scenarios", scenarios, setScenarios, "scenarios")}
+                <ListEditor
+                  items={scenarios}
+                  onChange={setScenarios}
+                  placeholder={t("editor.scenarios.ph")}
+                  addLabel={t("editor.scenarios.add")}
+                  t={t}
+                  earsPrefix={earsPrefix}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="criteria">
+              <AccordionTrigger className="py-2.5 text-sm">
+                {t("editor.criteria")}
+                {sectionCount(criteria)}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2 pb-3">
+                {/* Recordatorio del patrón en una fila, con la guía a un clic. */}
+                <p className="m-0 flex items-center gap-2 rounded-[7px] border bg-muted p-[8px_11px]">
+                  <span className="min-w-0 flex-1 font-mono text-[11.5px]">
+                    {lang === "es"
+                      ? "CUANDO/SI/MIENTRAS … EL SISTEMA DEBERÁ …"
+                      : "WHEN/IF/WHILE … THE SYSTEM SHALL …"}
+                  </span>
+                  <a
+                    className="shrink-0 text-xs font-semibold text-[var(--blue)] hover:underline"
+                    href={docsUrl("ears", lang)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {t("drawer.ears.what")}
+                  </a>
+                </p>
+                {aiList("criteria", criteria, setCriteria, "criteria")}
+                <ListEditor
+                  items={criteria}
+                  onChange={setCriteria}
+                  placeholder={earsPlaceholder}
+                  addLabel={t("editor.criteria.add")}
+                  earsAutocomplete
+                  earsLint
+                  t={t}
+                  earsPrefix={earsPrefix}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="requirements">
+              <AccordionTrigger className="py-2.5 text-sm">
+                {t("editor.requirements")}
+                {sectionCount(requirements)}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-1.5 pb-3">
+                {aiList("requirements", requirements, setRequirements, "requirements")}
+                <ListEditor
+                  items={requirements}
+                  onChange={setRequirements}
+                  placeholder={t("editor.requirements.ph")}
+                  addLabel={t("editor.requirements.add")}
+                  t={t}
+                  earsPrefix={earsPrefix}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="properties">
+              <AccordionTrigger className="py-2.5 text-sm">
+                {t("editor.properties")}
+                {sectionCount(properties)}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2 pb-3">
+                <p className="m-0 text-xs text-muted-foreground">{t("editor.properties.hint")}</p>
+                {aiList("properties", properties, setProperties, "properties")}
+                <ListEditor
+                  items={properties}
+                  onChange={setProperties}
+                  placeholder={t("editor.properties.ph")}
+                  addLabel={t("editor.properties.add")}
+                  t={t}
+                  earsPrefix={earsPrefix}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="success">
+              <AccordionTrigger className="py-2.5 text-sm">
+                {t("editor.success")}
+                {sectionCount(successCriteria)}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-1.5 pb-3">
+                {aiList("successCriteria", successCriteria, setSuccessCriteria, "successCriteria")}
+                <ListEditor
+                  items={successCriteria}
+                  onChange={setSuccessCriteria}
+                  placeholder={t("editor.success.ph")}
+                  addLabel={t("editor.success.add")}
+                  t={t}
+                  earsPrefix={earsPrefix}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="outOfScope">
+              <AccordionTrigger className="py-2.5 text-sm">{t("editor.outOfScope")}</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-1.5 pb-3">
+                {aiText("outOfScope", outOfScope, setOutOfScope, "outOfScope")}
+                <textarea
+                  className={inputClass + " resize-y"}
+                  value={outOfScope}
+                  rows={2}
+                  placeholder={t("editor.outOfScope.ph")}
+                  onChange={(e) => setOutOfScope(e.target.value)}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          {error ? (
+            <p className="m-0 rounded-[7px] bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
+              {error}
             </p>
-            <ListEditor
-              items={criteria}
-              onChange={setCriteria}
-              placeholder={earsPlaceholder}
-              addLabel={t("editor.criteria.add")}
-              earsAutocomplete
-              earsLint
-              t={t}
-              earsPrefix={earsPrefix}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="requirements">
-          <AccordionTrigger className="py-2.5 text-sm">
-            {t("editor.requirements")}
-            {sectionCount(requirements)}
-          </AccordionTrigger>
-          <AccordionContent className="pb-3">
-            <ListEditor
-              items={requirements}
-              onChange={setRequirements}
-              placeholder={t("editor.requirements.ph")}
-              addLabel={t("editor.requirements.add")}
-              t={t}
-              earsPrefix={earsPrefix}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="properties">
-          <AccordionTrigger className="py-2.5 text-sm">
-            {t("editor.properties")}
-            {sectionCount(properties)}
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-2 pb-3">
-            <p className="m-0 text-xs text-muted-foreground">{t("editor.properties.hint")}</p>
-            <ListEditor
-              items={properties}
-              onChange={setProperties}
-              placeholder={t("editor.properties.ph")}
-              addLabel={t("editor.properties.add")}
-              t={t}
-              earsPrefix={earsPrefix}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="success">
-          <AccordionTrigger className="py-2.5 text-sm">
-            {t("editor.success")}
-            {sectionCount(successCriteria)}
-          </AccordionTrigger>
-          <AccordionContent className="pb-3">
-            <ListEditor
-              items={successCriteria}
-              onChange={setSuccessCriteria}
-              placeholder={t("editor.success.ph")}
-              addLabel={t("editor.success.add")}
-              t={t}
-              earsPrefix={earsPrefix}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="outOfScope">
-          <AccordionTrigger className="py-2.5 text-sm">{t("editor.outOfScope")}</AccordionTrigger>
-          <AccordionContent className="pb-3">
-            <textarea
-              className={inputClass + " resize-y"}
-              value={outOfScope}
-              rows={2}
-              placeholder={t("editor.outOfScope.ph")}
-              onChange={(e) => setOutOfScope(e.target.value)}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-      {error ? (
-        <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
-          ⚠ {error}
-        </p>
-      ) : null}
-      {savedNote ? (
-        <p className="m-0 rounded-md bg-[var(--primary-soft)] px-3 py-2 text-sm text-primary">
-          ✓ {savedNote}
-        </p>
-      ) : null}
-      <Button onClick={() => void save()} disabled={busy}>
-        {busy ? t("editor.saving") : t("editor.save")}
-      </Button>
+          ) : null}
+          {savedNote ? (
+            <p className="m-0 rounded-[7px] bg-[var(--primary-soft)] px-3 py-2 text-sm text-primary">
+              ✓ {savedNote}
+            </p>
+          ) : null}
+        </div>
+      </ScrollArea>
+      {/* Barra inferior fija (spec 030): el guardado ya no se esconde al final
+          del scroll. */}
+      <div className="flex shrink-0 items-center gap-2.5 border-t bg-muted p-[12px_16px]">
+        <span className="min-w-0 flex-1 truncate font-mono text-[11.5px] text-muted-foreground">
+          {t("drawer.sections.dirty", { n: dirtyCount })}
+        </span>
+        <Button variant="outline" size="sm" onClick={discard} disabled={busy || dirtyCount === 0}>
+          {t("drawer.sections.discard")}
+        </Button>
+        <Button size="sm" onClick={() => void save()} disabled={busy}>
+          {busy ? t("editor.saving") : t("drawer.sections.save")}
+        </Button>
+      </div>
     </div>
   );
 }

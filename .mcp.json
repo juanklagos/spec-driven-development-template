@@ -6,7 +6,9 @@
         "-y",
         "@juanklagos/sdd-mcp@latest"
       ],
-      "env": {}
+      "env": {
+        "SDD_PROJECT_ROOT": "/Users/juanklagos/www/spec-driven-development-template"
+      }
     }
   }
 }

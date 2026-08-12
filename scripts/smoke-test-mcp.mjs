@@ -73,6 +73,8 @@ async function main() {
     "sdd_remove_task",
     "sdd_move_task",
     "sdd_update_spec_status",
+    "sdd_next_request",
+    "sdd_respond_request",
     "sdd_board_app"
   ];
 
@@ -101,6 +103,20 @@ async function main() {
   for (const templateName of ["sdd-project-index", "sdd-project-log", "sdd-project-latest-handoff", "sdd-project-idea", "sdd-spec-document"]) {
     if (!templateNames.includes(templateName)) {
       throw new Error(`Missing MCP resource template: ${templateName}`);
+    }
+  }
+
+  // Spec 032: the queue-serving prompt is the zero-install path for clients
+  // that render MCP prompts as slash commands — asserted by name, because a
+  // count would not notice it disappearing.
+  if (!promptNames.includes("sdd_serve_requests")) {
+    throw new Error(`Missing MCP prompt: sdd_serve_requests (got: ${promptNames.join(", ")})`);
+  }
+  const servePrompt = await client.getPrompt({ name: "sdd_serve_requests", arguments: {} });
+  const serveText = servePrompt.messages.map((m) => m.content.text ?? "").join("\n");
+  for (const needle of ["sdd_next_request", "sdd_respond_request", "specs/"]) {
+    if (!serveText.includes(needle)) {
+      throw new Error(`sdd_serve_requests prompt is missing "${needle}" — the loop contract is incomplete`);
     }
   }
 

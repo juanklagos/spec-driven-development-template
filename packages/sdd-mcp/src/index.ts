@@ -26,6 +26,23 @@ async function main() {
       process.exitCode = 1;
       return;
 
+    case "connect": {
+      // Spec 032: writes config files instead of starting a transport, so
+      // stdout is free for the report. Its own resolution of the workspace,
+      // because the point is to register a path the user names.
+      const { runConnectCommand } = await import("./connect-command.js");
+      const projectRoot = intent.projectRoot ?? process.env.SDD_PROJECT_ROOT ?? process.cwd();
+      const { output, failed } = await runConnectCommand({
+        projectRoot,
+        clients: intent.clients,
+        dryRun: intent.dryRun,
+        global: intent.global
+      });
+      console.log(output);
+      if (failed) process.exitCode = 1;
+      return;
+    }
+
     case "http":
       // `npx @juanklagos/sdd-mcp --http` reaches the board through the bin that
       // carries the package name. http.js starts the server as an import side

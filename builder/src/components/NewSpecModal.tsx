@@ -44,7 +44,7 @@ export function NewSpecModal({ onClose, onCreate }: Props) {
       <DialogContent className="sm:max-w-md">
         <form onSubmit={(e) => void submit(e)} className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>📋 {t("newSpec.title")}</DialogTitle>
+            <DialogTitle>{t("newSpec.title")}</DialogTitle>
             <DialogDescription>
               {t("newSpec.note", { dir: "specs/NNN-slug/" })}
             </DialogDescription>
@@ -70,7 +70,7 @@ export function NewSpecModal({ onClose, onCreate }: Props) {
           </label>
           {error ? (
             <p className="m-0 rounded-md bg-[var(--danger-soft)] px-3 py-2 text-sm text-destructive">
-              ⚠ {error}
+              {error}
             </p>
           ) : null}
           <DialogFooter>

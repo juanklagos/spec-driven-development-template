@@ -4,14 +4,15 @@
 // or one script run produces a single event per kind.
 
 import { watch, existsSync, type FSWatcher } from "node:fs";
+import { mkdir } from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
-import { isAtomicWriteTempName, specsRoot } from "@juanklagos/sdd-core";
+import { isAtomicWriteTempName, resolveSddRoot, specsRoot } from "@juanklagos/sdd-core";
 
 const SSE_KEEPALIVE_MS = 25_000;
 const WATCH_DEBOUNCE_MS = 300;
 
-type ChangeKind = "board" | "specs";
+type ChangeKind = "board" | "specs" | "request";
 
 export interface EventHub {
   /** Attach an incoming request as an SSE client. */
@@ -23,6 +24,7 @@ export interface EventHub {
 export function createEventHub(projectRoot: string): EventHub {
   const sseClients = new Set<http.ServerResponse>();
   let specsWatcher: FSWatcher | null = null;
+  let requestsWatcher: FSWatcher | null = null;
   let watcherStarting = false;
   let keepAliveTimer: NodeJS.Timeout | null = null;
   let changeFlushTimer: NodeJS.Timeout | null = null;
@@ -48,14 +50,14 @@ export function createEventHub(projectRoot: string): EventHub {
     sseBroadcast("presence", { count: sseClients.size });
   }
 
-  function queueWatcherChange(relPath: string): void {
+  function queueWatcherChange(relPath: string, fixedKind?: ChangeKind): void {
     const base = path.basename(relPath);
     // Ignore atomic-write scratch files and editor swap/hidden files; only real
     // documents matter. The scratch-name rule is owned by sdd-core (it writes
     // them), never re-spelled here — a local copy would have kept matching the
     // old "<file>.tmp-<pid>" shape and leaked every write as a phantom change.
     if (!base || base.startsWith(".") || isAtomicWriteTempName(base)) return;
-    const kind: ChangeKind = base === "board.canvas" ? "board" : "specs";
+    const kind: ChangeKind = fixedKind ?? (base === "board.canvas" ? "board" : "specs");
     pendingChanges.set(kind, relPath.split(path.sep).join("/"));
     if (changeFlushTimer) clearTimeout(changeFlushTimer);
     changeFlushTimer = setTimeout(() => {
@@ -74,19 +76,43 @@ export function createEventHub(projectRoot: string): EventHub {
    * on the next SSE connection / keep-alive tick instead of crashing.
    */
   async function ensureSpecsWatcher(): Promise<void> {
-    if (specsWatcher || watcherStarting) return;
+    if (watcherStarting) return;
     watcherStarting = true;
     try {
-      const dir = await specsRoot(projectRoot);
-      if (!existsSync(dir)) return;
-      const watcher = watch(dir, { recursive: true }, (_eventType, filename) => {
-        queueWatcherChange(typeof filename === "string" ? filename : "");
-      });
-      watcher.on("error", () => {
-        watcher.close();
-        if (specsWatcher === watcher) specsWatcher = null;
-      });
-      specsWatcher = watcher;
+      if (!specsWatcher) {
+        const dir = await specsRoot(projectRoot);
+        if (existsSync(dir)) {
+          const watcher = watch(dir, { recursive: true }, (_eventType, filename) => {
+            queueWatcherChange(typeof filename === "string" ? filename : "");
+          });
+          watcher.on("error", () => {
+            watcher.close();
+            if (specsWatcher === watcher) specsWatcher = null;
+          });
+          specsWatcher = watcher;
+        }
+      }
+      // Second watcher: the AI request queue (spec 031). It lives under
+      // .sdd/requests/, outside specs/, so the specs watcher never sees it.
+      // Lazy like the one above: the folder appears with the first request.
+      if (!requestsWatcher) {
+        const dir = path.join(await resolveSddRoot(projectRoot), ".sdd", "requests");
+        // Created eagerly: the folder normally appears with the first request,
+        // but then this watcher would not be running yet and the first request
+        // would miss its <2s SSE (spec 031, R1). resolveSddRoot above already
+        // guarantees we only ever scaffold inside a real SDD workspace.
+        await mkdir(dir, { recursive: true }).catch(() => {});
+        if (existsSync(dir)) {
+          const watcher = watch(dir, (_eventType, filename) => {
+            queueWatcherChange(typeof filename === "string" ? filename : "", "request");
+          });
+          watcher.on("error", () => {
+            watcher.close();
+            if (requestsWatcher === watcher) requestsWatcher = null;
+          });
+          requestsWatcher = watcher;
+        }
+      }
     } catch {
       // Workspace not resolvable right now; retry later.
     } finally {
@@ -129,6 +155,8 @@ export function createEventHub(projectRoot: string): EventHub {
   function dispose(): void {
     specsWatcher?.close();
     specsWatcher = null;
+    requestsWatcher?.close();
+    requestsWatcher = null;
     if (keepAliveTimer) clearInterval(keepAliveTimer);
     keepAliveTimer = null;
     if (changeFlushTimer) clearTimeout(changeFlushTimer);

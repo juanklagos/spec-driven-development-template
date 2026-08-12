@@ -20,6 +20,7 @@ import {
   styleEdgeForLabel
 } from "./convert";
 import { currentLang, translate } from "./i18n";
+import type { AgentPresence, AiRequest, AiRequestTarget, AiRequestType } from "./requests";
 import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates";
 import type { DrawerTab,
   AppEdge,
@@ -31,10 +32,18 @@ import type { DrawerTab,
   GateSummary,
   LiveStatus,
   SaveState,
+  SpecScore,
   SpecSummary,
   TaskItem,
   ViewMode
 } from "./types";
+
+/** ContextStrip filters (spec 030): dim non-matching nodes, never hide them. */
+export interface BoardFilters {
+  pending: boolean;
+  warnings: boolean;
+  drift: boolean;
+}
 
 const SAVE_DEBOUNCE_MS = 500;
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -122,8 +131,30 @@ interface BuilderStore {
   tourOpen: boolean;
   galleryOpen: boolean;
   assistantOpen: boolean;
+  /** ⌘K palette (spec 030): in the store so the gate bar and empty state can open it. */
+  paletteOpen: boolean;
+  /** Bitácora modal (spec 030): opened from the ⋯ menu and from ⌘K. */
+  bitacoraOpen: boolean;
+  /** "Conectar agente" panel (spec 032): from ⌘K, the empty state and "sin agente". */
+  connectOpen: boolean;
+  /** Cached spec scores so the card foot can show "C · 68" without opening the drawer. */
+  scores: Record<string, SpecScore>;
+  /** ContextStrip filters (spec 030): dim non-matching nodes at 0.35 opacity. */
+  filters: BoardFilters;
+  /** Graph zoom for the ContextStrip meta (from React Flow onMove). */
+  zoom: number;
+  /** AI request queue (spec 031): every request on disk, oldest first. */
+  aiRequests: AiRequest[];
+  /** Last time an agent polled the queue; what "agent connected" means (R6). */
+  agentPresence: AgentPresence | null;
 
   load: () => Promise<void>;
+  setPaletteOpen: (open: boolean) => void;
+  setBitacoraOpen: (open: boolean) => void;
+  setConnectOpen: (open: boolean) => void;
+  loadScores: () => Promise<void>;
+  toggleFilter: (key: keyof BoardFilters) => void;
+  setZoom: (zoom: number) => void;
   onNodesChange: (changes: NodeChange<AppNode>[]) => void;
   onEdgesChange: (changes: EdgeChange<AppEdge>[]) => void;
   onConnect: (connection: Connection) => void;
@@ -155,6 +186,14 @@ interface BuilderStore {
   setLiveStatus: (status: LiveStatus) => void;
   handleHello: (serverRoot: string) => void;
   handleLiveChange: (kind: ChangeKind) => Promise<void>;
+  loadAiRequests: () => Promise<void>;
+  sendAiRequest: (input: {
+    type: AiRequestType;
+    target?: AiRequestTarget;
+    currentText?: string;
+    instruction: string;
+  }) => Promise<AiRequest>;
+  closeAiRequest: (id: string, resolution: "accepted" | "rejected" | "cancelled") => Promise<void>;
 }
 
 export const useBuilderStore = create<BuilderStore>()((set, get) => ({
@@ -182,6 +221,37 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   tourOpen: false,
   galleryOpen: false,
   assistantOpen: false,
+  paletteOpen: false,
+  bitacoraOpen: false,
+  connectOpen: false,
+  scores: {},
+  filters: { pending: false, warnings: false, drift: false },
+  zoom: 1,
+  aiRequests: [],
+  agentPresence: null,
+
+  setPaletteOpen: (open) => set({ paletteOpen: open }),
+
+  setBitacoraOpen: (open) => set({ bitacoraOpen: open }),
+
+  setConnectOpen: (open) => set({ connectOpen: open }),
+
+  // Batch-fetch every spec's score (spec 030, R4). Failures are silent: the
+  // card foot simply shows nothing until the next refresh succeeds.
+  loadScores: async () => {
+    const ids = Object.keys(get().specs);
+    if (ids.length === 0) return;
+    const settled = await Promise.allSettled(ids.map((id) => api.getSpecScore(id)));
+    const scores: Record<string, SpecScore> = { ...get().scores };
+    settled.forEach((result, i) => {
+      if (result.status === "fulfilled") scores[ids[i]] = result.value;
+    });
+    set({ scores });
+  },
+
+  toggleFilter: (key) => set({ filters: { ...get().filters, [key]: !get().filters[key] } }),
+
+  setZoom: (zoom) => set({ zoom }),
 
   load: async () => {
     set({ loading: true, loadError: null });
@@ -200,9 +270,34 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         future: []
       });
       void get().refreshGate();
+      void get().loadScores();
+      void get().loadAiRequests();
     } catch (error) {
       set({ loading: false, loadError: errorMessage(error) });
     }
+  },
+
+  // --- AI request queue (spec 031) -----------------------------------------
+
+  loadAiRequests: async () => {
+    try {
+      const { requests, agent } = await api.listAiRequests();
+      set({ aiRequests: requests, agentPresence: agent });
+    } catch {
+      // Non-fatal: the next SSE `request` event (or reload) will retry.
+    }
+  },
+
+  sendAiRequest: async (input) => {
+    const created = await api.createAiRequest(input);
+    // Optimistic append; the SSE echo will reconcile with the disk state.
+    set({ aiRequests: [...get().aiRequests, created] });
+    return created;
+  },
+
+  closeAiRequest: async (id, resolution) => {
+    const resolved = await api.resolveAiRequest(id, resolution);
+    set({ aiRequests: get().aiRequests.map((r) => (r.id === id ? resolved : r)) });
   },
 
   onNodesChange: (changes) => {
@@ -526,6 +621,13 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   handleLiveChange: async (kind) => {
     if (get().loading || get().loadError) return;
 
+    if (kind === "request") {
+      // The AI queue changed on disk (new proposal, claim, presence touch).
+      // No echo guard needed: re-reading the queue is idempotent for the UI.
+      await get().loadAiRequests();
+      return;
+    }
+
     if (kind === "specs") {
       // Spec documents changed on disk (tasks.md, spec.md, new bundles...).
       // Re-fetch and reconcile by stable spec id: update card status/progress,
@@ -560,8 +662,10 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
           ...(appended.length > 0 ? { nodes: [...nodes, ...appended] } : {}),
           specsVersion: get().specsVersion + 1
         });
-        // The gate depends on the same documents: refresh the semaphore too.
+        // The gate depends on the same documents: refresh the semaphore too,
+        // and the scores — they read the same files (spec 030).
         void get().refreshGate();
+        void get().loadScores();
       } catch {
         // Transient fetch failure: the next change event will retry.
       }

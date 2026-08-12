@@ -13,6 +13,7 @@ export type CliIntent =
   | { kind: "http" }
   | { kind: "help" }
   | { kind: "version" }
+  | { kind: "connect"; clients?: string[]; dryRun: boolean; global: boolean; projectRoot?: string }
   | { kind: "unknown"; arg: string };
 
 /**
@@ -33,6 +34,36 @@ export function parseCliArgs(argv: string[]): CliIntent {
   if (argv.includes("--http")) {
     const stray = argv.find((arg) => arg !== "--http");
     return stray ? { kind: "unknown", arg: stray } : { kind: "http" };
+  }
+
+  // `connect` is a verb, not a flag (spec 032): it writes files instead of
+  // starting a transport, so it reads as a command the way `npm install` does.
+  if (argv[0] === "connect") {
+    let clients: string[] | undefined;
+    let dryRun = false;
+    let global = false;
+    let projectRoot: string | undefined;
+
+    for (let i = 1; i < argv.length; i++) {
+      const arg = argv[i];
+      if (arg === "--dry-run") {
+        dryRun = true;
+      } else if (arg === "--global") {
+        global = true;
+      } else if (arg === "--client" || arg.startsWith("--client=")) {
+        const value = arg.startsWith("--client=") ? arg.slice("--client=".length) : argv[++i];
+        if (!value) return { kind: "unknown", arg: `${arg} (missing value)` };
+        clients = [...(clients ?? []), ...value.split(",").map((c) => c.trim()).filter(Boolean)];
+      } else if (arg === "--project-root" || arg.startsWith("--project-root=")) {
+        const value = arg.startsWith("--project-root=") ? arg.slice("--project-root=".length) : argv[++i];
+        if (!value) return { kind: "unknown", arg: `${arg} (missing value)` };
+        projectRoot = value;
+      } else {
+        return { kind: "unknown", arg };
+      }
+    }
+
+    return { kind: "connect", clients, dryRun, global, projectRoot };
   }
 
   return { kind: "unknown", arg: argv[0] };
@@ -65,6 +96,17 @@ export function helpText(version: string): string {
     "                          Arranca el transporte MCP por stdio (por defecto).",
     "  sdd-mcp --http          Start the HTTP server: builder, dashboard and MCP endpoint.",
     "                          Arranca el servidor HTTP: builder, dashboard y endpoint MCP.",
+    "  sdd-mcp connect         Register this workspace in every agent client found",
+    "                          (Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini,",
+    "                          opencode) and install the /sdd-serve skill.",
+    "                          Registra este workspace en cada cliente de agente que",
+    "                          encuentre e instala la skill /sdd-serve.",
+    "    --client <id[,id]>    Only these clients. / Solo estos clientes.",
+    "    --dry-run             Show what it would write, write nothing.",
+    "                          Muestra qué escribiría, sin escribir nada.",
+    "    --global              User-level config instead of this project.",
+    "                          Config de usuario en vez de este proyecto.",
+    "    --project-root <path> Workspace to register. / Workspace a registrar.",
     "  sdd-mcp --help, -h      Show this help and exit. / Muestra esta ayuda y sale.",
     "  sdd-mcp --version, -V   Print the version and exit. / Imprime la versión y sale.",
     "",

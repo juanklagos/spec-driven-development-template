@@ -807,6 +807,43 @@ Salida estructurada:
 - `board` (canvas + specs, misma forma que `sdd_board_read`)
 - `gate` (misma forma que `sdd_gate_summary`)
 
+### `sdd_next_request`
+
+Propósito:
+- reclamar la petición de asistencia IA más antigua publicada por el SDD Builder (`pending` → `in_progress`) con todo su contexto: campo objetivo, texto actual e indicación del usuario (spec 031)
+
+Cuándo usarlo:
+- cuando el operador te pide atender la cola del builder («escucha el tablero», normalmente en bucle con `/loop`)
+
+Reglas:
+- cola vacía devuelve `{ request: null }`, nunca un error; el propio sondeo registra tu presencia, que el builder muestra como «agente conectado»
+- las peticiones canceladas por el usuario no se entregan
+- nunca escribas archivos de specs como respuesta: responde con `sdd_respond_request`
+
+Entrada:
+- `projectRoot`, `agent` (opcional, nombre visible en el builder)
+
+Salida estructurada:
+- `request` (id, type `draft-field` | `structure-idea`, target, currentText, instruction, status, fechas) o `null`
+
+### `sdd_respond_request`
+
+Propósito:
+- adjuntar tu propuesta a una petición reclamada (`in_progress` → `answered`)
+
+Cuándo usarlo:
+- justo después de redactar la propuesta para la petición que reclamaste
+
+Reglas:
+- la propuesta NO se escribe en ningún archivo: el usuario la revisa como diff en el builder y solo su aceptación escribe, por las rutas de secciones/tareas existentes
+- responder a una petición cancelada falla con error claro: descártala y pide la siguiente
+
+Entrada:
+- `projectRoot`, `id`, `proposal`
+
+Salida estructurada:
+- `request` (la petición ya en estado `answered`)
+
 ## Referencia de resources
 
 ### Resources estáticos
@@ -942,6 +979,12 @@ El transporte HTTP también sirve la API del builder en el mismo puerto. Escucha
 ### `easy_close_session`
 - úsalo al terminar una sesión con usuario no técnico
 - espera que la IA resuma en lenguaje simple y deje un solo siguiente paso exacto
+
+### `sdd_serve_requests`
+- entrega el bucle de atención de la cola del SDD Builder: `sdd_next_request` → redactar propuesta → `sdd_respond_request` → repetir (spec 032)
+- argumento opcional `projectRoot`
+- en clientes que muestran prompts MCP como slash commands (Claude Code, VS Code) es la vía **sin instalar nada**; en el resto, la misma instrucción llega como skill `/sdd-serve` (ver guía 51)
+- incluye la regla dura: el agente propone, nunca escribe archivos bajo `specs/`
 
 ## Flujo recomendado para el usuario
 
