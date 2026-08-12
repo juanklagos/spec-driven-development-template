@@ -3,9 +3,17 @@
 // tools use (see server.ts) — so no board logic lives in the transport.
 
 import http from "node:http";
+import packageJson from "../package.json" with { type: "json" };
 import {
   addSpecTask,
   appendProjectLogEntry,
+  compareSidecar,
+  createAiRequest,
+  getAgentPresence,
+  listAiRequests,
+  manualInstructions,
+  resolveAiRequest,
+  resolveSddRoot,
   approveSpec,
   recordUserConsent,
   createSpec,
@@ -24,17 +32,10 @@ import {
   writeDailyLog,
   writeDecision,
   writeHandoff,
-  type BitacoraKind,
-  type SpecSectionsInput
-} from "@juanklagos/sdd-core";
-import {
-  createAiRequest,
-  getAgentPresence,
-  listAiRequests,
-  manualInstructions,
-  resolveAiRequest,
   type AiRequestResolution,
-  type CreateAiRequestInput
+  type BitacoraKind,
+  type CreateAiRequestInput,
+  type SpecSectionsInput
 } from "@juanklagos/sdd-core";
 import { createIssuesForSpec, isGithubPreconditionError } from "./github.js";
 import { isPayloadTooLarge, json, payloadTooLargeResponse, readBody } from "./http-utils.js";
@@ -237,6 +238,23 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
           return true;
         }
         json(res, 201, await createAiRequest(projectRoot, body));
+        return true;
+      }
+      // Spec 029, R5: the version gap, visible on the canvas. Read-only —
+      // the builder shows it and points at the command; it never upgrades on
+      // its own, because this spec demands warning, not autonomy.
+      if (req.method === "GET" && route === "/api/version") {
+        const sddRoot = await resolveSddRoot(projectRoot);
+        const comparison = await compareSidecar(sddRoot, packageJson.version);
+        json(res, 200, {
+          templateVersion: comparison.templateVersion,
+          serverVersion: comparison.packageVersion,
+          upToDate: comparison.upToDate,
+          staleFramework: comparison.staleFramework.map((f) => f.target),
+          divergedPreserved: comparison.divergedPreserved.map((f) => f.target),
+          missing: comparison.missing.map((f) => f.target),
+          command: `npx @juanklagos/sdd-mcp@latest upgrade --project-root ${projectRoot} --dry-run`
+        });
         return true;
       }
       // Spec 032, R10: the connect panel's data comes from the SAME client

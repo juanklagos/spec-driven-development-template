@@ -2,11 +2,11 @@
 
 ## Estado de aprobación / Approval status
 
-- Estado / Status: `Pendiente`
+- Estado / Status: `Aprobado`
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
-- Fecha de aprobación / Approval date: `Pendiente`
-- Aprobado por / Approved by: `Pendiente`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): `Pendiente`
+- Fecha de aprobación / Approval date: `2026-08-12`
+- Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
+- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-12: "sigue con las 029 y luego se necesita publicar todo a main" — instrucción explícita de retomar e implementar la spec
 
 ## Objetivo / Objective
 
@@ -79,6 +79,19 @@ Catorce herramientas ausentes y ningún aviso. En la máquina del propietario ha
 además un servidor HTTP vivo (PID 49839) sirviendo 21 herramientas desde una caché
 de la 2.2.1, consumido por otro proyecto vía `http://127.0.0.1:3334/mcp`.
 
+**D6. La divergencia silenciosa también muerde hacia dentro: el pin entre
+paquetes.** Medido el 2026-08-12 publicando la 2.4.0. `@juanklagos/sdd-mcp`
+declaraba `"@juanklagos/sdd-core": "2.3.0"` con versión **exacta**. Al subir el
+núcleo a 2.4.0 y empaquetar, npm dejó de considerar el tarball local y bajó el
+2.3.0 del registro; el paquete instalado moría al arrancar con
+`does not provide an export named 'SERVE_QUEUE_INSTRUCTIONS'` — el mismo
+síntoma que habría tenido cualquiera al hacer `npx` el día de la publicación.
+Lo cazó `scripts/smoke-test-npm-package.mjs` porque instala tarballs de verdad
+en un proyecto limpio; nada más lo habría visto. Es la misma familia de defecto
+que D4 (dos versiones que no coinciden y nadie lo dice), pero en la puerta del
+mantenedor en vez de la del usuario, y se repetirá en **cada** release mientras
+el pin se suba a mano.
+
 **D5. Existe el marcador, falta la comparación.** `.sdd/TEMPLATE_VERSION` ya guarda
 `template_version`, `profile` e `installed_at`. Nadie lo lee para compararlo con la
 versión del servidor en marcha. La materia prima del aviso ya está en disco.
@@ -118,6 +131,9 @@ versión del servidor en marcha. La materia prima del aviso ya está en disco.
   que la versión del servidor, EL SISTEMA DEBERÁ mostrar ese desfase en la interfaz.
 - CUANDO la versión del servidor y la del sidecar no coincidan, EL SISTEMA DEBERÁ
   declarar ambas versiones y el comando que las alinea.
+- SI la dependencia interna de `sdd-mcp` sobre `sdd-core` no coincide con la
+  versión declarada por `sdd-core`, ENTONCES LA VERIFICACIÓN DEL REPOSITORIO
+  DEBERÁ fallar nombrando ambas versiones y el archivo a corregir.
 
 ## Requisitos
 
@@ -137,9 +153,14 @@ versión del servidor en marcha. La materia prima del aviso ya está en disco.
   nombra el comando de actualización en vez de abortar a secas.
 - **R7. Fijar `@latest` donde falta.** El `.mcp.json` de este repositorio, y
   cualquier comando publicado que aún no lo fije. Cierra el hueco que la spec 021
-  dio por cerrado.
+  dio por cerrado. *(Resuelto el 2026-08-08 en el commit `014a349`; queda la
+  auditoría del resto de comandos publicados.)*
 - **R8. Documentación.** Guía de actualización ES/EN, enlazada desde QUICKSTART y
   ambos README.
+- **R9. El pin interno deja de ser manual.** CUANDO se verifique el repositorio,
+  EL SISTEMA DEBERÁ fallar si la dependencia de `@juanklagos/sdd-mcp` sobre
+  `@juanklagos/sdd-core` no coincide con la versión que ese paquete declara.
+  Cubre D6: el desajuste se detecta antes de empaquetar, no al publicar.
 
 ## Propiedades de la spec / Spec properties
 

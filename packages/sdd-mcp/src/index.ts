@@ -43,6 +43,20 @@ async function main() {
       return;
     }
 
+    case "upgrade": {
+      // Spec 029: the named update. Writes files, so stdout carries the report.
+      const { runUpgradeCommand } = await import("./upgrade-command.js");
+      const projectRoot = intent.projectRoot ?? process.env.SDD_PROJECT_ROOT ?? process.cwd();
+      const { output, failed } = await runUpgradeCommand({
+        projectRoot,
+        dryRun: intent.dryRun,
+        applyPreserved: intent.applyPreserved
+      });
+      console.log(output);
+      if (failed) process.exitCode = 1;
+      return;
+    }
+
     case "http":
       // `npx @juanklagos/sdd-mcp --http` reaches the board through the bin that
       // carries the package name. http.js starts the server as an import side

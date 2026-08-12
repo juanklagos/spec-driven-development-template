@@ -38,6 +38,7 @@ import { SpecDrawer } from "./components/SpecDrawer";
 import { SpecNode } from "./components/SpecNode";
 import { TemplateGallery } from "./components/TemplateGallery";
 import { Tour } from "./components/Tour";
+import { VersionNotice } from "./components/VersionNotice";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -345,6 +346,7 @@ function Shell() {
   return (
     <div className="app">
       <IdentityBar />
+      <VersionNotice />
       <ContextStrip />
       {workspaceChanged ? (
         <div

@@ -200,6 +200,7 @@ Update:
 
 ## Next / Siguiente
 
+- Already installed? Upgrade without surprises / ¿Ya lo tienes instalado? Actualiza sin sorpresas: [EN](./docs/en/52-upgrade-guide.md) | [ES](./docs/es/52-guia-de-actualizacion.md)
 - AI detailed starter / Inicio IA detallado: [AI_START_HERE.md](./AI_START_HERE.md)
 - Command results reference / Referencia de resultados por comando: [EN](./docs/en/40-command-results-reference.md) | [ES](./docs/es/40-referencia-resultados-comandos.md)
 - Beginner path / Ruta principiante: [EN](./docs/en/13-quick-guide-non-programmers.md) | [ES](./docs/es/13-guia-rapida-no-programadores.md)

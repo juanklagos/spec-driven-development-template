@@ -36,6 +36,33 @@ describe("parseCliArgs — connect verb (spec 032)", () => {
   });
 });
 
+describe("parseCliArgs — upgrade verb (spec 029)", () => {
+  it("bare upgrade → defaults (write, current project, nothing authorised)", () => {
+    expect(parseCliArgs(["upgrade"])).toEqual({
+      kind: "upgrade",
+      dryRun: false,
+      projectRoot: undefined,
+      applyPreserved: undefined
+    });
+  });
+
+  it("accepts --dry-run, --project-root and --apply (repeated and comma-separated)", () => {
+    expect(parseCliArgs(["upgrade", "--dry-run"])).toMatchObject({ dryRun: true });
+    expect(parseCliArgs(["upgrade", "--project-root", "/tmp/x"])).toMatchObject({ projectRoot: "/tmp/x" });
+    expect(parseCliArgs(["upgrade", "--apply", "sdd.policy.yaml,specs/_template/spec.md"])).toMatchObject({
+      applyPreserved: ["sdd.policy.yaml", "specs/_template/spec.md"]
+    });
+    expect(parseCliArgs(["upgrade", "--apply=a.md", "--apply", "b.md"])).toMatchObject({
+      applyPreserved: ["a.md", "b.md"]
+    });
+  });
+
+  it("keeps the spec 021 contract: unknown flags are reported, never run", () => {
+    expect(parseCliArgs(["upgrade", "--force"])).toEqual({ kind: "unknown", arg: "--force" });
+    expect(parseCliArgs(["upgrade", "--apply"])).toEqual({ kind: "unknown", arg: "--apply (missing value)" });
+  });
+});
+
 describe("parseCliArgs", () => {
   it("no arguments → stdio (unchanged default)", () => {
     expect(parseCliArgs([])).toEqual({ kind: "stdio" });

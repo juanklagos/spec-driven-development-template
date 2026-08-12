@@ -14,6 +14,7 @@ export type CliIntent =
   | { kind: "help" }
   | { kind: "version" }
   | { kind: "connect"; clients?: string[]; dryRun: boolean; global: boolean; projectRoot?: string }
+  | { kind: "upgrade"; dryRun: boolean; projectRoot?: string; applyPreserved?: string[] }
   | { kind: "unknown"; arg: string };
 
 /**
@@ -66,6 +67,36 @@ export function parseCliArgs(argv: string[]): CliIntent {
     return { kind: "connect", clients, dryRun, global, projectRoot };
   }
 
+  // `upgrade` is a verb too (spec 029): the update that used to be an unnamed
+  // side effect of reinstalling. Same strict contract as everything else here.
+  if (argv[0] === "upgrade") {
+    let dryRun = false;
+    let projectRoot: string | undefined;
+    let applyPreserved: string[] | undefined;
+
+    for (let i = 1; i < argv.length; i++) {
+      const arg = argv[i];
+      if (arg === "--dry-run") {
+        dryRun = true;
+      } else if (arg === "--project-root" || arg.startsWith("--project-root=")) {
+        const value = arg.startsWith("--project-root=") ? arg.slice("--project-root=".length) : argv[++i];
+        if (!value) return { kind: "unknown", arg: `${arg} (missing value)` };
+        projectRoot = value;
+      } else if (arg === "--apply" || arg.startsWith("--apply=")) {
+        const value = arg.startsWith("--apply=") ? arg.slice("--apply=".length) : argv[++i];
+        if (!value) return { kind: "unknown", arg: `${arg} (missing value)` };
+        applyPreserved = [
+          ...(applyPreserved ?? []),
+          ...value.split(",").map((item) => item.trim()).filter(Boolean)
+        ];
+      } else {
+        return { kind: "unknown", arg };
+      }
+    }
+
+    return { kind: "upgrade", dryRun, projectRoot, applyPreserved };
+  }
+
   return { kind: "unknown", arg: argv[0] };
 }
 
@@ -107,6 +138,14 @@ export function helpText(version: string): string {
     "    --global              User-level config instead of this project.",
     "                          Config de usuario en vez de este proyecto.",
     "    --project-root <path> Workspace to register. / Workspace a registrar.",
+    "  sdd-mcp upgrade         Bring this project's SDD sidecar up to this version:",
+    "                          repairs framework files, never touches yours without",
+    "                          --apply. Actualiza el sidecar SDD de este proyecto.",
+    "    --dry-run             Report what would change, write nothing.",
+    "                          Informa que cambiaria, sin escribir nada.",
+    "    --apply <path[,path]> Overwrite these user-owned files too.",
+    "                          Sobrescribe tambien estos archivos propios.",
+    "    --project-root <path> Project to upgrade. / Proyecto a actualizar.",
     "  sdd-mcp --help, -h      Show this help and exit. / Muestra esta ayuda y sale.",
     "  sdd-mcp --version, -V   Print the version and exit. / Imprime la versión y sale.",
     "",

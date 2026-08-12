@@ -245,6 +245,13 @@ const es = {
 
   // Asistencia IA sin copy-paste (spec 031)
   "ai.assist": "Ampliar con IA",
+  // Aviso de desfase de version (spec 029)
+  "version.behind": "Tu proyecto usa SDD {installed} y el servidor es {server}",
+  "version.driftOnly": "Hay archivos del framework que no coinciden con la version {server}",
+  "version.stale": "{n} del framework a reparar",
+  "version.missing": "{n} que faltan",
+  "version.yours": "{n} tuyos que difieren (no se tocan)",
+  "version.safe": "Repara lo del framework y nunca escribe tus archivos sin que lo pidas.",
   "ai.title": "Pedir al agente",
   "ai.instruction.ph": "Qué quieres que haga con este campo (ampliar, reescribir, proponer más…)",
   "ai.send": "Enviar al agente",
@@ -826,6 +833,13 @@ const en: Record<keyof typeof es, string> = {
 
   // AI assistance without copy-paste (spec 031)
   "ai.assist": "Expand with AI",
+  // Version drift notice (spec 029)
+  "version.behind": "Your project uses SDD {installed} and the server is {server}",
+  "version.driftOnly": "Some framework files do not match version {server}",
+  "version.stale": "{n} framework files to repair",
+  "version.missing": "{n} missing",
+  "version.yours": "{n} of yours differ (left untouched)",
+  "version.safe": "It repairs framework files and never writes yours unless you ask.",
   "ai.title": "Ask the agent",
   "ai.instruction.ph": "What should the agent do with this field (expand, rewrite, propose more…)",
   "ai.send": "Send to agent",

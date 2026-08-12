@@ -12,6 +12,7 @@ import type {
   SpecScore,
   SpecSectionsInput,
   TaskItem,
+  VersionInfo,
   UpdateSpecSectionsResult
 } from "./types";
 
@@ -139,6 +140,9 @@ export const api = {
   /** Every queued request plus the agent's last-seen presence. */
   listAiRequests: (): Promise<{ requests: AiRequest[]; agent: AgentPresence | null }> =>
     request("/api/requests"),
+
+  /** Spec 029: sidecar vs server version, read-only. */
+  getVersionInfo: (): Promise<VersionInfo> => request("/api/version"),
 
   /** Spec 032: the agent-client catalogue, straight from sdd-core. */
   getConnectInfo: (): Promise<ConnectInfo> => request("/api/connect"),

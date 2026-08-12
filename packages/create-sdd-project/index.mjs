@@ -73,7 +73,26 @@ try {
   }
 
   if (mode === "sidecar" && existsSync(join(targetAbs, "spec"))) {
-    throw new Error(`${targetAbs}/spec already exists — aborting to avoid overwriting.`);
+    // Spec 029, R6. This used to abort with nothing but "already exists", and
+    // since this is the command QUICKSTART and both READMEs teach, the honest
+    // conclusion a user drew was that updating is impossible. It is not: it
+    // just had another name. Say that name.
+    throw new Error(
+      [
+        `${targetAbs}/spec already exists — not overwriting it.`,
+        `${targetAbs}/spec ya existe — no se sobrescribe.`,
+        "",
+        "To bring an existing install up to date, use the upgrade command:",
+        "Para poner al día una instalación existente, usa el comando de actualización:",
+        "",
+        `  npx @juanklagos/sdd-mcp@latest upgrade --project-root ${targetAbs} --dry-run`,
+        "",
+        "It reports what it would change first; without --dry-run it repairs the",
+        "framework files and never touches yours without --apply.",
+        "Primero informa qué cambiaría; sin --dry-run repara los archivos del",
+        "framework y nunca toca los tuyos sin --apply."
+      ].join("\n")
+    );
   }
 
   console.log(`\n→ Cloning template (depth 1)...`);

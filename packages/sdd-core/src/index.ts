@@ -1062,3 +1062,5 @@ export * from "./spec-actions.js";
 export * from "./validation.js";
 export * from "./requests.js";
 export * from "./connect.js";
+export * from "./sidecar-files.js";
+export * from "./upgrade.js";

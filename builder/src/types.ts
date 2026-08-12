@@ -266,3 +266,14 @@ export interface ConnectInfo {
   command: string;
   clients: ConnectClientInfo[];
 }
+
+/** Spec 029: GET /api/version — sidecar vs server, read-only. */
+export interface VersionInfo {
+  templateVersion: string | null;
+  serverVersion: string;
+  upToDate: boolean;
+  staleFramework: string[];
+  divergedPreserved: string[];
+  missing: string[];
+  command: string;
+}

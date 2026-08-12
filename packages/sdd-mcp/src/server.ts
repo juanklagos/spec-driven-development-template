@@ -9,6 +9,7 @@ import {
   approveSpec,
   checkGate,
   checkPolicy,
+  compareSidecar,
   connectBoardCards,
   createSpec,
   createWorkspace,
@@ -39,6 +40,7 @@ import {
   setSpecTaskDone,
   updateSpecIndexRow,
   updateSpecSections,
+  upgradeSidecar,
   validateEarsCriterion,
   validateProject,
   writeBoard,
@@ -992,6 +994,97 @@ export function createSddMcpServer(): McpServer {
     },
     async ({ projectRoot, specId, status, priority, owner }) => {
       const result = await updateSpecIndexRow({ projectRoot, specId, status, priority, owner });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  // --- Upgrade (spec 029): the update that had no name --------------------
+  // `sdd_install_sidecar` already did the right thing, but it is called
+  // "install" and nothing presented it as the way to catch up. This is the
+  // named door, and it answers "what would change?" before changing it.
+  const sidecarFileReportSchema = z.object({
+    target: z.string(),
+    kind: z.enum(["framework", "preserved"]),
+    status: z.enum(["current", "stale-framework", "diverged-preserved", "missing"])
+  });
+
+  server.registerTool(
+    "sdd_upgrade",
+    {
+      title: "Upgrade an SDD sidecar",
+      description:
+        "Bring an installed SDD sidecar up to the version of this server. Framework-owned files (the gate, validators, root resolver) are repaired; files the user owns (sdd.policy.yaml, specs/_template/*, logbook templates) are NEVER written unless named in applyPreserved. Call with dryRun: true first — it reports what would change and writes nothing. An already-current sidecar performs zero writes.",
+      inputSchema: {
+        projectRoot: projectRootSchema,
+        dryRun: z
+          .boolean()
+          .optional()
+          .describe("Report what would change and write nothing. Use this first, then show the user."),
+        applyPreserved: z
+          .array(z.string())
+          .optional()
+          .describe(
+            "Target paths of user-owned files the user explicitly authorised overwriting, e.g. ['sdd.policy.yaml']."
+          )
+      },
+      outputSchema: {
+        sidecarRoot: z.string(),
+        fromVersion: z.string().nullable(),
+        toVersion: z.string(),
+        alreadyCurrent: z.boolean(),
+        files: z.array(z.object({ target: z.string(), kind: z.enum(["framework", "preserved"]), action: z.string() })),
+        pending: z.array(z.string()),
+        markerUpdated: z.boolean()
+      }
+    },
+    async ({ projectRoot, dryRun, applyPreserved }) => {
+      const sddRoot = await resolveSddRoot(projectRoot);
+      const result = await upgradeSidecar(sddRoot, packageJson.version, { dryRun, applyPreserved });
+      return {
+        structuredContent: toStructuredContent(result),
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+
+  server.registerTool(
+    "sdd_check_version",
+    {
+      title: "Compare sidecar and server versions",
+      description:
+        "Compare an installed sidecar against this server's version WITHOUT writing anything: which files the framework would repair, which user-owned files diverged from the new reference, and which are missing. `upToDate` is false when content differs even if the version number matches — a tampered gate has survived a reinstall before.",
+      inputSchema: {
+        projectRoot: projectRootSchema
+      },
+      outputSchema: {
+        sidecarRoot: z.string(),
+        templateVersion: z.string().nullable(),
+        packageVersion: z.string(),
+        profile: z.string().nullable(),
+        upToDate: z.boolean(),
+        files: z.array(sidecarFileReportSchema),
+        staleFramework: z.array(sidecarFileReportSchema),
+        divergedPreserved: z.array(sidecarFileReportSchema),
+        missing: z.array(sidecarFileReportSchema)
+      }
+    },
+    async ({ projectRoot }) => {
+      const sddRoot = await resolveSddRoot(projectRoot);
+      const comparison = await compareSidecar(sddRoot, packageJson.version);
+      const result = {
+        sidecarRoot: comparison.sidecarRoot,
+        templateVersion: comparison.templateVersion,
+        packageVersion: comparison.packageVersion,
+        profile: comparison.profile,
+        upToDate: comparison.upToDate,
+        files: comparison.files,
+        staleFramework: comparison.staleFramework,
+        divergedPreserved: comparison.divergedPreserved,
+        missing: comparison.missing
+      };
       return {
         structuredContent: toStructuredContent(result),
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]

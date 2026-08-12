@@ -73,6 +73,8 @@ async function main() {
     "sdd_remove_task",
     "sdd_move_task",
     "sdd_update_spec_status",
+    "sdd_upgrade",
+    "sdd_check_version",
     "sdd_next_request",
     "sdd_respond_request",
     "sdd_board_app"

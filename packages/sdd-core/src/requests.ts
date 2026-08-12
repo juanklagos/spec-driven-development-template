@@ -77,6 +77,21 @@ const TRANSITIONS: Record<AiRequestStatus, AiRequestStatus[]> = {
 
 const PRESENCE_FILE = "agent-presence.json";
 
+/**
+ * Monotonic id prefix. `Date.now()` alone is not enough: two requests created
+ * inside the same millisecond got the same prefix, so the FIFO order that
+ * `nextAiRequest` promises fell through to comparing random uuid suffixes —
+ * whichever sorted first won. Caught by a flaky ordering test. The builder's
+ * server is the only writer, so a process-local monotonic counter is the whole
+ * fix. Padded so lexicographic filename order stays numeric order.
+ */
+let lastStamp = 0;
+function nextStamp(): string {
+  const now = Date.now();
+  lastStamp = now > lastStamp ? now : lastStamp + 1;
+  return String(lastStamp).padStart(14, "0");
+}
+
 async function requestsDir(projectRoot: string): Promise<string> {
   return path.join(await resolveSddRoot(projectRoot), ".sdd", "requests");
 }
@@ -123,7 +138,7 @@ export async function createAiRequest(projectRoot: string, input: CreateAiReques
   const dir = await requestsDir(projectRoot);
   await fs.mkdir(dir, { recursive: true });
   const request: AiRequest = {
-    id: `${Date.now()}-${randomUUID().slice(0, 8)}`,
+    id: `${nextStamp()}-${randomUUID().slice(0, 8)}`,
     type: input.type,
     ...(input.target ? { target: input.target } : {}),
     ...(input.currentText !== undefined ? { currentText: input.currentText } : {}),

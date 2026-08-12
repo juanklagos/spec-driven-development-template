@@ -30,7 +30,7 @@
 | 026 | tema-docs | Done / Completada (T6 ticker diferido a propósito) | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 027 | mcp-full-coverage | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-07-23 |
 | 028 | mcp-builder-superficie-completa | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / OpenCode | 2026-08-08 |
-| 029 | actualizacion-sin-sorpresas | Draft / Borrador | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-08 |
+| 029 | actualizacion-sin-sorpresas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
 | 030 | builder-rediseno-2a | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos | 2026-08-11 |
 | 031 | asistencia-ia-sin-copy-paste | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
 | 032 | conectar-agente-en-un-paso | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |

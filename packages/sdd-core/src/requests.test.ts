@@ -73,10 +73,14 @@ describe("createAiRequest (R1)", () => {
     expect(parsed.createdAt).toBeTruthy();
   });
 
-  it("gives every request a unique id even in the same millisecond", async () => {
-    const a = await createAiRequest(root, DRAFT_INPUT);
-    const b = await createAiRequest(root, DRAFT_INPUT);
-    expect(a.id).not.toBe(b.id);
+  it("gives every request a unique, monotonically ordered id in the same millisecond", async () => {
+    // Regression: ids were `Date.now()-<random>`, so two requests created in
+    // the same millisecond tied on the prefix and FIFO order fell through to
+    // the random suffix. 50 in a row makes a same-ms collision certain.
+    const ids: string[] = [];
+    for (let i = 0; i < 50; i++) ids.push((await createAiRequest(root, DRAFT_INPUT)).id);
+    expect(new Set(ids).size).toBe(50);
+    expect([...ids].sort()).toEqual(ids);
   });
 
   it("rejects an empty instruction and a draft-field without target", async () => {
