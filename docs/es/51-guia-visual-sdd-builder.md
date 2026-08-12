@@ -2,9 +2,9 @@
 
 El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas, y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad: aprobar, editar y marcar tareas son operaciones que tocan solo lo justo dentro de tus archivos `.md`, mientras el lienzo no guarda más que posiciones y uniones en `specs/board.canvas` (el formato abierto JSON Canvas). Esta guía recorre el producto completo, desde los dos comandos que lo abren hasta usarlo desde un agente IA, con capturas reales de un proyecto demo pequeño: una tienda online de plantas.
 
-![El lienzo del SDD Builder: notas de idea y épicas a la izquierda, tarjetas de spec con badges de estado y barras de progreso, una unión roja «bloquea» y una ámbar «depende de», y el semáforo del gate con un aviso de dependencia en la barra superior](../assets/builder/canvas.png)
+![El lienzo del SDD Builder: arriba la barra de identidad con la ruta del workspace y el buscador ⌘K; debajo la franja de contexto (Grafo/Tablero y filtros); a la izquierda el rail con Idea/Épica/Spec y la lista de specs/; en el centro una nota de idea que contiene dos épicas, tarjetas de spec con estado y puntaje, una unión ámbar «depende de» y una roja «bloquea»; abajo la barra del gate con el veredicto y la regla siempre visible](../assets/builder/canvas.png)
 
-*Un board, toda la verdad: gate abierto (🟢), un aviso ámbar `⚠ 1 dep`, uniones tipadas entre specs reales y el progreso de cada tarjeta leído en vivo de `tasks.md`.*
+*Un board, toda la verdad: el gate declara «bloqueado» con sus cuentas y su regla, las uniones tipadas dicen qué contiene qué y qué depende de qué, y el progreso y el puntaje de cada tarjeta se leen en vivo de tus `.md`.*
 
 ## Inicio rápido
 
@@ -64,7 +64,7 @@ SDD_PROJECT_ROOT=/ruta/a/mi-proyecto npx @juanklagos/sdd-mcp@latest --http
 
 ### Paso 3 — Lo que verás la primera vez
 
-El lienzo abre vacío si el proyecto aún no tiene specs, y eso es lo correcto: en SDD todavía no hay contrato en disco. Un **tour de bienvenida** te ofrece cinco pasos anclados (paleta → crear → conectar → tareas → gate); descártalo con «No mostrar de nuevo» y relánzalo cuando quieras desde el botón «?» de la barra superior. Para llenar el board de un tirón, usa el **✨ Asistente** de la barra superior, que se explica más abajo.
+El lienzo abre vacío si el proyecto aún no tiene specs, y eso es lo correcto: en SDD todavía no hay contrato en disco. Un **tour de bienvenida** te ofrece cinco pasos anclados (paleta → crear → conectar → tareas → gate); descártalo con «No mostrar de nuevo» y relánzalo cuando quieras desde ⌘K («tour») o el menú **⋯**. Para llenar el board de un tirón, usa el **asistente** desde ⌘K, que se explica más abajo.
 
 <details>
 <summary>Ruta larga: trabajar dentro de un clon de este repositorio (contribuyentes al template)</summary>
@@ -97,7 +97,7 @@ Todo ese texto vive en los diccionarios i18n (`builder/src/i18n.ts` y los diccio
 
 ## Tu primer proyecto con el asistente ✨
 
-La forma más rápida de pasar de nada a un board conectado es el botón **✨ Asistente** de la barra superior. Describe tu proyecto en una frase — *«una tienda online de plantas con catálogo, pagos y panel de administración»* — y el builder propone un borrador de board: una nota de idea, 2-4 épicas y 3-6 specs agrupadas por los dominios que detecta (auth, pagos, catálogo, admin, API, notificaciones, perfil, búsqueda; con un fallback MVP genérico cuando nada encaja).
+La forma más rápida de pasar de nada a un board conectado es el **asistente**, en ⌘K («asistente») o en el menú **⋯**. Describe tu proyecto en una frase — *«una tienda online de plantas con catálogo, pagos y panel de administración»* — y el builder propone un borrador de board: una nota de idea, 2-4 épicas y 3-6 specs agrupadas por los dominios que detecta (auth, pagos, catálogo, admin, API, notificaciones, perfil, búsqueda; con un fallback MVP genérico cuando nada encaja).
 
 ![El asistente ✨ con un borrador generado: tres specs agrupadas bajo las épicas Experiencia, Negocio y Operaciones, cada una editable antes de crear nada](../assets/builder/assistant.png)
 
@@ -118,7 +118,7 @@ Todo lo que hay en el lienzo corresponde a algo real:
 
 Las uniones tipadas se ganan el sueldo con los **avisos de dependencias**: cuando una unión tipada conecta dos specs reales y la spec dependiente está aprobada pero su dependencia no, el builder avisa — un chip ámbar `⚠ N dep` junto al semáforo del gate (lista completa en el tooltip) y un badge ámbar `⚠ dep` en la tarjeta dependiente, en ambas vistas. Solo consultivo: el gate nunca se cierra por esto. En la captura de arriba, `002-checkout-y-pagos` está aprobada pero depende de `004-envios-y-seguimiento`, que sigue pendiente: no puedes cobrar el total sin saber el costo del envío. De ahí el aviso.
 
-El **semáforo del gate** de la barra superior es el hard stop de SDD hecho visible: un chip vivo (🟢 abierto / 🔴 cerrado) más un botón «Validar ahora» que ejecuta la validación real del proyecto. Los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
+La **barra del gate**, fija abajo, es el hard stop de SDD hecho visible: veredicto (abierto / cerrado / bloqueado), las cuentas de errores, avisos y specs aprobadas, la regla escrita —«no hay código sin spec aprobada»— y dos botones, «Validar ahora» y «Ver qué falta». Los errores del gate aparecen como badge rojo `⚠ N` con tooltip sobre la tarjeta afectada.
 
 Al hacer clic en cualquier tarjeta de spec se abre el **panel (drawer)**, el puente entre lienzo y markdown:
 
@@ -128,7 +128,7 @@ Al hacer clic en cualquier tarjeta de spec se abre el **panel (drawer)**, el pue
 
 En el panel, las tareas son checkboxes vivos: marcar uno cambia solo esa línea `- [ ]` de `tasks.md` a `- [x]`, y la barra de progreso de la tarjeta lo refleja. Debajo de las tareas tienes un extracto de `spec.md` en solo lectura — el contenido largo se edita en tu editor, por diseño: el lienzo compone, tu editor escribe.
 
-La **sincronización en vivo** evita que las dos caras se desincronicen. El servidor vigila tu directorio `specs/`: edita cualquier `tasks.md` en tu editor y la tarjeta se actualiza sola, sin recargar. La barra superior muestra **🟢 En vivo**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es «último escritor gana».
+La **sincronización en vivo** evita que las dos caras se desincronicen. El servidor vigila tu directorio `specs/`: edita cualquier `tasks.md` en tu editor y la tarjeta se actualiza sola, sin recargar. La barra de identidad muestra **en vivo · guardado**; si el servidor se reinicia con otro workspace, un banner ámbar te pide recargar. Regla de concurrencia: tu markdown siempre gana; el layout del lienzo es «último escritor gana».
 
 ## Editar y aprobar specs
 
@@ -150,11 +150,11 @@ Debajo de la lista de tareas hay un campo **«Nueva tarea para esta spec…»** 
 
 ### La bitácora desde el lienzo (spec 028)
 
-El botón **📖 Bitácora** de la barra superior abre un modal para registrar los cuatro tipos de entrada sin salir del canvas: **Decisión**, **Handoff**, **Daily log** y **Log global del proyecto**. Cada tipo pide lo que necesita (nombre de archivo `.md` para decisiones y handoffs, fecha para el daily, texto suelto para el log global) y precarga un esqueleto de markdown como placeholder. Lo escriben los mismos escritores de `sdd-core` que usan las herramientas MCP y los scripts, así que el formato no se bifurca según por dónde entres.
+La acción **Bitácora** (⌘K o el menú **⋯**) abre un modal para registrar los cuatro tipos de entrada sin salir del canvas: **Decisión**, **Handoff**, **Daily log** y **Log global del proyecto**. Cada tipo pide lo que necesita (nombre de archivo `.md` para decisiones y handoffs, fecha para el daily, texto suelto para el log global) y precarga un esqueleto de markdown como placeholder. Lo escriben los mismos escritores de `sdd-core` que usan las herramientas MCP y los scripts, así que el formato no se bifurca según por dónde entres.
 
-### STATUS y roadmap desde la barra superior (spec 028)
+### STATUS y roadmap desde ⌘K (spec 028)
 
-El botón **📊 Informes** regenera `STATUS.md` y `docs/roadmap.md` a partir de `specs/INDEX.md`, los mismos generadores que `sdd_generate_status` y `sdd_generate_roadmap`. Confirma con un ✓ y vuelve a su estado normal a los pocos segundos; si falla, el error queda en el tooltip del botón en vez de desaparecer.
+La acción **Informes** (⌘K o el menú **⋯**) regenera `STATUS.md` y `docs/roadmap.md` a partir de `specs/INDEX.md`, los mismos generadores que `sdd_generate_status` y `sdd_generate_roadmap`. Confirma con un ✓ y vuelve a su estado normal a los pocos segundos; si falla, el error queda en el tooltip del botón en vez de desaparecer.
 
 ### El semáforo de deriva (spec 025)
 
@@ -162,7 +162,7 @@ Una vez aprobada una spec, el builder vigila si el código que gobierna siguió 
 
 ## La vista de equipo
 
-El toggle **«🗺️ Lienzo ↔ 📋 Tablero»** de la barra superior muestra las mismas specs como un kanban — tres columnas según el estado real de tus `.md`: **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel.
+El conmutador **«Grafo ↔ Tablero»** de la franja de contexto muestra las mismas specs como un kanban — tres columnas según el estado real de tus `.md`: **Borrador · Pendiente**, **Aprobada** (la línea `Estado / Status` del `spec.md`) y **Hecha** (todas las tareas marcadas). Las tarjetas conservan su barra de progreso y abren el mismo panel.
 
 ![La vista kanban: columna Borrador con dos specs, Aprobada con la spec de checkout y su aviso de dependencia, Hecha con el catálogo de plantas terminado](../assets/builder/kanban.png)
 
@@ -173,7 +173,7 @@ v1 honesta: arrastrar una tarjeta a otra columna *no cambia nada* en disco: apro
 Aquí viven dos funciones de equipo más:
 
 - **Tareas → issues de GitHub**: en el panel, «🐙 Crear issues» crea un issue de GitHub por cada tarea **pendiente** vía tu `gh` CLI local — título `[<specId>] <tarea>` para trazabilidad, cuerpo con enlace al `tasks.md` del bundle. Idempotente por título: las tareas cuyo título exacto ya existe se saltan, y el resultado se informa por tarea (creada / saltada / fallida) con enlaces. Degrada con honestidad: sin repo git, sin remote o sin `gh` autenticado recibes un error bilingüe claro que te dice exactamente qué ejecutar.
-- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra superior muestra **👥 N** («N personas viendo este workspace») — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
+- **Presencia**: cuando más de una persona (o agente) tiene el builder abierto sobre el mismo workspace, la barra de identidad muestra el número de personas viendo el workspace — con el mismo hub SSE de la sincronización en vivo, incluidas entradas y salidas.
 
 ## Plantillas
 
@@ -188,6 +188,8 @@ Si prefieres partir de una forma probada en lugar de una frase, el botón **🧩
 Cualquier cliente MCP conectado a `sdd-mcp` puede trabajar con el mismo board. Las tools del board — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — están respaldadas por la misma capa `sdd-core` que el lienzo, así que lo que tu agente escribe es lo que ves en `/builder` (y viceversa). Los agentes también tienen los poderes del panel (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), y los avisos de dependencias aparecen en el campo `dependencyWarnings` de `sdd_gate_summary` y de `GET /api/gate`. Ver guía 41 (referencia completa de MCP).
 
 ### Conecta tu agente en un comando (spec 032)
+
+![El panel «Conectar agente»: el comando de conexión ya con la ruta del workspace, y debajo una fila de clientes (Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini CLI, opencode) con el atajo para atender la cola y la configuración exacta del cliente seleccionado](../assets/builder/connect.png)
 
 La forma corta, desde la carpeta de tu proyecto:
 
@@ -286,6 +288,8 @@ Dónde está de verdad el estándar: la spec MCP 2026-07-28 es una release candi
 
 ### Modo conectado: «Ampliar con IA» sin copy-paste (spec 031)
 
+![El panel «Pedir al agente» abierto sobre el campo de tareas de una spec: avisa «sin agente», ofrece el atajo «Cómo conecto un agente» y, mientras tanto, el prompt clásico copiable con el contexto del campo ya dentro](../assets/builder/ai-assist.png)
+
 Todo campo editable de contenido del builder — las 7 secciones de `spec.md`,
 las tareas, las notas del lienzo y los borradores de bitácora — tiene un botón
 **✨ Ampliar con IA**. Al usarlo, el builder NO llama a ninguna API: publica
@@ -341,5 +345,5 @@ propósito: son la firma humana del gate.
 | Aprueba desde el panel | El bloque de aprobación real (estado, fecha, aprobador, evidencia) escrito en `spec.md` |
 | Guarda en la pestaña Editar del panel | Solo se reescriben las secciones guiadas de `spec.md` — aprobación y requisitos intactos |
 | Escribe en «Nueva tarea» y pulsa Añadir | Se añade una línea `- [ ] …` al final de `tasks.md` |
-| Guardas una entrada en 📖 Bitácora | Un archivo real en `bitacora/decisiones`, `handoffs`, `diaria` o una entrada en `bitacora/global/PROJECT_LOG.md` |
-| Pulsas 📊 Informes | Se regeneran `STATUS.md` y `docs/roadmap.md` desde `specs/INDEX.md` |
+| Guardas una entrada en Bitácora | Un archivo real en `bitacora/decisiones`, `handoffs`, `diaria` o una entrada en `bitacora/global/PROJECT_LOG.md` |
+| Ejecutas Informes | Se regeneran `STATUS.md` y `docs/roadmap.md` desde `specs/INDEX.md` |

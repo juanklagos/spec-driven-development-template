@@ -2,9 +2,9 @@
 
 The SDD Builder is a drag-and-drop canvas where you compose your SDD flow as connected cards, and every card is a **real** `specs/NNN-slug/` bundle on disk. Your markdown stays the source of truth: approving, editing and ticking tasks touch only the lines they have to inside your `.md` files, while the canvas stores nothing but positions and connections in `specs/board.canvas` (the open JSON Canvas format). This guide walks the whole product from the two commands that open it to running it from an AI agent, with real screenshots of a small demo project: an online plant store.
 
-![The SDD Builder canvas: idea and epic notes on the left, spec cards with status badges and progress bars, a red "bloquea" edge and an amber "depende de" edge, and the gate semaphore with a dependency warning in the top bar](../assets/builder/canvas.png)
+![The SDD Builder canvas: the identity bar on top with the workspace path and the ⌘K search; below it the context strip (Graph/Board and filters); on the left the rail with Idea/Epic/Spec and the specs/ list; in the middle an idea note containing two epics, spec cards with status and score, an amber "depends on" edge and a red "blocks" one; at the bottom the gate bar with the verdict and the rule always visible](../assets/builder/canvas.png)
 
-*One board, all the truth: gate open (🟢), an amber `⚠ 1 dep` warning, typed connections between real specs, and per-card progress read live from `tasks.md`.*
+*One board, all the truth: the gate declares "blocked" with its counts and its rule, typed connections say what contains what and what depends on what, and each card's progress and score are read live from your `.md` files.*
 
 ## Quick start
 
@@ -64,7 +64,7 @@ SDD_PROJECT_ROOT=/path/to/my-project npx @juanklagos/sdd-mcp@latest --http
 
 ### Step 3 — What you will see the first time
 
-The canvas opens empty if the project has no specs yet, and that is correct: in SDD there is no contract on disk yet. A **welcome tour** offers five anchored steps (palette → create → connect → tasks → gate); dismiss it with "Don't show again" and re-launch it anytime from the "?" button in the top bar. To fill the board in one go, use the **✨ Assistant** in the top bar, covered further down.
+The canvas opens empty if the project has no specs yet, and that is correct: in SDD there is no contract on disk yet. A **welcome tour** offers five anchored steps (palette → create → connect → tasks → gate); dismiss it with "Don't show again" and re-launch it anytime from ⌘K ("tour") or the **⋯** menu. To fill the board in one go, use the **assistant** from ⌘K, covered further down.
 
 <details>
 <summary>Longer route: working inside a clone of this repository (template contributors)</summary>
@@ -97,7 +97,7 @@ All of this text lives in the i18n dictionaries (`builder/src/i18n.ts` and the d
 
 ## Your first project with the ✨ assistant
 
-The fastest way to go from nothing to a connected board is the **✨ Assistant** button in the top bar. Describe your project in one sentence (*"an online plant store with catalog, payments and an admin panel"*) and the builder proposes a draft board: one idea note, 2-4 epics and 3-6 specs grouped by the domains it detects (auth, payments, catalog, admin, API, notifications, profile, search; with a generic MVP fallback when nothing matches).
+The fastest way to go from nothing to a connected board is the **assistant**, in ⌘K ("assistant") or the **⋯** menu. Describe your project in one sentence (*"an online plant store with catalog, payments and an admin panel"*) and the builder proposes a draft board: one idea note, 2-4 epics and 3-6 specs grouped by the domains it detects (auth, payments, catalog, admin, API, notifications, profile, search; with a generic MVP fallback when nothing matches).
 
 ![The ✨ assistant with a generated draft: three specs grouped under Experience, Business and Operations epics, each editable before anything is created](../assets/builder/assistant.png)
 
@@ -118,7 +118,7 @@ Everything on the canvas maps to something real:
 
 Typed connections earn their keep through **dependency warnings**: when a typed edge links two real specs and the dependent spec is approved while its dependency is not, the builder warns you. An amber `⚠ N dep` chip appears next to the gate semaphore (full list in the tooltip) and an amber `⚠ dep` badge on the dependent card, in both views. The warning is informational; the gate itself never closes because of it. In the screenshot above, `002-checkout-y-pagos` is approved but depends on `004-envios-y-seguimiento`, which is still pending: you cannot charge the total without knowing the shipping cost. Hence the warning.
 
-The **gate semaphore** in the top bar is the SDD hard stop made visible: a live chip (🟢 open / 🔴 closed) plus a "Validate now" button that runs the real project validation. Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
+The **gate bar**, pinned at the bottom, is the SDD hard stop made visible: the verdict (open / closed / blocked), the counts of errors, warnings and approved specs, the rule written out — "no code before an approved spec" — and two buttons, "Validate now" and "What is missing". Gate errors show up as a red `⚠ N` badge with a tooltip on the affected card.
 
 Clicking any spec card opens the **drawer** — the bridge between canvas and markdown:
 
@@ -128,7 +128,7 @@ Clicking any spec card opens the **drawer** — the bridge between canvas and ma
 
 In the drawer, tasks are live checkboxes: toggling one flips the `- [ ]` line in `tasks.md` to `- [x]` surgically, and the card's progress bar follows. Below the tasks you get a read-only excerpt of `spec.md` — long-form content is edited in your editor, by design: the canvas composes, your editor writes.
 
-**Live sync** keeps the two sides from drifting. The server watches your `specs/` directory: edit any `tasks.md` in your editor and the card updates by itself, no reload. The top bar shows **🟢 Live**; if the server restarts on a different workspace, an amber banner asks you to reload. Concurrency rule: your markdown always wins; canvas layout is last-writer-wins.
+**Live sync** keeps the two sides from drifting. The server watches your `specs/` directory: edit any `tasks.md` in your editor and the card updates by itself, no reload. The identity bar shows **live · saved**; if the server restarts on a different workspace, an amber banner asks you to reload. Concurrency rule: your markdown always wins; canvas layout is last-writer-wins.
 
 ## Editing and approving specs
 
@@ -150,11 +150,11 @@ Below the task list there is a **"New task for this spec…"** field with its **
 
 ### The logbook from the canvas (spec 028)
 
-The **📖 Logbook** button in the top bar opens a modal to record all four entry types without leaving the canvas: **Decision**, **Handoff**, **Daily log** and **Global project log**. Each type asks for what it needs (a `.md` file name for decisions and handoffs, a date for the daily, free text for the global log) and preloads a markdown skeleton as a placeholder. The same `sdd-core` writers the MCP tools and the scripts use do the writing, so the format never forks depending on where you came in from.
+The **Logbook** action (⌘K or the **⋯** menu) opens a modal to record all four entry types without leaving the canvas: **Decision**, **Handoff**, **Daily log** and **Global project log**. Each type asks for what it needs (a `.md` file name for decisions and handoffs, a date for the daily, free text for the global log) and preloads a markdown skeleton as a placeholder. The same `sdd-core` writers the MCP tools and the scripts use do the writing, so the format never forks depending on where you came in from.
 
-### STATUS and roadmap from the top bar (spec 028)
+### STATUS and roadmap from ⌘K (spec 028)
 
-The **📊 Reports** button regenerates `STATUS.md` and `docs/roadmap.md` from `specs/INDEX.md` — the same generators behind `sdd_generate_status` and `sdd_generate_roadmap`. It confirms with a ✓ and returns to normal after a few seconds; if it fails, the error stays in the button's tooltip instead of vanishing.
+The **Reports** action (⌘K or the **⋯** menu) regenerates `STATUS.md` and `docs/roadmap.md` from `specs/INDEX.md` — the same generators behind `sdd_generate_status` and `sdd_generate_roadmap`. It confirms with a ✓ and returns to normal after a few seconds; if it fails, the error stays in the button's tooltip instead of vanishing.
 
 ### The drift semaphore (spec 025)
 
@@ -162,7 +162,7 @@ Once a spec is approved, the builder watches whether the code it governs kept mo
 
 ## The team view
 
-The **"🗺️ Canvas ↔ 📋 Board" toggle** in the top bar shows the same specs as a kanban — three columns driven by the real state of your `.md` files: **Draft · Pending**, **Approved** (the `Estado / Status` line in `spec.md`), and **Done** (every task ticked). Cards keep their progress bar and open the same drawer.
+The **"Graph ↔ Board" toggle** in the context strip shows the same specs as a kanban — three columns driven by the real state of your `.md` files: **Draft · Pending**, **Approved** (the `Estado / Status` line in `spec.md`), and **Done** (every task ticked). Cards keep their progress bar and open the same drawer.
 
 ![The kanban view: Draft column with two specs, Approved with the checkout spec carrying its dependency warning, Done with the finished plant catalogue](../assets/builder/kanban.png)
 
@@ -173,7 +173,7 @@ In v1, dragging a card to another column changes *nothing* on disk. Approval is 
 Two more team features live here:
 
 - **Tasks → GitHub issues**: in the drawer, "🐙 Create issues" creates one GitHub issue per **pending** task via your local `gh` CLI: title `[<specId>] <task>` for traceability, body linking the bundle's `tasks.md`. Idempotent by title: tasks whose exact title already exists are skipped, and the result is reported per task (created / skipped / failed) with links. Without a git repo, a remote, or an authenticated `gh` it does not fail vaguely; you get a clear bilingual error telling you exactly what to run.
-- **Presence**: when more than one person (or agent) has the builder open on the same workspace, the top bar shows **👥 N** ("N people viewing this workspace") — powered by the same SSE hub as live sync, join/leave updates included.
+- **Presence**: when more than one person (or agent) has the builder open on the same workspace, the identity bar shows how many people are viewing the workspace — powered by the same SSE hub as live sync, join/leave updates included.
 
 ## Templates
 
@@ -188,6 +188,8 @@ If you would rather start from a proven shape than from a sentence, the **🧩 T
 Any MCP client connected to `sdd-mcp` can work with the same board. The board tools — `sdd_board_read`, `sdd_board_write`, `sdd_board_connect`, `sdd_read_tasks`, `sdd_set_task_done` — are backed by the exact same `sdd-core` layer as the canvas, so what your agent writes is what you see in `/builder` (and vice versa). Agents also get the drawer's powers (`sdd_gate_summary`, `sdd_approve_spec`, `sdd_update_spec_sections`, `sdd_create_spec`), and the dependency warnings appear in the `dependencyWarnings` field of `sdd_gate_summary` and of `GET /api/gate`. See guide 41 (complete MCP reference).
 
 ### Connect your agent in one command (spec 032)
+
+![The "Connect agent" panel: the connect command already carrying the workspace path, and below it a row of clients (Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini CLI, opencode) with the shortcut that serves the queue and the exact configuration for the selected one](../assets/builder/connect.png)
 
 The short way, from your project folder:
 
@@ -286,6 +288,8 @@ Where the standard actually is: the MCP 2026-07-28 spec is a release candidate f
 
 ### Connected mode: "Expand with AI" without copy-paste (spec 031)
 
+![The "Ask the agent" panel open over a spec's task field: it says "no agent", offers the "How do I connect an agent" shortcut and, meanwhile, the classic copyable prompt with the field's context already inside](../assets/builder/ai-assist.png)
+
 Every editable content field in the builder — the 7 `spec.md` sections,
 tasks, canvas notes and bitácora drafts — has an **✨ Expand with AI**
 button. Using it, the builder does NOT call any AI API: it publishes a
@@ -340,5 +344,5 @@ the gate.
 | Approve in the drawer | The real approval block (status, date, approver, evidence) written into `spec.md` |
 | Save in the drawer's Edit tab | Only the guided sections of `spec.md` are rewritten — approval and requirements untouched |
 | Type in "New task" and hit Add | A `- [ ] …` line is appended to `tasks.md` |
-| Save an entry in 📖 Logbook | A real file in `bitacora/decisiones`, `handoffs`, `diaria`, or an entry in `bitacora/global/PROJECT_LOG.md` |
-| Hit 📊 Reports | `STATUS.md` and `docs/roadmap.md` are regenerated from `specs/INDEX.md` |
+| Save an entry in Logbook | A real file in `bitacora/decisiones`, `handoffs`, `diaria`, or an entry in `bitacora/global/PROJECT_LOG.md` |
+| Run Reports | `STATUS.md` and `docs/roadmap.md` are regenerated from `specs/INDEX.md` |

@@ -1,9 +1,39 @@
 {
   "nodes": [
     {
+      "id": "note-idea",
+      "type": "text",
+      "x": 300,
+      "y": -460,
+      "width": 360,
+      "height": 110,
+      "color": "#eab308",
+      "text": "Tienda online de plantas\nCatalogo, pagos y panel de administracion."
+    },
+    {
+      "id": "note-epic-compra",
+      "type": "text",
+      "x": -40,
+      "y": -280,
+      "width": 300,
+      "height": 90,
+      "color": "#a855f7",
+      "text": "Experiencia de compra\nLo que ve y hace el cliente."
+    },
+    {
+      "id": "note-epic-negocio",
+      "type": "text",
+      "x": 700,
+      "y": -280,
+      "width": 300,
+      "height": 90,
+      "color": "#a855f7",
+      "text": "Negocio y operacion\nCobro, catalogo y administracion."
+    },
+    {
       "id": "001-checkout",
-      "x": -11,
-      "y": -180,
+      "x": -40,
+      "y": -80,
       "width": 300,
       "height": 114,
       "type": "file",
@@ -11,8 +41,8 @@
     },
     {
       "id": "002-catalogo-productos",
-      "x": 340,
-      "y": -235,
+      "x": 700,
+      "y": -80,
       "width": 300,
       "height": 117,
       "type": "file",
@@ -20,8 +50,8 @@
     },
     {
       "id": "003-pagos-stripe",
-      "x": 680,
-      "y": 0,
+      "x": 700,
+      "y": 110,
       "width": 300,
       "height": 117,
       "type": "file",
@@ -29,8 +59,8 @@
     },
     {
       "id": "004-panel-admin",
-      "x": 0,
-      "y": 220,
+      "x": 1120,
+      "y": -80,
       "width": 300,
       "height": 114,
       "type": "file",
@@ -38,13 +68,62 @@
     },
     {
       "id": "005-ejemplo-de-spec",
-      "x": 320,
-      "y": 357,
+      "x": -40,
+      "y": 110,
       "width": 300,
       "height": 114,
       "type": "file",
       "file": "specs/005-ejemplo-de-spec/spec.md"
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "id": "e-idea-compra",
+      "fromNode": "note-idea",
+      "toNode": "note-epic-compra",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene"
+    },
+    {
+      "id": "e-idea-negocio",
+      "fromNode": "note-idea",
+      "toNode": "note-epic-negocio",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene"
+    },
+    {
+      "id": "e-compra-001",
+      "fromNode": "note-epic-compra",
+      "toNode": "001-checkout",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene"
+    },
+    {
+      "id": "e-negocio-002",
+      "fromNode": "note-epic-negocio",
+      "toNode": "002-catalogo-productos",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "contiene"
+    },
+    {
+      "id": "e-001-003",
+      "fromNode": "001-checkout",
+      "toNode": "003-pagos-stripe",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "depende de"
+    },
+    {
+      "id": "e-002-004",
+      "fromNode": "002-catalogo-productos",
+      "toNode": "004-panel-admin",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "bloquea"
+    }
+  ]
 }

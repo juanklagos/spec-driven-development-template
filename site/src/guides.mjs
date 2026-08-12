@@ -38,7 +38,7 @@ export const GROUPS = [
 	{
 		label: 'Visual builder & MCP',
 		es: 'Builder visual y MCP',
-		guides: ['51', '33', '43', '41', '44', '45', '47', '48', '36'],
+		guides: ['51', '52', '33', '43', '41', '44', '45', '47', '48', '36'],
 	},
 	{
 		label: 'Real projects',
