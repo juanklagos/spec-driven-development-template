@@ -18,9 +18,9 @@ flowchart LR
 - `@juanklagos/sdd-core` y `@juanklagos/sdd-mcp` deben mantenerse alineados con la release minor del repositorio
 
 Alineación actual:
-- framework: `2.3.0`
-- `@juanklagos/sdd-core`: `2.3.0`
-- `@juanklagos/sdd-mcp`: `2.3.0`
+- framework: `2.4.0`
+- `@juanklagos/sdd-core`: `2.4.0`
+- `@juanklagos/sdd-mcp`: `2.4.0`
 
 ## Política práctica de releases
 
