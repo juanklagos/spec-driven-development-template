@@ -10,6 +10,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v2.5.0] — 2026-08-12
+
+### Added
+- **Actualizar SDD dejó de ser un efecto secundario de reinstalar.** No existía un camino de actualización con nombre: `create-sdd-project` sobre un proyecto que ya tenía `spec/` abortaba con «already exists» y ninguna alternativa — y es el comando que QUICKSTART y ambos README enseñan, así que la conclusión razonable era que actualizar no se podía. Ahora hay un verbo: `sdd-mcp upgrade`, con `--dry-run` que informa qué cambiaría sin escribir un byte. La regla, en una frase: **lo del framework se repara, lo tuyo no se toca sin que lo pidas**. Los scripts de la compuerta y sus dependencias se refrescan siempre; `sdd.policy.yaml`, `specs/_template/*`, las plantillas de bitácora y `template-context/*` no se escriben nunca sin nombrarlos en `--apply`. (spec 029)
+- **La clasificación de archivos salió del bash.** Vivía implícita en el orden de las líneas de `install-spec-sidecar.sh` (`copy_framework_file` frente a `copy_if_absent`), donde nadie podía consultarla antes de tocar nada. Ahora es explícita en `sidecar-files.ts`, y una prueba falla si el instalador copia un archivo que la clasificación no conoce: ese archivo sería invisible a toda actualización, que es exactamente la divergencia silenciosa que esta spec elimina. (spec 029)
+- **El desfase de versión se declara por las cuatro puertas, y ninguna actualiza sola.** Dos tools nuevas (37 → 39): `sdd_check_version` (la comparación, sin escribir) y `sdd_upgrade`. Más el verbo de terminal, `GET /api/version` con una franja de aviso en el lienzo, y el andamiador, que ahora nombra el comando de actualización en vez de abortar a secas. La spec pide aviso, no autonomía: el builder muestra el comando; ejecutarlo es de la persona. Guía 52 ES/EN, enlazada desde QUICKSTART y ambos README. (spec 029)
+- **Un número de versión correcto ya no basta para decir «al día».** `upToDate` compara contenido, no solo el marcador: la spec 021 vio un `exit 0  # TAMPERED` en `check-sdd-gate.sh` sobrevivir a un reinstalado byte a byte. Un proyecto puede declarar la versión buena y tener la compuerta rota; para esta herramienta eso no está al día. (spec 029)
+
+### Fixed
+- **El pin entre paquetes dejó de subirse a mano.** El fallo que rompió la 2.4.0 al empaquetarla —`sdd-mcp` pedía una versión exacta de `sdd-core` que ya no era la del repo, así que npm bajaba la publicada y el paquete moría al arrancar— ahora lo caza `release-integrity.test.ts` en un segundo, con el mensaje que nombra ambas versiones y el archivo a corregir. Se repetía en cada release; ya no. (spec 029, R9)
+- **La cola de peticiones podía atender fuera de orden.** Los ids usaban `Date.now()` como prefijo, así que dos peticiones creadas en el mismo milisegundo empataban y el orden FIFO que `sdd_next_request` promete caía en el sufijo aleatorio del uuid — quien ordenara primero, ganaba. Lo destapó una prueba intermitente. Sello monotónico y una prueba de 50 peticiones seguidas. (spec 031)
+
+---
+
 ## [v2.4.0] — 2026-08-12
 
 ### Added
