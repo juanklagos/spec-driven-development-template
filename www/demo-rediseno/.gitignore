@@ -1,0 +1,5 @@
+# --- Spec-Driven Development workspace ---
+spec/.sdd/*
+!spec/.sdd/user-consent.log
+!spec/.sdd/TEMPLATE_VERSION
+spec/specs/.lock/

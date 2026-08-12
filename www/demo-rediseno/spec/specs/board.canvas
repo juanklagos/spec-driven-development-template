@@ -1,0 +1,50 @@
+{
+  "nodes": [
+    {
+      "id": "001-checkout",
+      "x": -11,
+      "y": -180,
+      "width": 300,
+      "height": 114,
+      "type": "file",
+      "file": "specs/001-checkout/spec.md"
+    },
+    {
+      "id": "002-catalogo-productos",
+      "x": 340,
+      "y": -235,
+      "width": 300,
+      "height": 117,
+      "type": "file",
+      "file": "specs/002-catalogo-productos/spec.md"
+    },
+    {
+      "id": "003-pagos-stripe",
+      "x": 680,
+      "y": 0,
+      "width": 300,
+      "height": 117,
+      "type": "file",
+      "file": "specs/003-pagos-stripe/spec.md"
+    },
+    {
+      "id": "004-panel-admin",
+      "x": 0,
+      "y": 220,
+      "width": 300,
+      "height": 114,
+      "type": "file",
+      "file": "specs/004-panel-admin/spec.md"
+    },
+    {
+      "id": "005-ejemplo-de-spec",
+      "x": 320,
+      "y": 357,
+      "width": 300,
+      "height": 114,
+      "type": "file",
+      "file": "specs/005-ejemplo-de-spec/spec.md"
+    }
+  ],
+  "edges": []
+}
