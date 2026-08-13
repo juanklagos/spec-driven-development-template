@@ -97,6 +97,39 @@ async function countFiles(dir) {
   return total;
 }
 
+const RAW_BASE = "https://raw.githubusercontent.com/juanklagos/spec-driven-development-template/main";
+const BLOB_BASE = "https://github.com/juanklagos/spec-driven-development-template/blob/main";
+
+/**
+ * Point the copied guides at GitHub for everything the payload does not carry.
+ * Only these two prefixes: anything else inside docs/ travels with the payload
+ * and must keep resolving locally.
+ */
+async function rewritePayloadLinks(dir) {
+  let rewritten = 0;
+  for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      rewritten += await rewritePayloadLinks(full);
+      continue;
+    }
+    if (!entry.name.endsWith(".md")) continue;
+    const before = await fs.readFile(full, "utf8");
+    const after = before
+      // ![alt](../assets/…) -> raw.githubusercontent (images must be raw)
+      .replace(/\]\(\.\.\/assets\//g, `](${RAW_BASE}/docs/assets/`)
+      // [text](../../legal/…), ../../LICENSE, ../../NOTICE, ../../TEMPLATE-OUTPUT.md
+      .replace(/\]\(\.\.\/\.\.\/(legal\/[^)]+|LICENSE|NOTICE|TEMPLATE-OUTPUT\.md)\)/g, `](${BLOB_BASE}/$1)`)
+      // ../../bitacora/decisiones/… — the payload ships bitacora/ without it
+      .replace(/\]\(\.\.\/\.\.\/(bitacora\/decisiones\/[^)]+)\)/g, `](${BLOB_BASE}/$1)`);
+    if (after !== before) {
+      await fs.writeFile(full, after, "utf8");
+      rewritten += 1;
+    }
+  }
+  return rewritten;
+}
+
 async function main() {
   await fs.rm(payloadRoot, { recursive: true, force: true });
   await fs.mkdir(payloadRoot, { recursive: true });
@@ -113,6 +146,14 @@ async function main() {
     }
     await copyEntry(relative);
   }
+
+  // Links that only resolve inside a git checkout are rewritten to absolute
+  // GitHub URLs (spec-driven review, 2026-08-12). The payload deliberately
+  // ships neither docs/assets (2 MB of screenshots that would ride along with
+  // every install) nor legal/ (dropped 2026-07-21), but the copied guides kept
+  // linking to both: 43 dead links reached every user who installed the
+  // sidecar, five of them the images of the flagship builder guide.
+  await rewritePayloadLinks(path.join(payloadRoot, "docs"));
 
   // The scaffolding scripts are executed with `bash <path>`, but keep the exec
   // bit so a user can also run them straight out of node_modules.

@@ -197,19 +197,20 @@ flowchart TD
 
 <br>
 
-If your AI client supports MCP, this repo ships a local `sdd-mcp` server that turns the SDD workflow into guided commands (`/start-project`, `/create-spec ...`).
+If your AI tool supports MCP (the Model Context Protocol), it can run this workflow itself: create specs, check the gate, write the logbook. One command sets it up, in your project's folder:
 
 ```bash
-npm install
-npm run build
-npm run mcp:start
+npx @juanklagos/sdd-mcp@latest connect
 ```
 
-- **No clone?** Point your MCP client straight at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp@latest"]}`.
+It finds the clients you have — Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini CLI, opencode — and writes the configuration into each one's own file. It merges into what you already have and never overwrites it. Add `--dry-run` first to see what it would touch. Then restart your client.
+
+- **Prefer doing it by hand?** Point your client at npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp@latest"]}`. The `@latest` matters — without it, `npx` can serve an old cached version with fewer tools.
+- **Working on this template itself?** `npm install && npm run build && npm run mcp:start` runs the server from source.
 - **SDD Builder (visual, drag-and-drop):** build once with `npm run builder:build`, then `SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start` and open `http://127.0.0.1:3334/builder` — compose your specs as connected cards, where every card is a real `specs/NNN/` bundle on disk. Inside this template repository the builder is blocked by design (no target-project work in the template root), so always point `SDD_PROJECT_ROOT` at a real workspace. See the [visual guide](./docs/en/51-sdd-builder-visual-guide.md).
 - **Already using SDD and want the latest?** `npx @juanklagos/sdd-mcp@latest upgrade --project-root . --dry-run` shows what would change before changing it: framework files get repaired, yours are never written without `--apply`. See the [upgrade guide](./docs/en/52-upgrade-guide.md).
-- **SDD Desk (the same builder, as a desktop app):** [download it](https://juanklagos.github.io/spec-driven-development-template/en/download/) for macOS, Windows or Linux. It carries its own Node runtime, so nothing has to be installed first, and while it is open the app *is* your project's MCP server — point your agent at the URL it shows you. The builds are **not code-signed**: macOS and Windows ask you to authorise the app once, with a warning that sounds alarming, so it suits people who do not mind doing that. If you would rather not, `npx @juanklagos/sdd-mcp@latest --http` gives you the same builder in your browser with no warning at all.
-- **Visual dashboard:** point the server at a project — `SDD_PROJECT_ROOT=./www/my-project npm run mcp:http:start` — then open `http://127.0.0.1:3334/dashboard` for a read-only executive view (gate verdict, KPI tiles, per-spec progress, dependency warnings) in your language, with no build step. The template root is not a workspace, so running it from here reports exactly that.
+- **SDD Desk (the same builder, as a desktop app):** [download it](https://juanklagos.github.io/spec-driven-development-template/en/download/) for macOS, Windows or Linux. Nothing else has to be installed: the app includes everything it needs. While it is open, your AI assistant can connect to it — copy the address the app shows you and paste it into your assistant's settings. One caveat: the app is not digitally signed, so the first time you open it macOS or Windows shows a scary-looking warning and asks you to allow it. If you would rather not deal with that, run `npx @juanklagos/sdd-mcp@latest --http` instead. Same tool, in your browser, no warning.
+- **Visual dashboard:** point the server at a project — `SDD_PROJECT_ROOT=./www/my-project npm run mcp:http:start` — then open `http://127.0.0.1:3334/dashboard` for a page you can look at but not edit: whether the gate is open, a few headline numbers, how far each spec has got, and which specs are waiting on another one. In your language, with nothing to compile. This folder — the template itself — is not a project, so if you run it here it will tell you so.
 - Easiest explanation first: [Easy MCP Guide](./docs/en/43-easy-mcp-guide.md)
 - Client configs: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Complete reference: [docs/en/41-complete-mcp-reference.md](./docs/en/41-complete-mcp-reference.md)

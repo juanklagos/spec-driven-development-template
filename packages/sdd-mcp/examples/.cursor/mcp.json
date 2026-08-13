@@ -2,9 +2,10 @@
   "mcpServers": {
     "sdd": {
       "type": "stdio",
-      "command": "node",
+      "command": "npx",
       "args": [
-        "${workspaceFolder}/packages/sdd-mcp/dist/index.js"
+        "-y",
+        "@juanklagos/sdd-mcp@latest"
       ]
     }
   }

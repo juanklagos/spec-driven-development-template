@@ -1,11 +1,11 @@
 {
   "mcpServers": {
     "sdd": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "${PWD}/packages/sdd-mcp/dist/index.js"
-      ],
-      "env": {}
+        "-y",
+        "@juanklagos/sdd-mcp@latest"
+      ]
     }
   }
 }

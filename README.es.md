@@ -197,19 +197,20 @@ flowchart TD
 
 <br>
 
-Si tu cliente de IA soporta MCP, este repo incluye un servidor local `sdd-mcp` que convierte el flujo SDD en comandos guiados (`/start-project`, `/create-spec ...`).
+Si tu herramienta de IA soporta MCP (el Model Context Protocol), puede ejecutar este flujo por sí misma: crear specs, comprobar la compuerta, escribir la bitácora. Un solo comando lo configura, desde la carpeta de tu proyecto:
 
 ```bash
-npm install
-npm run build
-npm run mcp:start
+npx @juanklagos/sdd-mcp@latest connect
 ```
 
-- **¿Sin clonar?** Apunta tu cliente MCP directo a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp@latest"]}`.
+Detecta los clientes que tengas —Claude Code, Codex, Cursor, VS Code, Windsurf, Gemini CLI, opencode— y escribe la configuración en el archivo propio de cada uno. Fusiona con lo que ya tienes y no lo sobrescribe. Añade `--dry-run` primero para ver qué tocaría. Después reinicia tu cliente.
+
+- **¿Prefieres hacerlo a mano?** Apunta tu cliente a npm: `{"command": "npx", "args": ["-y", "@juanklagos/sdd-mcp@latest"]}`. El `@latest` importa: sin él, `npx` puede servir una versión vieja de su caché, con menos herramientas.
+- **¿Trabajas en esta plantilla?** `npm install && npm run build && npm run mcp:start` levanta el servidor desde el código fuente.
 - **SDD Builder (visual, arrastrar y soltar):** compila una vez con `npm run builder:build`, luego `SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start` y abre `http://127.0.0.1:3334/builder`. Construyes tus specs como tarjetas conectadas, y cada tarjeta es un bundle real `specs/NNN/` en disco. Dentro de este repositorio template el builder está bloqueado por diseño (no se ejecuta trabajo de proyecto destino en la raíz del template), así que apunta siempre `SDD_PROJECT_ROOT` a un workspace real. Ver la [guía visual](./docs/es/51-guia-visual-sdd-builder.md).
 - **¿Ya usas SDD y quieres lo último?** `npx @juanklagos/sdd-mcp@latest upgrade --project-root . --dry-run` te muestra qué cambiaría antes de cambiar nada: lo del framework se repara, lo tuyo no se escribe sin `--apply`. Ver la [guía de actualización](./docs/es/52-guia-de-actualizacion.md).
-- **SDD Desk (el mismo builder, como app de escritorio):** [descárgala](https://juanklagos.github.io/spec-driven-development-template/es/download/) para macOS, Windows o Linux. Trae su propio Node adentro, así que no hay que instalar nada antes, y mientras está abierta la app **es** el servidor MCP de tu proyecto: apunta tu agente a la URL que te muestra. Las builds **no están firmadas**: macOS y Windows te piden autorizarla una vez, con un aviso que suena alarmante, así que conviene a quien no le moleste hacerlo. Si prefieres evitarlo, `npx @juanklagos/sdd-mcp@latest --http` te da el mismo builder en el navegador sin ningún aviso.
-- **Dashboard visual:** apunta el servidor a un proyecto — `SDD_PROJECT_ROOT=./www/mi-proyecto npm run mcp:http:start` — y abre `http://127.0.0.1:3334/dashboard` para una vista ejecutiva de solo lectura (veredicto de la compuerta, tarjetas KPI, progreso por spec y avisos de dependencias) en tu idioma, sin compilar nada. La raíz del template no es un workspace, así que ejecutarlo desde aquí te lo dirá tal cual.
+- **SDD Desk (el mismo builder, como app de escritorio):** [descárgala](https://juanklagos.github.io/spec-driven-development-template/es/download/) para macOS, Windows o Linux. No hay que instalar nada más: la app trae todo lo que necesita. Mientras está abierta, tu asistente de IA puede conectarse a ella — copia la dirección que te muestra la app y pégala en la configuración de tu asistente. Un aviso: la app no está firmada digitalmente, así que la primera vez macOS o Windows muestra una advertencia que asusta y te pide autorizarla. Si prefieres no lidiar con eso, ejecuta `npx @juanklagos/sdd-mcp@latest --http`. La misma herramienta, en tu navegador, sin ninguna advertencia.
+- **Dashboard visual:** apunta el servidor a un proyecto — `SDD_PROJECT_ROOT=./www/mi-proyecto npm run mcp:http:start` — y abre `http://127.0.0.1:3334/dashboard` para una página que puedes mirar pero no editar: si la compuerta está abierta, unos pocos números de cabecera, cuánto ha avanzado cada spec y cuáles esperan a otra. En tu idioma y sin compilar nada. Esta carpeta —la plantilla— no es un proyecto, así que si lo ejecutas aquí te lo dirá.
 - La explicación más simple primero: [Guía fácil de MCP](./docs/es/43-guia-mcp-facil.md)
 - Configuraciones por cliente: [`.mcp.json`](./.mcp.json) (Claude Code) · [Cursor](./packages/sdd-mcp/examples/.cursor/mcp.json) · [Codex](./packages/sdd-mcp/examples/codex.config.toml)
 - Referencia completa: [docs/es/41-referencia-completa-mcp.md](./docs/es/41-referencia-completa-mcp.md)
