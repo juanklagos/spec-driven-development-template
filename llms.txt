@@ -67,6 +67,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [SDD in 2026: State of the Art and How This Template Compares](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/50-sdd-state-of-the-art-2026.md)
 - [🎨 SDD Builder: build your specs visually](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/51-sdd-builder-visual-guide.md)
 - [Upgrade guide](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/52-upgrade-guide.md)
+- [How the documentation in this project is written](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/53-writing-style.md)
 
 ## Docs (Español)
 
@@ -123,6 +124,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [SDD en 2026: estado del arte y cómo se compara este template](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/50-estado-del-arte-sdd-2026.md)
 - [🎨 SDD Builder: construye tus specs visualmente](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/51-guia-visual-sdd-builder.md)
 - [Guía de actualización](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/52-guia-de-actualizacion.md)
+- [Cómo se escribe la documentación de este proyecto](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/53-estilo-de-escritura.md)
 
 ## Optional
 

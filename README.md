@@ -4,7 +4,7 @@
 
 # 🌱 Spec-Driven Development Template
 
-**Learn Spec-Driven Development, then use it on real projects.<br>One rule, and a gate that stays shut until you approve a spec — and tells you on every run exactly what it checked.**
+**Learn Spec-Driven Development, then use it on real projects.<br>One rule: no code until you approve a written spec. A script checks that rule every time you run it, and prints exactly what it looked at.**
 
 🇺🇸 **English** · [🇪🇸 Español](./README.es.md)
 
@@ -25,15 +25,15 @@
 
 ## What is this?
 
-**Spec-Driven Development (SDD)** means writing and approving a clear specification *before* any code exists, so that scope and decisions outlive the chat window they were born in. By 2026 it is how most people build software with AI agents.
+**Spec-Driven Development (SDD)** means writing and approving a clear specification *before* any code exists. What you decided ends up in a file, instead of buried in a chat you will close and never find again. By 2026 it is how most people build software with AI agents.
 
 This repo does double duty.
 
 It is a school: a bilingual (EN/ES) path that starts from zero, with guides, an interactive course and a tutor you can talk to. You do not need to know how to program to get through it.
 
-It is also a toolkit for real work: enforcement scripts, rules your agent reads, an MCP server, and a compact `spec/` sidecar you drop into a codebase that already exists.
+It is also a toolkit for real work: scripts that check the rule, instruction files your AI assistant reads, a connector so your AI tool can run the workflow itself (MCP, the Model Context Protocol), and a single `spec/` folder you add to a project that already has code — without moving any of it.
 
-The workflow engine underneath is [GitHub Spec Kit](https://github.com/github/spec-kit). This repo is the practical layer around it.
+The step-by-step commands come from [GitHub Spec Kit](https://github.com/github/spec-kit). This repo adds the guides, the checks and the templates on top of them.
 
 <div align="center">
 

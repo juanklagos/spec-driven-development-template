@@ -48,7 +48,7 @@ export const GROUPS = [
 	{
 		label: 'Reference',
 		es: 'Referencia',
-		guides: ['06', '40', '24', '37', '09', '31'],
+		guides: ['06', '40', '24', '37', '53', '09', '31'],
 	},
 	{
 		label: 'Project & releases',

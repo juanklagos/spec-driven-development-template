@@ -4,7 +4,7 @@
 
 # 🌱 Spec-Driven Development Template
 
-**Aprende Spec-Driven Development y úsalo en proyectos reales.<br>Una sola regla, y una compuerta que no se abre hasta que apruebas una spec — y que te dice en cada ejecución qué comprobó.**
+**Aprende Spec-Driven Development y úsalo en proyectos reales.<br>Una sola regla: no se escribe código hasta que apruebas una especificación escrita. Un script comprueba esa regla cada vez que lo ejecutas, y te dice exactamente qué revisó.**
 
 [🇺🇸 English](./README.md) · 🇪🇸 **Español**
 
@@ -25,15 +25,15 @@
 
 ## ¿Qué es esto?
 
-**Spec-Driven Development (SDD)** consiste en escribir y aprobar una especificación clara *antes* de que exista código, para que el alcance y las decisiones sobrevivan a la ventana de chat donde nacieron. En 2026 es la forma en que casi todo el mundo construye software con agentes de IA.
+**Spec-Driven Development (SDD)** consiste en escribir y aprobar una especificación clara *antes* de que exista código. Lo que decidiste queda en un archivo, y no enterrado en un chat que vas a cerrar y no vas a volver a encontrar. En 2026 es la forma en que casi todo el mundo construye software con agentes de IA.
 
 Este repo sirve para dos cosas a la vez.
 
 Es una escuela: una ruta bilingüe (EN/ES) que arranca desde cero, con guías, un curso interactivo y un tutor con el que puedes conversar. No necesitas saber programar para llegar al final.
 
-Y es una caja de herramientas para trabajo real: scripts que hacen cumplir las reglas, instrucciones que tu agente lee, un servidor MCP y un sidecar compacto `spec/` que instalas dentro de un proyecto que ya existe.
+Y es una caja de herramientas para trabajo real: scripts que comprueban la regla, instrucciones que tu asistente de IA lee, un conector para que tu herramienta de IA ejecute el flujo por sí misma (MCP, el Model Context Protocol), y una sola carpeta `spec/` que añades a un proyecto que ya tiene código, sin mover nada de lo que ya tienes.
 
-Por debajo, quien mueve el flujo es [GitHub Spec Kit](https://github.com/github/spec-kit). Este repo es la capa práctica que va encima.
+Los comandos paso a paso vienen de [GitHub Spec Kit](https://github.com/github/spec-kit). Este repo añade encima las guías, las comprobaciones y las plantillas.
 
 <div align="center">
 

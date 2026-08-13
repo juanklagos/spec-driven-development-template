@@ -10,6 +10,14 @@
 - Español: [../es/23-onboarding-30-minutos.md](../es/23-onboarding-30-minutos.md)
 
 
+
+> [!IMPORTANT]
+> **Where are these scripts?** It depends on how you installed SDD:
+> - If you added the `spec/` folder to a project you already had (the usual case), they need `spec/` in front: `./spec/scripts/new-spec.sh …`
+> - If you created the project from scratch with the template, they are as shown: `./scripts/new-spec.sh …`
+>
+> Run them from your project's top folder, in a terminal.
+
 ## 🗣️ Friendly prompt (copy/paste)
 
 Use this when you are not technical and want the AI to do setup + guidance end-to-end:

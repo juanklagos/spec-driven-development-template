@@ -100,6 +100,7 @@ flowchart LR
 | 42 | Project organization map / Mapa de organización | [EN](./en/42-project-organization-map.md) | [ES](./es/42-mapa-organizacion-proyecto.md) |
 | 51 | SDD Builder visual guide / Guía visual del SDD Builder | [EN](./en/51-sdd-builder-visual-guide.md) | [ES](./es/51-guia-visual-sdd-builder.md) |
 | 52 | Upgrade guide / Guía de actualización | [EN](./en/52-upgrade-guide.md) | [ES](./es/52-guia-de-actualizacion.md) |
+| 53 | Writing style / Estilo de escritura | [EN](./en/53-writing-style.md) | [ES](./es/53-estilo-de-escritura.md) |
 
 ### MCP
 

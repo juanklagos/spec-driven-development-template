@@ -10,6 +10,14 @@
 - English: [../en/23-30-minute-onboarding.md](../en/23-30-minute-onboarding.md)
 
 
+
+> [!IMPORTANT]
+> **¿Dónde están estos scripts?** Depende de cómo instalaste SDD:
+> - Si añadiste la carpeta `spec/` a un proyecto que ya tenías (lo normal), van con `spec/` delante: `./spec/scripts/new-spec.sh …`
+> - Si creaste el proyecto desde cero con la plantilla, van tal cual: `./scripts/new-spec.sh …`
+>
+> Ejecútalos desde la carpeta principal de tu proyecto, en una terminal.
+
 ## 🗣️ Prompt amigable (copiar y pegar)
 
 Úsalo si no eres técnico y quieres que la IA lo integre todo y te vaya guiando:
