@@ -49,7 +49,7 @@ while IFS= read -r task_file; do
   c=$(rg -c "^- \[[xX]\]" "$task_file" || true)
   pending_total=$((pending_total + p))
   completed_total=$((completed_total + c))
-done < <(find "$ROOT/specs" -mindepth 2 -maxdepth 2 -type f -name tasks.md | sort)
+done < <(find "$ROOT/specs" -mindepth 2 -maxdepth 2 -type f -name tasks.md -not -path '*/_template/*' | sort)
 
 last_log="No entries"
 if [ -f "$ROOT/bitacora/global/PROJECT_LOG.md" ]; then
