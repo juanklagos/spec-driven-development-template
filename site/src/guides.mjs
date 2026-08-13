@@ -17,45 +17,81 @@ const docsRoot = join(here, '..', '..', 'docs');
 
 export const LOCALES = ['en', 'es'];
 
-/** Guide numbers per sidebar group, in the order they should be read. */
-export const GROUPS = [
+/**
+ * Spec 033 — the single source of what each guide IS.
+ *
+ * Four needs from Diátaxis (https://diataxis.fr/) plus one for repository
+ * material that is not product documentation. Both the sidebar and the header
+ * block that scripts/sync-doc-types.mjs writes into every guide read from
+ * here, so a guide cannot be one type in the menu and another on the page.
+ *
+ * Order inside each type is reading order, not numeric order.
+ */
+export const GUIDE_TYPES = [
 	{
-		label: 'Start here',
-		es: 'Empieza aquí',
+		id: 'tutorial',
+		label: 'Learn by doing',
+		es: 'Aprende haciendo',
+		badge: 'Tutorial',
+		esBadge: 'Tutorial',
+		intent: 'A guided lesson. Follow it start to finish and you will have built something.',
+		esIntent: 'Una lección guiada. Síguela de principio a fin y habrás construido algo.',
 		collapsed: false,
-		guides: ['00', '13', '23', '02', '04', '05'],
+		guides: ['13', '23', '18', '25', '14', '15'],
 	},
 	{
-		label: 'Learn SDD',
-		es: 'Aprende SDD',
-		guides: ['18', '14', '15', '25', '12', '11', '21', '20'],
+		id: 'how-to',
+		label: 'Get something done',
+		es: 'Consigue algo concreto',
+		badge: 'How-to',
+		esBadge: 'Cómo hacer',
+		intent: 'Steps for one specific job. Assumes you already know the basics.',
+		esIntent: 'Pasos para una tarea concreta. Da por sabido lo básico.',
+		guides: ['03', '51', '52', '33', '36', '43', '44', '47', '48', '12', '11', '21', '22', '27', '28', '29', '16', '17', '08', '07', '09'],
 	},
 	{
-		label: 'Work with AI agents',
-		es: 'Trabaja con agentes de IA',
-		guides: ['03', '10', '19', '26', '30', '49', '16', '17'],
+		id: 'reference',
+		label: 'Look something up',
+		es: 'Consulta un dato',
+		badge: 'Reference',
+		esBadge: 'Referencia',
+		intent: 'Facts to consult while you work. Not meant to be read end to end.',
+		esIntent: 'Datos para consultar mientras trabajas. No está pensada para leerse entera.',
+		guides: ['04', '41', '54', '40', '01', '42', '06', '10', '19', '26', '30', '49', '45', '37', '53', '31', '05'],
 	},
 	{
-		label: 'Visual builder & MCP',
-		es: 'Builder visual y MCP',
-		guides: ['51', '52', '33', '43', '41', '44', '45', '47', '48', '36'],
+		id: 'explanation',
+		label: 'Understand why',
+		es: 'Entiende por qué',
+		badge: 'Explanation',
+		esBadge: 'Explicación',
+		intent: 'Background and reasoning. No instructions here.',
+		esIntent: 'Contexto y razones. Aquí no hay instrucciones.',
+		guides: ['00', '02', '20', '24', '50'],
 	},
 	{
-		label: 'Real projects',
-		es: 'Proyectos reales',
-		guides: ['01', '42', '27', '22', '28', '29', '07', '08'],
-	},
-	{
-		label: 'Reference',
-		es: 'Referencia',
-		guides: ['06', '40', '24', '37', '53', '09', '31'],
-	},
-	{
-		label: 'Project & releases',
-		es: 'Proyecto y lanzamientos',
-		guides: ['35', '34', '38', '39', '46', '32', '50'],
+		id: 'project',
+		label: 'About this project',
+		es: 'Sobre este proyecto',
+		badge: 'Project',
+		esBadge: 'Proyecto',
+		intent: 'Repository material: roadmap, releases and audits. Not product documentation.',
+		esIntent: 'Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.',
+		guides: ['35', '34', '38', '39', '46', '32'],
 	},
 ];
+
+/** Back-compat: everything that used GROUPS reads the same data. */
+export const GROUPS = GUIDE_TYPES;
+
+/** { '13': 'tutorial', '51': 'how-to', … } */
+export function typeByGuide() {
+	const map = {};
+	for (const type of GUIDE_TYPES) {
+		for (const n of type.guides) map[n] = type;
+	}
+	return map;
+}
 
 const numberOf = (file) => file.slice(0, 2);
 const slugOf = (file) => file.replace(/\.md$/, '').toLowerCase();

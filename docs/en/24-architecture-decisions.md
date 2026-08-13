@@ -1,5 +1,11 @@
 # Architecture decisions
 
+<!-- sdd:doc-type:start -->
+
+> **Explanation** · Background and reasoning. No instructions here.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---

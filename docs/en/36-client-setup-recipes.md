@@ -1,5 +1,11 @@
 # Client Setup Recipes
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This guide gives exact copy-paste setup recipes for the main local AI clients used with this framework.

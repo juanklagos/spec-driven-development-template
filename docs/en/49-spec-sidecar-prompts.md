@@ -1,5 +1,11 @@
 # Spec Sidecar Prompts
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 Use these prompts when you want an AI to use this framework without cloning or copying the full repository into your project.

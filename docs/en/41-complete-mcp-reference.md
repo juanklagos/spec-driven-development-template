@@ -1,5 +1,11 @@
 # Complete MCP Reference
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This is the dedicated user-facing reference for the local `sdd-mcp` server.

@@ -1,5 +1,11 @@
 # Glossary
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---

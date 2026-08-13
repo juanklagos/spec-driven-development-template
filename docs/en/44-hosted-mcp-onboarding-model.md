@@ -1,5 +1,11 @@
 # Hosted MCP Onboarding Model
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 A product model for making this framework easier to adopt without softening it: a hosted MCP that handles onboarding, docs, prompts and visual help, plus a local MCP (or a thin local bridge) that does the actual writing in the user's project.

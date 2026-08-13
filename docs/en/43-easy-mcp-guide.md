@@ -1,5 +1,11 @@
 # Easy MCP Guide for Non-Technical Users
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This guide explains how to use `sdd-mcp` in the easiest possible way.

@@ -1,5 +1,11 @@
 # Media Kit
 
+<!-- sdd:doc-type:start -->
+
+> **Project** · Repository material: roadmap, releases and audits. Not product documentation.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This page centralizes reusable public-facing assets for social posts, repository previews, talks, and product positioning.

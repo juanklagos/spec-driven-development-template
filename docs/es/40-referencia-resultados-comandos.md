@@ -1,5 +1,11 @@
 # Referencia de resultados por comando
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Qué crea, qué modifica y qué devuelve cada script principal y cada tool MCP. Consúltala cuando quieras saber, antes de ejecutar algo, exactamente qué va a tocar en disco.

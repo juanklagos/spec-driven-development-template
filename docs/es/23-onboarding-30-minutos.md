@@ -1,5 +1,11 @@
 # Onboarding de 30 minutos
 
+<!-- sdd:doc-type:start -->
+
+> **Tutorial** · Una lección guiada. Síguela de principio a fin y habrás construido algo.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---

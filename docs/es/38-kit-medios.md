@@ -1,5 +1,11 @@
 # Kit de medios
 
+<!-- sdd:doc-type:start -->
+
+> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Todo lo que se usa de cara al público vive aquí: assets para posts, la imagen de preview del repositorio, material de charla y las frases de posicionamiento.

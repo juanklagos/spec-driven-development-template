@@ -1,5 +1,11 @@
 # Guía de actualización
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Poner al día un proyecto que ya usa SDD, sabiendo de antemano qué se toca y qué

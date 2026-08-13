@@ -1,5 +1,11 @@
 # Ejemplos visuales por cliente para MCP fácil
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Cómo se ve el uso fácil de MCP en clientes reales, con los mensajes tal cual aparecen.

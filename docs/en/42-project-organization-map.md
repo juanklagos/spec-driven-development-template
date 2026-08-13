@@ -1,5 +1,11 @@
 # Project Organization Map
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This document explains how the repository is organized at the folder level. It maps operations, not code — the point is that a human or an agent opening the repo for the first time can tell what belongs in each folder, which parts are framework-only and which are project material, and which files are meant to change every session versus which are meant to sit still.

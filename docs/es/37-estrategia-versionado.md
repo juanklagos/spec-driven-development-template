@@ -1,5 +1,11 @@
 # Estrategia de versionado
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Cómo se versionan el framework y sus paquetes internos, y por qué van siempre al mismo número.

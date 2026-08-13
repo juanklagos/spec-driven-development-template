@@ -1,5 +1,11 @@
 # Referencia completa de MCP
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 La referencia completa del servidor local `sdd-mcp`, escrita desde el punto de vista de quien lo usa.

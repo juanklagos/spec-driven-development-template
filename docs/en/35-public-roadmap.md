@@ -1,5 +1,11 @@
 # Public Roadmap
 
+<!-- sdd:doc-type:start -->
+
+> **Project** · Repository material: roadmap, releases and audits. Not product documentation.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This roadmap makes the next product steps explicit so users know where the framework is going.

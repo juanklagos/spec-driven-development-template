@@ -1,5 +1,11 @@
 # Marco legal y uso comercial
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---

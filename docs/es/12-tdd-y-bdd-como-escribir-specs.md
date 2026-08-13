@@ -1,5 +1,11 @@
 # 🧪 TDD y BDD: cómo escribir buenas especificaciones
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---

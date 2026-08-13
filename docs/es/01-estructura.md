@@ -1,5 +1,11 @@
 # Estructura detallada
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Par de idioma / Language pair
 
 - Español: **01-estructura.md**

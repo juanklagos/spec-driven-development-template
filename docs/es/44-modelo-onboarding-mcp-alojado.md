@@ -1,5 +1,11 @@
 # Modelo de onboarding MCP alojado
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 El modelo de producto más fácil para este framework se apoya en dos piezas:

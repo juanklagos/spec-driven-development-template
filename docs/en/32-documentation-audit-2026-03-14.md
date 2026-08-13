@@ -1,5 +1,11 @@
 # Documentation audit (2026-03-14)
 
+<!-- sdd:doc-type:start -->
+
+> **Project** · Repository material: roadmap, releases and audits. Not product documentation.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Language pair / Par de idioma
 
 - English: **32-documentation-audit-2026-03-14.md**

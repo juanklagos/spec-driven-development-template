@@ -1,5 +1,11 @@
 # Detailed structure
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Language pair / Par de idioma
 
 - English: **01-structure.md**

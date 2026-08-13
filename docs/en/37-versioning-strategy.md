@@ -1,5 +1,11 @@
 # Versioning Strategy
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This document defines how versioning should work across the framework and its internal packages.

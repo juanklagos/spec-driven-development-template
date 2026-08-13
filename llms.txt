@@ -68,6 +68,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [🎨 SDD Builder: build your specs visually](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/51-sdd-builder-visual-guide.md)
 - [Upgrade guide](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/52-upgrade-guide.md)
 - [How the documentation in this project is written](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/53-writing-style.md)
+- [Builder reference](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/en/54-builder-reference.md)
 
 ## Docs (Español)
 
@@ -125,6 +126,7 @@ Key rules for agents: read AGENTS.md and template-context/core-instructions/AGEN
 - [🎨 SDD Builder: construye tus specs visualmente](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/51-guia-visual-sdd-builder.md)
 - [Guía de actualización](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/52-guia-de-actualizacion.md)
 - [Cómo se escribe la documentación de este proyecto](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/53-estilo-de-escritura.md)
+- [Referencia del builder](https://github.com/juanklagos/spec-driven-development-template/blob/main/docs/es/54-referencia-del-builder.md)
 
 ## Optional
 

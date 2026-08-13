@@ -1,5 +1,11 @@
 # Client Visual Examples for Easy MCP
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This guide shows what easy MCP usage should look like in real clients.

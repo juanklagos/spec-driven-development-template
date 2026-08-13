@@ -1,5 +1,11 @@
 # Checklist de publicación (Release Checklist)
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Par de idioma / Language pair
 
 - Español: **09-release-checklist.md**

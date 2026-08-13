@@ -1,5 +1,11 @@
 # How to Connect This Repository with GitMCP
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This guide explains, in very simple terms, how to use `GitMCP` with this repository.

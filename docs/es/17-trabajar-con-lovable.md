@@ -1,5 +1,11 @@
 # 💜 Cómo trabajar con Lovable y Spec-Driven Development
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 <a href="../../AI_START_HERE.md"><img src="https://img.shields.io/badge/🤖_AI_Start_Here-74aa9c?style=for-the-badge" alt="AI Start"></a>
 

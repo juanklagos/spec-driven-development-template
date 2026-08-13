@@ -1,5 +1,11 @@
 # How the documentation in this project is written
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---
@@ -20,6 +26,26 @@ These rules are not invented here. They are the ones used by the platforms whose
 - [Google developer documentation style guide](https://developers.google.com/style/highlights) — second person, active voice, present tense, sentence case for headings.
 - [Microsoft writing style guide](https://learn.microsoft.com/en-us/style-guide/top-10-tips-style-voice) — write like you speak, short sentences, everyday words, prune every excess word.
 - [Diátaxis](https://diataxis.fr/) — tutorial, how-to, reference and explanation are four different things; mixing them is the most common cause of confusing documentation.
+
+## The five document types
+
+[Diátaxis](https://diataxis.fr/) rule: a document serves **one** need. Mixing them is the most common cause of confusing documentation, and it is what happened here: the builder guide was a lesson, a recipe book, a reference and an essay at once, so it grew without criteria and nobody knew where to put anything new.
+
+Pick the type before you write. Each guide declares it in a header, generated from `site/src/guides.mjs`.
+
+| Type | The reader wants | What it holds | What it does NOT hold |
+| :--- | :--- | :--- | :--- |
+| **Tutorial** | "teach me by doing" | a lesson start to finish, with a concrete result | exhaustive reference, alternatives, discussion |
+| **How-to** | "help me achieve X" | the steps for one task, assuming the basics | explaining concepts from scratch |
+| **Reference** | "tell me how it is" | tables and facts to consult while working | guided steps, opinions |
+| **Explanation** | "help me understand why" | context, reasoning, rejected alternatives | instructions |
+| **Project** | repository material | roadmap, releases, audits | none of this is product documentation |
+
+**How to choose**: if the reader knows nothing yet, tutorial. If they know what they want and need the steps, how-to. If they are already working and need a fact, reference. If they ask "why this way?", explanation.
+
+**The sign you mixed them**: your guide has a long table in the middle of a step-by-step walkthrough. That table is reference and wants to live apart; leave a link where it was.
+
+To change a guide's type, edit it in `GUIDE_TYPES` and run `node scripts/sync-doc-types.mjs`. The header and the site menu both come from there, so they cannot disagree.
 
 ## The rules
 

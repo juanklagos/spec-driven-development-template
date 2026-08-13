@@ -1,5 +1,11 @@
 # Cómo publicar en GitHub paso a paso
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Par de idioma / Language pair
 
 - Español: **07-como-publicar-en-github-paso-a-paso.md**

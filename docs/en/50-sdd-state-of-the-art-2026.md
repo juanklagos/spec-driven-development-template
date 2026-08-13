@@ -1,5 +1,11 @@
 # SDD in 2026: State of the Art and How This Template Compares
 
+<!-- sdd:doc-type:start -->
+
+> **Explanation** · Background and reasoning. No instructions here.
+
+<!-- sdd:doc-type:end -->
+
 > Research snapshot: 2026-07-17. Sources are listed at the end.
 > Goal: help you learn what Spec-Driven Development looks like across the industry today, and see exactly where this template stands.
 

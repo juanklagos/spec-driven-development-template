@@ -1,5 +1,11 @@
 # Preparación v1.2.0
 
+<!-- sdd:doc-type:start -->
+
+> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 La barra mínima para la siguiente minor release. Si algo de esto no está, la release no sale.

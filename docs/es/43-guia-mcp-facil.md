@@ -1,5 +1,11 @@
 # Guía fácil de MCP para usuarios no técnicos
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 La ruta más corta para usar `sdd-mcp` sin pelearte con nada técnico.

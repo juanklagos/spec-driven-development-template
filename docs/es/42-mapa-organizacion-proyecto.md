@@ -1,5 +1,11 @@
 # Mapa de organización del proyecto
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Cómo está organizado el repositorio, carpeta por carpeta.

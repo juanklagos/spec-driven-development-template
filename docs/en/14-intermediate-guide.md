@@ -1,5 +1,11 @@
 # 🛠️ Intermediate guide (teams and real projects)
 
+<!-- sdd:doc-type:start -->
+
+> **Tutorial** · A guided lesson. Follow it start to finish and you will have built something.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Language pair / Par de idioma
 
 - English: **14-intermediate-guide.md**

@@ -1,5 +1,11 @@
 # Introducción
 
+<!-- sdd:doc-type:start -->
+
+> **Explicación** · Contexto y razones. Aquí no hay instrucciones.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---

@@ -1,5 +1,11 @@
 # 🎨 SDD Builder: build your specs visually
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 The SDD Builder is a drag-and-drop canvas where you compose your SDD flow as connected cards, and every card is a **real** `specs/NNN-slug/` bundle on disk. Your markdown stays the source of truth: approving, editing and ticking tasks touch only the lines they have to inside your `.md` files, while the canvas stores nothing but positions and connections in `specs/board.canvas` (the open JSON Canvas format). This guide walks the whole product from the two commands that open it to running it from an AI agent, with real screenshots of a small demo project: an online plant store.
 
 ![The SDD Builder canvas: the identity bar on top with the workspace path and the ⌘K search; below it the context strip (Graph/Board and filters); on the left the rail with Idea/Epic/Spec and the specs/ list; in the middle an idea note containing two epics, spec cards with status and score, an amber "depends on" edge and a red "blocks" one; at the bottom the gate bar with the verdict and the rule always visible](../assets/builder/canvas.png)
@@ -86,46 +92,9 @@ SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
 
 ## Where everything lives
 
-The top bar does not carry a button for everything: almost everything lives in the **⌘K search** (Ctrl+K on Windows and Linux) and in the **⋯** menu. You type what you want and press Enter.
+Almost nothing lives in buttons: it is in the **⌘K search** (Ctrl+K on Windows and Linux) and the **⋯** menu. You type what you want and press Enter.
 
-**In ⌘K you can:**
-
-| You type | What happens |
-| :--- | :--- |
-| a spec number or name | jumps to that card and opens it |
-| "validate" | runs the real project validation |
-| "approve" | opens the approval tab of the spec you have open |
-| "decision" | opens the logbook to record a decision |
-| "reports" | regenerates `STATUS.md` and the roadmap |
-| "PNG" | exports the graph as an image |
-| "templates" | opens the template gallery |
-| "assistant" | opens the assistant that proposes a whole board |
-| "connect" | tells you how to connect your agent |
-| "tour" | replays the guided walkthrough |
-| "language" | switches between Spanish and English |
-| "save" | forces a save right now |
-| "dashboard" | opens the status page |
-
-Inside ⌘K you move with ↑ and ↓, run with Enter and close with Esc.
-
-**Keyboard shortcuts**, for when you know your way around:
-
-| Key | What it does |
-| :--- | :--- |
-| **I** | drops an Idea note in the middle |
-| **E** | drops an Epic note |
-| **S** | opens the new-spec form |
-| **⌘K** / Ctrl+K | opens the search |
-| **⌘Z** / Ctrl+Z | undo |
-| **⇧⌘Z** / Ctrl+Shift+Z | redo |
-| **Delete** or **Backspace** | deletes the selected note or connection (spec cards are not deleted this way, and it tells you why) |
-| **⌘Enter** / Ctrl+Enter | confirms in the long text fields (note, assistant, AI request) |
-| **Esc** | cancels the edit |
-| **←** **→** | previous and next step in the tour |
-
-I, E and S only work when you are not typing in a field.
-
-**The filters** in the second strip hide nothing: they **dim** what does not match, so the board does not change shape while you look at it. There are three: `pending` (specs not approved yet), `with warnings` (specs with gate errors) and `with drift` (specs whose code changed after they were approved). To the right of that strip you get the counts: how many specs, how many connections, and the zoom level.
+The full tables — every ⌘K action, the keyboard shortcuts and what each filter does — are in the [builder reference](./54-builder-reference.md), so this guide can be read straight through.
 
 ## Your first project with the ✨ assistant
 

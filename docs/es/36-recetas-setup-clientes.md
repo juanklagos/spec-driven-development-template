@@ -1,5 +1,11 @@
 # Recetas de setup por cliente
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Recetas exactas y copiables para los clientes IA locales que más se usan con este framework. Sin variantes ni ramas: el archivo, el bloque a pegar y cómo comprobar que quedó bien.

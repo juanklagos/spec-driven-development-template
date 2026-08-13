@@ -34,3 +34,4 @@
 | 030 | builder-rediseno-2a | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos | 2026-08-11 |
 | 031 | asistencia-ia-sin-copy-paste | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
 | 032 | conectar-agente-en-un-paso | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
+| 033 | documentacion-por-tipos | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |

@@ -1,5 +1,11 @@
 # Prompts para sidecar `spec/`
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Usa estos prompts cuando quieres que una IA use este framework sin clonar ni copiar el repositorio completo dentro de tu proyecto.

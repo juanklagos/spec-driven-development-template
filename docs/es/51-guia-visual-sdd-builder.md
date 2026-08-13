@@ -1,5 +1,11 @@
 # 🎨 SDD Builder: construye tus specs visualmente
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 El SDD Builder es un lienzo drag-and-drop donde compones tu flujo SDD como tarjetas conectadas, y cada tarjeta es un bundle **real** `specs/NNN-slug/` en disco. Tu markdown sigue siendo la fuente de verdad: aprobar, editar y marcar tareas son operaciones que tocan solo lo justo dentro de tus archivos `.md`, mientras el lienzo no guarda más que posiciones y uniones en `specs/board.canvas` (el formato abierto JSON Canvas). Esta guía recorre el producto completo, desde los dos comandos que lo abren hasta usarlo desde un agente IA, con capturas reales de un proyecto demo pequeño: una tienda online de plantas.
 
 ![El lienzo del SDD Builder: arriba la barra de identidad con la ruta del workspace y el buscador ⌘K; debajo la franja de contexto (Grafo/Tablero y filtros); a la izquierda el rail con Idea/Épica/Spec y la lista de specs/; en el centro una nota de idea que contiene dos épicas, tarjetas de spec con estado y puntaje, una unión ámbar «depende de» y una roja «bloquea»; abajo la barra del gate con el veredicto y la regla siempre visible](../assets/builder/canvas.png)
@@ -86,46 +92,9 @@ SDD_PROJECT_ROOT=~/sdd-playground npm run mcp:http:start
 
 ## Dónde está cada cosa
 
-La barra superior no tiene botones para todo: casi todo vive en el **buscador ⌘K** (Ctrl+K en Windows y Linux) y en el menú **⋯**. Se escribe lo que quieres y se pulsa Enter.
+Casi nada vive en botones: está en el **buscador ⌘K** (Ctrl+K en Windows y Linux) y en el menú **⋯**. Escribes lo que quieres y pulsas Enter.
 
-**En ⌘K puedes:**
-
-| Escribes | Qué hace |
-| :--- | :--- |
-| el número o el nombre de una spec | salta a esa tarjeta y la abre |
-| «validar» | ejecuta la validación real del proyecto |
-| «aprobar» | abre la pestaña de aprobación de la spec que tengas abierta |
-| «decisión» | abre la bitácora para registrar una decisión |
-| «informes» | regenera `STATUS.md` y el roadmap |
-| «PNG» | exporta el grafo como imagen |
-| «plantillas» | abre la galería de plantillas |
-| «asistente» | abre el asistente que propone un tablero entero |
-| «conectar» | te dice cómo conectar tu agente |
-| «tour» | vuelve a lanzar el recorrido guiado |
-| «idioma» | cambia entre español e inglés |
-| «guardar» | fuerza el guardado ahora |
-| «dashboard» | abre la página de estado |
-
-Dentro de ⌘K te mueves con ↑ y ↓, ejecutas con Enter y cierras con Esc.
-
-**Atajos de teclado**, para cuando ya te lo sabes:
-
-| Tecla | Qué hace |
-| :--- | :--- |
-| **I** | pone una nota de Idea en el centro |
-| **E** | pone una nota de Épica |
-| **S** | abre el formulario de spec nueva |
-| **⌘K** / Ctrl+K | abre el buscador |
-| **⌘Z** / Ctrl+Z | deshace |
-| **⇧⌘Z** / Ctrl+Shift+Z | rehace |
-| **Supr** o **Retroceso** | borra la nota o la unión seleccionada (las tarjetas de spec no se borran así, y te explica por qué) |
-| **⌘Enter** / Ctrl+Enter | confirma en los campos de texto largos (nota, asistente, petición a la IA) |
-| **Esc** | cancela la edición |
-| **←** **→** | avanza y retrocede en el tour |
-
-Las tres teclas I, E y S solo funcionan cuando no estás escribiendo en un campo.
-
-**Los filtros** de la segunda franja no ocultan nada: **atenúan** lo que no coincide, para que el tablero no cambie de forma mientras miras. Son tres: `pendientes` (specs sin aprobar), `con avisos` (specs con errores del gate) y `con deriva` (specs cuyo código cambió después de aprobarlas). A la derecha de esa franja tienes el recuento: cuántas specs, cuántas uniones y el zoom.
+Las tablas completas —cada acción de ⌘K, los atajos de teclado y qué hace cada filtro— están en la [referencia del builder](./54-referencia-del-builder.md), para que esta guía se pueda leer de corrido.
 
 ## Tu primer proyecto con el asistente ✨
 

@@ -101,6 +101,7 @@ flowchart LR
 | 51 | SDD Builder visual guide / Guía visual del SDD Builder | [EN](./en/51-sdd-builder-visual-guide.md) | [ES](./es/51-guia-visual-sdd-builder.md) |
 | 52 | Upgrade guide / Guía de actualización | [EN](./en/52-upgrade-guide.md) | [ES](./es/52-guia-de-actualizacion.md) |
 | 53 | Writing style / Estilo de escritura | [EN](./en/53-writing-style.md) | [ES](./es/53-estilo-de-escritura.md) |
+| 54 | Builder reference / Referencia del builder | [EN](./en/54-builder-reference.md) | [ES](./es/54-referencia-del-builder.md) |
 
 ### MCP
 

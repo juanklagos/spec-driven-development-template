@@ -1,5 +1,11 @@
 # Roadmap público
 
+<!-- sdd:doc-type:start -->
+
+> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Aquí queda por escrito hacia dónde va el framework, para que nadie tenga que adivinarlo leyendo commits.

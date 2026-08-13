@@ -21,7 +21,9 @@
     "mcp:smoke": "npm run build && node scripts/smoke-test-mcp.mjs",
     "mcp:http:smoke": "npm run build && node scripts/smoke-test-mcp-http.mjs",
     "mcp:pack:smoke": "npm run build && node scripts/smoke-test-npm-package.mjs",
-    "builder:build": "cd builder && npm install && npm run build"
+    "builder:build": "cd builder && npm install && npm run build",
+    "docs:types": "node scripts/sync-doc-types.mjs",
+    "docs:links": "node scripts/check-doc-links.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

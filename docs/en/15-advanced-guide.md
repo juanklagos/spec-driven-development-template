@@ -1,5 +1,11 @@
 # 🧭 Advanced guide (high-consistency teams)
 
+<!-- sdd:doc-type:start -->
+
+> **Tutorial** · A guided lesson. Follow it start to finish and you will have built something.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Language pair / Par de idioma
 
 - English: **15-advanced-guide.md**

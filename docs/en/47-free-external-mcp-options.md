@@ -1,5 +1,11 @@
 # Free External MCP Options
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 Which free external MCP options exist, and what they can and cannot do for this framework. It all comes down to one distinction: a free external repo-context MCP reads, and the local operational `sdd-mcp` writes.

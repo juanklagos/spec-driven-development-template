@@ -1,5 +1,11 @@
 # From written idea to specs with SDD (3 levels)
 
+<!-- sdd:doc-type:start -->
+
+> **Tutorial** · A guided lesson. Follow it start to finish and you will have built something.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Back_to_index-2D3139?style=for-the-badge" alt="Back to index"></a>
 
 ---

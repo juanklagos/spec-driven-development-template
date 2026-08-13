@@ -1,5 +1,11 @@
 # Cómo se escribe la documentación de este proyecto
 
+<!-- sdd:doc-type:start -->
+
+> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+
+<!-- sdd:doc-type:end -->
+
 <a href="../README.md"><img src="https://img.shields.io/badge/⬅️_Volver_al_índice-2D3139?style=for-the-badge" alt="Volver al índice"></a>
 
 ---
@@ -20,6 +26,26 @@ Estas reglas no son inventadas. Son las que usan las plataformas cuya documentac
 - [Guía de estilo para desarrolladores de Google](https://developers.google.com/style/highlights) — segunda persona, voz activa, presente, mayúscula solo al inicio de los títulos.
 - [Guía de estilo de Microsoft](https://learn.microsoft.com/en-us/style-guide/top-10-tips-style-voice) — escribe como hablas, frases cortas, palabras de todos los días, poda cada palabra sobrante.
 - [Diátaxis](https://diataxis.fr/) — tutorial, cómo-hacer, referencia y explicación son cuatro cosas distintas; mezclarlas es la causa más común de documentación confusa.
+
+## Los cinco tipos de documento
+
+Regla de [Diátaxis](https://diataxis.fr/): un documento sirve a **una** necesidad. Mezclarlas es la causa más común de documentación confusa, y es lo que le pasaba a este proyecto: la guía del builder era a la vez lección, recetario, referencia y ensayo, así que crecía sin criterio y nadie sabía dónde poner lo nuevo.
+
+Antes de escribir, elige el tipo. La cabecera de cada guía lo declara sola, generada desde `site/src/guides.mjs`.
+
+| Tipo | El lector quiere | Qué lleva | Qué NO lleva |
+| :--- | :--- | :--- | :--- |
+| **Tutorial** | «enséñame haciendo» | una lección de principio a fin, con un resultado concreto | referencia exhaustiva, alternativas, discusión |
+| **Cómo hacer** | «ayúdame a lograr X» | los pasos de una tarea, dando por sabido lo básico | explicar conceptos desde cero |
+| **Referencia** | «dime cómo es» | tablas y datos para consultar mientras trabajas | pasos guiados, opiniones |
+| **Explicación** | «ayúdame a entender por qué» | contexto, razones, alternativas rechazadas | instrucciones |
+| **Proyecto** | material del repositorio | roadmap, lanzamientos, auditorías | nada de esto es documentación de producto |
+
+**Cómo elegir**: si el lector no sabe nada todavía, tutorial. Si sabe qué quiere y necesita los pasos, cómo hacer. Si ya está trabajando y necesita un dato, referencia. Si pregunta «¿por qué así?», explicación.
+
+**La señal de que mezclaste**: tu guía tiene una tabla larga en medio de un recorrido paso a paso. Esa tabla es referencia y quiere vivir aparte; deja un enlace en su sitio.
+
+Para cambiar el tipo de una guía, edítalo en `GUIDE_TYPES` y ejecuta `node scripts/sync-doc-types.mjs`. La cabecera y el menú del sitio salen de ahí, así que no pueden discrepar.
 
 ## Las reglas
 

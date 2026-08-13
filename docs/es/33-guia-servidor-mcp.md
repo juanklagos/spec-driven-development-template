@@ -1,5 +1,11 @@
 # Guía del servidor MCP
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Solo setup y conectividad MCP. Nada más.

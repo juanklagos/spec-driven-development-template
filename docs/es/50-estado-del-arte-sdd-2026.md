@@ -1,5 +1,11 @@
 # SDD en 2026: estado del arte y cómo se compara este template
 
+<!-- sdd:doc-type:start -->
+
+> **Explicación** · Contexto y razones. Aquí no hay instrucciones.
+
+<!-- sdd:doc-type:end -->
+
 > Corte de investigación: 2026-07-17. Las fuentes están al final.
 > Objetivo: que aprendas cómo se ve Spec-Driven Development en la industria hoy, y veas exactamente dónde está parado este template.
 

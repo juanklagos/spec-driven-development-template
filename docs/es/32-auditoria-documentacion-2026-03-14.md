@@ -1,5 +1,11 @@
 # Auditoría de documentación (2026-03-14)
 
+<!-- sdd:doc-type:start -->
+
+> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Par de idioma / Language pair
 
 - Español: **32-auditoria-documentacion-2026-03-14.md**

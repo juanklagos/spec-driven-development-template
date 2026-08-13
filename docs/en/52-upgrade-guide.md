@@ -1,5 +1,11 @@
 # Upgrade guide
 
+<!-- sdd:doc-type:start -->
+
+> **How-to** · Steps for one specific job. Assumes you already know the basics.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 Bring a project that already uses SDD up to date, knowing in advance what gets

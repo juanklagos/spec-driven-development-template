@@ -1,5 +1,11 @@
 # Command Results Reference
 
+<!-- sdd:doc-type:start -->
+
+> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This guide documents what each core script and MCP tool creates, modifies, and returns.

@@ -1,5 +1,11 @@
 # Launch Kit
 
+<!-- sdd:doc-type:start -->
+
+> **Project** · Repository material: roadmap, releases and audits. Not product documentation.
+
+<!-- sdd:doc-type:end -->
+
 ## Purpose
 
 This page stores short launch-ready copy for diffusion of the framework.

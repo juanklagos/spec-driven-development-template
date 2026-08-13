@@ -1,5 +1,11 @@
 # Opciones gratuitas de MCP externo
 
+<!-- sdd:doc-type:start -->
+
+> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Qué opciones gratuitas de MCP externo existen hoy y cuál conviene para que la IA entienda este framework.

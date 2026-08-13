@@ -1,5 +1,11 @@
 # Kit de lanzamiento
 
+<!-- sdd:doc-type:start -->
+
+> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+
+<!-- sdd:doc-type:end -->
+
 ## Propósito
 
 Copy corto y reutilizable para anunciar el framework. Cópialo, ajústale la versión y publícalo.

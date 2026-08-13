@@ -1,5 +1,11 @@
 # 🛠️ Guía intermedia (equipos y proyectos reales)
 
+<!-- sdd:doc-type:start -->
+
+> **Tutorial** · Una lección guiada. Síguela de principio a fin y habrás construido algo.
+
+<!-- sdd:doc-type:end -->
+
 ## 🌍 Par de idioma / Language pair
 
 - Español: **14-guia-intermedia.md**
