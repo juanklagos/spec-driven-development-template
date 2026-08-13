@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Explicación** · Contexto y razones. Aquí no hay instrucciones.
+<p class="sdd-doc-type"><strong>Explicación</strong> Contexto y razones. Aquí no hay instrucciones.</p>
 
 <!-- sdd:doc-type:end -->
 

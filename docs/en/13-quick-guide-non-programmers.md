@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Tutorial** · A guided lesson. Follow it start to finish and you will have built something.
+<p class="sdd-doc-type"><strong>Tutorial</strong> A guided lesson. Follow it start to finish and you will have built something.</p>
 
 <!-- sdd:doc-type:end -->
 

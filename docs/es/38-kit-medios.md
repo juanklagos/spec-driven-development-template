@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Proyecto** · Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.
+<p class="sdd-doc-type"><strong>Proyecto</strong> Material del repositorio: roadmap, lanzamientos y auditorías. No es documentación de producto.</p>
 
 <!-- sdd:doc-type:end -->
 

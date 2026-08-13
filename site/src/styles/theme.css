@@ -154,3 +154,112 @@ input, button, .sl-flex > kbd, details, blockquote,
   border: 1px solid var(--sl-color-hairline);
   border-radius: 0;
 }
+
+/* ============================================================
+ * Spec 034 — jerarquía de lectura.
+ *
+ * La tentación era añadir una sans para titulares, como hace ia.net (los
+ * autores de esta misma fuente). Se descartó: una segunda familia significa
+ * otro archivo auto-hospedado, otra licencia y romper la única identidad
+ * tipográfica del proyecto. La antítesis tenía razón en el síntoma, no en la
+ * causa — iA Writer Quattro es duoespaciada y está hecha para leerse largo;
+ * lo que cansa es la medida, no la familia. Se ataca eso.
+ * ============================================================ */
+
+/* Medida de línea. ~68 caracteres es el rango donde el ojo no pierde el
+   renglón al volver. Solo el cuerpo: tablas, código y elementos anchos
+   siguen usando todo el ancho disponible. */
+.sl-markdown-content > p,
+.sl-markdown-content > ul,
+.sl-markdown-content > ol,
+.sl-markdown-content > blockquote {
+  max-width: 68ch;
+}
+
+.sl-markdown-content {
+  line-height: 1.75;
+}
+
+/* Jerarquía por tamaño, peso y espacio — no por familia. El aire encima de
+   un título es lo que lo separa de la sección anterior; sin él, todos los
+   niveles se leen igual. */
+.sl-markdown-content :is(h2, h3, h4) {
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.sl-markdown-content h2 {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sl-color-hairline);
+}
+.sl-markdown-content h3 {
+  font-size: 1.15rem;
+  margin-top: 2.25rem;
+}
+.sl-markdown-content h4 {
+  font-size: 1rem;
+  margin-top: 1.75rem;
+  color: var(--sl-color-white);
+}
+
+/* ---- Cabecera de tipo (spec 033, presentada por la 034) ----
+ * Se emite como <p class="sdd-doc-type"> en vez de cita para que no se
+ * confunda con un aviso. En GitHub y en el paquete npm, sin CSS, degrada a
+ * una línea de texto legible. */
+.sdd-doc-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin-block: 0 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  font-size: 0.8125rem;
+  color: var(--sl-color-gray-3);
+}
+.sdd-doc-type strong {
+  color: var(--sl-color-text-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.6875rem;
+}
+
+/* ---- Portada (spec 034) ----
+ * Sin tarjetas: la jerarquía la hace la tipografía, como en docs.stripe.com.
+ * Los grupos son rejillas simples que colapsan a una columna en móvil. */
+.sdd-home {
+  max-width: 62rem;
+  margin-inline: auto;
+  text-align: start;
+}
+.sdd-home h2 {
+  margin-top: 3.5rem;
+  font-size: 1.375rem;
+}
+.sdd-home h3 {
+  margin-top: 0;
+  font-size: 1.0625rem;
+}
+.sdd-home pre {
+  font-size: 0.8125rem;
+}
+.sdd-doors,
+.sdd-needs {
+  display: grid;
+  gap: 2rem 3rem;
+  margin-top: 1.5rem;
+}
+.sdd-doors { grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); }
+.sdd-needs { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.sdd-needs p { margin-bottom: 0.5rem; }
+.sdd-doors ul,
+.sdd-needs ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}

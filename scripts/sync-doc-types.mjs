@@ -30,11 +30,19 @@ function typeIndex() {
   return map;
 }
 
-/** The rendered block for one guide, in one language. */
+/**
+ * The rendered block for one guide, in one language.
+ *
+ * HTML, not a markdown blockquote (spec 034): as a quote it looked like any
+ * other aside on the site, and this is the reader's main orientation cue.
+ * A <p> with a class is the safest HTML subset — GitHub and the npm payload
+ * render it as a plain readable line with no CSS at all, and the site gives
+ * it its own treatment.
+ */
 function renderBlock(type, locale) {
   const badge = locale === "es" ? type.esBadge : type.badge;
   const intent = locale === "es" ? type.esIntent : type.intent;
-  return [START, "", `> **${badge}** · ${intent}`, "", END].join("\n");
+  return [START, "", `<p class="sdd-doc-type"><strong>${badge}</strong> ${intent}</p>`, "", END].join("\n");
 }
 
 /**

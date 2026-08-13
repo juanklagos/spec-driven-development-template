@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Cómo hacer** · Pasos para una tarea concreta. Da por sabido lo básico.
+<p class="sdd-doc-type"><strong>Cómo hacer</strong> Pasos para una tarea concreta. Da por sabido lo básico.</p>
 
 <!-- sdd:doc-type:end -->
 

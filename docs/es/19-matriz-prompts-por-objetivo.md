@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Referencia** · Datos para consultar mientras trabajas. No está pensada para leerse entera.
+<p class="sdd-doc-type"><strong>Referencia</strong> Datos para consultar mientras trabajas. No está pensada para leerse entera.</p>
 
 <!-- sdd:doc-type:end -->
 

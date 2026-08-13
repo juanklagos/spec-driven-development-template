@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Explanation** · Background and reasoning. No instructions here.
+<p class="sdd-doc-type"><strong>Explanation</strong> Background and reasoning. No instructions here.</p>
 
 <!-- sdd:doc-type:end -->
 

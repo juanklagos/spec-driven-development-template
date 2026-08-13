@@ -14,22 +14,101 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+{/* Spec 034 — no cards here on purpose. Four icon cards competed with each
+    other and none won; the reader could not tell which door was theirs.
+    Grouped links, hierarchy by type only (see docs/en/53-writing-style.md). */}
 
-<CardGrid stagger>
-	<Card title="Learn by doing" icon="open-book">
-		The sidebar groups every guide by what you need right now: learn by doing, get something done, look something up, understand why. Start with [Beginner](./guides/13-quick-guide-non-programmers/) · [Intermediate](./guides/14-intermediate-guide/) · [Advanced](./guides/15-advanced-guide/) — even if you don't program. Or learn by doing with the [interactive course](https://github.com/juanklagos/aprende-sdd).
-	</Card>
-	<Card title="Apply it for real" icon="rocket">
-		Compact `spec/` sidecar for real projects, `/sdd:*` agent commands, and validation scripts that run the gate and report its scope.
-	</Card>
-	<Card title="State of the art" icon="star">
-		Where this template stands vs Spec Kit, Kiro, OpenSpec and the 2026 ecosystem: [SDD in 2026](./guides/50-sdd-state-of-the-art-2026/).
-	</Card>
-	<Card title="Or use the desktop app" icon="laptop">
-		[SDD Desk](./download/) is the same visual builder in its own window, with its own Node inside — nothing to install first. It also hosts the MCP endpoint your agents connect to.
-	</Card>
-	<Card title="En español" icon="translate">
-		Toda la documentación existe en español: usa el selector de idioma o ve a [las guías en español](../es/guides/00-introduccion/).
-	</Card>
-</CardGrid>
+<div class="sdd-home">
+
+## This is what it does
+
+Run the check in any project. It reads your files and tells you, in one screen,
+whether you are allowed to write code yet:
+
+```
+gate: blocked   3 errors · 3 warnings · 2/5 approved
+  029-checkout        approved, but no consent recorded for it
+  031-payments        plan.md does not mention the approved requirements
+no code before an approved spec
+```
+
+That output is the whole product. Everything else exists to make it true.
+
+<div class="sdd-doors">
+<div>
+
+### I don't write code
+
+You are a founder, a product manager, or just curious. You will describe what
+you want and let an AI assistant do the typing.
+
+- [Start here, no jargon](https://github.com/juanklagos/spec-driven-development-template/blob/main/START_HERE_NON_TECH.md)
+- [Quick guide for non-programmers](./guides/13-quick-guide-non-programmers/)
+- [30-minute onboarding](./guides/23-30-minute-onboarding/)
+- [Glossary — every word that stops people](./guides/04-glossary/)
+
+</div>
+<div>
+
+### I write code
+
+You will install it, connect your AI tool and run the checks yourself.
+
+- [Quickstart](https://github.com/juanklagos/spec-driven-development-template/blob/main/QUICKSTART.md)
+- [Connect your AI tool (MCP)](./guides/33-mcp-server-guide/)
+- [The visual board](./guides/51-sdd-builder-visual-guide/)
+- [Complete MCP reference](./guides/41-complete-mcp-reference/)
+
+</div>
+</div>
+
+## Find a guide by what you need
+
+<div class="sdd-needs">
+<div>
+
+**Learn by doing**
+
+- [Quick guide for non-programmers](./guides/13-quick-guide-non-programmers/)
+- [30-minute onboarding](./guides/23-30-minute-onboarding/)
+- [The complete 3-level path](./guides/18-complete-3-level-path/)
+
+</div>
+<div>
+
+**Get something done**
+
+- [Use it with any AI tool](./guides/03-how-to-use-with-any-ai/)
+- [The visual board](./guides/51-sdd-builder-visual-guide/)
+- [Upgrade without surprises](./guides/52-upgrade-guide/)
+
+</div>
+<div>
+
+**Look something up**
+
+- [Glossary](./guides/04-glossary/)
+- [Complete MCP reference](./guides/41-complete-mcp-reference/)
+- [Builder reference](./guides/54-builder-reference/)
+
+</div>
+<div>
+
+**Understand why**
+
+- [Introduction](./guides/00-introduction/)
+- [The workflow](./guides/02-workflow/)
+- [SDD in 2026](./guides/50-sdd-state-of-the-art-2026/)
+
+</div>
+</div>
+
+Every guide says which of these it is, right under its title. The sidebar is
+grouped the same way.
+
+## Or use the desktop app
+
+[SDD Desk](./download/) is the same visual board in its own window. Nothing
+else to install.
+
+</div>

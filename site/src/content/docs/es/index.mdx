@@ -5,8 +5,8 @@ template: splash
 hero:
   tagline: "Una sola regla: no se escribe código hasta que apruebas una especificación escrita. Un script comprueba esa regla cada vez que lo ejecutas, y te dice exactamente qué revisó."
   actions:
-    - text: Empieza con las guías
-      link: ./guides/00-introduccion/
+    - text: Empieza por las guías
+      link: ./guides/00-introduction/
       icon: right-arrow
     - text: GitHub
       link: https://github.com/juanklagos/spec-driven-development-template
@@ -14,22 +14,101 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+{/* Spec 034 — aquí no hay tarjetas a propósito. Cuatro tarjetas con icono
+    competían entre sí y no ganaba ninguna; el lector no sabía cuál era su
+    puerta. Enlaces agrupados, jerarquía solo por tipografía. */}
 
-<CardGrid stagger>
-	<Card title="Aprende haciendo" icon="open-book">
-		El menú agrupa cada guía por lo que necesitas ahora mismo: aprender haciendo, conseguir algo concreto, consultar un dato, entender por qué. Empieza por [Básico](./guides/13-guia-rapida-no-programadores/) · [Intermedio](./guides/14-guia-intermedia/) · [Avanzado](./guides/15-guia-avanzada/) — incluso si no programas. O aprende haciendo con el [curso interactivo](https://github.com/juanklagos/aprende-sdd).
-	</Card>
-	<Card title="Aplícalo de verdad" icon="rocket">
-		Sidecar compacto `spec/` para proyectos reales, comandos `/sdd:*` para agentes y scripts de validación que ejecutan la compuerta y declaran su alcance.
-	</Card>
-	<Card title="Estado del arte" icon="star">
-		Dónde está este template frente a Spec Kit, Kiro, OpenSpec y el ecosistema 2026: [SDD en 2026](./guides/50-estado-del-arte-sdd-2026/).
-	</Card>
-	<Card title="O usa la app de escritorio" icon="laptop">
-		[SDD Desk](./download/) es el mismo builder visual en su propia ventana, con su propio Node adentro — no hay que instalar nada antes. También hospeda el endpoint MCP al que se conectan tus agentes.
-	</Card>
-	<Card title="In English" icon="translate">
-		All documentation exists in English: use the language picker or go to [the English guides](../en/guides/00-introduction/).
-	</Card>
-</CardGrid>
+<div class="sdd-home">
+
+## Esto es lo que hace
+
+Ejecuta la comprobación en cualquier proyecto. Lee tus archivos y te dice, en
+una pantalla, si ya puedes escribir código:
+
+```
+gate: bloqueado   3 errores · 3 avisos · 2/5 aprobadas
+  029-checkout        aprobada, pero sin consentimiento registrado
+  031-pagos           plan.md no menciona los requisitos aprobados
+no hay código sin spec aprobada
+```
+
+Esa salida es el producto entero. Todo lo demás existe para que sea verdad.
+
+<div class="sdd-doors">
+<div>
+
+### No escribo código
+
+Eres fundador, product manager o simplemente tienes curiosidad. Vas a describir
+lo que quieres y dejar que un asistente de IA escriba.
+
+- [Empieza aquí, sin jerga](https://github.com/juanklagos/spec-driven-development-template/blob/main/START_HERE_NON_TECH.md)
+- [Guía rápida para no programadores](./guides/13-quick-guide-non-programmers/)
+- [Onboarding en 30 minutos](./guides/23-30-minute-onboarding/)
+- [Glosario — las palabras que frenan](./guides/04-glossary/)
+
+</div>
+<div>
+
+### Escribo código
+
+Vas a instalarlo, conectar tu herramienta de IA y ejecutar las comprobaciones.
+
+- [Inicio rápido](https://github.com/juanklagos/spec-driven-development-template/blob/main/QUICKSTART.md)
+- [Conecta tu herramienta de IA (MCP)](./guides/33-mcp-server-guide/)
+- [El tablero visual](./guides/51-sdd-builder-visual-guide/)
+- [Referencia completa de MCP](./guides/41-complete-mcp-reference/)
+
+</div>
+</div>
+
+## Encuentra una guía por lo que necesitas
+
+<div class="sdd-needs">
+<div>
+
+**Aprende haciendo**
+
+- [Guía rápida para no programadores](./guides/13-quick-guide-non-programmers/)
+- [Onboarding en 30 minutos](./guides/23-30-minute-onboarding/)
+- [La ruta completa de 3 niveles](./guides/18-complete-3-level-path/)
+
+</div>
+<div>
+
+**Consigue algo concreto**
+
+- [Úsalo con cualquier herramienta de IA](./guides/03-how-to-use-with-any-ai/)
+- [El tablero visual](./guides/51-sdd-builder-visual-guide/)
+- [Actualiza sin sorpresas](./guides/52-upgrade-guide/)
+
+</div>
+<div>
+
+**Consulta un dato**
+
+- [Glosario](./guides/04-glossary/)
+- [Referencia completa de MCP](./guides/41-complete-mcp-reference/)
+- [Referencia del builder](./guides/54-builder-reference/)
+
+</div>
+<div>
+
+**Entiende por qué**
+
+- [Introducción](./guides/00-introduction/)
+- [El flujo de trabajo](./guides/02-workflow/)
+- [SDD en 2026](./guides/50-sdd-state-of-the-art-2026/)
+
+</div>
+</div>
+
+Cada guía dice cuál de estas es, justo debajo de su título. El menú lateral
+está agrupado igual.
+
+## O usa la app de escritorio
+
+[SDD Desk](./download/) es el mismo tablero visual en su propia ventana. No hay
+nada más que instalar.
+
+</div>

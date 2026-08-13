@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **Reference** · Facts to consult while you work. Not meant to be read end to end.
+<p class="sdd-doc-type"><strong>Reference</strong> Facts to consult while you work. Not meant to be read end to end.</p>
 
 <!-- sdd:doc-type:end -->
 

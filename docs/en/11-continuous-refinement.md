@@ -2,7 +2,7 @@
 
 <!-- sdd:doc-type:start -->
 
-> **How-to** · Steps for one specific job. Assumes you already know the basics.
+<p class="sdd-doc-type"><strong>How-to</strong> Steps for one specific job. Assumes you already know the basics.</p>
 
 <!-- sdd:doc-type:end -->
 
