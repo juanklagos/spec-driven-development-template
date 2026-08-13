@@ -3,7 +3,7 @@ title: SDD Template
 description: Learn Spec-Driven Development and apply it to real projects with AI agents.
 template: splash
 hero:
-  tagline: Learn Spec-Driven Development and apply it to real projects — with AI as your co-pilot and a gate that stays shut until a spec is approved, a plan agrees and you have recorded your consent.
+  tagline: "One rule: no code until you approve a written spec. A script checks that rule every time you run it, and prints exactly what it looked at."
   actions:
     - text: Start with the guides
       link: ./guides/00-introduction/
@@ -17,8 +17,8 @@ hero:
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
-	<Card title="Learn by levels" icon="open-book">
-		Every guide is tagged by level in the sidebar. Paths: [Beginner](./guides/13-quick-guide-non-programmers/) · [Intermediate](./guides/14-intermediate-guide/) · [Advanced](./guides/15-advanced-guide/) — even if you don't program. Or learn by doing with the [interactive course](https://github.com/juanklagos/aprende-sdd).
+	<Card title="Learn by doing" icon="open-book">
+		The sidebar groups every guide by what you need right now: learn by doing, get something done, look something up, understand why. Start with [Beginner](./guides/13-quick-guide-non-programmers/) · [Intermediate](./guides/14-intermediate-guide/) · [Advanced](./guides/15-advanced-guide/) — even if you don't program. Or learn by doing with the [interactive course](https://github.com/juanklagos/aprende-sdd).
 	</Card>
 	<Card title="Apply it for real" icon="rocket">
 		Compact `spec/` sidecar for real projects, `/sdd:*` agent commands, and validation scripts that run the gate and report its scope.
