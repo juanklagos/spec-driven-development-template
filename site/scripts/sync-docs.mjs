@@ -14,6 +14,7 @@
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { slug as githubSlug } from 'github-slugger';
 import { assertGuidesAreCovered, publishedSlugs } from '../src/guides.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -25,6 +26,12 @@ const RAW = 'https://raw.githubusercontent.com/juanklagos/spec-driven-developmen
 // group. Throwing here beats publishing a guide nobody can reach from the menu.
 const guideCount = assertGuidesAreCovered();
 const slugOf = publishedSlugs();
+// El slug del ARCHIVO no es la URL. Astro sirve cada guia por `github-slugger`,
+// que borra los puntos: `39-v1.2.0-preparation` se publica en
+// `39-v120-preparation`. Reescribir un enlace con el nombre del archivo daba una
+// pagina inexistente, y solo dos guias tienen punto en el nombre, asi que la
+// rotura estuvo latente hasta que algo las enlazo (spec 035).
+const urlOf = (file) => githubSlug(slugOf(file));
 
 // A link resolved by one rule must be invisible to the rules that follow. Without this the
 // last rule re-captures the output of the first: ](./19-guia.md) becomes ](../19-guide/) and
@@ -54,10 +61,10 @@ function transform(src, locale, file) {
 		.join('\n');
 
 	// Same-folder guide links: ](./NN-xxx.md) or ](NN-xxx.md)
-	text = text.replace(/\]\((?:\.\/)?(\d{2}-[^)#\s]+\.md)(#[^)]*)?\)/g, (_, f, hash = '') => `](${hold(`../${slugOf(f)}/${hash}`)})`);
+	text = text.replace(/\]\((?:\.\/)?(\d{2}-[^)#\s]+\.md)(#[^)]*)?\)/g, (_, f, hash = '') => `](${hold(`../${urlOf(f)}/${hash}`)})`);
 
 	// Cross-locale guide links: ](../es/NN-xxx.md) / ](../en/NN-xxx.md)
-	text = text.replace(/\]\(\.\.\/(en|es)\/([^)#\s]+\.md)(#[^)]*)?\)/g, (_, loc, f, hash = '') => `](${hold(`../../../${loc}/guides/${slugOf(f)}/${hash}`)})`);
+	text = text.replace(/\]\(\.\.\/(en|es)\/([^)#\s]+\.md)(#[^)]*)?\)/g, (_, loc, f, hash = '') => `](${hold(`../../../${loc}/guides/${urlOf(f)}/${hash}`)})`);
 
 	// Image links -> raw.githubusercontent (blob HTML pages would break <img>),
 	// resolved from docs/<locale>/ (e.g. ../assets/builder/canvas.png -> docs/assets/…)

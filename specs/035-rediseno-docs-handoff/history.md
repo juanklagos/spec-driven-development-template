@@ -31,3 +31,20 @@
   comprobados en el DOM, 10 líneas de terminal con su aviso y su cierre
   bilingüe, cero peticiones externas, builder intacto y cero enlaces rotos en
   las tres superficies.
+
+## 2026-08-17 — Segunda vuelta: menú, descarga y documentación caducada
+
+- El propietario rechazó el menú entregado: el contador se había resuelto
+  pegando `· N` a la etiqueta, no como pedía el handoff. Al reabrirlo apareció
+  un defecto mayor —dos taxonomías pintadas a la vez, con «Referencia»
+  significando dos cosas distintas en la misma fila— y 11 títulos con emoji.
+  Corregido en T11 y T12.
+- `/download/` se reescribe: el builder en el navegador pasa a ser la ruta
+  recomendada. Decisión en `bitacora/decisiones/2026-08-17-builder-en-navegador-como-ruta-recomendada.md`.
+- Tres guías describían un estado inexistente (T14, T15). Decisión en
+  `bitacora/decisiones/2026-08-17-una-sola-lista-de-release.md`.
+- Enlazar por primera vez a las guías 39 y 46 destapó que `sync-docs` reescribía
+  los enlaces con el nombre del archivo y no con el slug con el que Astro los
+  sirve, que borra los puntos. `check-doc-links` no lo veía porque solo miraba
+  los `href` absolutos. Los dos corregidos en T16; el verificador se comprobó
+  fallando antes de arreglar el origen.

@@ -1,4 +1,4 @@
-# Checklist de publicación (Release Checklist)
+# Checklist de publicación
 
 <!-- sdd:doc-type:start -->
 
@@ -10,7 +10,6 @@
 
 - Español: **09-release-checklist.md**
 - English: [../en/09-release-checklist.md](../en/09-release-checklist.md)
-
 
 > [!TIP]
 > Para inicio rápido y prompts, usa:
@@ -26,74 +25,95 @@ Mi proyecto es: [explica el proyecto].
 Revisa este checklist, dime qué falta y propón acciones exactas en lenguaje simple.
 ```
 
+## Para qué es esta lista
 
+Esta es **la** lista antes de publicar una versión, cada vez. Los comandos se
+ejecutan desde la carpeta principal del repositorio.
 
-Usa esta lista antes de publicar la plantilla en GitHub.
+Hubo otras dos listas —[39](./39-preparacion-v1.2.0.md) y
+[46](./46-preparacion-v1.3.0.md)— escritas para releases concretas que ya
+salieron. Se conservan como registro histórico y no se siguen.
 
-## 1. Validación de contenido
+## 1. La compuerta primero
 
-- [ ] El `README.md` explica claramente objetivo, estructura y uso.
-- [ ] La carpeta `idea/` tiene plantilla de idea general.
-- [ ] La carpeta `specs/` tiene reglas, índice y plantilla.
-- [ ] La carpeta `bitacora/` tiene estructura y plantillas.
-- [ ] Existe al menos un ejemplo completo de especificación (`001-ejemplo-inicial`).
-
-## 2. Integración con GitHub Spec Kit
-
-- [ ] Existe guía específica de integración (`docs/08-integracion-github-spec-kit.md`).
-- [ ] Se explican comandos de instalación e inicialización.
-- [ ] Se explica el flujo de comandos recomendado (`constitution`, `specify`, `plan`, `tasks`, `implement`).
-- [ ] Existe script de inicialización con Spec Kit (`scripts/init-project-with-spec-kit.sh`).
-
-## 3. Archivos de comunidad y gobernanza
-
-- [ ] `LICENSE` presente.
-- [ ] `CONTRIBUTING.md` presente.
-- [ ] `CODE_OF_CONDUCT.md` presente.
-- [ ] Plantillas de issue y pull request en `.github/`.
-
-## 4. Calidad de lenguaje
-
-- [ ] No hay siglas sin explicación.
-- [ ] El lenguaje es comprensible para personas nuevas y profesionales.
-- [ ] La documentación evita términos ambiguos.
-
-## 5. Preparación técnica para publicar
-
-- [ ] Git inicializado en el repositorio.
-- [ ] Primer commit realizado.
-- [ ] Rama principal definida (`main`).
-- [ ] Repositorio remoto conectado.
-- [ ] Push inicial realizado.
-
-## 6. Metadata recomendada en GitHub
-
-- [ ] Descripción breve del repositorio.
-- [ ] Temas (topics) añadidos. Recomendados:
-  - `spec-driven-development`
-  - `spec-kit`
-  - `template`
-  - `documentation`
-  - `ai-workflow`
-- [ ] Sitio o enlace de referencia (opcional).
-
-## 7. Versionado inicial
-
-- [ ] Crear etiqueta inicial:
+No hay release sin compuerta en verde, igual que no hay código sin spec.
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+./scripts/check-sdd-gate.sh
 ```
 
-## 8. Verificación final
+- [ ] La compuerta pasa: 0 errores.
+- [ ] Cada spec tocada en este ciclo está aprobada y su plan es consistente.
+- [ ] Las decisiones que se tomaron están en `bitacora/decisiones/`.
 
-- [ ] Cualquier persona puede seguir la guía sin pedir contexto adicional.
-- [ ] La plantilla se puede inicializar con `scripts/init-project.sh`.
-- [ ] La plantilla se puede inicializar con `scripts/init-project-with-spec-kit.sh`.
+## 2. Código
+
+```bash
+npm run typecheck && npm run build && npm test
+```
+
 - [ ] `npm run typecheck` pasa.
 - [ ] `npm run build` pasa.
-- [ ] `npm run mcp:smoke` pasa.
-- [ ] `npm run mcp:http:smoke` pasa.
-- [ ] La documentación MCP y las configuraciones copy/paste coinciden con la release actual.
-- [ ] Tag, versión y changelog están alineados.
+- [ ] `npm test` pasa — unitarios más la integración MCP.
+
+## 3. El servidor MCP responde de verdad
+
+Las tres pruebas de humo levantan el servidor y hablan con él; no leen el
+código, lo ejecutan.
+
+```bash
+npm run mcp:smoke && npm run mcp:http:smoke && npm run mcp:pack:smoke
+```
+
+- [ ] `mcp:smoke` pasa — transporte stdio.
+- [ ] `mcp:http:smoke` pasa — Streamable HTTP.
+- [ ] `mcp:pack:smoke` pasa — **el más importante antes de publicar**: empaqueta
+      el tarball tal como saldría a npm y lo ejecuta. Es el que detectó que un
+      pin interno exacto hacía que npm bajara la versión ya publicada de
+      `sdd-core` en vez de la del propio tarball.
+
+## 4. Documentación
+
+```bash
+npm run docs:types && npm run docs:links && npm run docs:contrast
+```
+
+- [ ] `docs:types` no deja cambios sin confirmar — la cabecera de tipo de cada
+      guía sale de `site/src/guides.mjs`, así que no pueden discrepar.
+- [ ] `docs:links` pasa en las tres superficies: `docs/`, el paquete npm y el
+      sitio construido.
+- [ ] `docs:contrast` pasa — ningún par de color por debajo de WCAG AA.
+- [ ] Ninguna afirmación sobre la interfaz describe algo que ya no existe.
+- [ ] El español y el inglés dicen lo mismo.
+
+## 5. Versiones alineadas
+
+Los cuatro paquetes y el `server.json` llevan **un solo número**, el de la
+release del repositorio ([guía 37](./37-estrategia-versionado.md)).
+
+- [ ] `packages/sdd-core`, `packages/sdd-mcp`, `packages/create-sdd-project` y
+      el paquete raíz coinciden.
+- [ ] `packages/sdd-mcp/server.json` coincide con ellos.
+- [ ] El pin de `sdd-mcp` sobre `sdd-core` no se quedó atrás.
+
+Esto no se revisa a ojo: lo comprueba `release-integrity.test.ts`, que corre
+dentro de `npm test`. Si falla, dice exactamente qué archivo corregir.
+
+## 6. Publicar
+
+- [ ] El `CHANGELOG.md` tiene la entrada de esta versión, con lo que cambió y
+      no solo los números.
+- [ ] La etiqueta de git, la versión de los paquetes y el changelog coinciden.
+- [ ] Las configuraciones copy/paste de MCP en la documentación corresponden a
+      esta versión.
+
+## Solo la primera vez
+
+Estos puntos son de la publicación inicial del repositorio, ya hecha. Quedan
+aquí porque sirven a quien parte de esta plantilla para su propio proyecto:
+
+- [ ] `LICENSE`, `CONTRIBUTING.md` y `CODE_OF_CONDUCT.md` presentes.
+- [ ] Plantillas de issue y pull request en `.github/`.
+- [ ] Descripción y temas (topics) del repositorio en GitHub.
+- [ ] `idea/`, `specs/` y `bitacora/` con sus plantillas, y al menos una spec
+      de ejemplo completa.

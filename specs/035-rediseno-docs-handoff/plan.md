@@ -1,6 +1,6 @@
 # Plan técnico 035 - Rediseño de la documentación (handoff)
 
-## Orden
+## Fases
 
 El del handoff, con una corrección: **el contraste va primero**, porque es un
 defecto ya publicado y no depende de ninguna decisión estética.
@@ -19,6 +19,38 @@ defecto ya publicado y no depende de ninguna decisión estética.
    `buildSidebar()`.
 5. **Verificación (R9, R10).** Contraste medido, build, enlaces en las tres
    superficies, redirecciones heredadas.
+6. **Menú, segunda vuelta (R7).** La primera entrega resolvió el contador
+   pegando `· N` a la etiqueta del grupo, no como pedía el handoff. El
+   propietario lo rechazó al verlo. Al reabrirlo apareció un defecto mayor: el
+   menú pintaba **dos taxonomías a la vez** —los grupos por tipo y una insignia
+   de nivel por guía— y la guía 50 salía dentro de «Entiende por qué» con una
+   insignia «Referencia», la misma palabra con dos significados en la misma
+   fila. Se retiran las insignias de nivel y el emoji inicial de 11 títulos; el
+   contador pasa a insignia propia, a la derecha y en monoespaciada.
+7. **Documentación caducada.** Tres guías describían un estado que ya no
+   existe: la 35 anunciaba «v1.7.0» con 2.5.0 publicada, y la 39 y la 46 eran
+   listas de releases pasadas escritas en futuro. La 09 se convierte en la
+   única lista viva —con los comandos que el proyecto ejecuta hoy— y se
+   completa en inglés, donde le faltaban cuatro secciones.
+
+## Dependencias
+
+- **Fase 1 no depende de nada** y por eso va primera: el contraste es un
+  defecto ya publicado, no una decisión estética pendiente.
+- **Fase 2 (tipografía) → fase 1.** Cambiar de familia altera la medida y el
+  peso visual del texto, así que medir contraste antes evita medir dos veces.
+- **Fases 3 y 4 → fase 2.** La portada y el menú se componen sobre la
+  tipografía definitiva; hacerlas antes obliga a rehacer el espaciado.
+- **Fase 5 → todas las anteriores.** Verifica el resultado, no las partes.
+- **Fase 6 → fase 5**, y depende de una decisión externa al plan: que el
+  propietario mire el menú construido. No era anticipable desde el handoff.
+- **Fase 7 es independiente** de las seis anteriores: toca contenido, no tema.
+  Se hace al final porque hasta entonces no se sabía qué guías quedaban
+  desalineadas con el estado real del proyecto.
+- **Herramienta externa:** `github-slugger`, ya presente. La fase 7 destapó que
+  el reescritor de enlaces usaba el nombre del archivo y no ese slug, así que
+  todo enlace a una guía con punto en el nombre apuntaba a una página
+  inexistente.
 
 ## Decisiones
 
@@ -56,3 +88,5 @@ defecto ya publicado y no depende de ninguna decisión estética.
 | R7 | `buildSidebar()` en `guides.mjs` |
 | R8 | `sync-doc-types.mjs` + CSS |
 | R9, R10 | `npm run docs:links` + build |
+| Fase 6 | `sync-docs.mjs` (sin insignias, sin emoji) + `guides.mjs` + `theme.css` |
+| Fase 7 | guías 09, 35, 39, 46 en ambos idiomas |

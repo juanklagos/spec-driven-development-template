@@ -72,16 +72,27 @@ function brokenSiteLinks() {
   })(dist);
 
   const broken = new Set();
-  const HREF = /href="(\/spec-driven-development-template\/[^"#?]*)/g;
+  // Absolutos (`/spec-driven-development-template/…`) y relativos (`../…`, `./…`).
+  // Los relativos no se miraban, y ahi se escondia una rotura real: el sitio
+  // sirve las guias con el slug de github-slugger, que borra los puntos, asi que
+  // un enlace a `39-v1.2.0-preparation` apuntaba a una pagina inexistente
+  // mientras esta comprobacion decia «ok».
+  const HREF = /href="((?:\/spec-driven-development-template|\.\.?)\/[^"#?]*)/g;
   for (const file of htmlFiles) {
+    const pageUrl = dirname(file).replace(dist, "") + "/";
     for (const match of readFileSync(file, "utf8").matchAll(HREF)) {
-      let url = match[1].replace("/spec-driven-development-template", "");
+      const href = match[1];
+      let url = href.startsWith("/")
+        ? href.replace("/spec-driven-development-template", "")
+        : // Resolver contra la URL de la pagina, no contra el disco: las paginas
+          // son carpetas con index.html, y `../x/` cuelga de la carpeta actual.
+          new URL(href, `http://x${pageUrl}`).pathname;
       if (!url.endsWith("/")) {
         // Asset or file URL: check it exists on disk instead.
         if (existsSync(join(dist, url))) continue;
         url += "/";
       }
-      if (!pages.has(url)) broken.add(`${file.replace(dist, "site/dist")} -> ${match[1]}`);
+      if (!pages.has(url)) broken.add(`${file.replace(dist, "site/dist")} -> ${href}`);
     }
   }
   return [...broken];

@@ -1,4 +1,4 @@
-# Public Roadmap
+# Public roadmap
 
 <!-- sdd:doc-type:start -->
 
@@ -8,54 +8,49 @@
 
 ## Purpose
 
-This roadmap makes the next product steps explicit so users know where the framework is going.
+This roadmap puts in writing where the framework is going, so nobody has to work
+it out by reading commits.
 
-## Roadmap timeline
+## Where to look for what
 
-```mermaid
-flowchart LR
-  A["v1.7.0"] --> B["v1.8.0"]
-  B --> C["v1.9.0"]
-```
+This document does **not** track published versions. That list rots: one more
+release and it lies. The numbers live where they are generated:
 
-## Current state
+| What you want to know | Where it is |
+| :--- | :--- |
+| Which version is the latest | The [releases page](https://github.com/juanklagos/spec-driven-development-template/releases) |
+| What changed in each one | [`CHANGELOG.md`](../../CHANGELOG.md) |
+| What is being built right now | [`specs/INDEX.md`](../../specs/INDEX.md) — every spec with its status |
+| Why something is the way it is | `bitacora/decisiones/` |
 
-Released:
-- `v1.7.0`
+## What is already settled
 
-Now available:
-- SDD framework with multi-agent policy
-- GitHub Spec Kit as the base workflow reference
-- recommended `spec/` sidecar for real target projects
-- `./www/<project-name>/` as the clean internal container when the project lives inside this repository
-- typed `sdd-core`
-- local `sdd-mcp`
-- `stdio` + `Streamable HTTP`
-- MCP tools, resources, prompts, smoke tests, and integration tests
-- client setup recipes and package version alignment
+The SDD framework with its multi-agent policy and the gate that enforces it. The
+`spec/` sidecar for projects that already exist. Typed `sdd-core` and `sdd-mcp`
+published on npm, with `stdio` and `Streamable HTTP`. The visual board, both as a
+desktop app and in the browser. Connecting an agent in one step. And a test line
+that runs the server rather than reading it.
 
-## v1.8.0
+## What is missing
 
-Focus: hosted onboarding hardening and richer operator experience.
+This comes from the open specs, not from an intention. Every point can be checked
+at its source:
 
-Planned:
-- hosted onboarding MCP contract hardening
-- richer easy-mode prompts and client shortcuts
-- more visual client examples and walkthrough assets
-- tested setup guides with screenshots for Cursor, Claude Code, and Codex
-- stronger release automation and packaging guidance
+- **The `npx` route for the one-command launcher.** Spec 011 is in progress: T1,
+  T2 and T7 are done; T3–T6 and T8 remain.
+- **Signing the desktop app on Windows.** There is a free path for OSI-approved
+  licences, which MIT meets, and it is pending application. On macOS it is a
+  decision, not an oversight: the Apple certificate costs 99 USD a year and one
+  person maintains the project.
+- **Browsing the documentation by type.** Deliberately out of scope in spec 035:
+  index pages per document type, filtering search by type — which needs a
+  Pagefind component — and the right-hand table of contents with a progress bar.
 
-## v1.9.0
+What is not in `specs/INDEX.md` is not planned. If something here matters to you,
+an issue is the place to ask for it.
 
-Focus: framework standardization and publishable MCP packaging.
+## The criteria that do not change
 
-Planned:
-- clearer packaging/version strategy for `@juanklagos/sdd-core` and `@juanklagos/sdd-mcp`
-- optional publishable MCP package workflow
-- governance model for community contributions
-- showcase of real projects using the framework
-
-## Notes
-
-- GitHub Spec Kit remains the primary external reference and operating guide.
-- New features should continue reducing user friction, not increasing setup complexity.
+- GitHub Spec Kit remains the external reference for the workflow.
+- A new feature has to **remove** friction. If it adds installation steps, it
+  does not ship.

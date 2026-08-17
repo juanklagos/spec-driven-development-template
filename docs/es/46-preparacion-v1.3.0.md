@@ -8,7 +8,14 @@
 
 ## Propósito
 
-La barra mínima para la release `v1.3.0`.
+**Registro histórico. No es la lista a seguir.**
+
+Esta era la barra mínima para la versión `v1.3.0`, que salió hace mucho: el
+proyecto va por 2.5.0. Se conserva para poder consultar con qué criterio se
+publicó aquella versión.
+
+La lista viva, la que se sigue antes de publicar cualquier versión, es la
+[guía 09](./09-release-checklist.md).
 
 ## Enfoque de la release
 
