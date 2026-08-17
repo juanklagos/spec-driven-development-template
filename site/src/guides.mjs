@@ -171,9 +171,11 @@ export function buildSidebar() {
 			translations: { es: page.es },
 			link: page.slug,
 		})),
-		...GROUPS.map((group) => ({
-			label: group.label,
-			translations: { es: group.es },
+		// Spec 035: el contador va en la etiqueta del grupo y sale de GUIDE_TYPES,
+		// no escrito a mano. Dice cuánto hay detrás antes de desplegar.
+		...GUIDE_TYPES.map((group) => ({
+			label: `${group.label} · ${group.guides.length}`,
+			translations: { es: `${group.es} · ${group.guides.length}` },
 			collapsed: group.collapsed !== false,
 			items: group.guides.map((n) => `guides/${urlSlugOf(en[n])}`),
 		})),

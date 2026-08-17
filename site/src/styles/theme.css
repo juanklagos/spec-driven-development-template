@@ -26,10 +26,38 @@
   src: url("../fonts/iAWriterQuattroS-BoldItalic.woff2") format("woff2");
 }
 
-/* ---- Fuente en todo el sitio ---- */
+/* ---- IBM Plex Sans (auto-hospedada, OFL — spec 035) ----
+ * La spec 034 rechazó una segunda familia y dejó escrita la condición para
+ * revisarla: "si tras corregir la medida sigue cansando, se reevalúa con
+ * datos". Ocurrió. No sustituye a Quattro: reparte el trabajo. */
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-weight: 400; font-style: normal; font-display: swap;
+  src: url("../fonts/IBMPlexSans-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-weight: 700; font-style: normal; font-display: swap;
+  src: url("../fonts/IBMPlexSans-Bold.woff2") format("woff2");
+}
+
+/* ---- Reparto tipográfico ----
+ * Sans para HABLAR: titulares, prosa, navegación, botones.
+ * Quattro para lo ESCRITO Y EJECUTABLE: código, salida de scripts, rutas,
+ * metadatos y etiquetas de tipo. El lector distingue "esto lo leo" de "esto
+ * lo copio" sin pensarlo. */
 :root {
-  --sl-font: "iA Writer Quattro", ui-monospace, "SF Mono", Menlo, monospace;
+  --sl-font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --sl-font-mono: "iA Writer Quattro", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Medida. En duoespaciada 68ch eran 68 caracteres; en proporcional el
+     glifo "0" es más ancho que la letra media, así que 68ch se convertirían
+     en unos 80: por encima del rango legible que motivaba el cambio.
+     Recalculado y CONTADO en el navegador, que es lo que exige el R4: con
+     58ch salían 77 caracteres reales. En IBM Plex Sans el "0" mide 9.6px y
+     la letra media 7.12px (ratio 0.74), no el 0.83 que yo había supuesto.
+     50ch = ~68 caracteres, dentro del rango de 45-75. */
+  --sdd-measure: 50ch;
 }
 
 /* ---- Paleta oscura (Starlight usa oscuro por defecto en :root) ---- */
@@ -64,6 +92,13 @@
   --sdd-blue: oklch(0.707 0.143 254.6);
   --sdd-green: oklch(0.723 0.192 149.6);
   --sdd-red: oklch(0.704 0.191 22.2);
+  /* Spec 035 — variantes de TEXTO. Los valores de arriba son de superficie
+     y de borde: usarlos como texto en tema claro baja de 4.5:1. En oscuro
+     coinciden porque ahí sí cumplen. Medido con scripts/check-contrast.mjs. */
+  --sdd-amber-text: oklch(0.84 0.13 82);
+  --sdd-blue-text: oklch(0.707 0.143 254.6);
+  --sdd-green-text: oklch(0.723 0.192 149.6);
+  --sdd-red-text: oklch(0.704 0.191 22.2);
   --sdd-card: oklch(0.225 0.016 261.7);
 }
 
@@ -88,7 +123,9 @@
   --sl-color-bg-sidebar: oklch(1 0 0);
   --sl-color-bg-inline-code: oklch(0.945 0.007 255.5);
   --sl-color-text: oklch(0.235 0.02 257.3);
-  --sl-color-text-accent: oklch(0.627 0.17 149.2);
+  /* Spec 035 — 0.627 daba 3.09:1 sobre fondo claro: falla AA. Ese valor
+     queda para superficies y bordes; como texto va el accent-high. */
+  --sl-color-text-accent: oklch(0.38 0.11 150);
   --sl-color-hairline: oklch(0.906 0.01 255.5);
   --sl-color-hairline-light: oklch(0.906 0.01 255.5);
   --sl-color-hairline-shade: oklch(0.906 0.01 255.5);
@@ -97,6 +134,12 @@
   --sdd-blue: oklch(0.546 0.215 262.9);
   --sdd-green: oklch(0.627 0.17 149.2);
   --sdd-red: oklch(0.577 0.245 27.3);
+  /* Spec 035 — como texto sobre tarjeta blanca, los de arriba dan 2.93:1
+     (ambar) y 3.30:1 (verde). Estos dan 6.68:1 y 9.48:1. */
+  --sdd-amber-text: oklch(0.48 0.12 72);
+  --sdd-blue-text: oklch(0.48 0.19 262.9);
+  --sdd-green-text: oklch(0.38 0.11 150);
+  --sdd-red-text: oklch(0.505 0.213 27.3);
   --sdd-card: oklch(1 0 0);
 }
 
@@ -127,10 +170,11 @@ input, button, .sl-flex > kbd, details, blockquote,
 .starlight-aside--tip     { border-left-color: var(--sdd-green); }
 .starlight-aside--caution { border-left-color: var(--sdd-amber); }
 .starlight-aside--danger  { border-left-color: var(--sdd-red); }
-.starlight-aside--note .starlight-aside__title    { color: var(--sdd-blue); }
-.starlight-aside--tip .starlight-aside__title     { color: var(--sdd-green); }
-.starlight-aside--caution .starlight-aside__title { color: var(--sdd-amber); }
-.starlight-aside--danger .starlight-aside__title  { color: var(--sdd-red); }
+/* El borde lleva el color de superficie; el título, el de texto (spec 035). */
+.starlight-aside--note .starlight-aside__title    { color: var(--sdd-blue-text); }
+.starlight-aside--tip .starlight-aside__title     { color: var(--sdd-green-text); }
+.starlight-aside--caution .starlight-aside__title { color: var(--sdd-amber-text); }
+.starlight-aside--danger .starlight-aside__title  { color: var(--sdd-red-text); }
 
 /* ---- Nav activo con barra verde (como el mockup) ---- */
 .sidebar-content a[aria-current="page"] {
@@ -173,11 +217,12 @@ input, button, .sl-flex > kbd, details, blockquote,
 .sl-markdown-content > ul,
 .sl-markdown-content > ol,
 .sl-markdown-content > blockquote {
-  max-width: 68ch;
+  max-width: var(--sdd-measure);
 }
 
 .sl-markdown-content {
-  line-height: 1.75;
+  font-size: 1.0625rem;   /* 17px — la sans a 16px queda pequeña para prosa */
+  line-height: 1.7;
 }
 
 /* Jerarquía por tamaño, peso y espacio — no por familia. El aire encima de
@@ -207,18 +252,23 @@ input, button, .sl-flex > kbd, details, blockquote,
  * Se emite como <p class="sdd-doc-type"> en vez de cita para que no se
  * confunda con un aviso. En GitHub y en el paquete npm, sin CSS, degrada a
  * una línea de texto legible. */
+/* Franja entre reglas, sin fondo ni caja: la regla superior de 2px la separa
+   del título y la inferior de 1px la cose al cuerpo (spec 035). */
 .sdd-doc-type {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.875rem;
   align-items: baseline;
-  margin-block: 0 2rem;
-  padding-bottom: 0.75rem;
+  margin-block: 1rem 1.5rem;
+  padding-block: 0.75rem 0.8125rem;
+  border-top: 2px solid var(--sl-color-text);
   border-bottom: 1px solid var(--sl-color-hairline);
-  font-size: 0.8125rem;
-  color: var(--sl-color-gray-3);
+  font-size: 0.90625rem;
+  color: var(--sl-color-gray-2);
+  max-width: none;
 }
 .sdd-doc-type strong {
+  font-family: var(--sl-font-mono);
   color: var(--sl-color-text-accent);
   font-weight: 700;
   text-transform: uppercase;
@@ -262,4 +312,34 @@ input, button, .sl-flex > kbd, details, blockquote,
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+
+/* ---- Terminal del hero (spec 035) ----
+ * Único elemento con borde de la portada, junto con los bloques de código:
+ * es lo que hay que creerse, así que se presenta como lo que es. */
+.sdd-term {
+  border: 1px solid var(--sl-color-hairline);
+  margin-top: 1.25rem;
+}
+.sdd-term-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5625rem 0.875rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  font-family: var(--sl-font-mono);
+  font-size: 0.71875rem;
+  color: var(--sl-color-gray-3);
+}
+.sdd-term pre {
+  border: 0 !important;
+  margin: 0;
+  font-size: 0.78125rem;
+  line-height: 1.85;
+}
+.sdd-term-note {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--sl-color-gray-3);
+  max-width: var(--sdd-measure);
 }

@@ -23,16 +23,28 @@ hero:
 ## This is what it does
 
 Run the check in any project. It reads your files and tells you, in one screen,
-whether you are allowed to write code yet:
+whether you are allowed to write code yet — and a real warning, because a
+perfect run would look like a mockup:
+
+<div class="sdd-term">
+<div class="sdd-term-bar"><span>./scripts/check-sdd-gate.sh</span><span>verbatim output</span></div>
 
 ```
-gate: blocked   3 errors · 3 warnings · 2/5 approved
-  029-checkout        approved, but no consent recorded for it
-  031-payments        plan.md does not mention the approved requirements
-no code before an approved spec
+Checking SDD gate in: /Users/jk/my-project
+[OK] SDD policy check
+[OK] 001-auth has approval status section
+[OK] 001-auth approved with minimum plan consistency signals
+[OK] 001-auth approved with checklist tasks
+[OK] User consent log present for execution stage: .sdd/user-consent.log
+[OK] 001-auth has recorded user consent
+[WARN] 002-billing not approved yet (implementation gate should remain closed)
+
+Compuerta / Gate: ABIERTA / open — 1 spec(s) aprobada(s) y consentida(s) / approved and consented
 ```
 
-That output is the whole product. Everything else exists to make it true.
+</div>
+
+<p class="sdd-term-note">The script prints its checks in English; only the closing lines are bilingual. Translating them here would misrepresent what you will see.</p>
 
 <div class="sdd-doors">
 <div>

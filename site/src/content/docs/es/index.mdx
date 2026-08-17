@@ -23,16 +23,28 @@ hero:
 ## Esto es lo que hace
 
 Ejecuta la comprobación en cualquier proyecto. Lee tus archivos y te dice, en
-una pantalla, si ya puedes escribir código:
+una pantalla, si ya puedes escribir código — con un aviso real, porque una
+salida perfecta parecería una maqueta:
+
+<div class="sdd-term">
+<div class="sdd-term-bar"><span>./scripts/check-sdd-gate.sh</span><span>salida literal</span></div>
 
 ```
-gate: bloqueado   3 errores · 3 avisos · 2/5 aprobadas
-  029-checkout        aprobada, pero sin consentimiento registrado
-  031-pagos           plan.md no menciona los requisitos aprobados
-no hay código sin spec aprobada
+Checking SDD gate in: /Users/jk/my-project
+[OK] SDD policy check
+[OK] 001-auth has approval status section
+[OK] 001-auth approved with minimum plan consistency signals
+[OK] 001-auth approved with checklist tasks
+[OK] User consent log present for execution stage: .sdd/user-consent.log
+[OK] 001-auth has recorded user consent
+[WARN] 002-billing not approved yet (implementation gate should remain closed)
+
+Compuerta / Gate: ABIERTA / open — 1 spec(s) aprobada(s) y consentida(s) / approved and consented
 ```
 
-Esa salida es el producto entero. Todo lo demás existe para que sea verdad.
+</div>
+
+<p class="sdd-term-note">El script emite sus comprobaciones en inglés; solo las líneas de cierre son bilingües. Traducirlas aquí sería mentir sobre lo que vas a ver.</p>
 
 <div class="sdd-doors">
 <div>
