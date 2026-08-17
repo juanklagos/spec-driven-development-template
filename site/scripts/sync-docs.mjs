@@ -26,22 +26,6 @@ const RAW = 'https://raw.githubusercontent.com/juanklagos/spec-driven-developmen
 const guideCount = assertGuidesAreCovered();
 const slugOf = publishedSlugs();
 
-// Curated learning-level map (guide number -> level). Everything else = reference.
-const LEVELS = {
-	beginner: ['00', '02', '04', '05', '13', '18', '23'],
-	intermediate: ['11', '12', '14', '19', '21', '22', '25', '26', '30'],
-	advanced: ['08', '15', '16', '17', '20', '24', '27', '28', '29', '33', '36', '40', '41', '43', '44', '45', '47', '48', '49'],
-};
-const BADGE = {
-	en: { beginner: ['Beginner', 'success'], intermediate: ['Intermediate', 'caution'], advanced: ['Advanced', 'danger'], reference: ['Reference', 'note'] },
-	es: { beginner: ['Básico', 'success'], intermediate: ['Intermedio', 'caution'], advanced: ['Avanzado', 'danger'], reference: ['Referencia', 'note'] },
-};
-function levelOf(file) {
-	const n = file.slice(0, 2);
-	for (const [lvl, nums] of Object.entries(LEVELS)) if (nums.includes(n)) return lvl;
-	return 'reference';
-}
-
 // A link resolved by one rule must be invisible to the rules that follow. Without this the
 // last rule re-captures the output of the first: ](./19-guia.md) becomes ](../19-guide/) and
 // then a GitHub URL for a path that does not exist. The marker uses NUL, which never appears
@@ -55,7 +39,12 @@ function transform(src, locale, file) {
 
 	// Title from first H1 (strip emoji-leading spaces, escape quotes)
 	const h1 = text.match(/^# (.+)$/m);
-	const title = (h1 ? h1[1] : slugOf(file)).trim().replace(/"/g, '\\"');
+	const title = (h1 ? h1[1] : slugOf(file))
+		// Quitar el emoji inicial: 11 guias lo llevaban y en el menu quedaban
+		// desalineadas unas con otras (spec 035).
+		.replace(/^\s*[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{FE0F}\u{20E3}]+\s*/u, '')
+		.trim()
+		.replace(/"/g, '\\"');
 	if (h1) text = text.replace(/^# .+$\n?/m, '');
 
 	// Drop "back to index" badge lines
@@ -102,8 +91,13 @@ function transform(src, locale, file) {
 		throw new Error(`${file}: a link marker survived the rewrites — the page would show raw markers`);
 	}
 
-	const [badgeText, badgeVariant] = BADGE[locale][levelOf(file)];
-	return `---\ntitle: "${title}"\nsidebar:\n  badge:\n    text: ${badgeText}\n    variant: ${badgeVariant}\n---\n\n${text}`;
+	// Spec 035: sin insignia de nivel. El menu ya agrupa por tipo de documento
+	// (spec 033) y las dos taxonomias se contradecian a la vista: la guia 50
+	// aparecia dentro de "Entiende por que" con una insignia "Referencia".
+	// La misma palabra significaba dos cosas distintas en la misma fila. El
+	// nivel sigue existiendo en el contenido (guia 18 y los enlaces de la
+	// portada), que es donde ayuda.
+	return `---\ntitle: "${title}"\n---\n\n${text}`;
 }
 
 for (const locale of ['en', 'es']) {

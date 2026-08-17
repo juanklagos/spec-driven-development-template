@@ -159,7 +159,10 @@ export function assertGuidesAreCovered() {
  * destinations rather than reading, and scripts/sync-docs.mjs only ever wipes
  * <locale>/guides/, so hand-authored siblings survive a sync.
  */
-const PAGES = [{ slug: 'download', label: 'Download SDD Desk', es: 'Descargar SDD Desk' }];
+// La ruta recomendada es el builder en el navegador; la descarga es la
+// alternativa. El slug sigue siendo `download` para no romper enlaces ya
+// publicados.
+const PAGES = [{ slug: 'download', label: 'Open the builder', es: 'Abrir el builder' }];
 
 /** Starlight sidebar: curated groups, labels translated, guides resolved per locale by slug. */
 export function buildSidebar() {
@@ -173,9 +176,13 @@ export function buildSidebar() {
 		})),
 		// Spec 035: el contador va en la etiqueta del grupo y sale de GUIDE_TYPES,
 		// no escrito a mano. Dice cuánto hay detrás antes de desplegar.
+		// Spec 035: el contador es una insignia propia, alineada a la derecha y
+		// en monoespaciada (CSS), no texto pegado a la etiqueta con un punto.
+		// Dice cuántas guías hay detrás antes de desplegar el grupo.
 		...GUIDE_TYPES.map((group) => ({
-			label: `${group.label} · ${group.guides.length}`,
-			translations: { es: `${group.es} · ${group.guides.length}` },
+			label: group.label,
+			translations: { es: group.es },
+			badge: { text: String(group.guides.length), variant: 'default' },
 			collapsed: group.collapsed !== false,
 			items: group.guides.map((n) => `guides/${urlSlugOf(en[n])}`),
 		})),

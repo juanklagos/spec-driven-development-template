@@ -1,41 +1,53 @@
 ---
-title: Descargar SDD Desk
-description: El SDD Builder como app de escritorio — ventana propia, ícono propio, sin terminal y sin necesitar Node.
+title: Abrir el builder
+description: El tablero visual de SDD en tu navegador con un comando, o como app de escritorio si prefieres una ventana propia.
 ---
 
 import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**SDD Desk** es el builder visual en su propia ventana. Trae su propio Node adentro, hospeda el
-servidor SDD él mismo, e incluye el endpoint MCP al que se conectan tus agentes.
+El **builder** es el tablero visual de tus specs. Hay dos formas de abrirlo, y las dos corren
+enteras en tu máquina: el mismo lienzo, el mismo servidor y el mismo endpoint MCP.
 
-## Antes de descargar: cuál te conviene
+## La forma recomendada: en tu navegador
 
-Hay dos formas de usar el mismo builder, y la mejor depende de una sola cosa — si te molesta
-autorizar una app la primera vez que la abres.
+Desde la carpeta principal de tu proyecto, en una terminal:
 
-<CardGrid>
-  <Card title="El builder en el navegador" icon="laptop">
-    **Sin ningún aviso, y sin descargar nada.** Un comando y se abre:
+```bash
+npx @juanklagos/sdd-mcp@latest --http
+```
 
-    ```bash
-    npx @juanklagos/sdd-mcp@latest --http
-    ```
+Eso es todo. Se abre el builder, y con él el servidor al que conectas tu agente.
 
-    Mismo lienzo, mismo servidor, mismo endpoint MCP. **Necesita Node instalado.**
-  </Card>
-  <Card title="SDD Desk" icon="rocket">
-    **Ventana propia, ícono propio, y trae Node adentro** — no hay que instalar nada antes.
+**Por qué esta primero:**
 
-    A cambio: macOS y Windows **te pedirán autorizarla la primera vez**, con un aviso que suena
-    alarmante. Son tres clics, una sola vez, y aquí abajo está el paso a paso.
-  </Card>
-</CardGrid>
+- **No descargas nada.** `npx` trae la versión publicada en el momento, así que siempre abres la
+  última sin actualizar a mano.
+- **Ningún aviso del sistema.** No hay archivo que autorizar, porque no hay archivo.
+- **Es la ruta que más se usa y la que antes recibe correcciones**, al no depender de empaquetar
+  y publicar un binario por sistema operativo.
 
-<Aside type="caution" title="Si nunca has autorizado una app a mano, empieza por el navegador">
+Lo único que pide: **tener Node instalado**. Compruébalo con `node --version`; si responde un
+número, ya está.
+
+<Aside type="tip" title="Para dejarlo abierto mientras trabajas">
+El comando ocupa esa terminal mientras el builder está en marcha. Abre otra pestaña para tus
+comandos, o cierra con `Ctrl+C` cuando termines.
+</Aside>
+
+## Si prefieres una ventana propia: SDD Desk
+
+**SDD Desk** es exactamente el mismo builder empaquetado como app de escritorio: ícono propio,
+sin terminal, y con Node adentro — útil si no lo tienes instalado o si no quieres dejar una
+terminal abierta.
+
+A cambio, macOS y Windows **te pedirán autorizarla la primera vez**, con un aviso que suena
+alarmante. Son tres clics, una sola vez, y aquí abajo está el paso a paso.
+
+<Aside type="caution" title="Si nunca has autorizado una app a mano, quédate con el navegador">
 La app de escritorio no está firmada con un certificado de Apple ni de Microsoft, así que tu
 sistema mostrará un aviso al abrirla y te sugerirá mover el archivo a la papelera. No es que la
 descarga esté rota — [aquí está qué significa](#por-qué-aparece-ese-aviso) — pero si esa
-frase te pone nervioso, el builder en el navegador hace exactamente lo mismo sin pedirte nada.
+frase te pone nervioso, el comando de arriba hace exactamente lo mismo sin pedirte nada.
 </Aside>
 
 ## Descargar
@@ -190,5 +202,5 @@ Todo lo que tu agente escriba por ese endpoint aparece en la ventana al instante
 Corre entera en tu máquina. No hay cuenta, ni sincronización, ni un servidor nuestro de por
 medio — la app abre un puerto en `127.0.0.1` que nada fuera de tu computadora alcanza.
 
-Tampoco reemplaza la ruta de terminal. `npx @juanklagos/sdd-mcp@latest --http` sigue abriendo
-el mismo builder en tu navegador, y sigue funcionando igual que antes.
+Y no es la única forma de abrir el builder ni la principal: `npx @juanklagos/sdd-mcp@latest
+--http` abre el mismo lienzo en tu navegador, sin descargar nada y sin ningún aviso.

@@ -1,41 +1,53 @@
 ---
-title: Download SDD Desk
-description: The SDD Builder as a desktop app — its own window, its own icon, no terminal, and no Node required.
+title: Open the builder
+description: The SDD visual board in your browser with one command, or as a desktop app if you prefer its own window.
 ---
 
 import { Aside, Card, CardGrid, LinkButton, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**SDD Desk** is the visual builder in its own window. It carries its own Node runtime, hosts the
-SDD server itself, and includes the MCP endpoint your agents connect to.
+The **builder** is the visual board for your specs. There are two ways to open it, and both run
+entirely on your machine: same canvas, same server, same MCP endpoint.
 
-## Before you download: which one suits you
+## The recommended way: in your browser
 
-There are two ways to use the same builder, and the right one depends on a single question — do
-you mind authorising an app the first time you open it?
+From your project's main folder, in a terminal:
 
-<CardGrid>
-  <Card title="The builder in your browser" icon="laptop">
-    **No warning at all, nothing to download.** One command and it opens:
+```bash
+npx @juanklagos/sdd-mcp@latest --http
+```
 
-    ```bash
-    npx @juanklagos/sdd-mcp@latest --http
-    ```
+That is all. The builder opens, and with it the server your agent connects to.
 
-    Same canvas, same server, same MCP endpoint. **Needs Node installed.**
-  </Card>
-  <Card title="SDD Desk" icon="rocket">
-    **Its own window, its own icon, and Node inside it** — nothing to install first.
+**Why this one comes first:**
 
-    In exchange: macOS and Windows **will ask you to authorise it once**, with a warning that
-    sounds alarming. Three clicks, one time, and the steps are right below.
-  </Card>
-</CardGrid>
+- **Nothing to download.** `npx` fetches the published version at that moment, so you always open
+  the latest without updating by hand.
+- **No system warning.** There is no file to authorise, because there is no file.
+- **It is the most used route and the first to get fixes**, since it does not depend on packaging
+  and publishing a binary per operating system.
 
-<Aside type="caution" title="If you have never authorised an app by hand, start with the browser">
+The only requirement: **Node installed**. Check with `node --version`; if it prints a number, you
+are set.
+
+<Aside type="tip" title="To keep it open while you work">
+The command holds that terminal while the builder runs. Open another tab for your commands, or
+stop it with `Ctrl+C` when you are done.
+</Aside>
+
+## If you prefer its own window: SDD Desk
+
+**SDD Desk** is the very same builder packaged as a desktop app: its own icon, no terminal, and
+Node inside it — handy if you do not have Node installed, or if you would rather not leave a
+terminal open.
+
+In exchange, macOS and Windows **will ask you to authorise it once**, with a warning that sounds
+alarming. Three clicks, one time, and the steps are right below.
+
+<Aside type="caution" title="If you have never authorised an app by hand, stay with the browser">
 The desktop app is not signed with an Apple or Microsoft certificate, so your system will show a
 warning when you open it and suggest moving the file to the Trash. The download is not broken —
 [here is what it means](#why-that-warning-appears) — but if that sentence makes you uneasy, the
-browser builder does exactly the same thing and asks you for nothing.
+command above does exactly the same thing and asks you for nothing.
 </Aside>
 
 ## Get it
@@ -191,5 +203,6 @@ reload.
 It runs entirely on your machine. There is no account, no sync and no server of ours involved —
 the app opens a port on `127.0.0.1` that nothing outside your computer can reach.
 
-It is also not a replacement for the terminal route. `npx @juanklagos/sdd-mcp@latest --http`
-still opens the same builder in your browser, and still works exactly as before.
+And it is neither the only nor the main way to open the builder: `npx
+@juanklagos/sdd-mcp@latest --http` opens the same canvas in your browser, with nothing to
+download and no warning at all.
