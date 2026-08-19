@@ -145,8 +145,8 @@ export function AiAssistButton({ kind, specId, refId, currentText, onAccept, com
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      {/* Plain trigger, not asChild: the ui Button doesn't forward refs, so
-          Radix would lose its anchor (same pattern as GateStatusBar). */}
+      {/* Plain trigger, not asChild: this widget carries its own compact
+          styling and does not need the ui Button (same as GateStatusBar). */}
       <PopoverTrigger
         className={
           "inline-flex cursor-pointer items-center gap-1 rounded-[5px] border border-transparent font-mono text-[11px] text-muted-foreground transition-colors hover:border-primary/45 hover:text-foreground " +

@@ -38,20 +38,25 @@ const buttonVariants = cva(
   }
 )
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
+type ButtonProps = React.ComponentPropsWithoutRef<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
-  }) {
+  }
+
+// forwardRef, aunque shadcn ya no lo traiga: este proyecto va con React 18,
+// donde `ref` no viaja como una prop más y un componente función lo tira sin
+// avisar. Los disparadores `asChild` de Radix pasan por ahí su ancla — sin
+// ref el Popper nunca sabe dónde está el botón y deja el contenido fuera de
+// pantalla en translate(0,-200%): el menú se abre y no lo ve nadie.
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { className, variant = "default", size = "default", asChild = false, ...props },
+  ref
+) {
   const Comp = asChild ? Slot.Root : "button"
 
   return (
     <Comp
+      ref={ref}
       data-slot="button"
       data-variant={variant}
       data-size={size}
@@ -59,6 +64,6 @@ function Button({
       {...props}
     />
   )
-}
+})
 
 export { Button, buttonVariants }
