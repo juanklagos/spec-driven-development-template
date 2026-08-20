@@ -5,9 +5,9 @@
 // existing route) or rejects. With no agent listening (R6) it degrades to
 // the classic copyable prompt instead of leaving anyone waiting.
 //
-// R4b note: `kind` is restricted to content surfaces by the AiTargetKind
-// union — approval/consent forms have no kind to mount this with, and
-// ai-surfaces.test.ts pins the exact mounts.
+// R4b note: `kind` is restricted to content surfaces by the AiFieldKind
+// union (spec 036 excluded "spec" from it) — approval/consent forms have no
+// kind to mount this with, and ai-surfaces.test.ts pins the exact mounts.
 
 import { useEffect, useMemo, useState } from "react";
 import { Plug, Sparkles, X } from "lucide-react";
@@ -15,14 +15,14 @@ import { errorMessage } from "../api";
 import { diffLines } from "../diff";
 import { useT } from "../i18n";
 import { buildFieldPrompt } from "../prompts";
-import { isAgentConnected, isStalled, type AiRequest, type AiTargetKind } from "../requests";
+import { isAgentConnected, isStalled, type AiFieldKind, type AiRequest } from "../requests";
 import { useBuilderStore } from "../store";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { PromptBox } from "./PromptBox";
 
 interface Props {
-  kind: AiTargetKind;
+  kind: AiFieldKind;
   specId?: string;
   /** Field id inside its surface: section key, "tasks.md", note id, bitacora kind. */
   refId: string;
@@ -75,6 +75,8 @@ export function AiAssistButton({ kind, specId, refId, currentText, onAccept, com
   const sendAiRequest = useBuilderStore((s) => s.sendAiRequest);
   const closeAiRequest = useBuilderStore((s) => s.closeAiRequest);
   const setConnectOpen = useBuilderStore((s) => s.setConnectOpen);
+  const aiPrefill = useBuilderStore((s) => s.aiPrefill);
+  const setAiPrefill = useBuilderStore((s) => s.setAiPrefill);
 
   const [open, setOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
@@ -84,6 +86,16 @@ export function AiAssistButton({ kind, specId, refId, currentText, onAccept, com
 
   const connected = isAgentConnected(agentPresence, now);
   const request: AiRequest | null = aiRequests.find((r) => r.id === requestId) ?? null;
+
+  // Spec 036 (R9): un hallazgo de la revisión nos abre con su indicación ya
+  // escrita. Se consume una sola vez; a partir de ahí el flujo es el de
+  // siempre — la persona lee el diff y decide.
+  useEffect(() => {
+    if (!aiPrefill || aiPrefill.refId !== refId || aiPrefill.specId !== specId) return;
+    setInstruction(aiPrefill.instruction);
+    setOpen(true);
+    setAiPrefill(null);
+  }, [aiPrefill, refId, specId, setAiPrefill]);
 
   const reset = () => {
     setRequestId(null);

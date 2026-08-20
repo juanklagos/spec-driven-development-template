@@ -27,6 +27,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { ReviewPanel } from "./ReviewPanel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { AppNode, CreateIssuesResult, SpecDetail, SpecScore, SpecTone, TaskItem } from "../types";
 
@@ -669,6 +670,7 @@ export function SpecDrawer() {
   const applyTasks = useBuilderStore((s) => s.applyTasks);
   const refreshSpecs = useBuilderStore((s) => s.refreshSpecs);
   const refreshGate = useBuilderStore((s) => s.refreshGate);
+  const setAiPrefill = useBuilderStore((s) => s.setAiPrefill);
 
   const [tab, setTab] = useState("summary");
   // Spec 022: folding the tasks list is a builder-wide preference.
@@ -845,6 +847,9 @@ export function SpecDrawer() {
             <TabsTrigger className={TAB_TRIGGER} value="approval">
               {t("sheet.tab.approval")}
             </TabsTrigger>
+            <TabsTrigger className={TAB_TRIGGER} value="review">
+              {t("sheet.tab.review")}
+            </TabsTrigger>
             <TabsTrigger className={TAB_TRIGGER} value="relations">
               {t("sheet.tab.relations")}
             </TabsTrigger>
@@ -961,6 +966,20 @@ export function SpecDrawer() {
               <TabsContent value="approval" className="nowheel min-h-0 flex-1 px-4 pb-4">
                 <ScrollArea className="h-full pr-3">
                   <ApprovalPanel specId={specId} specMarkdown={detail.docs.spec} onDone={handleApproved} />
+                </ScrollArea>
+              </TabsContent>
+              <TabsContent value="review" className="nowheel min-h-0 flex-1 px-4 pb-4">
+                <ScrollArea className="h-full pr-3">
+                  <ReviewPanel
+                    specId={specId}
+                    specMarkdown={detail.docs.spec}
+                    onFix={(section, instruction) => {
+                      // R9: solo foco e indicación. La escritura sigue siendo
+                      // el diff que la persona acepta en esa sección.
+                      setAiPrefill({ specId, refId: section, instruction });
+                      setTab("edit");
+                    }}
+                  />
                 </ScrollArea>
               </TabsContent>
               <TabsContent value="relations" className="nowheel min-h-0 flex-1 px-4 pb-4">

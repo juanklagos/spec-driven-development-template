@@ -215,10 +215,11 @@ const es = {
   "assistant.intro":
     "Escribe tu proyecto en una frase o párrafo y te propongo un borrador de board: idea, épicas y specs conectadas. Nada se guarda hasta que aceptes.",
   "assistant.ph": "p. ej. una tienda online de plantas con pagos y panel de administración",
-  "assistant.propose": "Proponer borrador",
+  "assistant.proposeOne": "Proponer una spec",
+  "assistant.proposeOne.ai": "La estructura tu agente conectado y la revisas antes de crearla",
+  "assistant.proposeOne.local": "Borrador local de una sola spec; sin agente no hay IA de por medio",
+  "assistant.proposeBoard": "Proponer board completo",
   "assistant.draftNote": "Borrador (aún sin guardar): renombra o quita specs antes de crear.",
-  "assistant.hasSpecs":
-    "Este workspace ya tiene specs; el asistente solo se aplica en un workspace vacío.",
   "assistant.keepOne": "Deja al menos una spec en el borrador",
   "assistant.regenerate": "regenerar",
   "assistant.regenerate.title": "Propone nombres alternativos",
@@ -306,6 +307,35 @@ const es = {
   "sheet.tab.edit": "Editar spec",
   "sheet.tab.approval": "Aprobación",
   "sheet.tab.relations": "Relaciones",
+  "sheet.tab.review": "Revisión IA",
+
+  // 🔎 Revisión de la spec por IA (spec 036)
+  "review.tag": "REVISIÓN DE LA SPEC",
+  "review.intro":
+    "Una IA lee la spec y devuelve hallazgos anclados a su sección. No escribe nada: desde cada hallazgo saltas al campo y decides tú.",
+  "review.ask": "Pedir revisión al agente",
+  "review.asking": "Enviando…",
+  "review.pending": "Pendiente — esperando a que el agente la recoja",
+  "review.working": "En curso — {agent} está revisando",
+  "review.noAgent":
+    "No hay ningún agente atendiendo la cola. Copia el prompt, pégalo en la IA que uses (la que sea, aunque no tenga MCP) y trae su respuesta aquí abajo.",
+  "review.paste": "Pega aquí la respuesta de tu IA",
+  "review.paste.ph": "El JSON que devuelva, tal cual — con o sin vallas de código",
+  "review.read": "Interpretar respuesta",
+  "review.parseError":
+    "Eso no se puede leer como una revisión. Pídesela otra vez recordándole que responda SOLO con el JSON del prompt.",
+  "review.clean": "Sin hallazgos: la IA no ve nada que corregir en esta spec.",
+  "review.count.one": "1 hallazgo",
+  "review.count.many": "{n} hallazgos",
+  "review.dropped.one": "1 descartado: anclaba a una sección que no existe.",
+  "review.dropped.many": "{n} descartados: anclaban a una sección que no existe.",
+  "review.severity.blocker": "bloqueante",
+  "review.severity.warning": "aviso",
+  "review.severity.note": "nota",
+  "review.fix": "Corregir",
+  "review.fix.title": "Abre esta sección en el editor con la indicación ya escrita",
+  "review.fix.instruction": "Corrige esto: {finding}. {why}",
+  "review.again": "Revisar de nuevo",
   "sheet.loading": "Cargando…",
   "sheet.tasks": "Tareas",
   "sheet.tasks.count": "{done}/{total} hechas",
@@ -428,6 +458,12 @@ const es = {
     "No se pudo conectar con la API — arranca el servidor: SDD_PROJECT_ROOT=/ruta/a/tu/proyecto npm run mcp:http:start",
   "error.templatesNonEmpty":
     "Este workspace ya tiene specs; las plantillas solo se aplican en un workspace vacío.",
+  "error.planPartial.none":
+    "No se creó ninguna spec: falló «{name}». No se ha tocado nada — ni el disco ni el lienzo.",
+  "error.planPartial.one":
+    "Se creó 1 spec y luego falló «{name}». Lo creado se conserva y el lienzo ya lo refleja; revisa el error y vuelve a intentarlo solo con lo que falta.",
+  "error.planPartial.many":
+    "Se crearon {n} specs y luego falló «{name}». Lo creado se conserva y el lienzo ya lo refleja; revisa el error y vuelve a intentarlo solo con lo que falta.",
 
   // Server errors with a machine code (packages/sdd-mcp/src/github.ts).
   // The server sends the code, the UI picks the language — spec 010, R1: no
@@ -595,7 +631,8 @@ const es = {
     "Propongo idea, épicas y specs conectadas. Nada se escribe en disco hasta que aceptes.",
   "assistant.proposal": "propuesta · {specs} specs · {epics} épicas",
   "assistant.copyPrompt": "Copiar prompt para tu agente MCP",
-  "assistant.createN": "Crear {n} specs en disco",
+  "assistant.createN.one": "Crear 1 spec en disco",
+  "assistant.createN.many": "Crear {n} specs en disco",
 
   // Implementar (rediseño)
   "implement.tag": "implementar · {id}",
@@ -803,10 +840,11 @@ const en: Record<keyof typeof es, string> = {
   "assistant.intro":
     "Write your project in a sentence or a paragraph and I'll propose a draft board: idea, epics and connected specs. Nothing is saved until you accept.",
   "assistant.ph": "e.g. an online plant store with payments and an admin panel",
-  "assistant.propose": "Propose draft",
+  "assistant.proposeOne": "Propose one spec",
+  "assistant.proposeOne.ai": "Your connected agent structures it and you review it before it is created",
+  "assistant.proposeOne.local": "Local single-spec draft; with no agent there is no AI involved",
+  "assistant.proposeBoard": "Propose full board",
   "assistant.draftNote": "Draft (not saved yet): rename or remove specs before creating.",
-  "assistant.hasSpecs":
-    "This workspace already has specs; the assistant only applies to an empty workspace.",
   "assistant.keepOne": "Keep at least one spec in the draft",
   "assistant.regenerate": "regenerate",
   "assistant.regenerate.title": "Proposes alternative names",
@@ -894,6 +932,35 @@ const en: Record<keyof typeof es, string> = {
   "sheet.tab.edit": "Edit spec",
   "sheet.tab.approval": "Approval",
   "sheet.tab.relations": "Relations",
+  "sheet.tab.review": "AI review",
+
+  // 🔎 AI review of the spec (spec 036)
+  "review.tag": "SPEC REVIEW",
+  "review.intro":
+    "An AI reads the spec and returns findings anchored to their section. It writes nothing: each finding takes you to the field and you decide.",
+  "review.ask": "Ask the agent for a review",
+  "review.asking": "Sending…",
+  "review.pending": "Pending — waiting for the agent to claim it",
+  "review.working": "In progress — {agent} is reviewing",
+  "review.noAgent":
+    "No agent is serving the queue. Copy the prompt, paste it into whichever AI you use (any of them, even without MCP) and bring its answer back down here.",
+  "review.paste": "Paste your AI's answer here",
+  "review.paste.ph": "Whatever JSON it returns, as is — with or without code fences",
+  "review.read": "Read the answer",
+  "review.parseError":
+    "That cannot be read as a review. Ask again, reminding it to reply ONLY with the JSON from the prompt.",
+  "review.clean": "No findings: the AI sees nothing to fix in this spec.",
+  "review.count.one": "1 finding",
+  "review.count.many": "{n} findings",
+  "review.dropped.one": "1 dropped: it anchored to a section that does not exist.",
+  "review.dropped.many": "{n} dropped: they anchored to a section that does not exist.",
+  "review.severity.blocker": "blocker",
+  "review.severity.warning": "warning",
+  "review.severity.note": "note",
+  "review.fix": "Fix",
+  "review.fix.title": "Opens this section in the editor with the instruction already written",
+  "review.fix.instruction": "Fix this: {finding}. {why}",
+  "review.again": "Review again",
   "sheet.loading": "Loading…",
   "sheet.tasks": "Tasks",
   "sheet.tasks.count": "{done}/{total} done",
@@ -1014,6 +1081,12 @@ const en: Record<keyof typeof es, string> = {
     "Could not reach the API — start the server: SDD_PROJECT_ROOT=/path/to/your/project npm run mcp:http:start",
   "error.templatesNonEmpty":
     "This workspace already has specs; templates only apply to an empty workspace.",
+  "error.planPartial.none":
+    "Not a single spec was created: \"{name}\" failed. Nothing was touched — neither the disk nor the board.",
+  "error.planPartial.one":
+    "1 spec was created and then \"{name}\" failed. What was created is kept and the board already shows it; check the error and retry with the rest only.",
+  "error.planPartial.many":
+    "{n} specs were created and then \"{name}\" failed. What was created is kept and the board already shows it; check the error and retry with the rest only.",
 
   // Server errors with a machine code (packages/sdd-mcp/src/github.ts).
   "error.code.GH_NO_REPO":
@@ -1166,7 +1239,8 @@ const en: Record<keyof typeof es, string> = {
     "I'll propose an idea, epics and connected specs. Nothing is written to disk until you accept.",
   "assistant.proposal": "proposal · {specs} specs · {epics} epics",
   "assistant.copyPrompt": "Copy the prompt for your MCP agent",
-  "assistant.createN": "Create {n} specs on disk",
+  "assistant.createN.one": "Create 1 spec on disk",
+  "assistant.createN.many": "Create {n} specs on disk",
 
   "implement.tag": "implement · {id}",
   "implement.newTitle": "The gate is open for this spec",

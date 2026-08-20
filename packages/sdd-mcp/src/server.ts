@@ -1098,10 +1098,10 @@ export function createSddMcpServer(): McpServer {
   // stays with the human in the builder.
   const aiRequestSchema = z.object({
     id: z.string(),
-    type: z.enum(["draft-field", "structure-idea"]),
+    type: z.enum(["draft-field", "structure-idea", "review-spec"]),
     target: z
       .object({
-        kind: z.enum(["section", "task", "note", "bitacora"]),
+        kind: z.enum(["section", "task", "note", "bitacora", "spec"]),
         specId: z.string().optional(),
         ref: z.string()
       })
@@ -1146,7 +1146,7 @@ export function createSddMcpServer(): McpServer {
     {
       title: "Answer an AI request with a proposal",
       description:
-        "Attach a proposal to a claimed AI-assist request (in_progress -> answered). The proposal is plain text for the target field (or, for structure-idea requests, the structured draft the builder asked for in the instruction). It is NOT written to any spec file: the user reviews it as a diff in the builder and only their acceptance writes, through the existing section/task routes.",
+        "Attach a proposal to a claimed AI-assist request (in_progress -> answered). The proposal is plain text for the target field; for structure-idea and review-spec requests it is exactly the JSON the instruction asks for, with no markdown around it. A review-spec answer is a list of findings anchored to the spec sections — findings, never a rewritten spec. It is NOT written to any spec file: the user reviews it in the builder and only their acceptance writes, through the existing section/task routes.",
       inputSchema: {
         projectRoot: projectRootSchema,
         id: z.string().min(1).describe("Request id, as returned by sdd_next_request."),

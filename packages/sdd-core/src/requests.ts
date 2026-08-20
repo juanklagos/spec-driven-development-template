@@ -15,7 +15,10 @@ import path from "node:path";
 import { withFileLock } from "./file-lock.js";
 import { resolveSddRoot } from "./workspace.js";
 
-export type AiRequestType = "draft-field" | "structure-idea";
+// `review-spec` (spec 036, R5): la revisión de una spec entera. Es un tipo
+// más de la misma cola a propósito — si necesitara camino propio, sería señal
+// de que el tipo está mal elegido.
+export type AiRequestType = "draft-field" | "structure-idea" | "review-spec";
 
 export type AiRequestStatus =
   | "pending"
@@ -27,7 +30,8 @@ export type AiRequestStatus =
 
 export type AiRequestResolution = "accepted" | "rejected" | "cancelled";
 
-export type AiTargetKind = "section" | "task" | "note" | "bitacora";
+/** `spec` apunta a la spec entera; el resto son campos dentro de ella. */
+export type AiTargetKind = "section" | "task" | "note" | "bitacora" | "spec";
 
 export interface AiRequestTarget {
   kind: AiTargetKind;
@@ -134,6 +138,9 @@ export async function createAiRequest(projectRoot: string, input: CreateAiReques
   }
   if (input.type === "draft-field" && !input.target) {
     throw new Error("A draft-field request needs a target ({ kind, specId?, ref }).");
+  }
+  if (input.type === "review-spec" && !input.target?.specId) {
+    throw new Error("A review-spec request needs a target naming the spec ({ kind: 'spec', specId, ref }).");
   }
   const dir = await requestsDir(projectRoot);
   await fs.mkdir(dir, { recursive: true });

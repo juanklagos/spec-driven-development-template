@@ -105,6 +105,44 @@ export function buildFieldPrompt(
 }
 
 /**
+ * Spec 036 (R5, R6) — la revisión de una spec, en un solo texto.
+ *
+ * El MISMO texto viaja por los dos caminos: como `instruction` de la petición
+ * `review-spec` cuando hay agente en la cola, y como prompt copiable cuando no
+ * lo hay. Que sea uno solo es lo que hace que las dos puertas devuelvan lo
+ * mismo; si se duplicara, se duplicaría el contrato de formato con él.
+ */
+export function buildReviewPrompt(specId: string, specText: string, lang: Lang): string {
+  const contract =
+    'JSON: {"summary": "...", "findings": [{"section": "story|scenarios|criteria|requirements|properties|successCriteria|outOfScope", "severity": "blocker|warning|note", "finding": "...", "why": "..."}]}';
+  const body = specText.trim() || (lang === "es" ? "(vacía)" : "(empty)");
+  if (lang === "es") {
+    return [
+      `Revisa la spec ${specId} de mi workspace SDD y dime qué le falta antes de aprobarla.`,
+      "Busca sobre todo: criterios que no se pueden verificar, palabras vagas sin número, escenarios sin criterio que los cubra, requisitos que contradicen el alcance, y lo que la spec da por supuesto sin decirlo.",
+      `Responde SOLO con ${contract} — sin markdown ni texto alrededor.`,
+      "Devuelve HALLAZGOS, no la spec reescrita: quien corrige es la persona, sección a sección.",
+      "Si no encuentras nada, devuelve findings vacío.",
+      "Spec:",
+      "---",
+      body,
+      "---"
+    ].join("\n");
+  }
+  return [
+    `Review spec ${specId} from my SDD workspace and tell me what is missing before I approve it.`,
+    "Look above all for: criteria that cannot be verified, vague words with no number, scenarios no criterion covers, requirements that contradict the scope, and what the spec assumes without saying.",
+    `Reply ONLY with ${contract} — no markdown, no text around it.`,
+    "Return FINDINGS, not a rewritten spec: the person fixes it, section by section.",
+    "If you find nothing, return an empty findings list.",
+    "Spec:",
+    "---",
+    body,
+    "---"
+  ].join("\n");
+}
+
+/**
  * Clipboard helper with a legacy fallback; returns false when both fail.
  * navigator.clipboard.writeText can HANG forever in embedded browsers that
  * never answer the permission prompt, so it races a short timeout before

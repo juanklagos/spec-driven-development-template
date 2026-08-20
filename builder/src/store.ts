@@ -9,6 +9,7 @@ import {
 } from "@xyflow/react";
 import { create } from "zustand";
 import { api, errorMessage } from "./api";
+import { PlanError, applyPlan, type ApplyMode } from "./boardplan";
 import {
   ARROW,
   EPIC_COLOR,
@@ -25,9 +26,6 @@ import { templateToPlan, type BoardPlan, type BoardTemplate } from "./templates"
 import type { DrawerTab,
   AppEdge,
   AppNode,
-  BoardCanvas,
-  CanvasEdge,
-  CanvasNode,
   ChangeKind,
   GateSummary,
   LiveStatus,
@@ -39,6 +37,13 @@ import type { DrawerTab,
 } from "./types";
 
 /** ContextStrip filters (spec 030): dim non-matching nodes, never hide them. */
+/** Sección a la que saltar y con qué indicación (spec 036, R9). */
+export interface AiPrefill {
+  specId: string;
+  refId: string;
+  instruction: string;
+}
+
 export interface BoardFilters {
   pending: boolean;
   warnings: boolean;
@@ -174,7 +179,8 @@ interface BuilderStore {
   pushHistory: () => void;
   undo: () => void;
   redo: () => void;
-  applyBoardPlan: (plan: BoardPlan) => Promise<void>;
+  /** `append` (asistente, spec 036) añade; `empty-only` (plantillas) exige lienzo virgen. */
+  applyBoardPlan: (plan: BoardPlan, mode?: ApplyMode) => Promise<void>;
   applyTemplate: (template: BoardTemplate) => Promise<void>;
   openTour: () => void;
   closeTour: (dontShowAgain: boolean) => void;
@@ -186,6 +192,13 @@ interface BuilderStore {
   setLiveStatus: (status: LiveStatus) => void;
   handleHello: (serverRoot: string) => void;
   handleLiveChange: (kind: ChangeKind) => Promise<void>;
+  /**
+   * Spec 036 (R9): un hallazgo de la revisión pide abrir el «Ampliar con IA»
+   * de SU sección con la instrucción ya escrita. Es una petición de foco, no
+   * una escritura: quien escribe sigue siendo el diff que la persona acepta.
+   */
+  aiPrefill: AiPrefill | null;
+  setAiPrefill: (prefill: AiPrefill | null) => void;
   loadAiRequests: () => Promise<void>;
   sendAiRequest: (input: {
     type: AiRequestType;
@@ -229,6 +242,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   zoom: 1,
   aiRequests: [],
   agentPresence: null,
+  aiPrefill: null,
 
   setPaletteOpen: (open) => set({ paletteOpen: open }),
 
@@ -278,6 +292,8 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   },
 
   // --- AI request queue (spec 031) -----------------------------------------
+
+  setAiPrefill: (aiPrefill) => set({ aiPrefill }),
 
   loadAiRequests: async () => {
     try {
@@ -489,68 +505,37 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   // spec for real (POST /api/spec, in order), then persist a pre-laid-out
   // canvas (PUT /api/board) and reload. Guarded against non-empty workspaces
   // using the server's spec list as the truth.
-  applyBoardPlan: async (plan) => {
-    const board = await api.getBoard();
-    if (board.specs.length > 0) {
-      throw new Error(translate("error.templatesNonEmpty"));
+  applyBoardPlan: async (plan, mode = "append") => {
+    // Tras un PUT propio, la ventana de eco evita que el watcher nos devuelva
+    // nuestro propio cambio como si viniera de fuera.
+    const settle = async (): Promise<void> => {
+      lastBoardPutAt = Date.now();
+      await get().load();
+    };
+    try {
+      await applyPlan(api, plan, { mode, runId: uid() });
+      await settle();
+    } catch (error) {
+      if (!(error instanceof PlanError)) throw error;
+      if (error.code === "board-not-empty") {
+        // Ni una escritura: no hay nada que asentar.
+        throw new Error(translate("error.templatesNonEmpty"));
+      }
+      // R4: lo que sí se creó ya está en disco, así que la pantalla debe
+      // reflejarlo antes de contar lo que falló. Con cero creadas no se
+      // escribió lienzo alguno, y el mensaje tiene que decir eso y no otra cosa.
+      const name = error.failedName ?? "?";
+      if (error.createdCount === 0) throw new Error(translate("error.planPartial.none", { name }));
+      await settle();
+      throw new Error(
+        error.createdCount === 1
+          ? translate("error.planPartial.one", { name })
+          : translate("error.planPartial.many", { n: error.createdCount, name })
+      );
     }
-
-    const idByKey = new Map<string, string>();
-    for (const spec of plan.specs) {
-      const created = await api.createSpec(spec.name);
-      idByKey.set(spec.key, created.specId);
-    }
-    const noteIdByKey = new Map(plan.notes.map((note) => [note.key, `note-${plan.id}-${note.key}`]));
-    const resolve = (key: string): string | undefined => idByKey.get(key) ?? noteIdByKey.get(key);
-
-    const nodes: CanvasNode[] = [
-      ...plan.notes.map(
-        (note): CanvasNode => ({
-          id: noteIdByKey.get(note.key) as string,
-          type: "text",
-          text: note.text,
-          color: note.color,
-          x: note.x,
-          y: note.y,
-          width: note.width,
-          height: note.height
-        })
-      ),
-      ...plan.specs.map(
-        (spec): CanvasNode => ({
-          id: idByKey.get(spec.key) as string,
-          type: "file",
-          file: `specs/${idByKey.get(spec.key)}/spec.md`,
-          x: spec.x,
-          y: spec.y,
-          width: SPEC_CARD.width,
-          height: SPEC_CARD.height
-        })
-      )
-    ];
-    const edges: CanvasEdge[] = plan.edges.flatMap((edge): CanvasEdge[] => {
-      const fromNode = resolve(edge.from);
-      const toNode = resolve(edge.to);
-      if (!fromNode || !toNode) return [];
-      return [
-        {
-          id: `edge-${plan.id}-${edge.from}-${edge.to}`,
-          fromNode,
-          toNode,
-          fromSide: "right",
-          toSide: "left",
-          ...(edge.label ? { label: edge.label } : {})
-        }
-      ];
-    });
-
-    const canvas: BoardCanvas = { nodes, edges };
-    await api.putBoard(canvas);
-    lastBoardPutAt = Date.now();
-    await get().load();
   },
 
-  applyTemplate: async (template) => get().applyBoardPlan(templateToPlan(template, currentLang())),
+  applyTemplate: async (template) => get().applyBoardPlan(templateToPlan(template, currentLang()), "empty-only"),
 
   openTour: () => set({ tourOpen: true }),
 

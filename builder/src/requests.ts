@@ -3,7 +3,10 @@
 // surface agree on what "connected" and "stalled" mean; both take `nowMs`
 // so tests inject the clock.
 
-export type AiRequestType = "draft-field" | "structure-idea";
+// `review-spec` (spec 036, R5): revisar una spec entera. Un tipo más de la
+// misma cola; mantener este union en sintonía con
+// packages/sdd-core/src/requests.ts, como el lint EARS.
+export type AiRequestType = "draft-field" | "structure-idea" | "review-spec";
 
 export type AiRequestStatus =
   | "pending"
@@ -13,7 +16,14 @@ export type AiRequestStatus =
   | "rejected"
   | "cancelled";
 
-export type AiTargetKind = "section" | "task" | "note" | "bitacora";
+export type AiTargetKind = "section" | "task" | "note" | "bitacora" | "spec";
+
+/**
+ * Superficies de CAMPO: lo único que puede montar «Ampliar con IA». `spec`
+ * queda fuera a propósito — una spec entera se revisa, no se amplía — y así el
+ * contrato de ai-surfaces.test.ts también lo sostiene el tipo (ISP).
+ */
+export type AiFieldKind = Exclude<AiTargetKind, "spec">;
 
 export interface AiRequestTarget {
   kind: AiTargetKind;

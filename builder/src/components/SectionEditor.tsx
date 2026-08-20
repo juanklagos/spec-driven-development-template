@@ -15,6 +15,7 @@ import { lintEarsCriterion } from "../ears";
 import { docsUrl } from "../help";
 import { useT, type TFunction } from "../i18n";
 import { parseSpecSections } from "../sections";
+import { useBuilderStore } from "../store";
 import type { SpecSectionsInput } from "../types";
 import {
   Accordion,
@@ -191,6 +192,15 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedNote, setSavedNote] = useState<string | null>(null);
+  /** Secciones desplegadas. Controlado desde la spec 036 (R9): un hallazgo de
+   *  la revisión tiene que poder abrir la suya. */
+  const [openSections, setOpenSections] = useState<string[]>(["story", "criteria"]);
+
+  const aiPrefill = useBuilderStore((s) => s.aiPrefill);
+  useEffect(() => {
+    if (!aiPrefill || aiPrefill.specId !== specId) return;
+    setOpenSections((prev) => (prev.includes(aiPrefill.refId) ? prev : [...prev, aiPrefill.refId]));
+  }, [aiPrefill, specId]);
 
   const earsPrefix = lang === "es" ? EARS_PREFIX_ES : EARS_PREFIX_EN;
   const earsPlaceholder = lang === "es" ? EARS_PLACEHOLDER_ES : EARS_PLACEHOLDER_EN;
@@ -370,7 +380,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
           <p className="m-0 text-[13px] leading-[1.55] text-muted-foreground">
             {t("drawer.sections.intro")}
           </p>
-          <Accordion type="multiple" defaultValue={["story", "criteria"]} className="w-full">
+          <Accordion type="multiple" value={openSections} onValueChange={setOpenSections} className="w-full">
             <AccordionItem value="story">
               <AccordionTrigger className="py-2.5 text-sm">{t("editor.story")}</AccordionTrigger>
               <AccordionContent className="flex flex-col gap-1.5 pb-3">

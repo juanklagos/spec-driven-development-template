@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Clipboard, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { api, errorMessage } from "../api";
-import { draftToPlan, generateDraft, type AssistantDraft } from "../assistant";
+import { draftToPlan, generateDraft, scopeSpecs, type AssistantDraft, type ProposalScope } from "../assistant";
 import { useT, type Lang } from "../i18n";
 import { buildOrchestratorPrompt } from "../prompts";
 import { isAgentConnected } from "../requests";
@@ -67,7 +67,6 @@ export function AssistantWizard() {
   const setAssistantOpen = useBuilderStore((s) => s.setAssistantOpen);
   const applyBoardPlan = useBuilderStore((s) => s.applyBoardPlan);
   const projectRoot = useBuilderStore((s) => s.projectRoot);
-  const hasSpecs = useBuilderStore((s) => Object.keys(s.specs).length > 0);
 
   const [description, setDescription] = useState("");
   const [draft, setDraft] = useState<AssistantDraft | null>(null);
@@ -154,11 +153,21 @@ export function AssistantWizard() {
     if (!busy) setAssistantOpen(false);
   };
 
-  const propose = (variant: number) => {
-    const next = generateDraft(description, variant, lang);
-    setDraft(next);
-    setSpecs(next.specs.map(({ key, name }) => ({ key, name })));
+  // Spec 036 (R1): el alcance lo elige la persona, no el estado del workspace.
+  const [scope, setScope] = useState<ProposalScope>("board");
+
+  const propose = (variant: number, next: ProposalScope = scope) => {
+    setScope(next);
+    const generated = generateDraft(description, variant, lang);
+    setDraft(generated);
+    setSpecs(scopeSpecs(generated, next).map(({ key, name }) => ({ key, name })));
     setError(null);
+  };
+
+  /** «Una spec»: con agente la estructura la IA; sin agente, el borrador local. */
+  const proposeOne = () => {
+    if (connected) void askStructure();
+    else propose(0, "one");
   };
 
   const renameSpec = (key: string, name: string) => {
@@ -239,15 +248,9 @@ export function AssistantWizard() {
             placeholder={t("assistant.ph")}
             onChange={(e) => setDescription(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && description.trim()) propose(0);
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && description.trim()) propose(0, "board");
             }}
           />
-          {hasSpecs ? (
-            <p className="m-0 rounded-lg border border-[var(--amber)]/45 bg-[var(--amber-soft)] p-[10px_12px] text-sm text-[var(--amber-text)]">
-              {t("assistant.hasSpecs")}
-            </p>
-          ) : null}
-
           {structureRequest && (structureRequest.status === "pending" || structureRequest.status === "in_progress") ? (
             <div className="flex items-center gap-2 rounded-lg border bg-muted p-[10px_12px]">
               <span className="min-w-0 flex-1 text-sm text-muted-foreground">
@@ -320,7 +323,7 @@ export function AssistantWizard() {
                   size="sm"
                   variant="ghost"
                   className="ml-auto h-6 px-2 font-mono text-[11px] lowercase"
-                  onClick={() => propose(draft.variant + 1)}
+                  onClick={() => propose(draft.variant + 1, scope)}
                   disabled={busy}
                   title={t("assistant.regenerate.title")}
                 >
@@ -385,26 +388,30 @@ export function AssistantWizard() {
                   </Button>
                 </>
               ) : draft ? (
-                <Button onClick={() => void create()} disabled={busy || hasSpecs || keptCount === 0}>
-                  {busy ? t("assistant.creating") : t("assistant.createN", { n: keptCount })}
+                <Button onClick={() => void create()} disabled={busy || keptCount === 0}>
+                  {busy
+                    ? t("assistant.creating")
+                    : keptCount === 1
+                      ? t("assistant.createN.one")
+                      : t("assistant.createN.many", { n: keptCount })}
                 </Button>
               ) : (
+                // Spec 036 (R1): las dos acciones, siempre. «Una spec» usa la
+                // cola cuando hay agente (spec 031, R5) y el borrador local
+                // cuando no lo hay; el prompt copiable de la izquierda sigue
+                // siendo la salida para cualquier otra IA.
                 <>
-                  {connected ? (
-                    // Braindump -> spec (spec 031, R5): the request travels the
-                    // queue; nothing to copy. Hidden without an agent — the
-                    // "copy prompt" button on the left is the classic fallback.
-                    <Button
-                      variant="outline"
-                      disabled={!description.trim() || busy || Boolean(structureRequest)}
-                      onClick={() => void askStructure()}
-                    >
-                      <Sparkles className="size-3.5" aria-hidden />
-                      {t("assistant.structure")}
-                    </Button>
-                  ) : null}
-                  <Button disabled={!description.trim()} onClick={() => propose(0)}>
-                    {t("assistant.propose")}
+                  <Button
+                    variant="outline"
+                    disabled={!description.trim() || busy || Boolean(structureRequest)}
+                    onClick={proposeOne}
+                    title={connected ? t("assistant.proposeOne.ai") : t("assistant.proposeOne.local")}
+                  >
+                    {connected ? <Sparkles className="size-3.5" aria-hidden /> : null}
+                    {t("assistant.proposeOne")}
+                  </Button>
+                  <Button disabled={!description.trim() || busy} onClick={() => propose(0, "board")}>
+                    {t("assistant.proposeBoard")}
                   </Button>
                 </>
               )}

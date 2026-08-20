@@ -192,3 +192,50 @@ describe("listAiRequests", () => {
     expect(await listAiRequests(root)).toEqual([]);
   });
 });
+
+// --- Spec 036, T6 (R5) ------------------------------------------------------
+// Una revisión es una petición más. Si necesitara su propio camino por la cola,
+// el tipo no estaría bien elegido.
+describe("review-spec requests (spec 036, R5)", () => {
+  const REVIEW_INPUT = {
+    type: "review-spec" as const,
+    target: { kind: "spec" as const, specId: "001-demo", ref: "001-demo" },
+    instruction: "Revisa esta spec y devuelve hallazgos por seccion."
+  };
+
+  it("travels the same lifecycle as any other request", async () => {
+    const before = await specsSnapshot();
+
+    const created = await createAiRequest(root, REVIEW_INPUT);
+    expect(created.type).toBe("review-spec");
+    expect(created.status).toBe("pending");
+    expect(created.target).toEqual(REVIEW_INPUT.target);
+
+    const claimed = await nextAiRequest(root, "cualquier-ia");
+    expect(claimed?.id).toBe(created.id);
+    expect(claimed?.status).toBe("in_progress");
+
+    const answered = await respondAiRequest(root, created.id, '{"findings":[]}');
+    expect(answered.status).toBe("answered");
+    expect(answered.proposal).toBe('{"findings":[]}');
+
+    const resolved = await resolveAiRequest(root, created.id, "accepted");
+    expect(resolved.status).toBe("accepted");
+
+    // R10: la revisión no escribe en specs/ por su cuenta, en ningun paso.
+    expect(await specsSnapshot()).toEqual(before);
+  });
+
+  it("needs a target that says which spec is under review", async () => {
+    await expect(
+      createAiRequest(root, { type: "review-spec", instruction: "revisa algo" })
+    ).rejects.toThrow(/target/i);
+  });
+
+  it("shows up in the list like the rest", async () => {
+    await createAiRequest(root, REVIEW_INPUT);
+    const all = await listAiRequests(root);
+    expect(all.map((r) => r.type)).toContain("review-spec");
+  });
+});
+

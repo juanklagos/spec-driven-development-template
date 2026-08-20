@@ -57,11 +57,22 @@ describe("AI assist mounts (R4b contract)", () => {
     expect(mountedKinds(read("BitacoraModal.tsx"))).toEqual(["bitacora"]);
   });
 
+  // Spec 036, T10 (R11). El panel de revisión entra en el contrato: existe,
+  // ancla a las 7 secciones y NO monta el botón — su única salida accionable
+  // es devolver el foco al «Ampliar con IA» de la sección, que ya pasa por el
+  // diff. La frontera de aprobación/consentimiento no se mueve.
+  it("ReviewPanel is declared, and mounts no AI button of its own", () => {
+    const source = read("ReviewPanel.tsx");
+    expect(mountedKinds(source)).toEqual([]);
+    expect(source).toContain("onFix");
+  });
+
   it("no other component mounts the button", () => {
     const withButton = fs
       .readdirSync(COMPONENTS)
       .filter((name) => name.endsWith(".tsx"))
       .filter((name) => name !== "AiAssistButton.tsx" && read(name).includes("<AiAssistButton"));
+    // ReviewPanel.tsx NO está en esta lista, y ese es el punto (spec 036).
     expect(withButton.sort()).toEqual(["BitacoraModal.tsx", "NoteNode.tsx", "SectionEditor.tsx", "SpecDrawer.tsx"]);
   });
 });

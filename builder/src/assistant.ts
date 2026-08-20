@@ -255,6 +255,16 @@ const IDEA_NOTE = { width: 320, height: 150 };
  * edits (renamed/removed specs); epics left without a spec are dropped so no
  * orphan note lands on the canvas.
  */
+/**
+ * Spec 036 (R1) — alcance de la propuesta. El asistente ya no decide por el
+ * estado del workspace; decide la persona, y las dos opciones existen siempre.
+ */
+export type ProposalScope = "one" | "board";
+
+export function scopeSpecs(draft: AssistantDraft, scope: ProposalScope): DraftSpec[] {
+  return scope === "one" ? draft.specs.slice(0, 1) : draft.specs;
+}
+
 export function draftToPlan(
   draft: AssistantDraft,
   chosen: Array<{ key: string; name: string }>
