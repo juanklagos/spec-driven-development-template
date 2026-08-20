@@ -141,3 +141,9 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 
 - **ES:** MCP deprecó sampling (SEP-2577, versión 2026-07-28) con ruta de migración «integra directamente con APIs de LLM» — justo lo que el builder rechazó. La condición de revisión del copy-first que dejó la decisión del 2026-07-20 se cierra con evidencia: no se hace el spike y no se toca el copy-first. Confirma, no reemplaza, la de «sin API keys».
 - **EN:** MCP deprecated sampling (SEP-2577, version 2026-07-28) with migration path "integrate directly with LLM provider APIs" — exactly what the builder rejected. The copy-first revisit condition left open on 2026-07-20 closes on evidence: no spike, no change to copy-first. It confirms, not replaces, the "no API keys" record.
+
+### 2026-08-19 — [Sin claves de API en el builder](2026-08-19-sin-claves-de-api-en-el-builder.md)
+
+- **ES:** La revisión de specs por IA se sirve por la cola de agentes y por pegar la respuesta de cualquier IA; se descarta guardar claves de proveedor, que habrían metido un secreto en disco y salida a internet en un servidor que solo toca ficheros (spec 036).
+- **EN:** AI spec review runs through the agent queue and through pasting any AI's answer; provider API keys are rejected — they would put a secret on disk and give outbound traffic to a server that only touches files (spec 036).
+

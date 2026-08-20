@@ -37,3 +37,4 @@
 | 033 | documentacion-por-tipos | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
 | 034 | rediseno-documentacion | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-13 |
 | 035 | rediseno-docs-handoff | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-17 |
+| 036 | revision-ia-y-asistente-sin-bloqueo | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-19 |
