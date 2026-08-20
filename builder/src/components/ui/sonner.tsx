@@ -7,6 +7,10 @@ import {
 } from "lucide-react"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
+// Sin forwardRef a proposito, unico de `ui/` que no lo lleva: este Toaster se
+// monta directo en App.tsx y nunca a traves de `asChild`, asi que nada compone
+// una ref por el. El porque de los demas esta en button.tsx.
+//
 // No theme provider in this app: "system" makes sonner follow
 // prefers-color-scheme, matching the rest of the builder.
 const Toaster = ({ ...props }: ToasterProps) => {

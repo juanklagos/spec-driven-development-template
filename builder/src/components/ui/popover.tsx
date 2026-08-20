@@ -3,28 +3,36 @@ import { Popover as PopoverPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+// forwardRef obligatorio en React 18: Radix compone estas refs vía Slot/Presence.
+// El porqué largo está en button.tsx. El trigger es además el ancla del Popper:
+// sin ref el contenido no sabe dónde colocarse. Root no pinta DOM: no lleva ref.
+
 function Popover({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />
 }
 
-function PopoverTrigger({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
-  return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
-}
+const PopoverTrigger = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
+>(function PopoverTrigger({ ...props }, ref) {
+  return (
+    <PopoverPrimitive.Trigger ref={ref} data-slot="popover-trigger" {...props} />
+  )
+})
 
-function PopoverContent({
-  className,
-  align = "start",
-  sideOffset = 6,
-  children,
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+const PopoverContent = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(function PopoverContent(
+  { className, align = "start", sideOffset = 6, children, ...props },
+  ref
+) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
+        ref={ref}
         data-slot="popover-content"
         align={align}
         sideOffset={sideOffset}
@@ -39,12 +47,15 @@ function PopoverContent({
       </PopoverPrimitive.Content>
     </PopoverPrimitive.Portal>
   )
-}
+})
 
-function PopoverAnchor({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {
-  return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />
-}
+const PopoverAnchor = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Anchor>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Anchor>
+>(function PopoverAnchor({ ...props }, ref) {
+  return (
+    <PopoverPrimitive.Anchor ref={ref} data-slot="popover-anchor" {...props} />
+  )
+})
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor }

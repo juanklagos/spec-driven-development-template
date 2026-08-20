@@ -5,6 +5,10 @@ import { Tooltip as TooltipPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+// forwardRef obligatorio en React 18: Radix compone estas refs vía Slot/Presence.
+// El porqué largo está en button.tsx. El trigger ancla el Popper: sin ref el
+// tooltip no sabría dónde colocarse. Provider y Root no pintan DOM: no llevan ref.
+
 function TooltipProvider({
   delayDuration = 0,
   ...props
@@ -24,21 +28,23 @@ function Tooltip({
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
 }
 
-function TooltipTrigger({
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
-}
+const TooltipTrigger = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
+>(function TooltipTrigger({ ...props }, ref) {
+  return (
+    <TooltipPrimitive.Trigger ref={ref} data-slot="tooltip-trigger" {...props} />
+  )
+})
 
-function TooltipContent({
-  className,
-  sideOffset = 0,
-  children,
-  ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+const TooltipContent = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(function TooltipContent({ className, sideOffset = 0, children, ...props }, ref) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
+        ref={ref}
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
@@ -52,6 +58,6 @@ function TooltipContent({
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )
-}
+})
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }

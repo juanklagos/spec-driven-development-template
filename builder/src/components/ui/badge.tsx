@@ -26,23 +26,28 @@ const badgeVariants = cva(
   }
 )
 
-function Badge({
-  className,
-  variant = "default",
-  asChild = false,
-  ...props
-}: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+type BadgeProps = React.ComponentPropsWithoutRef<"span"> &
+  VariantProps<typeof badgeVariants> & {
+    asChild?: boolean
+  }
+
+// forwardRef obligatorio en React 18: Radix compone estas refs vía Slot/Presence.
+// El porqué largo está en button.tsx.
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
+  { className, variant = "default", asChild = false, ...props },
+  ref
+) {
   const Comp = asChild ? Slot.Root : "span"
 
   return (
     <Comp
+      ref={ref}
       data-slot="badge"
       data-variant={variant}
       className={cn(badgeVariants({ variant }), className)}
       {...props}
     />
   )
-}
+})
 
 export { Badge, badgeVariants }
