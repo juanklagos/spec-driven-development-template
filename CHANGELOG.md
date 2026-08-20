@@ -10,6 +10,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [v2.6.0] — 2026-08-20
+
+### Added
+- **El asistente dejó de rendirse ante un lienzo que ya tenía specs.** Pintaba un aviso ámbar («el asistente solo se aplica en un workspace vacío») y deshabilitaba el botón de crear en cuanto había una sola spec: se podía escribir la descripción y ver la propuesta completa, pero el botón no se encendía nunca. Un callejón sin salida con vista previa — y además incoherente, porque la otra mitad del asistente ya sabía añadir una spec a un workspace poblado. Ahora el plan se aplica en modo `append`: las specs y los nodos nuevos se añaden, los anteriores conservan numeración y posición, y ninguna caja añadida intersecta una previa. Las plantillas mantienen la guardia, que ahí sí tenía sentido: una plantilla describe un board entero. (spec 036)
+- **Cualquier IA puede revisar una spec, tenga API o no.** Reclamar y responder peticiones era solo MCP, con siete clientes soportados; una IA fuera de esa lista no tenía por dónde entrar. Ahora hay dos caminos hacia el mismo sitio: la cola de agentes cuando hay uno conectado, y pegar la respuesta cuando no lo hay. El segundo es el que hace verdad «cualquier IA», porque funciona con las que ni siquiera exponen API. Un único analizador sirve a los dos, así que las dos puertas entregan exactamente el mismo producto. Los hallazgos se presentan con el mismo idioma visual que ya usaban `scoreSpec` y el linter EARS, en vez de inventar otro. (spec 036)
+- **La revisión devuelve hallazgos, no reescrituras.** Recibir una revisión no dispara ninguna escritura. Cada hallazgo lleva atajo al «Ampliar con IA» de su sección, que ya pasa por diff y firma humana, así que no nace un segundo camino de escritura hacia `specs/`. (spec 036)
+- **Cada guía dice qué es.** La documentación mezclaba tipos —tutorial, referencia, explicación— sin declararlo, así que el lector no sabía en cinco segundos si estaba en el sitio correcto ni quien escribía sabía dónde iba lo nuevo. Las 54 guías se tipan desde una fuente única, el menú del sitio se agrupa por necesidad del lector y la referencia del builder sale de la guía 51, que era cuatro documentos en uno. (spec 033)
+- **El sitio de documentación se lee sin cansar.** Medida e interlineado de lectura sin añadir familia tipográfica, cabecera de tipo como elemento propio y portada que manda a cada lector por su puerta en vez de presentar tarjetas. (spec 034)
+- **El handoff de diseño, con contraste medido.** IBM Plex Sans auto-hospedada con reparto de roles entre la sans y la duoespaciada, recálculo de la medida, portada con hero y dos puertas, cabecera de tipo como franja y menú con contadores. Corrige de paso los pares de contraste que fallaban, un defecto publicado en la spec 034. (spec 035)
+
+### Fixed
+- **El menú de tres puntos se abría donde nadie podía verlo.** No estaba roto en el sentido obvio: al pulsarlo el estado cambiaba y el contenido se montaba. Lo que fallaba era el sitio — Radix lo dejaba en `translate(0px, -200%)`, donde aparca un popper que todavía no ha podido posicionarse porque no sabe dónde está su ancla. La cadena empieza en un `PopoverTrigger asChild` sobre el `Button` de shadcn, que es una función simple sin `forwardRef`: el shadcn actual da por hecho React 19, donde `ref` viaja como una prop más, y este proyecto va con React 18.3.1, donde no viaja. La ref se caía sin aviso y Floating UI nunca llegaba a medir nada. El arreglo va en el `Button`, no en el llamador.
+- **El menú del sitio mostraba dos taxonomías a la vez**, y la portada seguía describiendo un menú por niveles que la spec 033 ya había sustituido.
+- **Tres guías describían un proyecto que ya no existe.** La 09 estaba escrita para publicar la plantilla por primera vez —`git init`, primer commit, primer tag— con el repositorio publicado desde hace mucho; pasa a ser la lista de cada release con los comandos que el proyecto ejecuta de verdad. La 39 y la 46 abren declarando que son registro histórico. Más dos enlaces rotos que nadie veía.
+
+---
+
 ## [v2.5.0] — 2026-08-12
 
 ### Added
