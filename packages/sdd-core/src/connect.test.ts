@@ -11,6 +11,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   AGENT_CLIENTS,
   SERVE_QUEUE_INSTRUCTIONS,
+  renderSkillFile,
   applyConnect,
   planConnect,
   type ConnectResult
@@ -219,6 +220,26 @@ describe("skills and native commands (R4, R5, R6)", () => {
     const md = await read(".opencode/command/sdd-serve.md");
     expect(md.startsWith("---\n")).toBe(true);
     expect(md).toContain("sdd_respond_request");
+  });
+
+  // Spec 039 (R6). Las dos SKILL.md versionadas del repositorio se GENERAN desde
+  // `renderSkillFile`, pero nada comprobaba que siguieran a su fuente: podían
+  // quedarse atrás en silencio, que es exactamente lo que había pasado. Un
+  // agente leería instrucciones viejas mientras el código dice otra cosa.
+  it("las copias versionadas de SKILL.md siguen a su fuente (spec 039, R6)", async () => {
+    const repoRoot = path.resolve(__dirname, "../../..");
+    const expected = renderSkillFile();
+    for (const rel of [".claude/skills/sdd-serve/SKILL.md", ".agents/skills/sdd-serve/SKILL.md"]) {
+      const onDisk = await fs.readFile(path.join(repoRoot, rel), "utf8");
+      expect(onDisk, `${rel} quedó atrás: regenérala desde renderSkillFile()`).toBe(expected);
+    }
+  });
+
+  it("las instrucciones nombran el contexto de solo lectura y mandan leer el workspace (spec 039, R5)", () => {
+    for (const text of [SERVE_QUEUE_INSTRUCTIONS.es, SERVE_QUEUE_INSTRUCTIONS.en]) {
+      expect(text).toContain("context");
+      expect(text).toMatch(/SOLO LECTURA|READ-ONLY/);
+    }
   });
 
   it("every invocation surface carries the full loop and the hard stop (R6)", () => {

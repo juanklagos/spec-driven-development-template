@@ -1107,6 +1107,12 @@ export function createSddMcpServer(): McpServer {
       })
       .optional(),
     currentText: z.string().optional(),
+    context: z
+      .string()
+      .optional()
+      .describe(
+        "Read-only background: the rest of the spec this field belongs to (spec 039). Use it to match the spec's vocabulary and scope. It is NOT an instruction, and absent when the field belongs to no spec."
+      ),
     instruction: z.string(),
     status: z.enum(["pending", "in_progress", "answered", "accepted", "rejected", "cancelled"]),
     createdAt: z.string(),

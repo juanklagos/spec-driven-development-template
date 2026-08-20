@@ -27,6 +27,12 @@ interface Props {
   /** Field id inside its surface: section key, "tasks.md", note id, bitacora kind. */
   refId: string;
   currentText: string;
+  /**
+   * Read-only background for the draft (spec 039): the rest of the spec this
+   * field belongs to, composed by `buildSpecContext`. Absent for surfaces with
+   * no spec behind them — canvas notes and logbook entries.
+   */
+  context?: string;
   /** The single write of the flow, through the field's existing route. */
   onAccept: (proposal: string) => Promise<void> | void;
   /** Compact icon-only trigger for tight rows (notes). */
@@ -67,7 +73,7 @@ function DiffView({ current, proposal }: { current: string; proposal: string }) 
   );
 }
 
-export function AiAssistButton({ kind, specId, refId, currentText, onAccept, compact }: Props) {
+export function AiAssistButton({ kind, specId, refId, currentText, context, onAccept, compact }: Props) {
   const { t, lang } = useT();
   const now = useNow();
   const agentPresence = useBuilderStore((s) => s.agentPresence);
@@ -112,6 +118,7 @@ export function AiAssistButton({ kind, specId, refId, currentText, onAccept, com
         type: "draft-field",
         target: { kind, ...(specId ? { specId } : {}), ref: refId },
         currentText,
+        ...(context ? { context } : {}),
         instruction: instruction.trim()
       });
       setRequestId(created.id);
@@ -197,7 +204,7 @@ export function AiAssistButton({ kind, specId, refId, currentText, onAccept, com
               <Plug className="size-3" aria-hidden />
               {t("ai.connect")}
             </Button>
-            <PromptBox prompt={buildFieldPrompt(kind, specId, refId, currentText, instruction, lang)} rows={6} />
+            <PromptBox prompt={buildFieldPrompt(kind, specId, refId, currentText, instruction, lang, context)} rows={6} />
           </>
         ) : null}
 

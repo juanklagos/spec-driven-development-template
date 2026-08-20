@@ -13,6 +13,7 @@ import { edgeKind, EDGE_KIND_LABELS, type EdgeKind } from "../convert";
 import { lintEarsCriterion } from "../ears";
 import { useT } from "../i18n";
 import { isApprovedStatusText, parseApproval, parseSpecSections } from "../sections";
+import { buildSpecContext } from "../speccontext";
 import { readTasksCollapsed, useBuilderStore, writeTasksCollapsed } from "../store";
 import { AiAssistButton } from "./AiAssistButton";
 import { ImplementModal } from "./ImplementModal";
@@ -216,10 +217,13 @@ function ScorePanel({ specId, specMarkdown }: { specId: string; specMarkdown: st
 function AddTaskForm({
   specId,
   tasks,
+  context,
   onAdded
 }: {
   specId: string;
   tasks: TaskItem[];
+  /** Spec 039: la spec y su plan como fondo para la propuesta de tareas. */
+  context?: string;
   onAdded: (tasks: TaskItem[]) => void;
 }) {
   const { t } = useT();
@@ -265,6 +269,7 @@ function AddTaskForm({
           specId={specId}
           refId="tasks.md"
           currentText={tasks.map((task) => `- [${task.done ? "x" : " "}] ${task.text}`).join("\n")}
+          context={context}
           onAccept={acceptTasks}
           compact
         />
@@ -942,7 +947,12 @@ export function SpecDrawer() {
                         ))}
                       </ul>
                     )}
-                    <AddTaskForm specId={specId} tasks={detail.tasks} onAdded={handleTasksChanged} />
+                    <AddTaskForm
+                      specId={specId}
+                      tasks={detail.tasks}
+                      context={buildSpecContext({ specMarkdown: detail.docs.spec, planMarkdown: detail.docs.plan })}
+                      onAdded={handleTasksChanged}
+                    />
                     <IssuesPanel key={specId} specId={specId} pendingCount={pendingCount} />
                     <SectionHead>
                       spec.md
@@ -960,6 +970,7 @@ export function SpecDrawer() {
                 <SectionEditor
                   specId={specId}
                   specMarkdown={detail.docs.spec}
+                  planMarkdown={detail.docs.plan}
                   onSaved={handleSectionsSaved}
                 />
               </TabsContent>

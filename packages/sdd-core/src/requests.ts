@@ -47,6 +47,15 @@ export interface AiRequest {
   target?: AiRequestTarget;
   /** Text of the field at request time, so the agent needs no second lookup. */
   currentText?: string;
+  /**
+   * Read-only background for the draft (spec 039): the rest of the spec the
+   * field belongs to. Deliberately NOT part of `instruction` — that is what the
+   * person asked for, this is what surrounds it, and merging them invites the
+   * model to treat the spec as an order. Absent for surfaces with no spec
+   * behind them (canvas notes, logbook), and absent in requests written before
+   * spec 039, which are still valid.
+   */
+  context?: string;
   instruction: string;
   status: AiRequestStatus;
   createdAt: string;
@@ -61,6 +70,7 @@ export interface CreateAiRequestInput {
   type: AiRequestType;
   target?: AiRequestTarget;
   currentText?: string;
+  context?: string;
   instruction: string;
 }
 
@@ -149,6 +159,7 @@ export async function createAiRequest(projectRoot: string, input: CreateAiReques
     type: input.type,
     ...(input.target ? { target: input.target } : {}),
     ...(input.currentText !== undefined ? { currentText: input.currentText } : {}),
+    ...(input.context?.trim() ? { context: input.context } : {}),
     instruction: input.instruction.trim(),
     status: "pending",
     createdAt: new Date().toISOString()

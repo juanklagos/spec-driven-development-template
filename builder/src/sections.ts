@@ -20,6 +20,18 @@ const ALIASES: Record<SectionKey, RegExp[]> = {
   outOfScope: [/^##\s+fuera de alcance/i, /^##\s+out of scope/i]
 };
 
+/**
+ * True when `line` is the heading that opens `key`'s section (spec 039).
+ *
+ * Exported so the AI-context composer can drop the section being edited without
+ * owning a second copy of ALIASES: two tables of headings would drift, and the
+ * one that drifted would fail silently — a context that quietly keeps the very
+ * section the person is rewriting.
+ */
+export function matchesSectionHeading(line: string, key: SectionKey): boolean {
+  return ALIASES[key].some((re) => re.test(line));
+}
+
 /** Template placeholder lines we hide from the guided editor lists. */
 const TEMPLATE_NOISE = [
   /\[(disparador|condición de error|trigger|error condition)\]/i,

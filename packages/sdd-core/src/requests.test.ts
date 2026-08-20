@@ -83,6 +83,40 @@ describe("createAiRequest (R1)", () => {
     expect([...ids].sort()).toEqual(ids);
   });
 
+  // Spec 039 (R1). `context` es opcional en los tres niveles —tipo, archivo y
+  // esquema del MCP— para que una petición escrita antes de la 039 siga siendo
+  // válida y atendible. La cola vive en disco: romper eso dejaría peticiones
+  // pendientes ilegibles tras actualizar.
+  it("guarda el contexto cuando llega, y omite el campo cuando no (spec 039, R1)", async () => {
+    const con = await createAiRequest(root, {
+      type: "draft-field",
+      target: { kind: "section", specId: "001-x", ref: "criteria" },
+      currentText: "- viejo",
+      context: "# Spec (contexto, solo lectura)\n\n## Historia\n\nComo persona...",
+      instruction: "amplía"
+    });
+    expect(con.context).toContain("Como persona");
+
+    const sin = await createAiRequest(root, {
+      type: "draft-field",
+      target: { kind: "note", ref: "n1" },
+      currentText: "nota",
+      instruction: "amplía"
+    });
+    expect(sin.context).toBeUndefined();
+    expect(Object.prototype.hasOwnProperty.call(sin, "context")).toBe(false);
+  });
+
+  it("no guarda un contexto vacío o en blanco (spec 039)", async () => {
+    const r = await createAiRequest(root, {
+      type: "draft-field",
+      target: { kind: "section", specId: "001-x", ref: "story" },
+      context: "   \n  ",
+      instruction: "amplía"
+    });
+    expect(r.context).toBeUndefined();
+  });
+
   it("rejects an empty instruction and a draft-field without target", async () => {
     await expect(createAiRequest(root, { ...DRAFT_INPUT, instruction: "  " })).rejects.toThrow(/instruction/i);
     await expect(

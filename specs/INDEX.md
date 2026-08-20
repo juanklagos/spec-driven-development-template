@@ -40,3 +40,4 @@
 | 036 | revision-ia-y-asistente-sin-bloqueo | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-19 |
 | 037 | evidencia-de-aprobacion-profesional | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
 | 038 | refs-de-shadcn-en-react-18 | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
+| 039 | contexto-de-spec-al-ampliar-con-ia | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |

@@ -15,6 +15,7 @@ import { lintEarsCriterion } from "../ears";
 import { docsUrl } from "../help";
 import { useT, type TFunction } from "../i18n";
 import { parseSpecSections } from "../sections";
+import { buildSpecContext } from "../speccontext";
 import { useBuilderStore } from "../store";
 import type { SpecSectionsInput } from "../types";
 import {
@@ -35,6 +36,8 @@ interface Props {
   specId: string;
   /** Current spec.md content (from the sheet's loaded detail). */
   specMarkdown: string;
+  /** Current plan.md, same source (spec 039): background for the AI drafts. */
+  planMarkdown?: string;
   onSaved: () => void;
 }
 
@@ -178,7 +181,7 @@ export function clearSectionDrafts(): void {
   drafts.clear();
 }
 
-export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
+export function SectionEditor({ specId, specMarkdown, planMarkdown, onSaved }: Props) {
   const { t, lang } = useT();
   const parsed = useMemo(() => parseSpecSections(specMarkdown), [specMarkdown]);
 
@@ -341,6 +344,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
         specId={specId}
         refId={refId}
         currentText={current}
+        context={buildSpecContext({ specMarkdown, planMarkdown, exclude: key })}
         onAccept={async (proposal) => {
           const value = proposal.trim();
           setLocal(value);
@@ -363,6 +367,7 @@ export function SectionEditor({ specId, specMarkdown, onSaved }: Props) {
         specId={specId}
         refId={refId}
         currentText={cleanList(current).join("\n")}
+        context={buildSpecContext({ specMarkdown, planMarkdown, exclude: key })}
         onAccept={async (proposal) => {
           const items = listFromProposal(proposal);
           setLocal(items);

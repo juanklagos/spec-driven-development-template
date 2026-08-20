@@ -78,13 +78,19 @@ export function buildFieldPrompt(
   refId: string,
   currentText: string,
   instruction: string,
-  lang: Lang
+  lang: Lang,
+  /** Spec 039: el mismo contexto que llevaría la petición de la cola. */
+  context?: string
 ): string {
   const where = specId ? `${specId} / ${refId}` : refId;
   const body = currentText.trim() || (lang === "es" ? "(vacío)" : "(empty)");
+  // El bloque de contexto va ANTES de la indicación y marcado como solo
+  // lectura: si va después, se lee como parte de lo que hay que redactar.
+  const ctx = context?.trim();
   if (lang === "es") {
     return [
       `Ayúdame a redactar el campo «${where}» (${kind}) de mi workspace SDD.`,
+      ...(ctx ? ["Contexto de la spec (solo lectura, NO lo reescribas):", "===", ctx, "===", ""] : []),
       instruction.trim() ? `Indicación: ${instruction.trim()}` : "Amplía y mejora el texto actual.",
       "Texto actual:",
       "---",
@@ -95,6 +101,7 @@ export function buildFieldPrompt(
   }
   return [
     `Help me draft the field "${where}" (${kind}) of my SDD workspace.`,
+    ...(ctx ? ["Spec context (read-only, do NOT rewrite it):", "===", ctx, "===", ""] : []),
     instruction.trim() ? `Instruction: ${instruction.trim()}` : "Expand and improve the current text.",
     "Current text:",
     "---",
