@@ -6,7 +6,12 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `YYYY-MM-DD`
 - Aprobado por / Approved by: `Nombre o rol`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote):
+- Evidencia de aprobación / Approval evidence:
+<!-- Qué se aprobó, con qué alcance y contra qué documento o propuesta, con la fecha. -->
+<!-- NO transcribas el chat: «hazlo» o «dale» no dicen qué se aprobó. -->
+<!-- What was approved, its scope, the document it was approved against, and the date. -->
+<!-- Do NOT transcribe chat: "go ahead" says nothing about what was approved. -->
+<!-- Ejemplo / Example: Aprobado en sesión del 2026-03-18: alcance A y B sobre `idea/PROPUESTA.md`. -->
 
 ## Historia de usuario principal
 

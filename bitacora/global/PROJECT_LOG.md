@@ -92,7 +92,7 @@
 
 ## 2026-07-23 — Spec 027: cobertura completa de comandos MCP
 
-- **Goal / Objetivo:** cerrar las asimetrías del servidor MCP (fuerte escribiendo, débil leyendo) tras la auditoría pedida por el propietario («cubre todo»).
+- **Goal / Objetivo:** cerrar las asimetrías del servidor MCP (fuerte escribiendo, débil leyendo) tras la auditoría pedida por el propietario, que aprobó la propuesta completa.
 - **Work completed / Trabajo realizado:** 7 herramientas nuevas (21 → 28): sdd_read_spec_document, sdd_read_bitacora, sdd_check_drift, sdd_add_task, sdd_lint_ears, sdd_score_spec, sdd_install_sidecar. Core nuevo probado (bitacora.ts, score.ts, addSpecTask, getSpecDriftReport, installSidecar); docs ES/EN actualizadas.
 - **Decisions made / Decisiones tomadas:** score portado a TS (el bash exige rg), sidecar delegado al bash con execFile (patrón createWorkspace) — `bitacora/decisiones/2026-07-23-mcp-score-port-y-sidecar-execfile.md`.
 - **Blockers / Bloqueos:** ninguno.

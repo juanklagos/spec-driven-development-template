@@ -14,3 +14,4 @@
   7. Overlays: vacío, sin conexión, asistente, tour, plantillas, bitácora, implementar.
 - Validación: `tsc --noEmit` limpio, 34 tests del builder y 110 del monorepo en verde, `vite build` OK, verificación visual en claro y oscuro contra `Builder 2a.dc.html` con el workspace de prueba `www/demo-rediseno`.
 - Desviación consciente del handoff: el menú `⋯` usa `Popover` (no se añadió `dropdown-menu` para evitar una dependencia nueva); el icono de GitHub es `CircleDot` (lucide ya no incluye iconos de marca).
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

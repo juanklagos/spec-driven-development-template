@@ -2,7 +2,7 @@
 
 ## 2026-07-20
 
-- Spec creada y aprobada ("hazlo todos"); consentimiento registrado. Ejecución secuencial 007→008→009.
+- Spec creada y aprobada junto con el resto de paquetes propuestos; consentimiento registrado. Ejecución secuencial 007→008→009.
 
 ## 2026-07-20 (cierre / close)
 
@@ -12,3 +12,4 @@
 - R3 lint EARS en vivo: regex compartida por contrato («keep in sync» documentado en ambos lados) entre `sdd-core/src/spec-actions.ts` (`validateEarsCriterion`) y `builder/src/ears.ts` (`lintEarsCriterion`); patrón CUANDO/WHEN/SI/IF/MIENTRAS/WHILE … DEBERÁ/DEBERA/DEBERÁN/SHALL (case-insensitive, bullet opcional; cierre con lookahead `(?!\w)` porque `\b` tras la Á acentuada nunca casa en regex JS — bug real detectado por el assert nuevo de mcp:test) + aviso de palabras vagas (rápido/fácil/intuitivo/fast/easy/user-friendly) sin número. UI en `SectionEditor.tsx`: borde verde/ámbar + pista corta bajo el campo; nunca bloquea guardar.
 - Evidencia de verificación: `npm run build` + `npm run typecheck` (raíz) y `tsc --noEmit` + `vite build` (builder) en verde; `npm run mcp:test` en verde con 9 asserts nuevos de `validateEarsCriterion`; sandbox sidecar fresco (scratchpad/v3-test, servidor en :3399 para no tocar el :3334 del usuario) verificado en navegador: «una tienda online de plantas con pagos y panel de administración» → borrador razonable (3 specs: catálogo/checkout+pagos/panel admin con épicas Experiencia/Negocio/Operaciones), rename en el wizard («catalogo de plantas») respetado, bundles reales en disco (`001-catalogo-de-plantas` etc. con spec/plan/tasks/history + board.canvas con 7 nodos y 6 edges etiquetados); botón Implementar deshabilitado con hard stop en spec Pendiente y habilitado tras aprobar con el botón de 007 (modal con prompt exacto, capturas); lint EARS: filas verdes con criterios EARS, ámbar con pista por DEBERÁ ausente y por «rápido» sin número (verde al añadir «2 segundos»), guardado con 3 secciones pese al aviso y bloque de aprobación intacto; `validate-sdd.sh`, `check-sdd-policy.sh` y `check-sdd-gate.sh` con 0 errores.
 - Decisiones: heurística 100 % local y determinista (mismo texto+variante → mismo borrador); nombres de spec sin acentos para slugs limpios; épicas sin specs restantes se descartan del plan (sin notas huérfanas); el asistente solo aplica en workspaces vacíos (misma guardia y verdad del servidor que la galería); copy-first sin deep links por fragilidad entre agentes.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

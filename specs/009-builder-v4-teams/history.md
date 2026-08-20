@@ -2,7 +2,7 @@
 
 ## 2026-07-20
 
-- Spec creada y aprobada ("hazlo todos"); consentimiento registrado. Ejecución secuencial 007→008→009.
+- Spec creada y aprobada junto con el resto de paquetes propuestos; consentimiento registrado. Ejecución secuencial 007→008→009.
 
 ## 2026-07-21
 
@@ -12,3 +12,4 @@
   - R3 Tasks→issues: `POST /api/spec/:id/issues` → `packages/sdd-mcp/src/github.ts` (transporte, gh CLI vía execFile); título trazable `[specId] tarea`, body con enlace al bundle, idempotencia por título; errores bilingües por precondición (sin repo git, sin remote, gh ausente, gh sin auth, remote no resoluble). Panel visual en el drawer con resumen created/skipped/failed.
   - R4 Presencia: broadcast `presence {count}` en el hub SSE (`events.ts`) al conectar/desconectar; chip 👥 N en TopBar cuando count>1.
 - Verificación real: builds+typecheck raíz y builder en verde; `mcp:test` extendido (edge tipado con color, warning aprobada→no aprobada, edges a notas no avisan, builders de título/body de issues) en verde; sandbox fresco (scratchpad/v4-test, :3399) con navegador — kanban consistente con canvas, toast+CTA, warning `⚠ 1 dep` y badge ámbar, cambio a "bloquea" invierte la dirección y retira el warning, presencia 👥 2→3→2 con conexiones concurrentes, error bilingüe de issues mostrado en el drawer. Camino gh verificado sin tocar repos reales (sin scope delete_repo no se creó repo desechable): errores reproducidos con curl/PATH restringido y `gh repo view` de solo lectura contra remote inexistente. 3 scripts SDD en 0 errores.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

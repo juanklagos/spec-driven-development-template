@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — el autor respondió *«arregla todo nivel senior con solid, quiero dejar todo listo»* al informe de estado que enumeraba estos cuatro defectos verificados. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-21: corrección de los cuatro defectos verificados que enumeraba el informe de estado, con SOLID como restricción de diseño. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 

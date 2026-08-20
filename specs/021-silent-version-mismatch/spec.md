@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-23`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-23 — «crea commits y sigue con lo que falte». La 021 era el borrador pendiente de mayor valor (bug reportado por el propietario: el binario del lienzo fallaba en silencio). Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-23: implementación de la 021, el borrador pendiente de mayor valor, sobre el defecto reportado por el propietario — el binario del lienzo fallaba en silencio. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 

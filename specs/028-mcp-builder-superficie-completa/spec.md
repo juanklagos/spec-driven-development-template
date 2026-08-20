@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-08`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-08 — el propietario pidió «que se amplien las herramientas que se pueden usar desde el mcp y el builder», seleccionó las 5 herramientas MCP y las 4 capacidades de Builder propuestas, y respondió **«Aprobar e implementar»** al borrador de la spec 028. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Chat 2026-08-08 — el propietario pidió «que se amplien las herramientas que se pueden usar desde el mcp y el builder», seleccionó las 5 herramientas MCP y las 4 capacidades de Builder propuestas, y respondió **«Aprobar e implementar»** al borrador de la spec 028. Consentimiento en `.sdd/user-consent.log`.
 
 ## Objetivo / Objective
 

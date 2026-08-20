@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-12`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-12: "has las dos, necesito todas las formas posible, y ojala mas automaticas, investiga como conectar con los agentes de codex, claude, open code y demas, de forma facil" — instrucción explícita de construir ambas mejoras
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-08-12: ambas mejoras, con el requisito de cubrir todas las formas de conexión posibles y hacerlas lo más automáticas que se pueda, investigando la integración con los agentes de Codex, Claude, opencode y demás.
 
 ## Objetivo
 

@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-12`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-12: "aprobada, sigue con lo que haga falta" tras revisar alcance ampliado (todo campo editable, R4b exclusión aprobación/consentimiento)
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-08-12: alcance ampliado tras revisión — todo campo editable, con R4b excluyendo aprobación y consentimiento.
 
 ## Historia de usuario principal
 

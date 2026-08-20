@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-22`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — el autor respondió *«siga, cubra todo lo que falte»*. El barrido de 84 agentes que siguió confirmó 71 hallazgos, y esta spec cubre los que un desconocido encuentra en sus primeros cinco minutos. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-22: cobertura de lo que faltaba. El barrido de 84 agentes que siguió confirmó 71 hallazgos, y esta spec cubre los que un desconocido encuentra en sus primeros cinco minutos. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 

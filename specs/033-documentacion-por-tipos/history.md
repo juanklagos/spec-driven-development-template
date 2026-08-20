@@ -24,3 +24,4 @@
   detrás. Las tres superficies —repositorio, paquete npm y sitio— en cero.
   Verificado: `npm run docs:links` en verde, sitio con 115 páginas, 55 guías
   emparejadas y cubiertas por el menú.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

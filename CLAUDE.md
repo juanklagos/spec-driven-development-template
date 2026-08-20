@@ -29,6 +29,13 @@ Decision log:
 - Registra una decisión cuando eligió entre alternativas reales, cuando revertirla será caro, o cuando alguien preguntaría después "¿por qué es así?".
 - Every record includes a "when to revisit" section, and every rationale points at a source (commit, `file:line`, spec history, CHANGELOG, `idea/`). Never invent rationale or dates.
 
+Approval and record rule:
+- Approval evidence records WHAT was approved, its scope, the document or proposal it was approved against, and the date. Never a transcription of the chat.
+- La evidencia de aprobación registra QUÉ se aprobó, con qué alcance y contra qué documento, con la fecha. Nunca la transcripción del chat.
+- "hazlo", "dale", "arranca" and the like are not evidence: they say nothing about what was approved.
+- The same rule governs `bitacora/` and the summary of each `.sdd/user-consent.log` line.
+- Correcting the wording of an existing record is legitimate; changing what was approved, by whom, or when is not.
+
 Session close contract:
 - objective
 - active_spec

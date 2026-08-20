@@ -24,7 +24,7 @@ Adoptar el posicionamiento **«la escuela bilingüe de SDD que también es herra
 
 Cada elección técnica lleva su razón escrita en el mismo documento, no en reconstrucción: **Agent Skills** porque «lo leen 32+ herramientas… Un formato, todos los agentes» (`:32`); **devcontainer** porque «Gitpod ya no es alternativa (pivotó a Ona)» (`:55`); **VHS** porque «la demo nunca queda desactualizada» (`:60`); **Astro Starlight** porque «es el framework 2026 con mejor i18n nativa» (`:89`).
 
-Cada nivel fue aprobado por el autor en el chat, con las palabras registradas en `.sdd/user-consent.log:2-5`: 10:43 «hazlo» (Nivel 1), 10:56 «hazlo y continua con todo nivel senior» (Nivel 2), 11:06 «continua con el resto» (Nivel 3), 11:21 (resto de propuestas + nivelado del aprendizaje). `bitacora/global/PROJECT_LOG.md:73` (Sesión 3) lo cierra como decisión confirmada.
+Cada nivel fue aprobado por el autor en sesión, con el alcance registrado en `.sdd/user-consent.log:2-5`: 10:43 Nivel 1, 10:56 Nivel 2, 11:06 Nivel 3, 11:21 resto de propuestas y nivelado del aprendizaje. `bitacora/global/PROJECT_LOG.md:73` (Sesión 3) lo cierra como decisión confirmada.
 
 ## Alternatives considered / Alternativas consideradas
 

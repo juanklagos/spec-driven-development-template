@@ -3,7 +3,7 @@
 ## 2026-07-17
 
 - Se crea la spec a partir del Nivel 2 de `idea/PROPUESTAS_2026-07-17.md`.
-- El autor aprueba con "hazlo y continua con todo nivel senior"; consentimiento registrado en `.sdd/user-consent.log`.
+- El autor aprueba la spec y la continuación con el Nivel 2; consentimiento registrado en `.sdd/user-consent.log`.
 - Se añade al alcance el arreglo del workflow de demo (R7): la primera corrida real reveló que vhs-action@v2 falla instalando ffmpeg.
 - Publicación efectiva en npm/Marketplace queda fuera de alcance (requiere cuentas del autor); se deja preparada y documentada.
 
@@ -18,3 +18,4 @@
 - Cuenta npm del autor recuperada. Paquetes renombrados al scope real y destapados: `@juanklagos/sdd-core`, `@juanklagos/sdd-mcp` (imports y scripts de workspace actualizados), y el scaffolder pasa a `@juanklagos/create-sdd-project` porque `create-sdd-project` ya está tomado en npm (0.20.0 de un tercero).
 - Metadatos de publicación completos (files, repository, license, engines, publishConfig public, prepublishOnly build). Verificado: build, typecheck, mcp:test y `npm pack --dry-run` de los tres paquetes.
 - Publicación efectiva: la ejecuta el autor con su sesión npm.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

@@ -1,6 +1,6 @@
 # Tareas 027 - cobertura completa de comandos MCP
 
-> Aprobada y consentida el 2026-07-23 («cubre todo» a la propuesta de cobertura MCP).
+> Aprobada y consentida el 2026-07-23: propuesta de cobertura MCP completa.
 
 - [x] T1 (R2): `packages/sdd-core/src/bitacora.ts` — `listBitacoraFiles` + `readBitacoraFile` (kinds handoffs|decisiones|diaria|global, guard anti-traversal) + tests (5).
 - [x] T2 (R4): `addSpecTask` en `board.ts` (append `- [ ] texto` vía `mutateSpecDocument`, devuelve tareas actualizadas) + tests (4).

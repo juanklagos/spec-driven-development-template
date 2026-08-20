@@ -1,6 +1,6 @@
 # Tareas 024 - núcleo con pruebas
 
-> Aprobada y consentida el 2026-07-23 («arranca»). Implementación en la misma sesión.
+> Aprobada y consentida el 2026-07-23. Implementación en la misma sesión.
 
 - [x] T1 (R1): Vitest instalado en la raíz (workspace, `vitest@^3`) y en `builder/`; `npm run test:unit` en la raíz corre los 57 en una pasada; `npm test` = `test:unit` + `mcp:test` (smoke conservado).
 - [x] T2 (R2): pruebas de `sdd-core/board.ts` — `isApprovedStatus` (tabla de verdad de 17 casos incl. negaciones), `specTone` (anti-patrón «marcadas sin aprobar» → nunca `done`, spec sin tareas → `ok`), y `getBoardView` sobre un workspace SDD temporal (paridad de `tone` en el camino real de lectura). `packages/sdd-core/src/board.test.ts`, 23 pruebas.

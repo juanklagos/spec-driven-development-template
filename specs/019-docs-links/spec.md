@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-22`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — al reportar el defecto y preguntar si atacarlo, el autor respondió *«hazlo»*.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-22: corrección del defecto de enlaces, autorizada tras reportarlo.
 
 ## Contexto
 

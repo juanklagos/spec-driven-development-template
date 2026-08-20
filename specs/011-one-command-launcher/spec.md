@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado`
 - Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Klagos (autor del template)`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — tras la pregunta explícita "¿sigo directo con `npx @juanklagos/sdd`?", el autor respondió "has lo mejor a corto y largo plazo". Decisión y evidencia en `bitacora/decisiones/2026-07-21-no-app-escritorio.md` y `idea/EVALUACION_DESKTOP_2026-07-21.md`. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-21: se opta por la vía de mejor resultado a corto y largo plazo, frente a seguir directo con `npx @juanklagos/sdd`. Fundamento en `bitacora/decisiones/2026-07-21-no-app-escritorio.md` y `idea/EVALUACION_DESKTOP_2026-07-21.md`. Consentimiento en `.sdd/user-consent.log`.
 
 ## Historia de usuario principal
 

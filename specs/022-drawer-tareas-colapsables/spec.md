@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-22`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Aprobación en sesión, 2026-07-22: «listo, hazlo», sobre el resumen de la spec 022 con las dos decisiones explicitadas (preferencia global de plegado y desplegado por defecto).
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-22: resumen de la spec 022 con las dos decisiones explicitadas — preferencia global de plegado, y desplegado por defecto.
 
 ## Contexto
 

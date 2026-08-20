@@ -2,7 +2,7 @@
 
 ## 2026-07-20
 
-- Spec creada y aprobada ("hazlo todos"); consentimiento registrado. Ejecución secuencial 007→008→009.
+- Spec creada y aprobada junto con el resto de paquetes propuestos; consentimiento registrado. Ejecución secuencial 007→008→009.
 
 ## 2026-07-20 (cierre / close)
 
@@ -10,3 +10,4 @@
 - Frontend en `builder/src`: chip del gate + «Validar ahora» + badges `⚠ N` por tarjeta (refresco vía SSE kind=specs); botón «Aprobar spec» con confirmación inline en el drawer; tour de 5 pasos con overlay propio (localStorage `sdd-builder-tour-dismissed`, botón «?»); galería de 4 plantillas (`templates.ts`) que crea specs reales + board conectado (solo workspace vacío); pestaña «Editar» con editor guiado (historia, escenarios, criterios EARS con autocompletado del prefijo, fuera de alcance) sobre `sections.ts` + `SectionEditor.tsx`; undo/redo con historial zustand (límite 50, ⌘Z/⇧⌘Z) y export PNG con `html-to-image` (patrón oficial de React Flow).
 - Evidencia de verificación: `npm run build` + `npm run typecheck` (raíz y builder) en verde; `npm run mcp:test` en verde con cobertura nueva de las 3 tools (aprobación y edición quirúrgica verificadas en disco, issues agrupados por spec-id); sandbox sidecar fresco en scratchpad (`v2-test`) con curl de `/api/gate` (ok/errores/specIssues), approve (spec.md en disco con `Aprobado`, fecha y aprobador) y sections (secciones reemplazadas, bloque de aprobación y Requisitos intactos, `## Fuera de alcance` añadida al final); flujo completo en navegador contra el sandbox: tour en primera visita, plantilla E-commerce aplicada (4 specs reales + épicas + edges etiquetados), gate rojo con badge `⚠ 1` al borrar plan.md y verde al restaurarlo (SSE), aprobación y editor guiado desde el drawer escritos en disco, undo/redo (3→2→3 notas) y export PNG sin errores de consola; `validate-sdd.sh`, `check-sdd-policy.sh` y `check-sdd-gate.sh` con 0 errores.
 - Decisiones: la evidencia de aprobación solo se rellena si está vacía (nunca se sobreescribe una evidencia real); las secciones guiadas ausentes en la plantilla (p. ej. «Fuera de alcance» en la ES) se añaden al final con heading bilingüe; el guard de la galería usa la lista de specs del servidor como verdad; el historial de undo se limpia al recargar el board desde disco.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

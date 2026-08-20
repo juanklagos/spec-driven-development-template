@@ -48,3 +48,4 @@
   sirve, que borra los puntos. `check-doc-links` no lo veía porque solo miraba
   los `href` absolutos. Los dos corregidos en T16; el verificador se comprobó
   fallando antes de arreglar el origen.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

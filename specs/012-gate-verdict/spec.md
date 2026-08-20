@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — el autor respondió: *«arregla el fallo real, QUE RESPONDA TODO LO POSIBLE PARA EVITAR ERRORES Y QUE EL USUARIO SUFRA. REVISA COMO SOLVENTARLO, NO IMPORTA SI HAY QUE CAMBIAR ALGO EN GENERAL»*. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-21: atacar el fallo real y cubrir todas las respuestas posibles para evitar errores al usuario, sin límite de alcance en la solución. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 

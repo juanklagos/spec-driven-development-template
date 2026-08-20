@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-12`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-12: "sigue con las 029 y luego se necesita publicar todo a main" — instrucción explícita de retomar e implementar la spec
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-08-12: retomar e implementar la spec 029, y publicar el resultado a `main`.
 
 ## Objetivo / Objective
 

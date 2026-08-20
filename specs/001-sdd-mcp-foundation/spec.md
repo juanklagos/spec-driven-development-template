@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-03-18`
 - Aprobado por / Approved by: `Usuario del repositorio`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): `2026-03-18: "listo, hagamoslo asi" y luego "hazlo todo"`
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-03-18: alcance completo de la spec. Consentimiento en `.sdd/user-consent.log`.
 
 ## Historia de usuario principal
 

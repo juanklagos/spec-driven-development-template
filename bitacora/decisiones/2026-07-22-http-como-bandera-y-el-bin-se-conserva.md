@@ -5,7 +5,7 @@
 2026-07-22
 
 Spec asociada: [`specs/020-front-door-two-commands/`](../../specs/020-front-door-two-commands/),
-aprobada por el autor en chat el 2026-07-22 («arreglalo»), consentimiento en
+aprobada por el autor el 2026-07-22, consentimiento en
 `.sdd/user-consent.log`.
 
 ## Context / Contexto

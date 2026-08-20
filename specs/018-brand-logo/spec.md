@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-22`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — el autor pidió un logo, descartó dos rondas de conceptos, y sobre la tercera eligió *monograma → tratamiento «recortada» → color monocromo*, con alcance *«logo + conectarlo al sitio»*. Ampliación el mismo día: *«ahora el logo necesito que lo ponga en el builder»*.
+- Evidencia de aprobación / Approval evidence: Chat 2026-07-22 — el autor pidió un logo, descartó dos rondas de conceptos, y sobre la tercera eligió *monograma → tratamiento «recortada» → color monocromo*, con alcance *«logo + conectarlo al sitio»*. Ampliación el mismo día: *«ahora el logo necesito que lo ponga en el builder»*.
 
 ## Contexto
 

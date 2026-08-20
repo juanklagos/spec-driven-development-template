@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado`
 - Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Klagos (autor del template)`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — el autor pidió: cada sección del template editable en su propio form, uniones con propósito, idioma es/en según corresponda (no labels dobles "que se ve horrible"), y shadcn para UI moderna. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Chat 2026-07-21 — el autor pidió: cada sección del template editable en su propio form, uniones con propósito, idioma es/en según corresponda (no labels dobles "que se ve horrible"), y shadcn para UI moderna. Consentimiento en `.sdd/user-consent.log`.
 
 ## Historia de usuario principal
 

@@ -44,3 +44,4 @@
   sobre el que se montarían. Decisión clave registrada en el plan: el agente
   propone, solo el humano escribe (la aceptación usa las rutas existentes;
   el gate no cambia).
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

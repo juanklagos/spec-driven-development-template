@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-21`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-21 — el autor respondió *«hazlo»* a los tres siguientes por valor que le propuse: título humano en las tarjetas, consentimiento desde el lienzo y paleta de comandos. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-21: los tres elementos propuestos por valor — título humano en las tarjetas, consentimiento desde el lienzo y paleta de comandos. Consentimiento en `.sdd/user-consent.log`.
 
 ## Contexto
 

@@ -147,3 +147,7 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 - **ES:** La revisión de specs por IA se sirve por la cola de agentes y por pegar la respuesta de cualquier IA; se descarta guardar claves de proveedor, que habrían metido un secreto en disco y salida a internet en un servidor que solo toca ficheros (spec 036).
 - **EN:** AI spec review runs through the agent queue and through pasting any AI's answer; provider API keys are rejected — they would put a secret on disk and give outbound traffic to a server that only touches files (spec 036).
 
+### 2026-08-20 — [El registro se corrige en el árbol de trabajo, no en el historial de git](2026-08-20-no-se-reescribe-el-historial-de-git.md)
+
+- **ES:** La evidencia de aprobación deja de transcribir el chat en specs, bitácora y log de consentimiento, y se corrige la plantilla que lo inducía. El historial de git no se reescribe: alcanzaría al 47% de los commits y a los 25 tags, y un fork público conservaría lo anterior de todos modos (spec 037).
+- **EN:** Approval evidence stops transcribing chat across specs, logbook and the consent log, and the template that invited it is fixed. Git history is not rewritten: it would touch 47% of commits and all 25 tags, and a public fork would keep the old history anyway (spec 037).

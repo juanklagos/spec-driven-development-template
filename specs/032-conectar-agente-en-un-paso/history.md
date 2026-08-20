@@ -32,12 +32,13 @@
   descrito es el mismo.
 
 - 2026-08-12 — Creación. Origen: tras cerrar la 031 el usuario preguntó
-  "¿cómo hace el usuario para conectar con un agente?" y pidió las dos
-  mejoras propuestas ("has las dos, necesito todas las formas posibles, y
-  ojalá más automáticas"), con investigación explícita de Codex, Claude,
-  opencode "y demás". Alcance resultante: tres caminos coexistiendo (CLI que
+  cómo conecta el usuario con un agente, y aprobó las dos mejoras
+  propuestas con el requisito de cubrir todas las formas posibles y hacerlas
+  lo más automáticas que se pueda, investigando Codex, Claude, opencode y
+  demás clientes. Alcance resultante: tres caminos coexistiendo (CLI que
   escribe la config, skill portable + comandos nativos, prompt MCP), porque
   la investigación mostró que ninguno cubre solo los siete clientes en 2026
   (Codex no expone prompts MCP — openai/codex#8342; Gemini y opencode no
   leen SKILL.md). Fuera de alcance deliberado: lanzar el agente como
   subproceso desde el builder o el servidor.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

@@ -52,4 +52,4 @@ script, entre portarlo a TypeScript o ejecutarlo con `execFile`.
 - Si `install-spec-sidecar.sh` crece o necesita correr donde no hay bash
   (Windows sin WSL): ahí sí toca portarlo, con suite de paridad primero.
 
-Fuente / Source: `specs/027-mcp-full-coverage/research.md`, sesión de chat 2026-07-23 («cubre todo»).
+Fuente / Source: `specs/027-mcp-full-coverage/research.md`, sesión del 2026-07-23, en la que se aprobó la propuesta completa.

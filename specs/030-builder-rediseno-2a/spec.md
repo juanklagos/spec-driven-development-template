@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-11`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Petición directa del autor en sesión de Claude Code (2026-08-11): "ayudame a que quede como se ve" + handoff en ~/Downloads/design_handoff_builder_2a (README, Builder 2a.dc.html, reference_tsx)
+- Evidencia de aprobación / Approval evidence: Petición directa del autor en sesión de Claude Code (2026-08-11): "ayudame a que quede como se ve" + handoff en ~/Downloads/design_handoff_builder_2a (README, Builder 2a.dc.html, reference_tsx)
 
 ## Historia de usuario
 

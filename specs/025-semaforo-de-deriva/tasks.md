@@ -1,6 +1,6 @@
 # Tareas 025 - semáforo de deriva spec↔código
 
-> Aprobada y consentida el 2026-07-23 («continue»). Implementada la misma sesión.
+> Aprobada y consentida el 2026-07-23. Implementada la misma sesión.
 > Depende de la spec 024 (runner de pruebas) — hecha.
 
 - [x] T1 (R1): parser del ámbito de archivos. Ya existía `extractFileScope` en `sdd-core` (`fileScope` en `SpecSummary`); se reusa. La deriva lo consume tal cual.

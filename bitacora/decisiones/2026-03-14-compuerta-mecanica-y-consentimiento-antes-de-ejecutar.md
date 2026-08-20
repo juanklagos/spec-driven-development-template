@@ -49,7 +49,7 @@ El consentimiento del usuario deja de ser una afirmación en el chat y pasa a se
 
 **Vigencia**
 - **Vigente.** La semántica `required_before_execution_after_spec_approval` no ha cambiado desde `bbf0390`: es el único commit que la toca (`git log -S`).
-- **Dogfooded.** `.sdd/user-consent.log` tiene 9 entradas reales entre 2026-03-18 y 2026-07-21, citando las palabras del propio autor: *"hazlo"*, *"continua con el resto"*, *"hazlo todos"*, *"has lo mejor a corto y largo plazo"*.
+- **Dogfooded.** `.sdd/user-consent.log` tiene 9 entradas reales entre 2026-03-18 y 2026-07-21, cada una registrando qué alcance autorizó el autor antes de ejecutar.
 
 ## Cuándo revisar esta decisión / When to revisit
 

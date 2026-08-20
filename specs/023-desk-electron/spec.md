@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-23`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-22 — tras la evaluación que mostró la decisión vigente en contra y sus fases previas sin completar, el propietario respondió "aprobada y hazle con todo nivel senior con solid". Decisión en bitacora/decisiones/2026-07-22-app-escritorio-electron.md
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-22: implementación tras la evaluación que mostró la decisión vigente en contra y sus fases previas sin completar, con SOLID como restricción de diseño. Decisión en `bitacora/decisiones/2026-07-22-app-escritorio-electron.md`.
 
 ## Historia de usuario principal
 

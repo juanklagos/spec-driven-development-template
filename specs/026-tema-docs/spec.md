@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-23`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-07-23 — el propietario compartió `tools.rmv.fyi` («me gusta ese tipo de diseño, quisiera replicarlo para la documentación»), pidió «pero utiliza nuestros colores», y en la pregunta de decisión eligió **«verde primario (como el mockup)»** + **«crear spec 026 y construir»**. Mockup revisado en `scratchpad/docs-theme-mockup.html`. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Chat 2026-07-23 — el propietario compartió `tools.rmv.fyi` («me gusta ese tipo de diseño, quisiera replicarlo para la documentación»), pidió «pero utiliza nuestros colores», y en la pregunta de decisión eligió **«verde primario (como el mockup)»** + **«crear spec 026 y construir»**. Mockup revisado en `scratchpad/docs-theme-mockup.html`. Consentimiento en `.sdd/user-consent.log`.
 
 ## Objetivo / Objective
 

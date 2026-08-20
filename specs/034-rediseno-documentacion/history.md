@@ -27,3 +27,4 @@
   oscuro desde sus propios tokens. Sin recursos externos nuevos y sin tocar
   los tokens compartidos con el builder. Enlaces: cero rotos en las tres
   superficies.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

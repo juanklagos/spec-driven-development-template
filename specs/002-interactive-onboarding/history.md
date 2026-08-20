@@ -3,7 +3,7 @@
 ## 2026-07-17
 
 - Se crea la spec a partir del Nivel 1 de `idea/PROPUESTAS_2026-07-17.md` (síntesis de dos investigaciones: proyectos SDD similares y formatos/estándares 2026).
-- El autor aprueba la spec y la ejecución en el chat de la sesión ("hazlo"); consentimiento registrado en `.sdd/user-consent.log`.
+- El autor aprueba la spec y su ejecución en la sesión; consentimiento registrado en `.sdd/user-consent.log`.
 - Alcance fijado en R1-R7 (skill portable, comandos /sdd:*, soporte Copilot, llms.txt, devcontainer, demo VHS, README); Niveles 2 y 3 quedan explícitamente fuera de alcance.
 
 ## 2026-07-17 (cierre)
@@ -17,3 +17,4 @@
 
 - Primera corrida real del workflow falló (vhs-action@v2 no instala ffmpeg); arreglado en spec 003 con instalación directa de vhs.
 - GIF regenerado en CI (run 29594585862) y embebido en README EN/ES. T12 cerrada.
+- 2026-08-20 — Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo (spec 037).

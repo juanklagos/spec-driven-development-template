@@ -33,6 +33,13 @@ Consent rule:
 - **MUST** ask and record explicit user consent right before execution/implementation starts on an approved spec.
 - **MUST** keep runnable project work inside the currently opened chat workspace (use `./www/<project-name>/` in this template).
 
+Record rule / Regla de registro:
+- **MUST** record approval evidence as facts: what was approved, its scope, the document or proposal it was approved against, and the date.
+- **MUST NOT** transcribe the user's chat words as approval evidence. "hazlo", "dale", "go ahead" and the like say nothing about what was approved, and they read as unprofessional to anyone who opens the repository.
+- **MUST** apply the same rule to `bitacora/` entries and to the summary of each `.sdd/user-consent.log` line.
+- **MUST NOT** alter what was approved, by whom, or when. Rewriting the wording of a record is a correction of form; changing its substance is falsifying an audit trail.
+- ES: la evidencia de aprobación registra QUÉ se aprobó, con qué alcance y contra qué documento, con fecha. Nunca la transcripción del chat. Nunca se altera qué, quién ni cuándo.
+
 Workspace rule:
 - **SHOULD** default to the compact `spec/` sidecar for real target projects outside this repository (`./scripts/install-spec-sidecar.sh <path> --profile=recommended`), keeping product code in the project root.
 - **SHOULD** use `./www/<project-name>/` only when the runnable project lives inside this template repository.

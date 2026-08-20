@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado`
 - Fecha de aprobación / Approval date: `2026-07-20`
 - Aprobado por / Approved by: `Juan Klagos (autor del template)`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): El autor pidió el builder visual ("arrastrar, soltar... tarjetas, con uniones... si no existe, que lo creemos") y eligió "Opción B: Ambiciosa" en la pregunta de alcance (2026-07-20). Investigación previa en `idea/PROPUESTA_BUILDER_2026-07-20.md`. Consentimiento en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: El autor pidió el builder visual ("arrastrar, soltar... tarjetas, con uniones... si no existe, que lo creemos") y eligió "Opción B: Ambiciosa" en la pregunta de alcance (2026-07-20). Investigación previa en `idea/PROPUESTA_BUILDER_2026-07-20.md`. Consentimiento en `.sdd/user-consent.log`.
 
 ## Historia de usuario principal
 

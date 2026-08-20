@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-07-17`
 - Aprobado por / Approved by: `Juan Klagos (autor del template)`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat de la sesión 2026-07-17 — el autor respondió "hazlo" a la propuesta explícita "¿Arranco con el Nivel 1?" tras revisar `idea/PROPUESTAS_2026-07-17.md`. Consentimiento registrado en `.sdd/user-consent.log`.
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-07-17: Nivel 1 del backlog, sobre las propuestas revisadas en `idea/PROPUESTAS_2026-07-17.md`. Consentimiento registrado en `.sdd/user-consent.log`.
 
 ## Historia de usuario principal
 

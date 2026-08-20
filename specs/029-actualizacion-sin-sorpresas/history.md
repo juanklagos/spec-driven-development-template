@@ -30,3 +30,4 @@
   peticiones creadas en el mismo milisegundo empataban y el orden FIFO caía en
   el sufijo aleatorio. Corregido con un sello monotónico y una prueba de 50
   peticiones seguidas.
+| 2026-08-20 | Record / Registro | Evidencia de aprobación reescrita: registra qué se aprobó y contra qué fuente, sin transcribir el chat. No cambia qué se aprobó, quién ni cuándo | `spec.md` | Juan Carlos Alvarez Lagos / Claude |

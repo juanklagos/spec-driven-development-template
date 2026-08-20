@@ -6,7 +6,7 @@
 - Valores permitidos / Allowed values: `Pendiente` o `Aprobado` (`Pending` or `Approved`)
 - Fecha de aprobación / Approval date: `2026-08-17`
 - Aprobado por / Approved by: `Juan Carlos Alvarez Lagos`
-- Evidencia de aprobación (enlace o cita corta) / Approval evidence (link or short quote): Chat 2026-08-17: "necesito rediseñar la doc así" + "dale" tras la revisión del handoff — incluye la decisión de añadir la sans, en las condiciones que la spec 034 dejó escritas
+- Evidencia de aprobación / Approval evidence: Aprobado en sesión del 2026-08-17: rediseño de la documentación tras la revisión del handoff, incluida la decisión de añadir la sans en las condiciones que la spec 034 dejó escritas.
 
 ## Objetivo
 
