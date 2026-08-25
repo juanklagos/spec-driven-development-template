@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+---
+
+## [v2.8.0] — 2026-08-25
+
 ### Fixed
 - **El lienzo destruía los grupos de JSON Canvas.** Un nodo `type:"group"` se cargaba por la rama de nota, que lee el texto de `text` —y un grupo guarda su título en `label`—, así que salía una tarjeta «IDEA» vacía. Lo grave venía después: al guardar se reescribía como `type:"text"` con texto vacío, borrando el tipo, la etiqueta y el fondo **del archivo del usuario**. Como el builder guarda el layout ante cualquier cambio, bastaba mover una tarjeta para consumarlo. Nueve capas se perdían así en un board real. (spec 041)
 
