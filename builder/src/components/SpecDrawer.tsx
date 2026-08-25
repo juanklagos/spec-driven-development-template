@@ -465,6 +465,9 @@ function RelationsPanel({ specId }: { specId: string }) {
     const node = nodes.find((n) => n.id === id) as AppNode | undefined;
     if (!node) return id;
     if (node.type === "spec") return node.data.specId;
+    // Spec 041: a group names itself with `label`, a note with the first line
+    // of its text. Reading `text` off a group is what printed an empty card.
+    if (node.type === "group") return node.data.label.trim() || t("note.empty");
     const firstLine = (node.data.text ?? "").split("\n")[0].trim();
     return firstLine || t("note.empty");
   };

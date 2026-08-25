@@ -36,6 +36,7 @@ Dentro de ⌘K te mueves con ↑ y ↓, ejecutas con Enter y cierras con Esc.
 | :--- | :--- |
 | **I** | pone una nota de Idea en el centro |
 | **E** | pone una nota de Épica |
+| **G** | pone un grupo: un marco titulado que agrupa lo que caiga dentro |
 | **S** | abre el formulario de spec nueva |
 | **⌘K** / Ctrl+K | abre el buscador |
 | **⌘Z** / Ctrl+Z | deshace |
@@ -45,7 +46,17 @@ Dentro de ⌘K te mueves con ↑ y ↓, ejecutas con Enter y cierras con Esc.
 | **Esc** | cancela la edición |
 | **←** **→** | avanza y retrocede en el tour |
 
-Las tres teclas I, E y S solo funcionan cuando no estás escribiendo en un campo.
+Las cuatro teclas I, E, G y S solo funcionan cuando no estás escribiendo en un campo.
+
+**Los grupos** son los marcos titulados de JSON Canvas, los mismos que usa Obsidian. Un grupo no guarda una lista de lo que contiene: **contiene lo que cae dentro de su rectángulo**, y eso se recalcula solo cada vez que arrastras algo. Por eso:
+
+- Arrastra el marco por su título y se lleva consigo todo lo que tenga dentro.
+- Arrastra una tarjeta hacia dentro y pasa a pertenecerle; sácala y deja de pertenecerle. No hay nada que confirmar.
+- Si dos marcos se solapan, la tarjeta es del más pequeño de los que la contienen por completo.
+- **Borrar un marco no borra sus tarjetas**: se quedan exactamente donde estaban.
+- Con el marco seleccionado aparecen las asas para redimensionarlo; doble clic en el título para renombrarlo.
+
+El archivo que se guarda es JSON Canvas puro: el grupo conserva su etiqueta, su color y su fondo, y **ninguna tarjeta guarda a qué grupo pertenece**, porque el formato no tiene ese campo. Así el mismo `board.canvas` sigue abriéndose en Obsidian.
 
 **Los filtros** de la segunda franja no ocultan nada: **atenúan** lo que no coincide, para que el tablero no cambie de forma mientras miras. Son tres: `pendientes` (specs sin aprobar), `con avisos` (specs con errores del gate) y `con deriva` (specs cuyo código cambió después de aprobarlas). A la derecha de esa franja tienes el recuento: cuántas specs, cuántas uniones y el zoom.
 

@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **El lienzo destruía los grupos de JSON Canvas.** Un nodo `type:"group"` se cargaba por la rama de nota, que lee el texto de `text` —y un grupo guarda su título en `label`—, así que salía una tarjeta «IDEA» vacía. Lo grave venía después: al guardar se reescribía como `type:"text"` con texto vacío, borrando el tipo, la etiqueta y el fondo **del archivo del usuario**. Como el builder guarda el layout ante cualquier cambio, bastaba mover una tarjeta para consumarlo. Nueve capas se perdían así en un board real. (spec 041)
+
+### Added
+- **Los grupos funcionan como grupos.** El marco se pinta con su título, su color y su fondo, detrás de las tarjetas y sin robarles el clic; se arrastra por el título y se lleva consigo todo lo que contiene; se crea con **G** o desde la paleta, se renombra con doble clic y se redimensiona con las asas. Borrar un marco **libera** sus tarjetas en vez de borrarlas — React Flow las arrastraba al borrar el padre, y eso se intercepta. (spec 041)
+- **La pertenencia es geometría, y no se guarda.** JSON Canvas no tiene campo de padre: una tarjeta está dentro de un marco porque sus coordenadas lo dicen. Así que se deriva al cargar y se disuelve al guardar, y el archivo sale con coordenadas absolutas y sin ningún campo que la especificación no defina. Es lo que permite abrir el mismo `board.canvas` en el builder y en Obsidian sin que ninguno pierda lo que escribió el otro. Con marcos solapados manda el más pequeño que contenga la tarjeta entera. (spec 041, [decisión](bitacora/decisiones/2026-08-25-la-pertenencia-a-un-grupo-no-se-guarda.md))
+- **`"group"` en el borde MCP.** `sdd_board_write` rechazaba con su enum cualquier canvas que llevara un grupo: un agente no podía escribir un board que una persona hubiera dibujado en Obsidian. (spec 041)
+
 ---
 
 ## [v2.7.0] — 2026-08-25

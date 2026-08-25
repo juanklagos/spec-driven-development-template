@@ -36,6 +36,7 @@ Inside ⌘K you move with ↑ and ↓, run with Enter and close with Esc.
 | :--- | :--- |
 | **I** | drops an Idea note in the middle |
 | **E** | drops an Epic note |
+| **G** | drops a group: a titled frame that owns whatever lands inside it |
 | **S** | opens the new-spec form |
 | **⌘K** / Ctrl+K | opens the search |
 | **⌘Z** / Ctrl+Z | undo |
@@ -45,7 +46,17 @@ Inside ⌘K you move with ↑ and ↓, run with Enter and close with Esc.
 | **Esc** | cancels the edit |
 | **←** **→** | previous and next step in the tour |
 
-I, E and S only work when you are not typing in a field.
+I, E, G and S only work when you are not typing in a field.
+
+**Groups** are JSON Canvas titled frames, the same ones Obsidian uses. A group does not store a list of what it holds: it **holds whatever falls inside its rectangle**, recomputed every time you drag something. So:
+
+- Drag the frame by its title and everything inside travels with it.
+- Drag a card in and it belongs to the frame; drag it out and it stops belonging. Nothing to confirm.
+- When two frames overlap, the card belongs to the smallest one that fully contains it.
+- **Deleting a frame does not delete its cards**: they stay exactly where they were.
+- Select the frame to get resize handles; double-click the title to rename it.
+
+The file that gets saved is plain JSON Canvas: the group keeps its label, colour and background, and **no card records which group it belongs to**, because the format has no such field. That is what keeps the same `board.canvas` opening in Obsidian.
 
 **The filters** in the second strip hide nothing: they **dim** what does not match, so the board does not change shape while you look at it. There are three: `pending` (specs not approved yet), `with warnings` (specs with gate errors) and `with drift` (specs whose code changed after they were approved). To the right of that strip you get the counts: how many specs, how many connections, and the zoom level.
 

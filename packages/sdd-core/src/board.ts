@@ -42,7 +42,14 @@ export interface BoardView {
 
 export interface CanvasNode {
   id: string;
-  type: "file" | "text";
+  /**
+   * Spec 041: "group" is a first-class JSON Canvas node type. It used to be
+   * absent here, and the builder coerced any group it loaded into a "text"
+   * node — losing the label on read and overwriting the type on the next
+   * layout save. KEEP IN SYNC with builder/src/types.ts and the zod enum in
+   * packages/sdd-mcp/src/schemas.ts.
+   */
+  type: "file" | "text" | "group";
   x: number;
   y: number;
   width: number;
@@ -50,6 +57,12 @@ export interface CanvasNode {
   file?: string;
   text?: string;
   color?: string;
+  /** Group only: its title. JSON Canvas puts it in `label`, never in `text`. */
+  label?: string;
+  /** Group only: background image path. */
+  background?: string;
+  /** Group only: how the background image is laid out. */
+  backgroundStyle?: "cover" | "ratio" | "repeat";
 }
 
 export interface CanvasEdge {

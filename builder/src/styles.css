@@ -255,6 +255,59 @@
   gap: 0.4rem;
 }
 
+/* ---------- Group frames (spec 041) ----------
+   El marco no captura el puntero: las tarjetas que quedan dentro tienen que
+   seguir siendo clicables. Solo la cabecera lo hace, y por eso es también el
+   asa de arrastre (`dragHandle` en convert.ts). */
+
+.group-frame {
+  position: relative;
+  border: 1.5px dashed;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.group-frame.selected {
+  border-style: solid;
+  box-shadow: 0 0 0 3px var(--primary-chip);
+}
+
+.group-handle {
+  position: absolute;
+  top: -11px;
+  left: 14px;
+  pointer-events: all;
+  cursor: grab;
+  max-width: calc(100% - 28px);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-handle:active {
+  cursor: grabbing;
+}
+
+.group-title-input {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  min-width: 8ch;
+}
+
 /* ---------- Status + progress (shared canvas/kanban/sheet) ---------- */
 
 .badge-tone {

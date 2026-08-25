@@ -6,7 +6,8 @@ import type { Edge, Node } from "@xyflow/react";
 
 export interface CanvasNode {
   id: string;
-  type: "file" | "text";
+  /** Spec 041. KEEP IN SYNC with packages/sdd-core/src/board.ts. */
+  type: "file" | "text" | "group";
   x: number;
   y: number;
   width: number;
@@ -14,6 +15,10 @@ export interface CanvasNode {
   file?: string;
   text?: string;
   color?: string;
+  /** Group only: its title. JSON Canvas puts it in `label`, never in `text`. */
+  label?: string;
+  background?: string;
+  backgroundStyle?: "cover" | "ratio" | "repeat";
 }
 
 export interface CanvasEdge {
@@ -199,15 +204,35 @@ export type NoteNodeData = {
   height: number;
 };
 
+/**
+ * Spec 041. A JSON Canvas group is a titled frame, not a note: its text lives
+ * in `label` and it owns whatever sits inside its rectangle. Membership is
+ * NOT stored here — see deriveGroupMembership in convert.ts.
+ */
+export type GroupNodeData = {
+  label: string;
+  color?: string;
+  background?: string;
+  backgroundStyle?: "cover" | "ratio" | "repeat";
+  width: number;
+  height: number;
+  /**
+   * Fields of the source node this builder does not paint. Carried through so
+   * a round-trip never drops what another canvas editor wrote.
+   */
+  extra?: Record<string, unknown>;
+};
+
 export type SpecFlowNode = Node<SpecNodeData, "spec">;
 export type NoteFlowNode = Node<NoteNodeData, "note">;
-export type AppNode = SpecFlowNode | NoteFlowNode;
+export type GroupFlowNode = Node<GroupNodeData, "group">;
+export type AppNode = SpecFlowNode | NoteFlowNode | GroupFlowNode;
 
 export type EdgeData = { label?: string };
 export type AppEdge = Edge<EdgeData, "labeled">;
 
 export type SaveState = "saved" | "dirty" | "saving" | "error";
-export type PaletteKind = "idea" | "epic" | "spec";
+export type PaletteKind = "idea" | "epic" | "spec" | "group";
 /** Canvas (React Flow) vs Kanban board view (spec 009, R1). */
 export type ViewMode = "canvas" | "board";
 

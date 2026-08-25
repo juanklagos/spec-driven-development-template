@@ -32,6 +32,7 @@ import { IdentityBar } from "./components/IdentityBar";
 import { KanbanBoard } from "./components/KanbanBoard";
 import { LabeledEdge } from "./components/LabeledEdge";
 import { NewSpecModal } from "./components/NewSpecModal";
+import { GroupNode } from "./components/GroupNode";
 import { NoteNode } from "./components/NoteNode";
 import { Rail, PALETTE_ITEMS } from "./components/Rail";
 import { SpecDrawer } from "./components/SpecDrawer";
@@ -46,7 +47,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useBuilderStore } from "./store";
 import type { AppEdge, AppNode, PaletteKind } from "./types";
 
-const nodeTypes = { spec: SpecNode, note: NoteNode };
+const nodeTypes = { spec: SpecNode, note: NoteNode, group: GroupNode };
 const edgeTypes = { labeled: LabeledEdge };
 
 // Estado vacío (spec 030, R7): panel con cabecera de terminal. Sin 🪴.
@@ -155,6 +156,7 @@ function Shell() {
   const onEdgesChange = useBuilderStore((s) => s.onEdgesChange);
   const onConnect = useBuilderStore((s) => s.onConnect);
   const addNote = useBuilderStore((s) => s.addNote);
+  const addGroup = useBuilderStore((s) => s.addGroup);
   const addSpecNode = useBuilderStore((s) => s.addSpecNode);
   const refreshSpecs = useBuilderStore((s) => s.refreshSpecs);
   const selectSpec = useBuilderStore((s) => s.selectSpec);
@@ -256,6 +258,7 @@ function Shell() {
     const position = screenToFlowPosition({ x: rect.left, y: rect.top });
     const kind = event.active.data.current?.kind as PaletteKind | undefined;
     if (kind === "idea" || kind === "epic") addNote(kind, position);
+    else if (kind === "group") addGroup(position);
     else if (kind === "spec") setSpecModalPos(position);
   };
 
@@ -267,6 +270,7 @@ function Shell() {
     if (viewMode === "board") {
       useBuilderStore.getState().setViewMode("canvas");
       if (kind === "idea" || kind === "epic") addNote(kind, { x: 120, y: 120 });
+      else if (kind === "group") addGroup({ x: 120, y: 120 });
       else setSpecModalPos({ x: 120, y: 120 });
       return;
     }
@@ -277,16 +281,17 @@ function Shell() {
     const jitter = () => Math.round((Math.random() - 0.5) * 60);
     const position = screenToFlowPosition({ x: center.x + jitter(), y: center.y + jitter() });
     if (kind === "idea" || kind === "epic") addNote(kind, position);
+    else if (kind === "group") addGroup(position);
     else setSpecModalPos(position);
   };
 
-  // Atajos I / E / S (spec 030, R8): colocan Idea/Épica/Spec en el centro.
+  // Atajos I / E / G / S (spec 030, R8; grupo en la 041): colocan la pieza en el centro.
   // Ignorados dentro de inputs, igual que el handler de undo.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const key = e.key.toLowerCase();
-      if (key !== "i" && key !== "e" && key !== "s") return;
+      if (key !== "i" && key !== "e" && key !== "g" && key !== "s") return;
       const target = e.target as HTMLElement | null;
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
         return;
@@ -294,7 +299,7 @@ function Shell() {
       const state = useBuilderStore.getState();
       if (state.paletteOpen || state.tourOpen || state.galleryOpen || state.assistantOpen) return;
       e.preventDefault();
-      handleQuickAdd(key === "i" ? "idea" : key === "e" ? "epic" : "spec");
+      handleQuickAdd(key === "i" ? "idea" : key === "e" ? "epic" : key === "g" ? "group" : "spec");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -414,7 +419,20 @@ function Shell() {
                       description: t("canvas.specNotDeletableWhy")
                     });
                   }
-                  return { nodes: toDelete.filter((n) => n.type !== "spec"), edges: edgesToDelete };
+                  // Spec 041, decisión 5: borrar un marco libera sus tarjetas,
+                  // nunca las borra. React Flow arrastra a los hijos al borrar
+                  // el padre —verificado en el navegador: al borrar una capa
+                  // desapareció también la nota que contenía—, así que se sacan
+                  // de la lista. `onNodesChange` ya las devuelve a coordenadas
+                  // absolutas antes de aplicar el borrado, de modo que se quedan
+                  // exactamente donde estaban.
+                  const doomed = new Set(toDelete.map((n) => n.id));
+                  const survivesAsOrphan = (n: (typeof toDelete)[number]) =>
+                    Boolean(n.parentId && doomed.has(n.parentId));
+                  return {
+                    nodes: toDelete.filter((n) => n.type !== "spec" && !survivesAsOrphan(n)),
+                    edges: edgesToDelete
+                  };
                 }}
                 isValidConnection={(c) => c.source !== c.target}
               >

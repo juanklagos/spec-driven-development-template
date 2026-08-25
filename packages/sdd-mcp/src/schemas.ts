@@ -39,16 +39,22 @@ export const dependencyWarningSchema = z.object({
   message: z.string()
 });
 
+// Spec 041: "group" belongs here too. While this enum said ["file","text"],
+// sdd_board_write rejected any canvas containing a group — so an agent could
+// not write a board a human had drawn in Obsidian.
 export const canvasNodeSchema = z.object({
   id: z.string(),
-  type: z.enum(["file", "text"]),
+  type: z.enum(["file", "text", "group"]),
   x: z.number(),
   y: z.number(),
   width: z.number(),
   height: z.number(),
   file: z.string().optional(),
   text: z.string().optional(),
-  color: z.string().optional()
+  color: z.string().optional(),
+  label: z.string().optional(),
+  background: z.string().optional(),
+  backgroundStyle: z.enum(["cover", "ratio", "repeat"]).optional()
 });
 
 export const canvasEdgeSchema = z.object({

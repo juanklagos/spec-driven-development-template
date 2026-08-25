@@ -13,12 +13,15 @@ import { PlanError, applyPlan, type ApplyMode } from "./boardplan";
 import {
   ARROW,
   EPIC_COLOR,
+  GROUP_FRAME,
   IDEA_COLOR,
   NOTE_CARD,
   SPEC_CARD,
+  applyGroupMembership,
   boardToFlow,
   flowToBoard,
-  styleEdgeForLabel
+  styleEdgeForLabel,
+  toAbsoluteNodes
 } from "./convert";
 import { currentLang, translate } from "./i18n";
 import type { AgentPresence, AiRequest, AiRequestTarget, AiRequestType } from "./requests";
@@ -166,6 +169,10 @@ interface BuilderStore {
   addNote: (kind: "idea" | "epic", position: XYPosition) => void;
   addSpecNode: (specId: string, position: XYPosition) => void;
   updateNoteText: (id: string, text: string) => void;
+  /** Spec 041: grupos de JSON Canvas — marco titulado que arrastra lo que contiene. */
+  addGroup: (position: XYPosition) => void;
+  renameGroup: (id: string, label: string) => void;
+  resizeGroup: (id: string, width: number, height: number) => void;
   updateEdgeLabel: (id: string, label: string) => void;
   removeEdge: (id: string) => void;
   setEditingEdge: (id: string | null) => void;
@@ -326,10 +333,16 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     for (const c of changes) {
       if (c.type === "position" && typeof c.dragging === "boolean") dragActive = c.dragging;
     }
-    set({ nodes: applyNodeChanges(changes, get().nodes) });
-    const persistent = changes.some(
-      (c) => c.type === "remove" || (c.type === "position" && c.dragging === false)
-    );
+    // Spec 041. Membership is geometric, so it is re-derived whenever geometry
+    // settles. Removals dissolve it FIRST: a child whose frame disappears would
+    // otherwise keep a position relative to a node that no longer exists, and
+    // jump across the board. That is also what makes "deleting a group frees
+    // its cards" true without a special case.
+    const dragEnded = changes.some((c) => c.type === "position" && c.dragging === false);
+    const base = removing ? toAbsoluteNodes(get().nodes) : get().nodes;
+    const applied = applyNodeChanges(changes, base);
+    set({ nodes: removing || dragEnded ? applyGroupMembership(toAbsoluteNodes(applied)) : applied });
+    const persistent = removing || dragEnded;
     if (persistent) get().scheduleSave();
   },
 
@@ -396,6 +409,47 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
         n.id === id && n.type === "note" ? { ...n, data: { ...n.data, text } } : n
       )
     });
+    get().scheduleSave();
+  },
+
+  addGroup: (position) => {
+    get().pushHistory();
+    const node: AppNode = {
+      id: `group-${uid()}`,
+      type: "group",
+      position,
+      dragHandle: ".group-handle",
+      zIndex: -1,
+      width: GROUP_FRAME.width,
+      height: GROUP_FRAME.height,
+      data: { label: translate("group.new"), ...GROUP_FRAME }
+    };
+    // Whatever the new frame lands on top of becomes its child right away:
+    // membership is geometry (spec 041), so it is derived, never declared.
+    set({ nodes: applyGroupMembership(toAbsoluteNodes([...get().nodes, node])) });
+    get().scheduleSave();
+  },
+
+  renameGroup: (id, label) => {
+    get().pushHistory();
+    set({
+      nodes: get().nodes.map((n) =>
+        n.id === id && n.type === "group" ? { ...n, data: { ...n.data, label } } : n
+      )
+    });
+    get().scheduleSave();
+  },
+
+  resizeGroup: (id, width, height) => {
+    get().pushHistory();
+    const resized = get().nodes.map((n) =>
+      n.id === id && n.type === "group"
+        ? { ...n, width, height, data: { ...n.data, width, height } }
+        : n
+    );
+    // Un marco más grande adopta lo que ahora cae dentro, y uno más pequeño
+    // suelta lo que se quedó fuera: la pertenencia es geometría (spec 041).
+    set({ nodes: applyGroupMembership(toAbsoluteNodes(resized)) });
     get().scheduleSave();
   },
 

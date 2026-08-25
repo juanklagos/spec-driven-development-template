@@ -6,7 +6,7 @@
 // usuario necesita para orientarse en un proyecto de 29 specs.
 import { useDraggable } from "@dnd-kit/core";
 import { useReactFlow } from "@xyflow/react";
-import { Box, ClipboardList, Lightbulb, type LucideIcon } from "lucide-react";
+import { Box, ClipboardList, Frame, Lightbulb, type LucideIcon } from "lucide-react";
 import { useT } from "../i18n";
 import { useBuilderStore } from "../store";
 import type { PaletteKind, SpecSummary } from "../types";
@@ -35,6 +35,15 @@ export const PALETTE_ITEMS: PaletteEntry[] = [
     iconClass: "text-[var(--epic)]",
     labelKey: "palette.epic",
     shortcut: "E"
+  },
+  {
+    // Spec 041: un grupo es organización pura — no escribe en disco más que
+    // layout, igual que idea y épica.
+    kind: "group",
+    icon: Frame,
+    iconClass: "text-muted-foreground",
+    labelKey: "palette.group",
+    shortcut: "G"
   },
   {
     kind: "spec",

@@ -452,6 +452,12 @@ const es = {
   "note.epic.new": "Épica nueva",
   "note.empty": "(vacío)",
   "note.editTitle": "Doble clic para editar",
+  // Spec 041: grupos de JSON Canvas.
+  "group.untitled": "Capa sin título",
+  "group.editTitle": "Doble clic en el título para renombrar",
+  "group.new": "Capa nueva",
+  "palette.group": "Grupo",
+  "palette.group.hint": "Marco con título",
 
   // Client-side errors
   "error.apiUnreachable":
@@ -1075,6 +1081,11 @@ const en: Record<keyof typeof es, string> = {
   "note.epic.new": "New epic",
   "note.empty": "(empty)",
   "note.editTitle": "Double-click to edit",
+  "group.untitled": "Untitled group",
+  "group.editTitle": "Double-click the title to rename",
+  "group.new": "New group",
+  "palette.group": "Group",
+  "palette.group.hint": "Titled frame",
 
   // Client-side errors
   "error.apiUnreachable":

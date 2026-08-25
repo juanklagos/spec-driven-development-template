@@ -23,6 +23,8 @@ export const EPIC_COLOR = "#a855f7";
 
 export const SPEC_CARD = { width: 300, height: 180 };
 export const NOTE_CARD = { width: 260, height: 120 };
+/** Spec 041: a new frame has to be big enough to drop a couple of cards in. */
+export const GROUP_FRAME = { width: 560, height: 360 };
 
 export function colorToHex(color: string | undefined, fallback: string): string {
   if (!color) return fallback;
@@ -124,6 +126,14 @@ export function boardToFlow(
   for (const n of canvas.nodes) {
     maxBottom = Math.max(maxBottom, n.y + n.height);
     const position = { x: n.x, y: n.y };
+    // Spec 041. Before this branch existed, a group fell through to the note
+    // fallback below, which reads `n.text` — and a group has none, so the card
+    // came up empty and the next save wrote it back as type "text", erasing
+    // the label and the background from the user's file.
+    if (n.type === "group") {
+      nodes.push(toGroupNode(n, position));
+      continue;
+    }
     if (n.type === "file") {
       const fromFile = n.file?.match(SPEC_FILE_RE)?.[1];
       const specId = specIds.has(n.id) ? n.id : fromFile && specIds.has(fromFile) ? fromFile : undefined;
@@ -180,12 +190,176 @@ export function boardToFlow(
     });
   });
 
-  return { nodes, edges: canvas.edges.map(toFlowEdge) };
+  return { nodes: applyGroupMembership(nodes), edges: canvas.edges.map(toFlowEdge) };
+}
+
+/** JSON Canvas fields the builder paints itself; anything else is carried in `extra`. */
+const GROUP_OWN_FIELDS = new Set([
+  "id",
+  "type",
+  "x",
+  "y",
+  "width",
+  "height",
+  "label",
+  "color",
+  "background",
+  "backgroundStyle"
+]);
+
+/** JSON Canvas group -> React Flow node, keeping every field it arrived with. */
+function toGroupNode(n: CanvasNode, position: { x: number; y: number }): AppNode {
+  const extra: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(n as unknown as Record<string, unknown>)) {
+    if (!GROUP_OWN_FIELDS.has(key)) extra[key] = value;
+  }
+  return {
+    id: n.id,
+    type: "group",
+    position,
+    // Solo la cabecera arrastra: el cuerpo del marco no captura el puntero,
+    // así que las tarjetas de encima siguen siendo clicables.
+    dragHandle: ".group-handle",
+    // Un grupo es fondo. React Flow apila por orden y por zIndex; sin esto el
+    // marco taparía las tarjetas que contiene.
+    zIndex: -1,
+    // El tamaño se declara en el nodo, no solo dentro de `data`: sin esto el
+    // wrapper de React Flow se ajusta a la chapa del título (medido: 150×342
+    // para un marco de 760×320) y ese número acabaría en el archivo.
+    width: n.width,
+    height: n.height,
+    data: {
+      label: n.label ?? "",
+      ...(n.color ? { color: n.color } : {}),
+      ...(n.background ? { background: n.background } : {}),
+      ...(n.backgroundStyle ? { backgroundStyle: n.backgroundStyle } : {}),
+      width: n.width,
+      height: n.height,
+      ...(Object.keys(extra).length > 0 ? { extra } : {})
+    }
+  };
+}
+
+
+// --- Group membership (spec 041, decisión 2) -------------------------------
+// JSON Canvas has NO parent field: being inside a group is geometry, not data
+// (spec 1.0, verified 2026-08-25). React Flow needs the opposite — an explicit
+// `parentId` plus positions relative to the parent. So membership is DERIVED
+// on every load and DISSOLVED again on every save. Writing a parentId into the
+// file would take it outside the format, and Obsidian — where these boards
+// come from — would stop understanding it.
+
+type Rect = { x: number; y: number; width: number; height: number };
+
+function rectOf(n: AppNode, at: { x: number; y: number }): Rect {
+  return { x: at.x, y: at.y, width: n.data.width, height: n.data.height };
+}
+
+function contains(outer: Rect, inner: Rect): boolean {
+  return (
+    inner.x >= outer.x &&
+    inner.y >= outer.y &&
+    inner.x + inner.width <= outer.x + outer.width &&
+    inner.y + inner.height <= outer.y + outer.height
+  );
+}
+
+/** Absolute position of a node whose `position` may be relative to a parent. */
+function absolutePosition(node: AppNode, byId: Map<string, AppNode>): { x: number; y: number } {
+  let x = node.position.x;
+  let y = node.position.y;
+  const seen = new Set<string>([node.id]);
+  let parentId = node.parentId;
+  while (parentId && !seen.has(parentId)) {
+    const parent = byId.get(parentId);
+    if (!parent) break;
+    seen.add(parentId);
+    x += parent.position.x;
+    y += parent.position.y;
+    parentId = parent.parentId;
+  }
+  return { x, y };
+}
+
+/** Every node with an absolute position and no parent link. The save shape. */
+export function toAbsoluteNodes(nodes: AppNode[]): AppNode[] {
+  const byId = new Map(nodes.map((n) => [n.id, n]));
+  return nodes.map((n) => {
+    const { parentId: _drop, extent: _extent, ...rest } = n;
+    return { ...rest, position: absolutePosition(n, byId) } as AppNode;
+  });
+}
+
+/**
+ * Derive `parentId` from geometry and rewrite child positions as relative.
+ * Takes and returns nodes in absolute coordinates. The parent of a node is the
+ * SMALLEST group that fully contains it (spec 041, decisión 4), which also
+ * makes nesting deterministic and cycle-free: a group can only be the child of
+ * a strictly larger one. Parents are emitted before their children, which the
+ * React Flow runtime requires.
+ */
+export function applyGroupMembership(nodes: AppNode[]): AppNode[] {
+  const groups = nodes.filter((n) => n.type === "group");
+  if (groups.length === 0) return nodes.map((n) => ({ ...n, parentId: undefined }) as AppNode);
+
+  const absById = new Map(nodes.map((n) => [n.id, { ...n.position }]));
+  const parentOf = new Map<string, string>();
+
+  for (const node of nodes) {
+    const here = absById.get(node.id)!;
+    const mine = rectOf(node, here);
+    const myArea = mine.width * mine.height;
+    let best: { id: string; area: number } | undefined;
+    for (const group of groups) {
+      if (group.id === node.id) continue;
+      const gr = rectOf(group, absById.get(group.id)!);
+      const area = gr.width * gr.height;
+      // A group only nests inside a strictly larger one: equal areas would let
+      // two identical frames adopt each other.
+      if (node.type === "group" && area <= myArea) continue;
+      if (!contains(gr, mine)) continue;
+      if (!best || area < best.area) best = { id: group.id, area };
+    }
+    if (best) parentOf.set(node.id, best.id);
+  }
+
+  const depthOf = (id: string): number => {
+    let depth = 0;
+    let current = parentOf.get(id);
+    const seen = new Set<string>([id]);
+    while (current && !seen.has(current)) {
+      seen.add(current);
+      depth += 1;
+      current = parentOf.get(current);
+    }
+    return depth;
+  };
+
+  const placed = nodes.map((node) => {
+    const parentId = parentOf.get(node.id);
+    if (!parentId) return { ...node, parentId: undefined } as AppNode;
+    const here = absById.get(node.id)!;
+    const parent = absById.get(parentId)!;
+    return {
+      ...node,
+      parentId,
+      position: { x: here.x - parent.x, y: here.y - parent.y }
+    } as AppNode;
+  });
+
+  // Parent before child. Stable within a depth so the rest of the order — and
+  // with it the paint order of overlapping cards — survives untouched.
+  return placed
+    .map((node, index) => ({ node, index, depth: depthOf(node.id) }))
+    .sort((a, b) => a.depth - b.depth || a.index - b.index)
+    .map((entry) => entry.node);
 }
 
 /** React Flow -> JSON Canvas (what PUT /api/board expects). */
 export function flowToBoard(nodes: AppNode[], edges: AppEdge[]): BoardCanvas {
-  const canvasNodes: CanvasNode[] = nodes.map((n) => {
+  // Absolute first: JSON Canvas stores absolute coordinates and knows nothing
+  // about parents, so the runtime's relative positions never reach the file.
+  const canvasNodes: CanvasNode[] = toAbsoluteNodes(nodes).map((n) => {
     const base = {
       id: n.id,
       x: Math.round(n.position.x),
@@ -193,6 +367,23 @@ export function flowToBoard(nodes: AppNode[], edges: AppEdge[]): BoardCanvas {
       width: Math.round(n.measured?.width ?? n.data.width),
       height: Math.round(n.measured?.height ?? n.data.height)
     };
+    if (n.type === "group") {
+      // `extra` first so the geometry the user just moved always wins over the
+      // copy that came in with the file. Size comes from `data`, never from
+      // `measured`: a frame is as big as the file says, not as big as the DOM
+      // happened to lay it out.
+      return {
+        ...(n.data.extra ?? {}),
+        ...base,
+        width: Math.round(n.data.width),
+        height: Math.round(n.data.height),
+        type: "group",
+        ...(n.data.label ? { label: n.data.label } : {}),
+        ...(n.data.color ? { color: n.data.color } : {}),
+        ...(n.data.background ? { background: n.data.background } : {}),
+        ...(n.data.backgroundStyle ? { backgroundStyle: n.data.backgroundStyle } : {})
+      } as CanvasNode;
+    }
     if (n.type === "spec") {
       return { ...base, type: "file", file: n.data.file };
     }
