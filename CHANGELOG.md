@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+---
+
+## [v2.7.0] — 2026-08-25
+
 ### Fixed
 - **El instalador entrega la versión que dice entregar.** `create-sdd-project@X.Y.Z` clonaba la rama por defecto mientras `sdd-mcp upgrade` comparaba contra el payload de `@juanklagos/sdd-core@X.Y.Z`, que sale del árbol publicado: dos fuentes bajo el mismo número de versión. Todo lo commiteado entre dos releases llegaba a los proyectos de los usuarios sin existir en ningún paquete publicado, y el diagnóstico de actualización lo reportaba después como archivos editados **por ellos** — con la dirección invertida, porque lo que el usuario tenía era lo más nuevo y «la versión nueva» que ofrecía la herramienta era lo anterior. Medido en la v2.6.0: la ventana se abre 29 minutos después de publicar, con el trabajo normal de esa misma tarde. Ahora el instalador clona el tag `v<version>` correspondiente a su propia versión, leída en tiempo de ejecución. (spec 040)
 
