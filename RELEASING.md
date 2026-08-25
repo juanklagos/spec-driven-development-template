@@ -100,8 +100,19 @@ Y el andamiador **sin terminal interactiva**, que es como lo ejecuta un agente:
 And the scaffolder **with no interactive terminal**, which is how an agent runs it:
 
 ```bash
-node node_modules/@juanklagos/create-sdd-project/index.mjs mi-app < /dev/null
+node node_modules/@juanklagos/create-sdd-project/index.mjs mi-app --ref main < /dev/null
 ```
+
+`--ref main` no es decorativo. Desde la spec 040 el andamiador clona el tag `vX.Y.Z` de
+su propia versión, y aquí ese tag todavía no existe: se empuja en el §6, después de la
+compuerta. Sin `--ref` este paso instalaría por fallback y lo advertiría en cada release,
+hasta que la advertencia dejara de leerse. Con él, la verificación sigue ejercitando un
+clonado por ref declarada.
+
+`--ref main` is not decorative. Since spec 040 the scaffolder clones the `vX.Y.Z` tag for
+its own version, and that tag does not exist yet at this point: it is pushed in §6, after
+the gate. Without `--ref` this step would install through the fallback and warn about it
+on every release, until nobody read the warning any more.
 
 ## 5. Compuerta / Gate
 
@@ -111,7 +122,36 @@ node node_modules/@juanklagos/create-sdd-project/index.mjs mi-app < /dev/null
 ./scripts/check-sdd-gate.sh .
 ```
 
-## 6. Publica en npm, en este orden / Publish to npm, in this order
+## 6. Tag, antes de publicar / Tag, before publishing
+
+```bash
+git tag vX.Y.Z && git push origin main --tags
+```
+
+Este paso iba **después** de publicar hasta la spec 040, y ese orden era justo lo que
+llegaba roto a los usuarios. `create-sdd-project` clona el tag `vX.Y.Z` correspondiente a
+su propia versión: entre el `npm publish` y el `git push --tags` existía una ventana en la
+que el paquete ya era instalable desde npm y su tag todavía no estaba en el remoto. Toda
+instalación hecha en esa ventana caía a la rama por defecto —es decir, a HEAD— que es
+exactamente el defecto que la 040 cierra. El orden dejó de ser cosmético.
+
+This step came **after** publishing until spec 040, and that order was what reached users
+broken. `create-sdd-project` clones the `vX.Y.Z` tag matching its own version: between
+`npm publish` and `git push --tags` there was a window where the package was installable
+from npm and its tag was not in the remote yet. Every install made in that window fell
+back to the default branch — HEAD — which is the defect spec 040 closes.
+
+> [!NOTE]
+> Sí, esto rompe la regla de «todo antes de `npm publish`» con la que abre el documento, y
+> se rompe a conciencia: los dos errores no son del mismo tipo. Un tag empujado de más se
+> borra —`git push origin :refs/tags/vX.Y.Z`— y una versión de npm publicada se queda
+> pública para siempre. Se acepta el error reversible para eliminar el irreversible.
+>
+> Yes, this breaks the "everything before `npm publish`" rule the document opens with, on
+> purpose: the two mistakes are not the same kind. A tag pushed by mistake is deleted with
+> `git push origin :refs/tags/vX.Y.Z`; a published npm version stays public forever.
+
+## 7. Publica en npm, en este orden / Publish to npm, in this order
 
 `sdd-core` primero: los otros dos dependen de él.
 
@@ -128,12 +168,6 @@ y nadie lo alcanza hasta que suba `sdd-mcp`. Repite el comando.
 
 If the second fails with the first already up, no harm: `sdd-core@X.Y.Z` sits there and
 nobody reaches it until `sdd-mcp` goes up. Just run it again.
-
-## 7. Tag
-
-```bash
-git tag vX.Y.Z && git push origin main --tags
-```
 
 ## 8. Registro MCP / MCP Registry
 

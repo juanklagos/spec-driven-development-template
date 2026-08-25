@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **El instalador entrega la versión que dice entregar.** `create-sdd-project@X.Y.Z` clonaba la rama por defecto mientras `sdd-mcp upgrade` comparaba contra el payload de `@juanklagos/sdd-core@X.Y.Z`, que sale del árbol publicado: dos fuentes bajo el mismo número de versión. Todo lo commiteado entre dos releases llegaba a los proyectos de los usuarios sin existir en ningún paquete publicado, y el diagnóstico de actualización lo reportaba después como archivos editados **por ellos** — con la dirección invertida, porque lo que el usuario tenía era lo más nuevo y «la versión nueva» que ofrecía la herramienta era lo anterior. Medido en la v2.6.0: la ventana se abre 29 minutos después de publicar, con el trabajo normal de esa misma tarde. Ahora el instalador clona el tag `v<version>` correspondiente a su propia versión, leída en tiempo de ejecución. (spec 040)
+
+### Added
+- **`--ref <git-ref>` en `create-sdd-project`.** Clona la rama o el tag que se le indique en vez del tag de la versión; si no existe, falla nombrándola y no cae a ninguna otra ref. La resolución tiene tres fuentes en orden de precedencia —`--ref`, tag de la versión, rama por defecto— y **la ref utilizada se imprime siempre**, antes de copiar un solo archivo. Cuando el tag falta (desarrollo local, réplica sin tags) la instalación continúa desde la rama por defecto y lo advierte: un fallback silencioso sería el defecto original con otro nombre. (spec 040)
+
+### Changed
+- **El tag se empuja antes de publicar en npm.** `RELEASING.md` invierte sus pasos §6 y §7. Con el orden anterior, el arreglo del instalador quedaba desactivado por el propio proceso de release: entre el `npm publish` y el `git push --tags` el paquete ya era instalable y su tag todavía no existía en el remoto. Se rompe a conciencia la regla de «todo antes de `npm publish`» con la que abre el documento, porque los dos errores no son del mismo tipo: un tag empujado de más se borra, una versión de npm publicada se queda pública para siempre. La verificación del §4, que corre antes del tag por diseño, pasa ahora `--ref main` explícito. Registrado en `bitacora/decisiones/2026-08-25-el-tag-se-empuja-antes-de-publicar.md`. (spec 040)
+
 ---
 
 ## [v2.6.0] — 2026-08-20

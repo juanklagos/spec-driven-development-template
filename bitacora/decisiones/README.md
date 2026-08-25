@@ -151,3 +151,8 @@ Cronológico, del más antiguo al más reciente. Las fechas vienen del historial
 
 - **ES:** La evidencia de aprobación deja de transcribir el chat en specs, bitácora y log de consentimiento, y se corrige la plantilla que lo inducía. El historial de git no se reescribe: alcanzaría al 47% de los commits y a los 25 tags, y un fork público conservaría lo anterior de todos modos (spec 037).
 - **EN:** Approval evidence stops transcribing chat across specs, logbook and the consent log, and the template that invited it is fixed. Git history is not rewritten: it would touch 47% of commits and all 25 tags, and a public fork would keep the old history anyway (spec 037).
+
+### 2026-08-25 — [El tag se empuja antes de publicar en npm](2026-08-25-el-tag-se-empuja-antes-de-publicar.md)
+
+- **ES:** `RELEASING.md` invierte sus pasos §6 y §7: el tag va antes del `npm publish`. Desde la spec 040 el instalador clona el tag de su propia versión, así que publicar primero abría una ventana en la que el paquete era instalable y su tag no existía, y toda instalación hecha ahí caía a HEAD. Se rompe a propósito la regla de «todo antes de publicar»: un tag empujado de más se borra, una versión de npm no (spec 040).
+- **EN:** `RELEASING.md` swaps steps §6 and §7 — the tag goes before `npm publish`. Since spec 040 the installer clones the tag matching its own version, so publishing first opened a window where the package was installable and its tag did not exist, and every install made there fell back to HEAD. The "everything before publishing" rule is broken on purpose: a tag pushed by mistake can be deleted, a published npm version cannot (spec 040).
