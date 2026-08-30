@@ -8,6 +8,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **Un `board.canvas` ilegible se convertía en una cuadrícula por defecto, y el primer gesto la escribía en disco.** La lectura usaba el mismo `catch` para «el archivo no existe» y «el archivo no se pudo leer», así que un merge de git con marcadores `<<<<<<<` abría el builder con un tablero que no era el tuyo — y como el lienzo guarda ante cualquier cambio, bastaba mover una tarjeta *para investigar* y el layout original desaparecía. Ahora las dos causas son distintas: el tablero ilegible tiene su propia pantalla, con la ruta del archivo y dos salidas explícitas, y **el guardado automático queda desactivado hasta que elijas una**. (spec 042)
+- **La pantalla de error decía que no encontraba el servidor cuando el servidor sí había contestado**, y ofrecía un comando que reproducía el mismo fallo. Los errores del API viajan ahora con su código, y el lienzo distingue «no hay servidor» de «tu tablero no se puede leer». (spec 042)
+- **La ida y vuelta a JSON Canvas destruía lo que el builder no pinta.** Un nodo `link` salía como `text` vacío —perdiendo la URL—, el `subpath` de un archivo desaparecía, y los lados y el color de cada unión se reescribían a `right`/`left` con el color recalculado en cada guardado. El mecanismo que la spec 041 había creado para los grupos se generaliza ahora a todos los nodos y a las aristas. (spec 042)
+- **`sdd_board_write` borraba silenciosamente las claves que no enumeraba.** El esquema zod usaba `z.object()`, que descarta lo desconocido, así que la ruta del agente deshacía lo que la del builder conservaba. (spec 042, [decisión](bitacora/decisiones/2026-08-30-validar-el-canvas-en-el-nucleo-y-no-reusar-el-esquema-zod.md))
+- **Un guardado fallido no avisaba al cerrar la pestaña, y un cambio externo lo borraba junto con su aviso.** El estado `error` —el único en el que consta que el trabajo no está en disco— quedaba fuera de `beforeunload` y de la guarda de cambios externos, así que la recarga se llevaba por delante las tarjetas, el historial de deshacer y el propio banner rojo. (spec 042)
+- **Los atajos `I`/`E`/`G`/`S` seguían activos con un modal abierto.** «Conectar un agente» e «Implementar» no tienen ningún campo de texto, así que el foco se quedaba en un botón y la tecla creaba un marco **detrás del diálogo**, que además adoptaba las tarjetas de debajo y se guardaba a los 500 ms. La guardia deja de ser una lista de banderas y pasa a preguntar si hay algún diálogo abierto; el panel de detalle de una spec se declara excepción por ser un panel y no un modal. (spec 042)
+
+### Added
+- **`writeBoard` valida nodo a nodo y arista a arista antes de escribir.** Hasta ahora sólo comprobaba que `nodes` y `edges` fueran arrays: cualquier objeto con esa forma sustituía el tablero. Una escritura rechazada nombra el nodo o la arista culpable y deja el archivo anterior intacto. Es la deuda que la spec 041 dejó anotada en su decisión 8. (spec 042)
+- **Soporte del nodo `link` y del `subpath`**, con lo que el builder cubre los cuatro tipos de nodo de JSON Canvas 1.0. (spec 042)
+- **Respaldo automático `board.canvas.bak`**: la primera vez que el builder guarda en cada sesión del servidor, copia antes lo que hubiera. Una copia por sesión, no un historial. (spec 042)
+- **Reintento del guardado a 250 ms, 1 s y 4 s** antes de declarar el error, para que un servidor reiniciándose no deje el trabajo en rojo. (spec 042)
+- **Pruebas de `builder/src/store.ts`**, el módulo de 742 líneas que escribe `specs/board.canvas` y que no tenía ninguna: orden de coordenadas, debounce, guarda de eco, política ante cambios externos en cada estado, deshacer/rehacer y borrado de marco. La spec 024 lo había señalado sin llegar a cubrirlo. (spec 042)
+
+### Fixed
+- **El template no podía usar sus propias herramientas sobre sí mismo.** La guarda que impide materializar un *proyecto destino* en la raíz del template vivía dentro de `resolveSddRoot`, que es la puerta de 25 llamadas —incluidas todas las de sólo lectura—, así que crear una spec aquí, puntuarla, listar el tablero o regenerar `STATUS.md` fallaban con «Project root cannot be the template root itself». Las 42 specs de este repositorio se crearon a mano por eso. La regla no se elimina: se mueve a las tres operaciones que sí materializan un proyecto destino (`createWorkspace`, `installSidecar` y el descubrimiento heredado), y los tres rechazos tienen ahora prueba propia. (spec 043)
+
+### Fixed (fuera de spec)
+- **El paquete publicado enviaba dos enlaces muertos.** `scripts/build-framework-payload.mjs` reescribe a URL de GitHub los enlaces a ficheros de raíz que el payload no lleva —`LICENSE`, `NOTICE`, `TEMPLATE-OUTPUT.md`, `legal/`—, y `CHANGELOG.md` faltaba en esa lista: las dos guías del roadmap (`docs/es/35` y `docs/en/35`) apuntaban a un fichero inexistente en cada instalación. Lo detectó `npm run docs:links`, que existe justo para esto.
+- **`STATUS.md` regenerado**: llevaba desde el 2026-08-13 y le faltaban las specs 034-042.
+
 ---
 
 ## [v2.8.0] — 2026-08-25

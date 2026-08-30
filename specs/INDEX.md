@@ -43,3 +43,5 @@
 | 039 | contexto-de-spec-al-ampliar-con-ia | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
 | 040 | instalador-fija-la-version | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-25 |
 | 041 | grupos-de-json-canvas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-25 |
+| 042 | no-perder-trabajo | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-30 |
+| 043 | el-template-usa-sus-herramientas | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-30 |
