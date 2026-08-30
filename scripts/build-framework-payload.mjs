@@ -118,8 +118,14 @@ async function rewritePayloadLinks(dir) {
     const after = before
       // ![alt](../assets/…) -> raw.githubusercontent (images must be raw)
       .replace(/\]\(\.\.\/assets\//g, `](${RAW_BASE}/docs/assets/`)
-      // [text](../../legal/…), ../../LICENSE, ../../NOTICE, ../../TEMPLATE-OUTPUT.md
-      .replace(/\]\(\.\.\/\.\.\/(legal\/[^)]+|LICENSE|NOTICE|TEMPLATE-OUTPUT\.md)\)/g, `](${BLOB_BASE}/$1)`)
+      // [text](../../legal/…), ../../LICENSE, ../../NOTICE, ../../TEMPLATE-OUTPUT.md,
+      // ../../CHANGELOG.md — el payload no lleva ninguno de esos ficheros de raíz.
+      // CHANGELOG faltaba en esta lista, así que las dos guías del roadmap
+      // (docs/es/35 y docs/en/35) enviaban un enlace muerto en cada publicación.
+      .replace(
+        /\]\(\.\.\/\.\.\/(legal\/[^)]+|LICENSE|NOTICE|TEMPLATE-OUTPUT\.md|CHANGELOG\.md)\)/g,
+        `](${BLOB_BASE}/$1)`
+      )
       // ../../bitacora/decisiones/… — the payload ships bitacora/ without it
       .replace(/\]\(\.\.\/\.\.\/(bitacora\/decisiones\/[^)]+)\)/g, `](${BLOB_BASE}/$1)`);
     if (after !== before) {
