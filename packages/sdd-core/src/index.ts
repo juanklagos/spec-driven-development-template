@@ -126,12 +126,23 @@ export async function createWorkspace(input: CreateWorkspaceInput): Promise<Crea
     args.push("--recommended-template");
   }
 
+  const projectRoot = path.join(workspacesRoot, "www", slugify(input.projectName));
+
+  // Spec 043, R2. La política de proyecto destino se aplica aquí —donde se
+  // materializa uno— y no dentro de `resolveSddRoot`, que sólo responde a
+  // «¿dónde está la raíz SDD de este directorio?». Se comprueba ANTES de
+  // ejecutar el instalador: rechazar después de haber escrito no sirve de nada.
+  //
+  // Con la ruta de hoy (`<workspacesRoot>/www/<slug>`) esta llamada siempre
+  // pasa, y ése es justo el punto: deja escrito el invariante en vez de
+  // confiar en que nadie toque esa línea.
+  await assertProjectRootAllowed(projectRoot);
+
   await execFileAsync("bash", [scriptPath, ...args], {
     cwd: frameworkRoot,
     env: { ...process.env, SDD_WORKSPACES_ROOT: workspacesRoot }
   });
 
-  const projectRoot = path.join(workspacesRoot, "www", slugify(input.projectName));
   const layout = profile === "full" ? "full" : "sidecar";
   return {
     projectRoot,

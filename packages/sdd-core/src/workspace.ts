@@ -105,6 +105,22 @@ export function getWorkspacesRoot(): string {
   return info.layout === "repo" ? info.root : process.cwd();
 }
 
+/**
+ * La política de DÓNDE PUEDE MATERIALIZARSE UN PROYECTO DESTINO
+ * (`sdd.policy.yaml`: `do_not_implement_in_template_root`,
+ * `if_target_inside_template_use_default_workspace`).
+ *
+ * Spec 043: la llaman las tres operaciones que crean un proyecto destino
+ * —`createWorkspace`, `installSidecar` y `runLegacyDiscovery`— y NADIE MÁS.
+ * Vivió dentro de `resolveSddRoot` desde `cd01c5d`, que es la puerta de 25
+ * llamadas de sólo lectura, y el efecto era que el propio template no podía
+ * leerse a sí mismo: crear una spec aquí, puntuarla o regenerar `STATUS.md`
+ * fallaban con el mensaje de abajo, y `STATUS.md` llegó a acumular 17 días y
+ * ocho specs de retraso.
+ *
+ * Si añades una operación que escribe un proyecto destino nuevo, llámala aquí.
+ * Si sólo lees ficheros de un workspace, no lo hagas.
+ */
 export async function ensureProjectRootAllowed(projectRoot: string): Promise<void> {
   const root = path.resolve(projectRoot);
   const framework = resolveFrameworkRoot();
@@ -169,7 +185,9 @@ export async function readFrameworkFile(relativePath: string): Promise<string> {
 
 export async function resolveSddRoot(projectRoot: string): Promise<string> {
   const root = path.resolve(projectRoot);
-  await ensureProjectRootAllowed(root);
+  // Spec 043, R1: aquí NO se aplica `ensureProjectRootAllowed`. Resolver una
+  // raíz no es autorizar un proyecto, y mezclarlo dejaba al template sin poder
+  // usar sus propias herramientas sobre sí mismo. Ver esa función.
 
   if (await isSddRoot(root)) {
     return root;

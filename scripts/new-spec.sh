@@ -14,12 +14,18 @@ SDD_ROOT="$(sdd_require_local_root "$SCRIPT_DIR/..")" || exit 1
 
 PROJECT_ROOT="$(sdd_project_root "$SDD_ROOT")"
 
-# Block spec creation in template root to avoid mixing framework and runnable project work.
-if [ -f "$SDD_ROOT/sdd.policy.yaml" ] && [ -f "$SDD_ROOT/scripts/create-www-project.sh" ] && [ -d "$SDD_ROOT/www" ]; then
-  echo "Error: refusing to create spec in template root."
-  echo "Create/use a target project under www/<project-name>/ or install a spec sidecar in an external target path first."
-  exit 1
-fi
+# Spec 043: aquí ya NO se bloquea la raíz del template.
+#
+# Este bloque rechazaba cualquier raíz que tuviera a la vez `sdd.policy.yaml`,
+# `scripts/create-www-project.sh` y `www/` — es decir, exactamente una: la del
+# template. Y el template es un proyecto SDD con sus propias specs, así que el
+# efecto era que sus 42 specs había que crearlas a mano.
+#
+# La política que ese bloque creía defender es «un PROYECTO DESTINO no se
+# materializa en la raíz del template» (`sdd.policy.yaml`), y de eso se
+# encargan `create-www-project.sh` y `install-spec-sidecar.sh`, más
+# `ensureProjectRootAllowed` en el núcleo. Crear una spec no materializa
+# ningún proyecto destino: escribe documentos en el `specs/` que ya existe.
 
 NAME_RAW="$1"
 OWNER="${2:-TBD / Por definir}"
