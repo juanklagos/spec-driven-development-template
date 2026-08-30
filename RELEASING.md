@@ -198,3 +198,8 @@ curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=juanklagos"
 Los cuatro tienen que decir el mismo número. Mientras no lo digan, el release no está hecho.
 
 All four must say the same number. Until they do, the release is not done.
+
+> **Regenerar `STATUS.md`** antes de tagear. Desde la spec 043 se puede hacer
+> desde este mismo repositorio (antes lo rechazaba el guard de raíz de
+> template): `node -e "import('@juanklagos/sdd-core').then(m => m.generateStatus(process.cwd()))"`,
+> o desde el builder con ⌘K → «informes».

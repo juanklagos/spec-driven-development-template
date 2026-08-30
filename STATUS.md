@@ -1,6 +1,6 @@
 # Status Dashboard / Tablero de estado
 
-Generated at / Generado en: 2026-08-13 14:44 UTC
+Generated at / Generado en: 2026-08-30T21:27:53.875Z
 
 ## Active specs / Specs activas
 
@@ -44,21 +44,32 @@ Generated at / Generado en: 2026-08-13 14:44 UTC
 | 030 | builder-rediseno-2a | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos | 2026-08-11 |
 | 031 | asistencia-ia-sin-copy-paste | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
 | 032 | conectar-agente-en-un-paso | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
+| 033 | documentacion-por-tipos | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-12 |
+| 034 | rediseno-documentacion | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-13 |
+| 035 | rediseno-docs-handoff | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-17 |
+| 036 | revision-ia-y-asistente-sin-bloqueo | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-19 |
+| 037 | evidencia-de-aprobacion-profesional | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
+| 038 | refs-de-shadcn-en-react-18 | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
+| 039 | contexto-de-spec-al-ampliar-con-ia | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-20 |
+| 040 | instalador-fija-la-version | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-25 |
+| 041 | grupos-de-json-canvas | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-25 |
+| 042 | no-perder-trabajo | Done / Completada | High / Alta | Juan Carlos Alvarez Lagos / Claude | 2026-08-30 |
+| 043 | el-template-usa-sus-herramientas | Done / Completada | Medium / Media | Juan Carlos Alvarez Lagos / Claude | 2026-08-30 |
 
 ## Task progress / Progreso de tareas
 
-- Pending / Pendientes: 8
-- Completed / Completadas: 346
+- Pending / Pendientes: 44
+- Completed / Completadas: 553
 
 ## Recent log excerpt / Extracto reciente de bitácora
 
 ```text
-  ## 2026-07-23 — Spec 027: cobertura completa de comandos MCP
-  
-  - **Goal / Objetivo:** cerrar las asimetrías del servidor MCP (fuerte escribiendo, débil leyendo) tras la auditoría pedida por el propietario («cubre todo»).
-  - **Work completed / Trabajo realizado:** 7 herramientas nuevas (21 → 28): sdd_read_spec_document, sdd_read_bitacora, sdd_check_drift, sdd_add_task, sdd_lint_ears, sdd_score_spec, sdd_install_sidecar. Core nuevo probado (bitacora.ts, score.ts, addSpecTask, getSpecDriftReport, installSidecar); docs ES/EN actualizadas.
-  - **Decisions made / Decisiones tomadas:** score portado a TS (el bash exige rg), sidecar delegado al bash con execFile (patrón createWorkspace) — `bitacora/decisiones/2026-07-23-mcp-score-port-y-sidecar-execfile.md`.
-  - **Blockers / Bloqueos:** ninguno.
-  - **Next step / Próximo paso:** publicar la versión con las 28 herramientas (propietario, con OTP); spec futura opcional: resources/prompts para projectRoot arbitrario.
-  - **Owner / Responsable:** Juan Carlos Alvarez Lagos / Claude
+
+- **Goal / Objetivo:** cerrar las asimetrías del servidor MCP (fuerte escribiendo, débil leyendo) tras la auditoría pedida por el propietario, que aprobó la propuesta completa.
+- **Work completed / Trabajo realizado:** 7 herramientas nuevas (21 → 28): sdd_read_spec_document, sdd_read_bitacora, sdd_check_drift, sdd_add_task, sdd_lint_ears, sdd_score_spec, sdd_install_sidecar. Core nuevo probado (bitacora.ts, score.ts, addSpecTask, getSpecDriftReport, installSidecar); docs ES/EN actualizadas.
+- **Decisions made / Decisiones tomadas:** score portado a TS (el bash exige rg), sidecar delegado al bash con execFile (patrón createWorkspace) — `bitacora/decisiones/2026-07-23-mcp-score-port-y-sidecar-execfile.md`.
+- **Blockers / Bloqueos:** ninguno.
+- **Next step / Próximo paso:** publicar la versión con las 28 herramientas (propietario, con OTP); spec futura opcional: resources/prompts para projectRoot arbitrario.
+- **Owner / Responsable:** Juan Carlos Alvarez Lagos / Claude
+
 ```

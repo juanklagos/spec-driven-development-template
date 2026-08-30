@@ -812,6 +812,12 @@ export function SpecDrawer() {
         // (30px), que persisten en todas las vistas (spec 030).
         className="!top-[80px] !bottom-[30px] h-auto w-full gap-0 shadow-[var(--shadow-drawer)] sm:max-w-[560px] [&>button:last-child]:hidden"
         aria-label={t("sheet.aria", { id: specId })}
+        // Spec 042 (R6). El cajón es un panel, no un modal: `modal={false}`, no
+        // atrapa el foco y el lienzo sigue vivo detrás. Los atajos de un
+        // carácter deben seguir funcionando con él abierto, así que se marca
+        // como la ÚNICA excepción de la guardia. Cualquier diálogo nuevo que
+        // olvide esta marca queda bloqueado, que es el fallo seguro.
+        data-shortcuts="allow"
         onInteractOutside={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >

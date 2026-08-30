@@ -8,7 +8,7 @@ import {
   type XYPosition
 } from "@xyflow/react";
 import { create } from "zustand";
-import { api, errorMessage } from "./api";
+import { ApiError, api, errorMessage } from "./api";
 import { PlanError, applyPlan, type ApplyMode } from "./boardplan";
 import {
   ARROW,
@@ -54,6 +54,8 @@ export interface BoardFilters {
 }
 
 const SAVE_DEBOUNCE_MS = 500;
+/** Spec 042 (R5): esperas del reintento del guardado. El cuarto fallo es error. */
+const SAVE_RETRY_DELAYS_MS = [250, 1000, 4000];
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
 // --- Live sync bookkeeping (module-level: not render state) ---------------
@@ -110,6 +112,13 @@ const uid = (): string => crypto.randomUUID().slice(0, 8);
 interface BuilderStore {
   loading: boolean;
   loadError: string | null;
+  /**
+   * Spec 042 (R1/R2). El tablero existe en disco pero no se pudo leer. Es un
+   * estado distinto de «no hay servidor»: mientras dure, el lienzo NO guarda,
+   * porque guardar aquí es exactamente lo que borraba el trabajo.
+   */
+  boardUnreadable: { path: string; message: string } | null;
+  discardUnreadableBoard: () => Promise<void>;
   projectRoot: string;
   nodes: AppNode[];
   edges: AppEdge[];
@@ -219,6 +228,7 @@ interface BuilderStore {
 export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   loading: true,
   loadError: null,
+  boardUnreadable: null,
   projectRoot: "",
   requestedDrawerTab: null,
   nodes: [],
@@ -275,7 +285,7 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   setZoom: (zoom) => set({ zoom }),
 
   load: async () => {
-    set({ loading: true, loadError: null });
+    set({ loading: true, loadError: null, boardUnreadable: null });
     try {
       const board = await api.getBoard();
       const { nodes, edges } = boardToFlow(board.canvas, board.specs);
@@ -294,7 +304,29 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
       void get().loadScores();
       void get().loadAiRequests();
     } catch (error) {
+      // Spec 042: el servidor SÍ respondió, y lo que dijo es que el archivo del
+      // tablero no se puede leer. Pintarlo como «no encuentro el servidor»
+      // mandaba a la persona a reiniciar algo que estaba funcionando.
+      if (error instanceof ApiError && error.code === "BOARD_UNREADABLE") {
+        set({
+          loading: false,
+          boardUnreadable: { path: error.detail ?? "specs/board.canvas", message: error.message }
+        });
+        return;
+      }
       set({ loading: false, loadError: errorMessage(error) });
+    }
+  },
+
+  // Segunda salida del aviso (spec 042, escenario 1). El servidor conserva el
+  // archivo ilegible como `board.canvas.bak` antes de sustituirlo.
+  discardUnreadableBoard: async () => {
+    try {
+      await api.resetBoard();
+      set({ boardUnreadable: null });
+      await get().load();
+    } catch (error) {
+      set({ loadError: errorMessage(error) });
     }
   },
 
@@ -620,6 +652,10 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
   setAssistantOpen: (open) => set({ assistantOpen: open }),
 
   scheduleSave: () => {
+    // Spec 042 (R2): con un tablero que no se pudo leer, cualquier escritura
+    // sustituye el archivo del usuario por lo que el lienzo tenga en memoria.
+    // Ésa es la ruta de pérdida entera, y aquí es donde se corta.
+    if (get().boardUnreadable) return;
     set({ saveState: "dirty" });
     if (saveTimer) clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
@@ -632,15 +668,27 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
       clearTimeout(saveTimer);
       saveTimer = null;
     }
-    const { nodes, edges, loading, loadError } = get();
-    if (loading || loadError) return;
+    const { nodes, edges, loading, loadError, boardUnreadable } = get();
+    if (loading || loadError || boardUnreadable) return;
     set({ saveState: "saving", saveError: null });
-    try {
-      await api.putBoard(flowToBoard(nodes, edges));
-      lastBoardPutAt = Date.now();
-      set({ saveState: "saved" });
-    } catch (error) {
-      set({ saveState: "error", saveError: errorMessage(error) });
+    const canvas = flowToBoard(nodes, edges);
+    // Spec 042 (R5). Un corte de red de un segundo dejaba el guardado en error
+    // y ahí se quedaba hasta el siguiente gesto de la persona. Tres reintentos
+    // con espera creciente cubren el caso normal —el servidor reiniciándose—
+    // sin convertir un fallo real en una espera indefinida.
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await api.putBoard(canvas);
+        lastBoardPutAt = Date.now();
+        set({ saveState: "saved" });
+        return;
+      } catch (error) {
+        if (attempt >= SAVE_RETRY_DELAYS_MS.length) {
+          set({ saveState: "error", saveError: errorMessage(error) });
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, SAVE_RETRY_DELAYS_MS[attempt]));
+      }
     }
   },
 
@@ -721,7 +769,12 @@ export const useBuilderStore = create<BuilderStore>()((set, get) => ({
     //    the user. The .md files are never at risk (they are the source of
     //    truth and travel on kind=specs).
     const { saveState } = get();
-    if (saveState === "dirty" || saveState === "saving" || dragActive) return;
+    // Spec 042 (R5): `error` entra en la guarda. Antes se colaba, y la recarga
+    // se llevaba por delante las tarjetas, el historial de deshacer y el propio
+    // banner rojo que denunciaba que nada de eso estaba en disco.
+    if (saveState === "dirty" || saveState === "saving" || saveState === "error" || dragActive) {
+      return;
+    }
     try {
       const board = await api.getBoard();
       const { nodes, edges } = boardToFlow(board.canvas, board.specs);

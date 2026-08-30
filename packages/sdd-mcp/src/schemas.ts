@@ -42,30 +42,47 @@ export const dependencyWarningSchema = z.object({
 // Spec 041: "group" belongs here too. While this enum said ["file","text"],
 // sdd_board_write rejected any canvas containing a group — so an agent could
 // not write a board a human had drawn in Obsidian.
-export const canvasNodeSchema = z.object({
-  id: z.string(),
-  type: z.enum(["file", "text", "group"]),
-  x: z.number(),
-  y: z.number(),
-  width: z.number(),
-  height: z.number(),
-  file: z.string().optional(),
-  text: z.string().optional(),
-  color: z.string().optional(),
-  label: z.string().optional(),
-  background: z.string().optional(),
-  backgroundStyle: z.enum(["cover", "ratio", "repeat"]).optional()
-});
+//
+// Spec 042: "link" completes the four node types of JSON Canvas 1.0, and both
+// schemas are `.passthrough()`. Zod's default is to STRIP unknown keys, and
+// this schema is the input of sdd_board_write and the output of
+// sdd_board_read — so a `z.object()` here quietly deleted from the user's file
+// every field the tool did not enumerate, exactly the loss the builder's own
+// round-trip stopped causing. Verified against zod 3.25.76.
+//
+// KEEP IN SYNC with the hand-written validation in packages/sdd-core/src/board.ts:
+// sdd-core has `dependencies: {}` and sdd-mcp depends on it, never the other
+// way round, so the two cannot share one implementation.
+export const canvasNodeSchema = z
+  .object({
+    id: z.string(),
+    type: z.enum(["file", "text", "link", "group"]),
+    x: z.number(),
+    y: z.number(),
+    width: z.number(),
+    height: z.number(),
+    file: z.string().optional(),
+    text: z.string().optional(),
+    url: z.string().optional(),
+    subpath: z.string().optional(),
+    color: z.string().optional(),
+    label: z.string().optional(),
+    background: z.string().optional(),
+    backgroundStyle: z.enum(["cover", "ratio", "repeat"]).optional()
+  })
+  .passthrough();
 
-export const canvasEdgeSchema = z.object({
-  id: z.string(),
-  fromNode: z.string(),
-  toNode: z.string(),
-  fromSide: z.string().optional(),
-  toSide: z.string().optional(),
-  label: z.string().optional(),
-  color: z.string().optional()
-});
+export const canvasEdgeSchema = z
+  .object({
+    id: z.string(),
+    fromNode: z.string(),
+    toNode: z.string(),
+    fromSide: z.string().optional(),
+    toSide: z.string().optional(),
+    label: z.string().optional(),
+    color: z.string().optional()
+  })
+  .passthrough();
 
 export const canvasSchema = z.object({
   nodes: z.array(canvasNodeSchema),

@@ -22,6 +22,7 @@ import { Plug, Plus } from "lucide-react";
 import { api } from "./api";
 import { useT } from "./i18n";
 import { startLive } from "./live";
+import { shortcutsBlocked } from "./shortcuts";
 import { AssistantWizard } from "./components/AssistantWizard";
 import { CommandPalette } from "./components/CommandPalette";
 import { CommandRow } from "./components/CommandRow";
@@ -139,10 +140,64 @@ function LoadErrorScreen({ message, onRetry }: { message: string; onRetry: () =>
   );
 }
 
+// Spec 042 (R1/R2). El tablero está en disco y no se pudo leer. Es un estado
+// distinto de «no hay servidor», y merece su propia pantalla: la de error de
+// carga afirmaba que el builder no encontraba el servidor —que había
+// contestado— y ofrecía un comando que reproducía este mismo error.
+//
+// Las dos salidas son explícitas porque hasta que se elija una no se escribe
+// nada: el autoguardado está cortado en `scheduleSave`.
+function BoardUnreadableScreen({ path, detail }: { path: string; detail: string }) {
+  const { t } = useT();
+  const load = useBuilderStore((s) => s.load);
+  const discard = useBuilderStore((s) => s.discardUnreadableBoard);
+  return (
+    <div className="grid flex-1 place-items-center p-8">
+      <div className="w-[620px] max-w-full overflow-hidden rounded-xl border bg-card shadow-[var(--shadow-card)]">
+        <div className="flex h-[34px] items-center gap-2 border-b bg-[var(--amber-soft)] px-4">
+          <span className="size-[7px] rounded-[2px] bg-[var(--amber)]" aria-hidden />
+          <span className="font-mono text-[11.5px] tracking-[0.1em] text-[var(--amber-text)] uppercase">
+            {t("boardUnreadable.tag")}
+          </span>
+        </div>
+        <div className="flex flex-col gap-3.5 p-[22px_26px_26px]">
+          <h2 className="m-0 text-[20px] leading-tight font-semibold tracking-[-0.015em]">
+            {t("boardUnreadable.title")}
+          </h2>
+          <p className="m-0 text-[13.5px] leading-[1.55] text-muted-foreground">
+            {t("boardUnreadable.body")}
+          </p>
+          <span className="font-mono text-[10.5px] tracking-[0.16em] text-muted-foreground uppercase">
+            {t("boardUnreadable.fileLabel")}
+          </span>
+          <pre className="m-0 overflow-x-auto rounded-lg border bg-muted p-[10px_12px] font-mono text-xs break-words whitespace-pre-wrap">
+            {path}
+          </pre>
+          {detail ? (
+            <pre className="m-0 overflow-x-auto rounded-lg border bg-muted p-[10px_12px] font-mono text-[11px] break-words whitespace-pre-wrap text-muted-foreground">
+              {detail}
+            </pre>
+          ) : null}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button className="h-[34px]" onClick={() => void load()}>
+              {t("boardUnreadable.reread")}
+            </Button>
+            <Button variant="outline" className="h-[34px]" onClick={() => void discard()}>
+              {t("boardUnreadable.discard")}
+            </Button>
+          </div>
+          <span className="text-xs text-muted-foreground">{t("boardUnreadable.discardHint")}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Shell() {
   const { t } = useT();
   const loading = useBuilderStore((s) => s.loading);
   const loadError = useBuilderStore((s) => s.loadError);
+  const boardUnreadable = useBuilderStore((s) => s.boardUnreadable);
   const workspaceChanged = useBuilderStore((s) => s.workspaceChanged);
   const nodes = useBuilderStore((s) => s.nodes);
   const edges = useBuilderStore((s) => s.edges);
@@ -233,8 +288,10 @@ function Shell() {
   // Warn before closing the tab with unsaved changes.
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
+      // Spec 042 (R5): `error` es el ÚNICO estado en el que consta que el
+      // trabajo no llegó al disco, y era justo el que no preguntaba.
       const state = useBuilderStore.getState().saveState;
-      if (state === "dirty" || state === "saving") e.preventDefault();
+      if (state === "dirty" || state === "saving" || state === "error") e.preventDefault();
     };
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
@@ -292,12 +349,9 @@ function Shell() {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const key = e.key.toLowerCase();
       if (key !== "i" && key !== "e" && key !== "g" && key !== "s") return;
-      const target = e.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
-        return;
-      }
-      const state = useBuilderStore.getState();
-      if (state.paletteOpen || state.tourOpen || state.galleryOpen || state.assistantOpen) return;
+      // Spec 042 (R6): la regla completa —campo de texto o diálogo abierto—
+      // vive en `shortcuts.ts`, donde se puede probar. Ver ahí el porqué.
+      if (shortcutsBlocked(document, e.target)) return;
       e.preventDefault();
       handleQuickAdd(key === "i" ? "idea" : key === "e" ? "epic" : key === "g" ? "group" : "spec");
     };
@@ -332,6 +386,17 @@ function Shell() {
       return matches ? node : { ...node, className: "filter-dimmed" };
     });
   }, [nodes, anyFilter, filters, specs, gate]);
+
+  if (boardUnreadable) {
+    return (
+      <div className="app">
+        <IdentityBar />
+        <BoardUnreadableScreen path={boardUnreadable.path} detail={boardUnreadable.message} />
+        <GateStatusBar />
+        <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+      </div>
+    );
+  }
 
   if (loadError) {
     return (

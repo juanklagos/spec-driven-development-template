@@ -90,7 +90,7 @@ export function Tour() {
   }
 
   return (
-    <div className="tour-layer" role="dialog" aria-label={t("tour.aria")}>
+    <div className="tour-layer" role="dialog" aria-modal="true" aria-label={t("tour.aria")}>
       {rect ? (
         <div
           className="tour-ring"

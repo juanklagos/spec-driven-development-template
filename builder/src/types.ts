@@ -6,14 +6,18 @@ import type { Edge, Node } from "@xyflow/react";
 
 export interface CanvasNode {
   id: string;
-  /** Spec 041. KEEP IN SYNC with packages/sdd-core/src/board.ts. */
-  type: "file" | "text" | "group";
+  /** Specs 041 y 042. KEEP IN SYNC with packages/sdd-core/src/board.ts. */
+  type: "file" | "text" | "link" | "group";
   x: number;
   y: number;
   width: number;
   height: number;
   file?: string;
   text?: string;
+  /** Link node (JSON Canvas 1.0). Spec 042. */
+  url?: string;
+  /** Heading/block anchor inside a `file` node (JSON Canvas 1.0). Spec 042. */
+  subpath?: string;
   color?: string;
   /** Group only: its title. JSON Canvas puts it in `label`, never in `text`. */
   label?: string;
@@ -193,6 +197,8 @@ export type SpecNodeData = {
   file: string;
   width: number;
   height: number;
+  /** Spec 042: fields of the source node this builder does not paint. */
+  extra?: Record<string, unknown>;
 };
 
 export type NoteNodeData = {
@@ -200,6 +206,13 @@ export type NoteNodeData = {
   color?: string;
   /** Preserved for JSON Canvas "file" nodes that do not map to a spec. */
   file?: string;
+  /**
+   * Spec 042. The JSON Canvas type this note came from, so saving emits the
+   * same one back. Absent means a note authored in the builder -> "text".
+   */
+  canvasType?: "text" | "file" | "link";
+  /** Spec 042: fields of the source node this builder does not paint. */
+  extra?: Record<string, unknown>;
   width: number;
   height: number;
 };
@@ -228,7 +241,20 @@ export type NoteFlowNode = Node<NoteNodeData, "note">;
 export type GroupFlowNode = Node<GroupNodeData, "group">;
 export type AppNode = SpecFlowNode | NoteFlowNode | GroupFlowNode;
 
-export type EdgeData = { label?: string };
+/**
+ * Spec 042. The edge carries back what the file said, so a round-trip does not
+ * flatten the geometry another canvas editor chose. `originalLabel` is what
+ * makes "the user changed the purpose" distinguishable from "nobody touched
+ * it": only the first re-derives the color.
+ */
+export type EdgeData = {
+  label?: string;
+  originalLabel?: string;
+  fromSide?: string;
+  toSide?: string;
+  color?: string;
+  extra?: Record<string, unknown>;
+};
 export type AppEdge = Edge<EdgeData, "labeled">;
 
 export type SaveState = "saved" | "dirty" | "saving" | "error";
