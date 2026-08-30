@@ -58,6 +58,14 @@ I, E, G and S only work when you are not typing in a field.
 
 The file that gets saved is plain JSON Canvas: the group keeps its label, colour and background, and **no card records which group it belongs to**, because the format has no such field. That is what keeps the same `board.canvas` opening in Obsidian.
 
+**When the board cannot be read.** If `specs/board.canvas` is there but broken — a git merge that left `<<<<<<<` markers, a half-written JSON — the builder does **not** show you a default grid as if it were your board. It stops, names the file path and offers two ways out: fix it by hand and read it again, or discard it and start fresh. Until you pick one, **autosave stays off**, so no gesture of yours writes over something still recoverable. If you discard, your file is kept as `board.canvas.bak`.
+
+That backup is also written on its own: the first time the builder saves in each server session, it copies whatever was in `board.canvas` first. One copy per session, not a history — git is the history.
+
+**What the builder does not paint, it gives back untouched.** The board supports all four JSON Canvas node types: text, file, link and group. The builder paints some in more detail than others, but on save it returns every field exactly as it arrived: a link's `url`, a file's `subpath`, an edge's sides and color, and any field a future revision of the format adds. Edge colors are only re-derived when you change their purpose.
+
+**Shortcuts and dialogs.** The I, E, G and S keys do nothing while a dialog is open — a modal, the tour, the ⋯ menu — only when the canvas is in view. A spec's detail panel does not count as a dialog: it is a panel, and the shortcuts keep working with it open.
+
 **The filters** in the second strip hide nothing: they **dim** what does not match, so the board does not change shape while you look at it. There are three: `pending` (specs not approved yet), `with warnings` (specs with gate errors) and `with drift` (specs whose code changed after they were approved). To the right of that strip you get the counts: how many specs, how many connections, and the zoom level.
 
 

@@ -49,13 +49,17 @@ export interface CanvasNode {
    * layout save. KEEP IN SYNC with builder/src/types.ts and the zod enum in
    * packages/sdd-mcp/src/schemas.ts.
    */
-  type: "file" | "text" | "group";
+  type: "file" | "text" | "link" | "group";
   x: number;
   y: number;
   width: number;
   height: number;
   file?: string;
   text?: string;
+  /** Link node (JSON Canvas 1.0). Spec 042. */
+  url?: string;
+  /** Heading/block anchor inside a `file` node (JSON Canvas 1.0). Spec 042. */
+  subpath?: string;
   color?: string;
   /** Group only: its title. JSON Canvas puts it in `label`, never in `text`. */
   label?: string;
@@ -320,26 +324,200 @@ export async function defaultBoard(projectRoot: string): Promise<BoardCanvas> {
   return { nodes, edges: [] };
 }
 
+/**
+ * Spec 042 (R1). The board exists but could not be read. It is NOT the same as
+ * "there is no board yet", and conflating the two is what let a merge conflict
+ * turn into a silent overwrite: the unreadable file came back as a default grid,
+ * and the user's first drag wrote that grid over their layout.
+ */
+export class BoardUnreadableError extends Error {
+  readonly code = "BOARD_UNREADABLE";
+  readonly path: string;
+
+  constructor(filePath: string, cause: unknown) {
+    super(
+      `The board file exists but could not be read: ${filePath}. ` +
+        `Fix it by hand and reload, or discard it and start from the default board. ` +
+        `(${cause instanceof Error ? cause.message : String(cause)})`
+    );
+    this.name = "BoardUnreadableError";
+    this.path = filePath;
+  }
+}
+
 export async function readBoard(projectRoot: string): Promise<BoardCanvas> {
   return readBoardAt(await boardPath(projectRoot), projectRoot);
 }
 
-async function readBoardAt(filePath: string, projectRoot: string): Promise<BoardCanvas> {
+/**
+ * Exported so the distinction between "absent" and "unreadable" is testable on
+ * the real read path, which is where it matters (spec 042, fase 4).
+ */
+export async function readBoardAt(filePath: string, projectRoot: string): Promise<BoardCanvas> {
+  let raw: string;
   try {
-    const parsed: unknown = JSON.parse(await fs.readFile(filePath, "utf8"));
-    if (!isCanvas(parsed)) throw new Error("invalid canvas");
+    raw = await fs.readFile(filePath, "utf8");
+  } catch (error) {
+    // Only a missing file justifies the default board. A permission error, a
+    // directory where a file should be, or anything else is a real problem the
+    // user has to see before something writes over it.
+    if ((error as NodeJS.ErrnoException)?.code === "ENOENT") return defaultBoard(projectRoot);
+    throw new BoardUnreadableError(filePath, error);
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!isCanvas(parsed)) throw new Error("not a JSON Canvas document: expected { nodes, edges }");
     return parsed;
-  } catch {
-    return defaultBoard(projectRoot);
+  } catch (error) {
+    throw new BoardUnreadableError(filePath, error);
+  }
+}
+
+/** The four node types of JSON Canvas 1.0. KEEP IN SYNC with `CanvasNode`. */
+const CANVAS_NODE_TYPES = new Set(["text", "file", "link", "group"]);
+
+function isFiniteNumber(value: unknown): boolean {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+/**
+ * Spec 042 (R7). Validate every node and every edge before a single byte is
+ * written. Until this existed, `writeBoard` only checked that `nodes` and
+ * `edges` were arrays, so any object with that shape replaced the user's board
+ * — the deuda the spec 041 recorded in its decision 8.
+ *
+ * Two rules govern what this does NOT do:
+ *   - It never strips. Unknown keys are the user's data (a `subpath`, a field
+ *     from a future JSON Canvas revision) and travel through untouched.
+ *   - It is written by hand. `sdd-core` has `dependencies: {}` and `sdd-mcp`
+ *     depends on it, never the other way round, so the zod `canvasSchema` in
+ *     packages/sdd-mcp/src/schemas.ts cannot be imported here. That schema is
+ *     kept in parity instead; changing one means changing the other.
+ *
+ * Throws naming the offending node or edge: a rejection you cannot locate is
+ * only marginally better than the silent overwrite it replaced.
+ */
+export function validateCanvas(canvas: BoardCanvas): void {
+  if (!isCanvas(canvas)) {
+    throw new Error("Invalid canvas payload: expected { nodes: [], edges: [] }");
+  }
+
+  const ids = new Set<string>();
+  for (const [index, node] of canvas.nodes.entries()) {
+    const where = `node #${index}`;
+    if (typeof node !== "object" || node === null) {
+      throw new Error(`Invalid canvas: ${where} is not an object`);
+    }
+    const label = typeof node.id === "string" && node.id ? `node "${node.id}"` : where;
+    if (typeof node.id !== "string" || node.id === "") {
+      throw new Error(`Invalid canvas: ${where} has no id`);
+    }
+    if (ids.has(node.id)) {
+      throw new Error(`Invalid canvas: duplicate node id "${node.id}"`);
+    }
+    ids.add(node.id);
+    if (!CANVAS_NODE_TYPES.has(node.type)) {
+      throw new Error(
+        `Invalid canvas: ${label} has unknown type "${String(node.type)}" (expected text, file, link or group)`
+      );
+    }
+    for (const field of ["x", "y", "width", "height"] as const) {
+      if (!isFiniteNumber(node[field])) {
+        throw new Error(`Invalid canvas: ${label} has a non-numeric ${field}`);
+      }
+    }
+  }
+
+  const edgeIds = new Set<string>();
+  for (const [index, edge] of canvas.edges.entries()) {
+    const where = `edge #${index}`;
+    if (typeof edge !== "object" || edge === null) {
+      throw new Error(`Invalid canvas: ${where} is not an object`);
+    }
+    const label = typeof edge.id === "string" && edge.id ? `edge "${edge.id}"` : where;
+    if (typeof edge.id !== "string" || edge.id === "") {
+      throw new Error(`Invalid canvas: ${where} has no id`);
+    }
+    if (edgeIds.has(edge.id)) {
+      throw new Error(`Invalid canvas: duplicate edge id "${edge.id}"`);
+    }
+    edgeIds.add(edge.id);
+    for (const end of ["fromNode", "toNode"] as const) {
+      const target = edge[end];
+      if (typeof target !== "string" || target === "") {
+        throw new Error(`Invalid canvas: ${label} has no ${end}`);
+      }
+      if (!ids.has(target)) {
+        throw new Error(`Invalid canvas: ${label} points at "${target}", which is not a node on this board`);
+      }
+    }
+  }
+}
+
+/** Suffix of the once-per-session safety copy of the board. */
+export const BOARD_BACKUP_SUFFIX = ".bak";
+
+/**
+ * True for the board's safety copy. Owned here, next to the code that writes
+ * it, for the same reason `isAtomicWriteTempName` is: the watcher in sdd-mcp
+ * must skip it, and a second spelling of the rule over there would drift.
+ */
+export function isBoardBackupName(name: string): boolean {
+  return name === `board.canvas${BOARD_BACKUP_SUFFIX}`;
+}
+
+/**
+ * Paths already backed up by THIS process. "Once per session" means once per
+ * server run: a copy on every save would be noise, and a copy only on the very
+ * first run would be stale by the time it is needed.
+ */
+const backedUpThisSession = new Set<string>();
+
+/** Copy the current board next to itself, once per server session. */
+async function backupOnce(filePath: string): Promise<void> {
+  if (backedUpThisSession.has(filePath)) return;
+  // Marked before the copy, not after: if the copy fails because there is no
+  // board yet (the common first-run case), retrying on every save would be
+  // pointless work.
+  backedUpThisSession.add(filePath);
+  try {
+    await fs.copyFile(filePath, `${filePath}${BOARD_BACKUP_SUFFIX}`);
+  } catch (error) {
+    // No board yet is normal. Anything else must not block the save the user
+    // asked for — the backup is a safety net, not a precondition.
+    if ((error as NodeJS.ErrnoException)?.code !== "ENOENT") {
+      console.error(`[sdd] could not back up ${filePath}:`, error);
+    }
   }
 }
 
 export async function writeBoard(projectRoot: string, canvas: BoardCanvas): Promise<void> {
-  if (!isCanvas(canvas)) {
-    throw new Error("Invalid canvas payload: expected { nodes: [], edges: [] }");
-  }
+  validateCanvas(canvas);
   const filePath = await boardPath(projectRoot);
-  await withFileLock(filePath, () => writeBoardAt(filePath, canvas));
+  await withFileLock(filePath, async () => {
+    await backupOnce(filePath);
+    await writeBoardAt(filePath, canvas);
+  });
+}
+
+/**
+ * Spec 042, escenario 1, segunda salida: the person looked at an unreadable
+ * board and chose to discard it. The file is never deleted — it is moved to the
+ * backup name first, so "discard" stays recoverable.
+ */
+export async function resetBoard(projectRoot: string): Promise<BoardCanvas> {
+  const filePath = await boardPath(projectRoot);
+  const fresh = await defaultBoard(projectRoot);
+  await withFileLock(filePath, async () => {
+    try {
+      await fs.copyFile(filePath, `${filePath}${BOARD_BACKUP_SUFFIX}`);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException)?.code !== "ENOENT") throw error;
+    }
+    backedUpThisSession.add(filePath);
+    await writeBoardAt(filePath, fresh);
+  });
+  return fresh;
 }
 
 /** Unlocked write; callers already inside `withFileLock(boardPath, ...)`. */

@@ -27,6 +27,33 @@ import type { AgentPresence, AiRequest, AiRequestTarget, AiRequestType } from ".
 // "es / en" fallback message — spec 010, R1 forbids double labels in errors
 // too. Any code the dictionary does not know falls back to the server text,
 // which is never worse than the previous behaviour.
+/**
+ * Spec 042. An error that knows whether the server answered. Until this
+ * existed, the canvas had a single narrative for every load failure — «the
+ * builder can't find the server» — and printed it even when the server had
+ * answered perfectly well to say the board file was unreadable, together with a
+ * command that reproduced the very error the person was looking at.
+ */
+export class ApiError extends Error {
+  /** Machine code from the server body, when it sent one. */
+  readonly code?: string;
+  /** Untranslatable server-side detail (a file path, raw CLI output). */
+  readonly detail?: string;
+  /** True only when the request never reached a server. */
+  readonly unreachable: boolean;
+
+  constructor(
+    message: string,
+    options: { code?: string; detail?: string; unreachable?: boolean } = {}
+  ) {
+    super(message);
+    this.name = "ApiError";
+    this.code = options.code;
+    this.detail = options.detail;
+    this.unreachable = options.unreachable ?? false;
+  }
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
@@ -35,13 +62,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       ...init
     });
   } catch {
-    throw new Error(translate("error.apiUnreachable"));
+    throw new ApiError(translate("error.apiUnreachable"), { unreachable: true });
   }
   if (!res.ok) {
     let message = `HTTP ${res.status}`;
+    let code: string | undefined;
+    let detail: string | undefined;
     try {
       const body = (await res.json()) as { error?: string; code?: string; detail?: string };
       if (body?.error) message = body.error;
+      code = body?.code;
+      detail = body?.detail;
       const key = body?.code ? `error.code.${body.code}` : "";
       if (key && hasTranslation(key)) {
         // `detail` is raw CLI output: no dictionary can translate it, so it is
@@ -51,7 +82,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       // keep the HTTP status message
     }
-    throw new Error(message);
+    throw new ApiError(message, { code, detail });
   }
   return (await res.json()) as T;
 }
@@ -61,6 +92,14 @@ export const api = {
 
   putBoard: (canvas: BoardCanvas): Promise<{ ok: boolean }> =>
     request("/api/board", { method: "PUT", body: JSON.stringify(canvas) }),
+
+  /**
+   * Spec 042. Discard an unreadable board and start from the default one. The
+   * server keeps the old file as `board.canvas.bak`, so «discard» stays
+   * recoverable. Only ever called from the explicit button in the notice.
+   */
+  resetBoard: (): Promise<{ canvas: BoardCanvas }> =>
+    request("/api/board/reset", { method: "POST" }),
 
   getSpec: (id: string): Promise<SpecDetail> => request(`/api/spec/${encodeURIComponent(id)}`),
 

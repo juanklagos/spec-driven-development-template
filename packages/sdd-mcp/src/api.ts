@@ -7,24 +7,25 @@ import packageJson from "../package.json" with { type: "json" };
 import {
   addSpecTask,
   appendProjectLogEntry,
+  approveSpec,
   compareSidecar,
   createAiRequest,
-  getAgentPresence,
-  listAiRequests,
-  manualInstructions,
-  resolveAiRequest,
-  resolveSddRoot,
-  approveSpec,
-  recordUserConsent,
   createSpec,
   generateRoadmap,
   generateStatus,
+  getAgentPresence,
   getBoardView,
   getGateSummary,
+  listAiRequests,
   listBitacoraFiles,
+  manualInstructions,
   parseTasksMarkdown,
   readBitacoraFile,
   readSpecDocument,
+  recordUserConsent,
+  resetBoard,
+  resolveAiRequest,
+  resolveSddRoot,
   scoreSpec,
   setSpecTaskDone,
   updateSpecSections,
@@ -60,6 +61,13 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       if (req.method === "GET" && route === "/api/board") {
         const view = await getBoardView(projectRoot);
         json(res, 200, { projectRoot, ...view });
+        return true;
+      }
+      // Spec 042, escenario 1: la segunda salida del aviso de tablero ilegible.
+      // Es una escritura, así que sólo ocurre cuando la persona la pide.
+      if (req.method === "POST" && route === "/api/board/reset") {
+        const canvas = await resetBoard(projectRoot);
+        json(res, 200, { canvas });
         return true;
       }
       if (req.method === "PUT" && route === "/api/board") {
@@ -311,8 +319,24 @@ export function createApiHandler({ projectRoot, handleEvents }: ApiDeps): ApiHan
       // A coded precondition failure also ships its `code` (and raw CLI
       // `detail` when there is one) so the client can localize it instead of
       // printing the bilingual fallback message verbatim (spec 010, R1).
+      // Spec 042: cualquier error del núcleo que traiga su propio `code` viaja
+      // con él, no sólo los de GitHub. Es lo que permite al lienzo distinguir
+      // «el tablero no se pudo leer» de «el servidor no responde», que hasta
+      // ahora se pintaban con el mismo titular.
+      const coded =
+        error && typeof error === "object" && typeof (error as { code?: unknown }).code === "string"
+          ? {
+              code: (error as { code: string }).code,
+              // `path` viaja como `detail`: es el dato que el aviso del lienzo
+              // tiene que enseñar para que la persona sepa qué archivo abrir.
+              ...(typeof (error as { path?: unknown }).path === "string"
+                ? { detail: (error as { path: string }).path }
+                : {})
+            }
+          : {};
       json(res, 422, {
         error: error instanceof Error ? error.message : String(error),
+        ...coded,
         ...(isGithubPreconditionError(error)
           ? { code: error.code, ...(error.detail ? { detail: error.detail } : {}) }
           : {})

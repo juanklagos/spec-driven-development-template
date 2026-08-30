@@ -58,6 +58,14 @@ Las cuatro teclas I, E, G y S solo funcionan cuando no estás escribiendo en un 
 
 El archivo que se guarda es JSON Canvas puro: el grupo conserva su etiqueta, su color y su fondo, y **ninguna tarjeta guarda a qué grupo pertenece**, porque el formato no tiene ese campo. Así el mismo `board.canvas` sigue abriéndose en Obsidian.
 
+**Cuando el tablero no se puede leer.** Si `specs/board.canvas` existe pero está roto —un merge de git que dejó marcadores `<<<<<<<`, un JSON a medias—, el builder **no** te enseña una cuadrícula por defecto como si fuera tu tablero. Se para, te dice la ruta del archivo y te ofrece dos salidas: arreglarlo a mano y volver a leerlo, o descartarlo y empezar de cero. Hasta que elijas una, **el guardado automático queda desactivado**, para que ningún gesto tuyo escriba encima de lo que aún se puede recuperar. Si eliges descartar, tu archivo se conserva como `board.canvas.bak`.
+
+Ese respaldo también se escribe solo: la primera vez que el builder guarda en cada sesión del servidor, copia antes lo que hubiera en `board.canvas`. Es una copia por sesión, no un historial — para eso está git.
+
+**Lo que el builder no pinta, lo devuelve intacto.** El tablero admite los cuatro tipos de nodo de JSON Canvas: texto, archivo, enlace y grupo. El builder pinta unos con más detalle que otros, pero al guardar devuelve todos los campos tal como llegaron: la `url` de un enlace, el `subpath` de un archivo, los lados y el color de una unión, y cualquier campo que una versión futura del formato añada. Los colores de las uniones sólo se recalculan cuando cambias su propósito.
+
+**Los atajos y los diálogos.** Las teclas I, E, G y S no hacen nada mientras haya un diálogo abierto —un modal, el tour, el menú ⋯—, sólo cuando el lienzo está a la vista. El panel de detalle de una spec no cuenta como diálogo: es un panel, y los atajos siguen funcionando con él abierto.
+
 **Los filtros** de la segunda franja no ocultan nada: **atenúan** lo que no coincide, para que el tablero no cambie de forma mientras miras. Son tres: `pendientes` (specs sin aprobar), `con avisos` (specs con errores del gate) y `con deriva` (specs cuyo código cambió después de aprobarlas). A la derecha de esa franja tienes el recuento: cuántas specs, cuántas uniones y el zoom.
 
 

@@ -104,7 +104,17 @@ function toFlowEdge(edge: CanvasEdge): AppEdge {
     source: edge.fromNode,
     target: edge.toNode,
     type: "labeled",
-    data: { label: edge.label ?? "" },
+    // Spec 042: carry back what the file said, so saving does not flatten the
+    // sides or overwrite a color this builder never chose. `originalLabel` is
+    // what makes "the person changed the purpose" distinguishable later.
+    data: {
+      label: edge.label ?? "",
+      originalLabel: edge.label ?? "",
+      ...(edge.fromSide ? { fromSide: edge.fromSide } : {}),
+      ...(edge.toSide ? { toSide: edge.toSide } : {}),
+      ...(edge.color ? { color: edge.color } : {}),
+      ...extraOf(edge, EDGE_OWN_FIELDS)
+    },
     markerEnd: ARROW
   });
 }
@@ -149,7 +159,8 @@ export function boardToFlow(
             specId,
             file: n.file ?? `specs/${specId}/spec.md`,
             width: n.width,
-            height: n.height
+            height: n.height,
+            ...extraOf(n)
           }
         });
         continue;
@@ -163,9 +174,33 @@ export function boardToFlow(
         data: {
           text: n.file ?? "(archivo / file)",
           file: n.file,
+          canvasType: "file",
           color: n.color,
           width: n.width,
-          height: n.height
+          height: n.height,
+          ...extraOf(n)
+        }
+      });
+      continue;
+    }
+    // Spec 042. A link is the fourth node type of JSON Canvas 1.0. It used to
+    // fall through to the text fallback below, which reads `n.text` — a link
+    // has none, so the card came up empty and the next save wrote it back as
+    // `type:"text"`, dropping the URL from the user's file. Same shape of
+    // defect the 041 fixed for groups, and the same treatment: show what it
+    // points at, and give it back untouched.
+    if (n.type === "link") {
+      nodes.push({
+        id: n.id,
+        type: "note",
+        position,
+        data: {
+          text: n.url ?? "(enlace / link)",
+          canvasType: "link",
+          color: n.color,
+          width: n.width,
+          height: n.height,
+          ...extraOf(n)
         }
       });
       continue;
@@ -174,7 +209,14 @@ export function boardToFlow(
       id: n.id,
       type: "note",
       position,
-      data: { text: n.text ?? "", color: n.color, width: n.width, height: n.height }
+      data: {
+        text: n.text ?? "",
+        canvasType: "text",
+        color: n.color,
+        width: n.width,
+        height: n.height,
+        ...extraOf(n)
+      }
     });
   }
 
@@ -193,26 +235,62 @@ export function boardToFlow(
   return { nodes: applyGroupMembership(nodes), edges: canvas.edges.map(toFlowEdge) };
 }
 
-/** JSON Canvas fields the builder paints itself; anything else is carried in `extra`. */
-const GROUP_OWN_FIELDS = new Set([
+/**
+ * JSON Canvas fields the builder paints itself; anything else is carried in
+ * `extra` and written back untouched.
+ *
+ * Spec 041 introduced this for the group node. Spec 042 generalises it to every
+ * node and to edges: the same argument applies to `subpath`, to `url`, and to
+ * whatever a future JSON Canvas revision adds. One set for all types is safe
+ * because the fields are disjoint per type — a group has no `text`, a note has
+ * no `label` — and carrying a key the node never had costs nothing.
+ */
+const NODE_OWN_FIELDS = new Set([
   "id",
   "type",
   "x",
   "y",
   "width",
   "height",
-  "label",
+  "text",
+  "file",
+  // `url` is deliberately NOT here. The builder shows it as the card's text but
+  // never writes it back from `data`, so it has to travel in `extra` to survive
+  // the round-trip — including when the person edits the card's text.
   "color",
+  "label",
   "background",
   "backgroundStyle"
 ]);
 
+/** Edge fields the builder paints; the rest travels in `extra`. */
+const EDGE_OWN_FIELDS = new Set([
+  "id",
+  "fromNode",
+  "toNode",
+  "fromSide",
+  "toSide",
+  "label",
+  "color"
+]);
+
+/** Everything the source object carried that this builder does not paint. */
+function extraFields(source: object, own: Set<string>): Record<string, unknown> {
+  const extra: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(source as Record<string, unknown>)) {
+    if (!own.has(key)) extra[key] = value;
+  }
+  return extra;
+}
+
+/** `{ extra }` when there is anything to carry, `{}` otherwise. */
+function extraOf(source: object, own: Set<string> = NODE_OWN_FIELDS): { extra?: Record<string, unknown> } {
+  const extra = extraFields(source, own);
+  return Object.keys(extra).length > 0 ? { extra } : {};
+}
+
 /** JSON Canvas group -> React Flow node, keeping every field it arrived with. */
 function toGroupNode(n: CanvasNode, position: { x: number; y: number }): AppNode {
-  const extra: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(n as unknown as Record<string, unknown>)) {
-    if (!GROUP_OWN_FIELDS.has(key)) extra[key] = value;
-  }
   return {
     id: n.id,
     type: "group",
@@ -235,7 +313,7 @@ function toGroupNode(n: CanvasNode, position: { x: number; y: number }): AppNode
       ...(n.backgroundStyle ? { backgroundStyle: n.backgroundStyle } : {}),
       width: n.width,
       height: n.height,
-      ...(Object.keys(extra).length > 0 ? { extra } : {})
+      ...extraOf(n)
     }
   };
 }
@@ -384,24 +462,56 @@ export function flowToBoard(nodes: AppNode[], edges: AppEdge[]): BoardCanvas {
         ...(n.data.backgroundStyle ? { backgroundStyle: n.data.backgroundStyle } : {})
       } as CanvasNode;
     }
+    // Spec 042. `extra` first, geometry after: what the person just moved always
+    // wins over the copy that came in with the file.
     if (n.type === "spec") {
-      return { ...base, type: "file", file: n.data.file };
+      return { ...(n.data.extra ?? {}), ...base, type: "file", file: n.data.file } as CanvasNode;
+    }
+    if (n.data.canvasType === "link") {
+      // The URL itself rides in `extra` (see NODE_OWN_FIELDS).
+      return {
+        ...(n.data.extra ?? {}),
+        ...base,
+        type: "link",
+        ...(n.data.color ? { color: n.data.color } : {})
+      } as CanvasNode;
     }
     if (n.data.file) {
-      return { ...base, type: "file", file: n.data.file, ...(n.data.color ? { color: n.data.color } : {}) };
+      return {
+        ...(n.data.extra ?? {}),
+        ...base,
+        type: "file",
+        file: n.data.file,
+        ...(n.data.color ? { color: n.data.color } : {})
+      } as CanvasNode;
     }
-    return { ...base, type: "text", text: n.data.text, ...(n.data.color ? { color: n.data.color } : {}) };
+    return {
+      ...(n.data.extra ?? {}),
+      ...base,
+      type: "text",
+      text: n.data.text,
+      ...(n.data.color ? { color: n.data.color } : {})
+    } as CanvasNode;
   });
 
   const canvasEdges: CanvasEdge[] = edges.map((e) => {
-    const color = EDGE_KIND_CANVAS_COLOR[edgeKind(e.data?.label)];
+    // Spec 042. The color is re-derived ONLY when the person changed the
+    // purpose; otherwise the file's own color wins. Re-deriving on every save
+    // overwrote colors this builder never chose — and the sides were written
+    // literally as right/left, flattening the geometry another canvas editor
+    // had set.
+    const label = e.data?.label;
+    const labelChanged = (e.data?.originalLabel ?? "") !== (label ?? "");
+    const derived = EDGE_KIND_CANVAS_COLOR[edgeKind(label)];
+    const color = labelChanged ? derived : (e.data?.color ?? derived);
     return {
+      ...(e.data?.extra ?? {}),
       id: e.id,
       fromNode: e.source,
       toNode: e.target,
-      fromSide: "right",
-      toSide: "left",
-      ...(e.data?.label ? { label: e.data.label } : {}),
+      ...(e.data?.fromSide ? { fromSide: e.data.fromSide } : {}),
+      ...(e.data?.toSide ? { toSide: e.data.toSide } : {}),
+      ...(label ? { label } : {}),
       ...(color ? { color } : {})
     };
   });

@@ -627,6 +627,18 @@ const es = {
   "loadError.nothingLost":
     "El grafo es una vista de tus archivos; sin el servidor no hay archivos que mostrar. Nada se ha perdido.",
   "loadError.startIt": "arráncalo así",
+  // Spec 042: el tablero ilegible es un estado propio. El titular de
+  // «no encuentro el servidor» era falso aquí —el servidor había contestado— y
+  // el comando que ofrecía reproducía el mismo error.
+  "boardUnreadable.tag": "tablero ilegible",
+  "boardUnreadable.title": "Tu tablero existe, pero no se pudo leer",
+  "boardUnreadable.body":
+    "No se ha tocado nada. El guardado automático queda desactivado hasta que elijas una salida, para que nada escriba encima de este archivo.",
+  "boardUnreadable.fileLabel": "archivo",
+  "boardUnreadable.reread": "Ya lo arreglé: volver a leer",
+  "boardUnreadable.discard": "Descartarlo y empezar de cero",
+  "boardUnreadable.discardHint": "Tu archivo se conserva como board.canvas.bak",
+  "error.code.BOARD_UNREADABLE": "El archivo del tablero existe pero no se pudo leer",
   "loadError.apiTag": "api inalcanzable",
   "loadError.newTitle": "El builder no encuentra el servidor",
 
@@ -1241,6 +1253,15 @@ const en: Record<keyof typeof es, string> = {
   "loadError.nothingLost":
     "The graph is a view of your files; without the server there are no files to show. Nothing was lost.",
   "loadError.startIt": "start it like this",
+  "boardUnreadable.tag": "unreadable board",
+  "boardUnreadable.title": "Your board is there, but it could not be read",
+  "boardUnreadable.body":
+    "Nothing has been touched. Autosave stays off until you pick a way out, so nothing writes over this file.",
+  "boardUnreadable.fileLabel": "file",
+  "boardUnreadable.reread": "I fixed it: read it again",
+  "boardUnreadable.discard": "Discard it and start fresh",
+  "boardUnreadable.discardHint": "Your file is kept as board.canvas.bak",
+  "error.code.BOARD_UNREADABLE": "The board file is there but could not be read",
   "loadError.apiTag": "api unreachable",
   "loadError.newTitle": "The builder can't find the server",
 

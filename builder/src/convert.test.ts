@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 
 import { boardToFlow, edgeKind, flowToBoard, toAbsoluteNodes } from "./convert";
-import type { BoardCanvas, SpecSummary } from "./types";
+import type { BoardCanvas, CanvasNode, SpecSummary } from "./types";
 
 function specSummary(id: string): SpecSummary {
   return {
@@ -297,5 +297,96 @@ describe("a frame is as big as the file says (spec 041)", () => {
     const measured = nodes.map((n) => ({ ...n, measured: { width: 150, height: 342 } }));
     const back = flowToBoard(measured, edges);
     expect(back.nodes[0]).toMatchObject({ width: 760, height: 320 });
+  });
+});
+
+// --- Spec 042, fase 2 (R4): lo que entra vuelve a salir igual --------------
+// El principio lo fijó la spec 041 en su decisión 1 y lo aplicó solo al nodo
+// grupo. Aquí se generaliza al resto de nodos y a las aristas: el builder no
+// puede borrar del archivo del usuario lo que él no pinta.
+
+function roundTrip(canvas: BoardCanvas, specs: SpecSummary[] = []): BoardCanvas {
+  const { nodes, edges } = boardToFlow(canvas, specs);
+  return flowToBoard(nodes, edges);
+}
+
+const plainNote = (id: string, x: number, y: number): CanvasNode => ({
+  id,
+  type: "text",
+  text: id,
+  x,
+  y,
+  width: 260,
+  height: 120
+});
+
+describe("ida y vuelta sin pérdida (spec 042)", () => {
+  it("conserva los cuatro tipos de nodo de JSON Canvas 1.0", () => {
+    const canvas: BoardCanvas = {
+      nodes: [
+        { id: "t", type: "text", text: "una nota", x: 0, y: 0, width: 260, height: 120 },
+        { id: "f", type: "file", file: "docs/README.md", x: 300, y: 0, width: 260, height: 120 },
+        { id: "l", type: "link", url: "https://jsoncanvas.org", x: 600, y: 0, width: 260, height: 120 },
+        { id: "g", type: "group", label: "Capa", x: 0, y: 400, width: 560, height: 360 }
+      ],
+      edges: []
+    };
+    expect(roundTrip(canvas).nodes).toEqual(canvas.nodes);
+  });
+
+  it("un nodo link conserva su url y no se convierte en texto", () => {
+    const canvas: BoardCanvas = {
+      nodes: [{ id: "l", type: "link", url: "https://jsoncanvas.org", x: 10, y: 20, width: 260, height: 120 }],
+      edges: []
+    };
+    const back = roundTrip(canvas);
+    expect(back.nodes[0].type).toBe("link");
+    expect(back.nodes[0].url).toBe("https://jsoncanvas.org");
+  });
+
+  it("un nodo file conserva su subpath", () => {
+    const canvas: BoardCanvas = {
+      nodes: [
+        { id: "f", type: "file", file: "specs/001-x/spec.md", subpath: "#objetivo", x: 0, y: 0, width: 300, height: 180 }
+      ],
+      edges: []
+    };
+    expect(roundTrip(canvas).nodes[0].subpath).toBe("#objetivo");
+  });
+
+  it("conserva claves desconocidas en cualquier nodo", () => {
+    const canvas: BoardCanvas = {
+      nodes: [
+        { id: "t", type: "text", text: "x", x: 0, y: 0, width: 260, height: 120, futureField: 42 } as never
+      ],
+      edges: []
+    };
+    expect((roundTrip(canvas).nodes[0] as never as Record<string, unknown>).futureField).toBe(42);
+  });
+
+  it("una arista conserva sus lados y su color de origen", () => {
+    const canvas: BoardCanvas = {
+      nodes: [plainNote("a", 0, 0), plainNote("b", 400, 0)],
+      edges: [{ id: "e1", fromNode: "a", toNode: "b", fromSide: "bottom", toSide: "top", color: "5" }]
+    };
+    expect(roundTrip(canvas).edges[0]).toMatchObject({
+      fromSide: "bottom",
+      toSide: "top",
+      color: "5"
+    });
+  });
+
+  it("recalcula el color solo cuando la etiqueta cambia", () => {
+    const canvas: BoardCanvas = {
+      nodes: [plainNote("a", 0, 0), plainNote("b", 400, 0)],
+      edges: [{ id: "e1", fromNode: "a", toNode: "b", label: "depende de", color: "#custom" }]
+    };
+    // Etiqueta intacta: gana el color del archivo, no el derivado del tipo.
+    expect(roundTrip(canvas).edges[0].color).toBe("#custom");
+
+    // Etiqueta cambiada por la persona: el color se vuelve a derivar.
+    const { nodes, edges } = boardToFlow(canvas, []);
+    const relabelled = edges.map((e) => ({ ...e, data: { ...e.data, label: "bloquea" } }));
+    expect(flowToBoard(nodes, relabelled).edges[0].color).toBe("1");
   });
 });

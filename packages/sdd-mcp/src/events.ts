@@ -7,7 +7,7 @@ import { watch, existsSync, type FSWatcher } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
-import { isAtomicWriteTempName, resolveSddRoot, specsRoot } from "@juanklagos/sdd-core";
+import { isAtomicWriteTempName, isBoardBackupName, resolveSddRoot, specsRoot } from "@juanklagos/sdd-core";
 
 const SSE_KEEPALIVE_MS = 25_000;
 const WATCH_DEBOUNCE_MS = 300;
@@ -56,7 +56,10 @@ export function createEventHub(projectRoot: string): EventHub {
     // documents matter. The scratch-name rule is owned by sdd-core (it writes
     // them), never re-spelled here — a local copy would have kept matching the
     // old "<file>.tmp-<pid>" shape and leaked every write as a phantom change.
-    if (!base || base.startsWith(".") || isAtomicWriteTempName(base)) return;
+    // Spec 042: el respaldo del tablero se escribe junto a él y no es un
+    // documento del proyecto; si se colara aquí, cada primer guardado de la
+    // sesión emitiría un `change` fantasma de specs a todas las pestañas.
+    if (!base || base.startsWith(".") || isAtomicWriteTempName(base) || isBoardBackupName(base)) return;
     const kind: ChangeKind = fixedKind ?? (base === "board.canvas" ? "board" : "specs");
     pendingChanges.set(kind, relPath.split(path.sep).join("/"));
     if (changeFlushTimer) clearTimeout(changeFlushTimer);
